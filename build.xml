@@ -1,0 +1,111 @@
+<?xml version="1.0"?>
+
+<!--
+    $LastChangedRevision$
+    $LastChangedDate$
+-->
+
+<project name="Functional Java" default="target" basedir=".">
+  <property name="build.dir" value=".build"/>
+  <property name="build-java.version" value="1.13"/>
+  <property name="javadoc.doctitle" value="Functional Java ${build.number} API Specification"/>
+  <property name="javadoc.header" value="&lt;div&gt;&lt;p&gt;&lt;em&gt;Copyright Workingmouse Pty. Ltd. 2007, 2008&lt;/em&gt;&lt;/p&gt;This software is released under an open source BSD licence.&lt;/div&gt;"/>
+  <property name="javadoc.windowtitle" value="Functional Java ${build.number}"/>
+  <property name="projects.repository.uri" value="http://projects.workingmouse.com/public"/>
+  <property name="resources.dir" value="resources"/>
+  <import file="build-java.xml" optional="true"/>
+
+  <path id="libs.path" description="JAR files and ZIP files in the lib directory">
+    <fileset dir="${build.dir}/lib" includes="**/*.jar"/>
+    <fileset dir="${build.dir}/lib" includes="**/*.zip"/>
+  </path>
+
+  <path id="build.path" description="built class files">
+    <pathelement path="${build.dir}/classes/src"/>
+    <pathelement path="${build.dir}/classes/test-src"/>
+  </path>
+
+  <path id="fast.build.path" description="fast built class files">
+    <pathelement path="${build.dir}/classes/src"/>
+    <pathelement path="${build.dir}/classes/fast-test-src"/>
+  </path>
+
+  <path id="project.path" description="the project-wide path">
+    <path refid="libs.path"/>
+    <path refid="build.path"/>
+    <pathelement location="${resources.dir}"/>
+    <pathelement path="${java.class.path}"/>
+  </path>
+
+  <path id="fast.project.path" description="the project-wide path for fast builds">
+    <path refid="libs.path"/>
+    <path refid="fast.build.path"/>
+    <pathelement location="${resources.dir}"/>
+    <pathelement path="${java.class.path}"/>
+  </path>
+
+  <target name="init" description="initialise the project">
+    <get src="${projects.repository.uri}/build/java/artifacts/${build-java.version}/build-java.xml" dest="build-java.xml"
+      usetimestamp="true"/>
+    <ant antfile="build-java.xml" target="init"/>
+  </target>
+
+  <target name="target" depends="init" description="run a given target">
+    <fail unless="t" message="Set the t property"/>
+    <ant antfile="build-java.xml" target="${t}"/>
+  </target>
+
+  <target name="clean" depends="init" description="delete the build environment">
+    <ant antfile="build-java.xml" target="clean"/>
+    <delete file="build-scala.xml"/>
+  </target>
+
+  <target name="archive" depends="init">
+    <ant antfile="build-java.xml" target="archive"/>
+  </target>
+
+  <target name="javadoc" depends="init">
+    <ant antfile="build-java.xml" target="javadoc"/>
+  </target>
+
+  <target name="dist" depends="init">
+    <ant antfile="build-java.xml" target="dist"/>
+  </target>
+
+  <target name="commit-archive" depends="init">
+    <ant antfile="build-java.xml" target="commit-archive"/>
+  </target>
+
+  <target name="version" depends="init">
+    <ant antfile="build-java.xml" target="version"/>
+  </target>
+
+  <target name="fast-scalac-test" depends="init">
+    <ant antfile="build-java.xml" target="fast-scalac-test"/>
+  </target>
+
+  <target name="scalac-test" depends="init">
+    <ant antfile="build-java.xml" target="scalac-test"/>
+  </target>
+
+  <target name="fast-test" depends="fast-scalac-test" description="run tests">
+    <java classname="fj.Tests" failonerror="true">
+      <classpath refid="fast.project.path"/>
+    </java>
+  </target>
+
+  <target name="test" depends="scalac-test" description="run tests">
+    <java classname="fj.Tests" failonerror="true">
+      <classpath refid="project.path"/>
+    </java>
+  </target>
+
+  <target name="testx" depends="scalac-test" description="run tests">
+    <fail unless="test.name" message="set the test.name property"/>    
+    <java classname="${test.name}" failonerror="true">
+      <classpath refid="project.path"/>
+    </java>
+  </target>
+
+</project>
+
