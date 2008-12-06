@@ -370,11 +370,15 @@ public final class Gen<A> {
    * @return A new generator.
    */
   public static <A> Gen<A> parameterised(final F<Integer, F<Rand, Gen<A>>> f) {
-    return new Gen<A>(curry(new F2<Integer, Rand, A>() {
-      public A f(final Integer i, Rand r) {
-        return f.f(i).f(r).gen(i, r);
+    return new Gen<A>(new F<Integer, F<Rand, A>>() {
+      public F<Rand, A> f(final Integer i) {
+        return new F<Rand, A>() {
+          public A f(final Rand r) {
+            return f.f(i).f(r).gen(i, r);
+          }
+        };
       }
-    }));
+    });
   }
 
   /**
@@ -415,11 +419,15 @@ public final class Gen<A> {
   public static Gen<Integer> choose(final int from, final int to) {
     final int f = min(from, to);
     final int t = max(from, to);
-    return parameterised(curry(new F2<Integer, Rand, Gen<Integer>>() {
-      public Gen<Integer> f(final Integer i, final Rand r) {
-        return value(r.choose(f, t));
+    return parameterised(new F<Integer, F<Rand, Gen<Integer>>>() {
+      public F<Rand, Gen<Integer>> f(final Integer i) {
+        return new F<Rand, Gen<Integer>>() {
+          public Gen<Integer> f(final Rand r) {
+            return value(r.choose(f, t));
+          }
+        };
       }
-    }));
+    });
   }
 
   /**

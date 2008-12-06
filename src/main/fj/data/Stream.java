@@ -1010,19 +1010,6 @@ public abstract class Stream<A> implements Iterable<A> {
   }
 
   /**
-   * Returns a function that prepends (cons) an element to a stream to produce a new stream.
-   *
-   * @return A function that prepends (cons) an element to a stream to produce a new stream.
-   */
-  public static <A> F<A, F<Stream<A>, Stream<A>>> cons_() {
-    return curry(new F2<A, Stream<A>, Stream<A>>() {
-      public Stream<A> f(final A a, final Stream<A> as) {
-        return as.cons(a);
-      }
-    });
-  }
-
-  /**
    * Returns an empty stream.
    *
    * @return An empty stream.

@@ -10,14 +10,12 @@
   <import file="buildj.xml" optional="true"/>
 
   <property name="maven-build.dir" value="${build.dir}/maven"/>
-  <!-- Note. Artifact ID must match that in pom.xml -->
-  <property name="artifact-id" value="fj"/>
   <property name="project.jar" value="${archive.file}"/>
-  <property name="sources.jar" value="${artifact-id}-${build.number}-sources.jar"/>
-  <property name="javadoc.jar" value="${artifact-id}-${build.number}-javadoc.jar"/>
-  <property name="maven-bundle.jar" value="${artifact-id}-${build.number}-bundle.jar"/>
+  <property name="sources.jar" value="${release.file.name.prefix}-${build.number}-sources.jar"/>
+  <property name="javadoc.jar" value="${release.file.name.prefix}-${build.number}-javadoc.jar"/>
+  <property name="maven-bundle.jar" value="${release.file.name.prefix}-${build.number}-bundle.jar"/>
 
-  <target name="-maven-bundle" depends="archive,javadoc" description="Creates Maven bundle files">
+  <target name="-maven-bundle" depends="archive, javadoc" description="Creates Maven bundle files">
     <fail unless="build.number" message="set the build.number property"/>
     <mkdir dir="${maven-build.dir}"/>
     <copy file="${build.dir}/archive/${archive.file}" tofile="${maven-build.dir}/${project.jar}"/>

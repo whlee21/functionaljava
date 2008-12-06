@@ -16,7 +16,6 @@ import fj.Unit;
 import static fj.Unit.unit;
 import static fj.Bottom.error;
 import fj.pre.Semigroup;
-import java.util.Iterator;
 
 /**
  * Isomorphic to {@link Either} but has renamed functions and represents failure on the left and success on the right.
@@ -29,7 +28,7 @@ import java.util.Iterator;
  *          <li>$LastChangedDate$</li>
  *          </ul>
  */
-public final class Validation<E, T> implements Iterable<T> {
+public final class Validation<E, T> {
   private final Either<E, T> e;
 
   private Validation(final Either<E, T> e) {
@@ -700,18 +699,9 @@ public final class Validation<E, T> implements Iterable<T> {
   }
 
   /**
-   * Returns an iterator for this validation. This method exists to permit the use in a <code>for</code>-each loop.
-   *
-   * @return A iterator for this validation.
-   */
-  public Iterator<T> iterator() {
-    return toEither().right().iterator();
-  }
-
-  /**
    * A failing projection of a validation.
    */
-  public final class FailProjection<E, T> implements Iterable<E> {
+  public final class FailProjection<E, T> {
     private final Validation<E, T> v;
 
     private FailProjection(final Validation<E, T> v) {
@@ -817,20 +807,6 @@ public final class Validation<E, T> implements Iterable<T> {
     }
 
     /**
-     * Performs a bind across the validation, but ignores the element value in the function.
-     *
-     * @param v The validation value to apply in the final join.
-     * @return A new validation value after the final join.
-     */
-    public <A> Validation<A, T> sequence(final Validation<A, T> v) {
-      return bind(new F<E, Validation<A, T>>() {
-        public Validation<A, T> f(final E e) {
-          return v;
-        }
-      });
-    }
-
-    /**
      * Returns <code>None</code> if this is a success or if the given predicate <code>p</code> does not hold for the
      * failing value, otherwise, returns a fail in <code>Some</code>.
      *
@@ -924,15 +900,6 @@ public final class Validation<E, T> implements Iterable<T> {
      */
     public Stream<E> toStream() {
       return v.toEither().left().toStream();
-    }
-
-    /**
-     * Returns an iterator for this projection. This method exists to permit the use in a <code>for</code>-each loop.
-     *
-     * @return A iterator for this projection.
-     */
-    public Iterator<E> iterator() {
-      return v.toEither().left().iterator();
     }
   }
 

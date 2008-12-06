@@ -15,9 +15,6 @@ import static fj.Function.compose;
  */
 public abstract class HList<A extends HList<A>> {
 
-  protected HList() {
-  }
-
   /**
    * Extends (cons) this list by prepending the given element, returning a new list.
    *
@@ -26,7 +23,43 @@ public abstract class HList<A extends HList<A>> {
    */
   public abstract <E> HCons<E, A> extend(E e);
 
-  public abstract <E> Apply<Unit, P2<E, A>, HCons<E, A>> extender();
+  /**
+   * The empty list
+   */
+  public static final class HNil extends HList<HNil> {
+    private HNil() {
+    }
+
+    public <E> HCons<E, HNil> extend(final E e) {
+      return cons(e, this);
+    }
+
+  }
+
+  /**
+   * The nonempty list
+   */
+  public static final class HCons<E, L extends HList<L>> extends HList<HCons<E, L>> {
+    private E e;
+    private L l;
+
+    private HCons(final E e, final L l) {
+      this.e = e;
+      this.l = l;
+    }
+
+    public E head() {
+      return e;
+    }
+
+    public L tail() {
+      return l;
+    }
+
+    public <X> HCons<X, HCons<E, L>> extend(final X e) {
+      return cons(e, this);
+    }
+  }
 
   private static final HNil nil = new HNil();
 
@@ -63,26 +96,26 @@ public abstract class HList<A extends HList<A>> {
   /**
    * The concatenation of two heterogeneous lists.
    *
-   * @param <A> The type of the first list.
-   * @param <B> The type of the second list.
-   * @param <C> The type of the combined list.
+   * @param <L> The type of the first list.
+   * @param <LL> The type of the second list.
+   * @param <LLL> The type of the combined list.
    */
-  public static final class HAppend<A, B, C> {
-    private final F2<A, B, C> append;
+  public static final class HAppend<L, LL, LLL> {
+    private final F2<L, LL, LLL> append;
 
-    private HAppend(final F2<A, B, C> f) {
+    private HAppend(final F2<L, LL, LLL> f) {
       append = f;
     }
 
     /**
      * Append a given heterogeneous list to another.
      *
-     * @param a a heterogeneous list to be appended to.
-     * @param b a heterogeneous list to append to another.
+     * @param l1 a heterogeneous list to be appended to.
+     * @param l2 a heterogeneous list to append to another.
      * @return a new heterogeneous list consisting of the second argument appended to the first.
      */
-    public C append(final A a, final B b) {
-      return append.f(a, b);
+    public LLL append(final L l1, final LL l2) {
+      return append.f(l1, l2);
     }
 
     /**
@@ -104,10 +137,10 @@ public abstract class HList<A extends HList<A>> {
      * @param h a method for appending lists to the tail of the given nonempty list.
      * @return a method for appending lists to a nonempty heterogeneous list.
      */
-    public static <X, A extends HList<A>, B, C extends HList<C>, H extends HAppend<A, B, C>>
-    HAppend<HCons<X, A>, B, HCons<X, C>> append(final H h) {
-      return new HAppend<HCons<X, A>, B, HCons<X, C>>(new F2<HCons<X, A>, B, HCons<X, C>>() {
-        public HCons<X, C> f(final HCons<X, A> c, final B l) {
+    public static <X, L extends HList<L>, LL, LLL extends HList<LLL>, H extends HAppend<L, LL, LLL>>
+    HAppend<HCons<X, L>, LL, HCons<X, LLL>> append(final H h) {
+      return new HAppend<HCons<X, L>, LL, HCons<X, LLL>>(new F2<HCons<X, L>, LL, HCons<X, LLL>>() {
+        public HCons<X, LLL> f(final HCons<X, L> c, final LL l) {
           return cons(c.head(), h.append(c.tail(), l));
         }
       });
@@ -165,62 +198,34 @@ public abstract class HList<A extends HList<A>> {
         }
       };
     }
-
-    /**
-     * An operator for the construction of heterogeneous lists.
-     *
-     * @return an operator that constructs heterogeneous lists.
-     */
-    public static <E, L extends HList<L>> Apply<Unit, P2<E, L>, HCons<E, L>> cons() {
-      return new Apply<Unit, P2<E, L>, HCons<E, L>>() {
-        public HCons<E, L> apply(final Unit f, final P2<E, L> p) {
-          return HList.cons(p._1(), p._2());
-        }
-      };
-    }
-
-    /**
-     * A function application operator for concatenating heterogeneous lists.
-     * @param <A> The type of the list to which to append.
-     * @param <B> The type of the list to append.
-     * @param <C> The type of the concatenated list. 
-     * @return an operator that concatenates heterogeneous lists.
-     */
-    public static <A, B, C> Apply<HAppend<A, B, C>, P2<A, B>, C> append() {
-      return new Apply<HAppend<A, B, C>, P2<A, B>, C>() {
-        public C apply(final HAppend<A, B, C> f, final P2<A, B> p) {
-          return f.append(p._1(), p._2());
-        }
-      };
-    }
   }
 
   /**
    * The catamorphism over heterogeneous lists.
    *
-   * @param <G> The type of the function with which to fold.
+   * @param <F> The type of the function with which to fold.
    * @param <V> The type of the value to be substituted for the empty list.
    * @param <L> The type of the heterogeneous list to be folded.
    * @param <R> The return type of the fold.
    */
-  public static class HFoldr<G, V, L, R> {
+  public static class HFoldr<F, V, L, R> {
 
-    private final F3<G, V, L, R> foldRight;
+    private final F3<F, V, L, R> foldRight;
 
-    private HFoldr(final F3<G, V, L, R> foldRight) {
+    private HFoldr(final F3<F, V, L, R> foldRight) {
       this.foldRight = foldRight;
     }
 
     /**
      * A fold instance for the empty list.
      *
-     * @param <G> The type of the function with which to fold.
+     * @param <F$> The type of the function with which to fold.
      * @param <V>  The type of value that this fold returns.
      * @return a fold instance for the empty list.
      */
-    public static <G, V> HFoldr<G, V, HNil, V> hFoldr() {
-      return new HFoldr<G, V, HNil, V>(new F3<G, V, HNil, V>() {
-        public V f(final G f, final V v, final HNil hNil) {
+    public static <F$, V> HFoldr<F$, V, HNil, V> hFoldr() {
+      return new HFoldr<F$, V, HNil, V>(new F3<F$, V, HNil, V>() {
+        public V f(final F$ f, final V v, final HNil hNil) {
           return v;
         }
       });
@@ -232,7 +237,7 @@ public abstract class HList<A extends HList<A>> {
      * @param p    An operator that applies a function on the head of the list and the fold of its tail.
      * @param h    A fold instance for the tail of the list.
      * @param <E>  The type of the head of the list.
-     * @param <G>  The type of function to apply to the head of the list and the fold of its tail.
+     * @param <F>  The type of function to apply to the head of the list and the fold of its tail.
      * @param <V>  The type of value to substitute for the empty list.
      * @param <L>  The type of the tail of the list.
      * @param <R>  The type of the fold of the tail of the list.
@@ -241,12 +246,12 @@ public abstract class HList<A extends HList<A>> {
      * @param <PP> The type of the given function application operator.
      * @return A fold instance for a non-empty heterogeneous list.
      */
-    public static <E, G, V, L extends HList<L>, R, RR,
-        H extends HFoldr<G, V, L, R>,
-        PP extends Apply<G, P2<E, R>, RR>>
-    HFoldr<G, V, HCons<E, L>, RR> hFoldr(final PP p, final H h) {
-      return new HFoldr<G, V, HCons<E, L>, RR>(new F3<G, V, HCons<E, L>, RR>() {
-        public RR f(final G f, final V v, final HCons<E, L> c) {
+    public static <E, F, V, L extends HList<L>, R, RR,
+      H extends HFoldr<F, V, L, R>,
+      PP extends Apply<F, P2<E, R>, RR>>
+    HFoldr<F, V, HCons<E, L>, RR> hFoldr(final PP p, final H h) {
+      return new HFoldr<F, V, HCons<E, L>, RR>(new F3<F, V, HCons<E, L>, RR>() {
+        public RR f(final F f, final V v, final HCons<E, L> c) {
           return p.apply(f, P.p(c.head(), h.foldRight(f, v, c.tail())));
         }
       });
@@ -260,56 +265,10 @@ public abstract class HList<A extends HList<A>> {
      * @param l The heterogeneous list to be folded.
      * @return a value obtained by folding the given list with the given function.
      */
-    public R foldRight(final G f, final V v, final L l) {
+    public R foldRight(final F f, final V v, final L l) {
       return foldRight.f(f, v, l);
     }
 
   }
 
-  /**
- * The nonempty list
-   */
-  public static final class HCons<E, L extends HList<L>> extends HList<HCons<E, L>> {
-    private E e;
-    private L l;
-
-    HCons(final E e, final L l) {
-      this.e = e;
-      this.l = l;
-    }
-
-    public E head() {
-      return e;
-    }
-
-    public L tail() {
-      return l;
-    }
-
-    public <X> Apply<Unit, P2<X, HCons<E, L>>, HCons<X, HCons<E, L>>> extender() {
-      return Apply.cons();
-    }
-
-    public <X> HCons<X, HCons<E, L>> extend(final X e) {
-      return cons(e, this);
-    }
-
-  }
-
-  /**
-   * The empty list
-   */
-  public static final class HNil extends HList<HNil> {
-    HNil() {
-    }
-
-    public <E> HCons<E, HNil> extend(final E e) {
-      return cons(e, this);
-    }
-
-    public <E> Apply<Unit, P2<E, HNil>, HCons<E, HNil>> extender() {
-      return Apply.cons();
-    }
-
-  }
 }

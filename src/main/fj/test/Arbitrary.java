@@ -24,14 +24,11 @@ import fj.data.Array;
 import fj.data.Either;
 import static fj.data.Either.left;
 import static fj.data.Either.right;
-import static fj.data.Enumerator.charEnumerator;
 import fj.data.List;
-import static fj.data.List.asString;
 import static fj.data.List.list;
 import fj.data.Option;
 import static fj.data.Option.some;
 import fj.data.Stream;
-import static fj.data.Stream.range;
 import static fj.test.Gen.choose;
 import static fj.test.Gen.elements;
 import static fj.test.Gen.fail;
@@ -527,30 +524,9 @@ public final class Arbitrary<A> {
    */
   public static final Arbitrary<String> arbString = arbitrary(arbList(arbCharacter).gen.map(new F<List<Character>, String>() {
     public String f(final List<Character> cs) {
-      return asString(cs);
+      return List.asString(cs);
     }
   }));
-
-  /**
-   * An arbitrary implementation for string values with characters in the US-ASCII range.
-   */
-  public static final Arbitrary<String> arbUSASCIIString = arbitrary(arbList(arbCharacter).gen.map(new F<List<Character>, String>() {
-    public String f(final List<Character> cs) {
-      return asString(cs.map(new F<Character, Character>() {
-        public Character f(final Character c) {
-          return (char)(c % 128);
-        }
-      }));
-    }
-  }));
-
-  /**
-   * An arbitrary implementation for string values with alpha-numeric characters.
-   */
-  public static final Arbitrary<String> arbAlphaNumString =
-      arbitrary(arbList(arbitrary(elements(range(charEnumerator, 'a', 'z').append(
-                                           range(charEnumerator, 'A', 'Z')).append(
-                                           range(charEnumerator, '0', '9')).toArray().array()))).gen.map(asString()));
 
   /**
    * An arbitrary implementation for string buffer values.

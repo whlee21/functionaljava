@@ -62,8 +62,6 @@ object Arbitrary {
     val gen = g
   }
 
-  def arbitrary[A](implicit a: Arbitrary[A]) = a
-
   implicit def SArbitrary_Arbitrary[A](a: Arbitrary[A]): fj.test.Arbitrary[A] = fj.test.Arbitrary.arbitrary(a.gen)
 
   implicit def Arbitrary_SArbitrary[A](a: fj.test.Arbitrary[A]): Arbitrary[A] = arb(a.gen)
@@ -138,8 +136,6 @@ object Arbitrary {
   }
   
   implicit val arbString: Arbitrary[String] = fj.test.Arbitrary.arbString
-  implicit val arbUSASCIIString: Arbitrary[String] = fj.test.Arbitrary.arbUSASCIIString
-  implicit val arbAlphaNumString: Arbitrary[String] = fj.test.Arbitrary.arbAlphaNumString
   implicit val arbStringBuffer: Arbitrary[StringBuffer] = fj.test.Arbitrary.arbStringBuffer
   implicit val arbStringBuilder: Arbitrary[java.lang.StringBuilder] = fj.test.Arbitrary.arbStringBuilder
 

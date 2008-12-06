@@ -309,7 +309,7 @@ public final class Monoid<A> {
    */
   @SuppressWarnings({"unchecked"})
   public static <A> Monoid<Array<A>> arrayMonoid() {
-    return monoid(Semigroup.<A>arraySemigroup(), Array.<A>empty());
+    return monoid(Semigroup.<A>arraySemigroup(), Array.<A>array());
   }
 
   /**

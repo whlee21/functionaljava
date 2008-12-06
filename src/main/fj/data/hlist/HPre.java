@@ -237,9 +237,6 @@ public final class HPre {
 
     /**
      * Zero is equal to itself.
-     * @param a Zero
-     * @param b Zero
-     * @return Equality for Zero
      */
     public static HEq<HZero, HZero, HTrue> eq(final HZero a, final HZero b) {
       return new HEq<HZero, HZero, HTrue>(hTrue());
@@ -262,43 +259,11 @@ public final class HPre {
     /**
      * A number is equal to another if their predecessors are equal.
      */
-    public static <N extends HNat<N>, NN extends HNat<NN>, B extends HBool, E extends HEq<N, NN, B>>
-    HEq<HSucc<N>, HSucc<NN>, B> eq(final HSucc<N> a, final HSucc<NN> b, final E e) {
+    public static <N extends HNat<N>, NN extends HNat<NN>, B extends HBool, E extends HEq<N, NN, B>> HEq<HSucc<N>, HSucc<NN>, B>
+    eq(final HSucc<N> a, final HSucc<NN> b, final E e) {
       return new HEq<HSucc<N>, HSucc<NN>, B>(e.v);
     }
 
-  }
-
-  /**
-   * Type-level integer arithmetic
-   */
-  public static final class HAdd<A extends HNat<A>, B extends HNat<B>, C extends HNat<C>> {
-    private final C sum;
-    private HAdd(final C sum) {
-      this.sum = sum;
-    }
-
-    /**
-     * The sum of zero and any other number is that number.
-     */
-    public static <N extends HNat<N>> HAdd<HZero, HSucc<N>, HSucc<N>> add(final HZero a, final HSucc<N> b) {
-      return new HAdd<HZero, HSucc<N>, HSucc<N>>(b);
-    }
-
-    /**
-     * The sum of zero and any other number is that number.
-     */
-    public static <N extends HNat<N>> HAdd<HSucc<N>, HZero, HSucc<N>> add(final HSucc<N> a, final HZero b) {
-      return new HAdd<HSucc<N>, HZero, HSucc<N>>(a);
-    }
-
-    /**
-     * The sum of numbers a and b is one greater than the sum of b and the predecessor of a. 
-     */
-    public static <N extends HNat<N>, M extends HNat<M>, R extends HNat<R>, H extends HAdd<N, HSucc<M>, R>>
-    HAdd<HSucc<N>, HSucc<M>, HSucc<R>> add(final HSucc<N> a, final HSucc<M> b, final H h) {
-      return new HAdd<HSucc<N>, HSucc<M>, HSucc<R>>(HNat.hSucc(h.sum));
-    }
   }
 
 }

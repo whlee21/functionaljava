@@ -7,7 +7,7 @@
 
 <project name="Functional Java" default="target" basedir=".">
   <property name="build.dir" value="build"/>
-  <property name="build-java.version" value="1.51"/>
+  <property name="build-java.version" value="1.35"/>
   <property name="etc.dir" value="etc"/>
   <property name="javadoc.doctitle" value="Functional Java ${build.number} API Specification"/>
   <property name="javadoc.header" value="&lt;div&gt;&lt;p&gt;&lt;em&gt;Copyright Workingmouse Pty. Ltd. 2007, 2008&lt;/em&gt;&lt;/p&gt;This software is released under an open source BSD licence.&lt;/div&gt;"/>
@@ -31,15 +31,11 @@
   <path id="build.path" description="built class files">
     <pathelement path="${build.dir}/classes/src"/>
     <pathelement path="${build.dir}/classes/test-src"/>
-    <pathelement path="${build.dir}/classes/deps-src"/>
-    <pathelement path="${build.dir}/classes/deps-test-src"/>
   </path>
 
   <path id="fast.build.path" description="fast built class files">
     <pathelement path="${build.dir}/classes/src"/>
     <pathelement path="${build.dir}/classes/fast-test-src"/>
-    <pathelement path="${build.dir}/classes/deps-src"/>
-    <pathelement path="${build.dir}/classes/deps-test-src"/>
   </path>
 
   <path id="project.path" description="the project-wide path">

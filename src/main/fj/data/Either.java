@@ -388,7 +388,7 @@ public abstract class Either<A, B> {
   /**
    * A right projection of an either value.
    */
-  public final class RightProjection<A, B> implements Iterable<B> {
+  public final class RightProjection<A, B> {
     private final Either<A, B> e;
 
     private RightProjection(final Either<A, B> e) {

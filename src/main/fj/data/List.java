@@ -298,7 +298,7 @@ public abstract class List<A> implements Iterable<A> {
    */
   public List<A> delete(final A a, final Equal<A> e) {
     final P2<List<A>, List<A>> p = span(compose(not, e.eq(a)));
-    return p._2().isEmpty() ? p._1() : p._1().append(p._2().tail());
+    return p._1().append(p._2().tail());
   }
 
   /**
