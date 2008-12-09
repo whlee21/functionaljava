@@ -69,7 +69,7 @@ public final class DbState {
    * @return A new writer that writes the database via the given Connector.
    */
   public static DbState writer(final Connector pc) {
-    return new DbState(pc, rollback);
+    return new DbState(pc, commit);
   }
 
   private static final DB<Unit> rollback = new DB<Unit>() {
@@ -95,6 +95,7 @@ public final class DbState {
    */
   public <A> A run(final DB<A> dba) throws SQLException {
     final Connection c = pc.connect();
+    c.setAutoCommit(false);
     try {
       final A a = dba.run(c);
       terminal.run(c);
