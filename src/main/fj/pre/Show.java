@@ -84,6 +84,28 @@ public final class Show<A> {
   }
 
   /**
+   * Returns the transformation equivalent to this show.
+   *
+   * @return the transformation equivalent to this show.
+   */
+  public F<A, String> showS_() {
+    return new F<A, String>() {
+      public String f(final A a) {
+        return showS(a);
+      }
+    };
+  }
+
+  /**
+   * Returns the transformation equivalent to this show.
+   *
+   * @return the transformation equivalent to this show.
+   */
+  public F<A, List<Character>> show_() {
+    return f;
+  }
+
+  /**
    * Prints the given argument to the standard output stream.
    *
    * @param a The argument to print.
@@ -312,6 +334,7 @@ public final class Show<A> {
 
   /**
    * A show instance for the {@link Tree} type.
+   *
    * @param sa Show for the elements of the tree.
    * @return A show instance for the {@link Tree} type.
    */
@@ -627,14 +650,15 @@ public final class Show<A> {
 
   /**
    * A show instance for heterogeneous lists.
+   *
    * @param e A show instance for the first element of the list.
    * @param l A show instance for the rest of the list.
    * @return a show instance for heterogeneous lists.
    */
   public static <E, L extends HList<L>> Show<HList.HCons<E, L>> hListShow(final Show<E> e, final Show<L> l) {
-    return show(new F<HList.HCons<E, L>, List<Character>>(){
+    return show(new F<HList.HCons<E, L>, List<Character>>() {
       public List<Character> f(final HList.HCons<E, L> c) {
-        return e.show(c.head()).cons('[').append(l.show(c.tail())).snoc(']'); 
+        return e.show(c.head()).cons('[').append(l.show(c.tail())).snoc(']');
       }
     });
   }
