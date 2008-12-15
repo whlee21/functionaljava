@@ -1,0 +1,13 @@
+== Functional Java
+
+
+== Maven
+
+To create a Maven release:
+
+$ # Edit pom.xml in HEAD to point to correct version, 2.16 below.
+$ svn co https://functionaljava.googlecode.com/svn/tags/2.16 functionaljava-2.16
+$ cd functionaljava-2.16
+$ ant -Dbuild.number=2.16 -Dbuild.username=<SVn username> -Dbuild.password=<SVN password> maven-deploy
+$ # Post to list.
+
