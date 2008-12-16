@@ -45,6 +45,15 @@ public abstract class Set<A> implements Iterable<A> {
 
   abstract Set<A> r();
 
+  /**
+   * Returns the order of this Set.
+   *
+   * @return the order of this Set.
+   */
+  public Ord<A> ord() {
+    return ord;
+  }
+
   private static final class Empty<A> extends Set<A> {
     private Empty(final Ord<A> ord) {
       super(ord);
@@ -131,7 +140,7 @@ public abstract class Set<A> implements Iterable<A> {
       }
     });
   }
-  
+
   /**
    * Inserts the given element into this set.
    *
@@ -144,12 +153,12 @@ public abstract class Set<A> implements Iterable<A> {
 
   private Set<A> ins(final A x) {
     return isEmpty() ?
-      new Tree<A>(ord, Color.R, empty(ord), x, empty(ord)) :
-      ord.isLessThan(x, head()) ?
-        balance(ord, color(), l().ins(x), head(), r()) :
-        ord.eq(x, head()) ?
-          this :
-          balance(ord, color(), l(), head(), r().ins(x));
+        new Tree<A>(ord, Color.R, empty(ord), x, empty(ord)) :
+        ord.isLessThan(x, head()) ?
+            balance(ord, color(), l().ins(x), head(), r()) :
+            ord.eq(x, head()) ?
+                this :
+                balance(ord, color(), l(), head(), r().ins(x));
   }
 
   private Set<A> makeBlack() {
@@ -221,8 +230,8 @@ public abstract class Set<A> implements Iterable<A> {
    */
   public <B> B foldMap(final F<A, B> f, final Monoid<B> m) {
     return isEmpty() ?
-      m.zero() :
-      m.sum(m.sum(r().foldMap(f, m), f.f(head())), l().foldMap(f, m));
+        m.zero() :
+        m.sum(m.sum(r().foldMap(f, m), f.f(head())), l().foldMap(f, m));
   }
 
   /**
@@ -331,15 +340,16 @@ public abstract class Set<A> implements Iterable<A> {
     if (isEmpty())
       return P.p(empty(ord), Option.<A>none(), empty(ord));
     else {
-      final Ordering i = ord.compare(a, head());
+      final A h = head();
+      final Ordering i = ord.compare(a, h);
       if (i == LT) {
         final P3<Set<A>, Option<A>, Set<A>> lg = l().split(a);
-        return P.p(lg._1(), lg._2(), lg._3().insert(head()).union(r()));
+        return P.p(lg._1(), lg._2(), lg._3().insert(h).union(r()));
       } else if (i == GT) {
         final P3<Set<A>, Option<A>, Set<A>> lg = r().split(a);
-        return P.p(lg._1().insert(head()).union(l()), lg._2(), lg._3());
+        return P.p(lg._1().insert(h).union(l()), lg._2(), lg._3());
       } else
-        return P.p(l(), some(a), r());
+        return P.p(l(), some(h), r());
     }
   }
 
