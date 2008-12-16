@@ -1,13 +1,14 @@
 package fj.data;
 
+import static fj.Function.compose;
 import fj.P;
 import fj.P2;
-import static fj.data.IterableW.wrap;
 import static fj.data.IterableW.join;
-import static fj.Function.compose;
+import static fj.data.List.iterableList;
 import fj.pre.Ord;
 
 import java.util.Iterator;
+import java.util.Map;
 
 /**
  * An immutable, in-memory map, backed by a red-black tree.
@@ -56,14 +57,98 @@ public class TreeMap<K, V> implements Iterable<P2<K, V>> {
   }
 
   /**
+   * Deletes the entry in the tree map that corresponds to the given key.
+   *
+   * @param k The key to delete from this tree map.
+   * @return A new tree map with the entry corresponding to the given key removed.
+   */
+  public TreeMap<K, V> delete(final K k) {
+    return new TreeMap<K, V>(tree.delete(P.p(k, Option.<V>none())));
+  }
+
+  /**
+   * Returns the number of entries in this tree map.
+   *
+   * @return The number of entries in this tree map.
+   */
+  public int size() {
+    return tree.size();
+  }
+
+  /**
+   * Determines if this tree map has any entries.
+   *
+   * @return <code>true</code> if this tree map has no entries, <code>false</code> otherwise.
+   */
+  public boolean isEmpty() {
+    return tree.isEmpty();
+  }
+
+  /**
+   * Returns all values in this tree map.
+   *
+   * @return All values in this tree map.
+   */
+  public List<V> values() {
+    return iterableList(join(tree.toList().map(compose(IterableW.<V, Option<V>>wrap(), P2.<K, Option<V>>__2()))));
+  }
+
+  /**
+   * Returns all keys in this tree map.
+   *
+   * @return All keys in this tree map.
+   */
+  public List<K> keys() {
+    return tree.toList().map(P2.<K, Option<V>>__1());
+  }
+
+  /**
+   * Determines if the given key value exists in this tree map.
+   *
+   * @param k The key value to look for in this tree map.
+   * @return <code>true</code> if this tree map contains the given key, <code>false</code> otherwise.
+   */
+  public boolean contains(final K k) {
+    return tree.member(P.p(k, Option.<V>none()));
+  }
+
+  /**
    * Returns an iterator for this map's key-value pairs.
    * This method exists to permit the use in a <code>for</code>-each loop.
    *
    * @return A iterator for this map's key-value pairs.
    */
   public Iterator<P2<K, V>> iterator() {
-    return join(wrap(tree).map(P2.<K, Option<V>, IterableW<V>>map2_(IterableW.<V, Option<V>>wrap())
+    return join(tree.toStream().map(P2.<K, Option<V>, IterableW<V>>map2_(IterableW.<V, Option<V>>wrap())
     ).map(P2.tuple(compose(IterableW.<V, P2<K, V>>map(), P.<K, V>p2())))).iterator();
+  }
+
+  /**
+   * A mutable map projection of this tree map.
+   *
+   * @return A new mutable map isomorphic to this tree map.
+   */
+  public Map<K, V> toMutableMap() {
+    final Map<K, V> m = new java.util.TreeMap<K, V>();
+    for (final P2<K, V> e : this) {
+      m.put(e._1(), e._2());
+    }
+    return m;
+  }
+
+  /**
+   * An immutable projection of the given mutable map.
+   *
+   * @param ord An order for the map's keys.
+   * @param m   A mutable map to project to an immutable one.
+   * @return A new immutable tree map isomorphic to the given mutable map.
+   */
+  public static <K, V> TreeMap<K, V> fromMutableMap(final Ord<K> ord, final Map<K, V> m) {
+    TreeMap<K, V> t = empty(ord);
+    for (final Map.Entry<K, V> e : m.entrySet()) {
+      t = t.set(e.getKey(), e.getValue());
+    }
+    return t;
   }
 
 }
