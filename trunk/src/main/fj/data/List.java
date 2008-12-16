@@ -947,6 +947,18 @@ public abstract class List<A> implements Iterable<A> {
   }
 
   /**
+   * Returns the index of the first element in this list which is equal (by the given equality) to the
+   * query element, or None if there is no such element.
+   * @param e An equality for this list's elements.
+   * @param a A query element.                                       
+   * @return The index of the first element in this list which is equal (by the given equality) to the
+   * query element, or None if there is no such element.
+   */
+  public Option<Integer> elementIndex(final Equal<A> e, final A a) {
+    return lookup(e, zipIndex(), a);
+  }
+
+  /**
    * Projects an immutable collection of this list.
    *
    * @return An immutable collection of this list.
