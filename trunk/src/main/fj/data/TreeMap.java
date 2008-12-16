@@ -13,7 +13,7 @@ import java.util.Map;
 /**
  * An immutable, in-memory map, backed by a red-black tree.
  */
-public class TreeMap<K, V> implements Iterable<P2<K, V>> {
+public final class TreeMap<K, V> implements Iterable<P2<K, V>> {
   private final Set<P2<K, Option<V>>> tree;
 
   private TreeMap(final Set<P2<K, Option<V>>> tree) {
