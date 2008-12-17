@@ -2,9 +2,11 @@ package fj.data.relation;
 
 import fj.F;
 import fj.F2;
+import fj.Function;
 import fj.P;
 import fj.P2;
 import fj.P3;
+import static fj.Function.compose2;
 import fj.data.Set;
 import fj.data.TreeMap;
 import static fj.data.relation.R1.r1$;
@@ -150,6 +152,12 @@ public final class R3<A, B, C> implements Iterable<P3<A, B, C>> {
 
   public Iterator<P3<A, B, C>> iterator() {
     return body.iterator();
+  }
+
+  public F<A, F<B, F<C, Boolean>>> toPredicate() {
+    final F<F<C, P3<A, B, C>>, F<C, Boolean>> f =
+        Function.<C, P3<A, B, C>, Boolean>compose().f(Set.<P3<A, B, C>>member().f(body));
+    return compose2(f, P.<A, B, C>p3());
   }
 
 }
