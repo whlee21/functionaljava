@@ -11,6 +11,7 @@ import static fj.data.relation.R1.r1$;
 import fj.pre.Monoid;
 import fj.pre.Ord;
 import fj.pre.Semigroup;
+import static fj.pre.Ord.p2Ord;
 
 import java.util.Iterator;
 
@@ -23,39 +24,39 @@ public class R2<A, B> implements Iterable<P2<A, B>> {
   private final Set<P2<A, B>> body;
   private final TreeMap<A, Set<B>> map1;
   private final TreeMap<B, Set<A>> map2;
+  private final Ord<A> orda;
+  private final Ord<B> ordb;
 
-  private R2(final Set<P2<A, B>> s) {
+  private R2(final Set<P2<A, B>> s, final Ord<A> oa, final Ord<B> ob) {
     body = s;
-    TreeMap<A, Set<B>> map1 = TreeMap.empty(ord1());
-    TreeMap<B, Set<A>> map2 = TreeMap.empty(ord2());
+    orda = oa;
+    ordb = ob;
+    TreeMap<A, Set<B>> map1 = TreeMap.empty(orda);
+    TreeMap<B, Set<A>> map2 = TreeMap.empty(ordb);
 
     for (final P2<A, B> e : body) {
-      map1 = map1.set(e._1(), map1.get(e._1()).orSome(Set.single(ord2(), e._2())));
-      map2 = map2.set(e._2(), map2.get(e._2()).orSome(Set.single(ord1(), e._1())));
+      map1 = map1.set(e._1(), map1.get(e._1()).orSome(Set.single(ordb, e._2())));
+      map2 = map2.set(e._2(), map2.get(e._2()).orSome(Set.single(orda, e._1())));
     }
 
     this.map1 = map1;
     this.map2 = map2;
   }
 
-  private Ord<A> ord1() {
-    return body.ord().comap(flip(P.<A, B>p2()).f(null));
+  private R2<A, B> r2(final Set<P2<A, B>> s) {
+    return r2(s, orda, ordb);
   }
 
-  private Ord<B> ord2() {
-    return body.ord().comap(P.<A, B>p2().f(null));
-  }
-
-  public static <A, B> R2<A, B> r2(final Set<P2<A, B>> s) {
-    return new R2<A, B>(s);
+  public static <A, B> R2<A, B> r2(final Set<P2<A, B>> s, final Ord<A> oa, final Ord<B> ob) {
+    return new R2<A, B>(s, oa, ob);
   }
 
   public R1<A> project1() {
-    return r1$(body.map(ord1(), P2.<A, B>__1()));
+    return r1$(body.map(orda, P2.<A, B>__1()));
   }
 
   public R1<B> project2() {
-    return r1$(body.map(ord2(), P2.<A, B>__2()));
+    return r1$(body.map(ordb, P2.<A, B>__2()));
   }
 
   public R2<A, B> select(final F<P2<A, B>, Boolean> p) {
@@ -67,11 +68,11 @@ public class R2<A, B> implements Iterable<P2<A, B>> {
   }
 
   public R2<A, B> selectBy1(final A a) {
-    return r2(map1.get(a).orSome(Set.<B>empty(ord2())).map(body.ord(), P.<A, B>p2().f(a)));
+    return r2(map1.get(a).orSome(Set.<B>empty(ordb)).map(body.ord(), P.<A, B>p2().f(a)));
   }
 
   public R2<A, B> selectBy2(final B b) {
-    return r2(map2.get(b).orSome(Set.<A>empty(ord1())).map(body.ord(), flip(P.<A, B>p2()).f(b)));
+    return r2(map2.get(b).orSome(Set.<A>empty(orda)).map(body.ord(), flip(P.<A, B>p2()).f(b)));
   }
 
   public R2<A, B> union(final R2<A, B> r) {
@@ -86,12 +87,16 @@ public class R2<A, B> implements Iterable<P2<A, B>> {
     };
   }
 
+  public static <A, B> R2<A, B> empty(final Ord<A> oa, final Ord<B> ob) {
+    return r2(Set.empty(p2Ord(oa, ob)), oa, ob);
+  }
+
   public static <A, B> Semigroup<R2<A, B>> r2Semigroup() {
     return Semigroup.semigroup(R2.<A, B>union());
   }
 
-  public static <A, B> Monoid<R2<A, B>> r2Monoid(Ord<P2<A, B>> o) {
-    return Monoid.monoid(R2.<A, B>r2Semigroup(), r2(Set.empty(o)));
+  public static <A, B> Monoid<R2<A, B>> r2Monoid(final Ord<A> oa, final Ord<B> ob) {
+    return Monoid.monoid(R2.<A, B>r2Semigroup(), empty(oa, ob));
   }
 
   public Set<P2<A, B>> toSet() {
