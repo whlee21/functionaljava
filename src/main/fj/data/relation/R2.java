@@ -2,6 +2,7 @@ package fj.data.relation;
 
 import fj.F;
 import fj.F2;
+import static fj.Function.compose2;
 import static fj.Function.flip;
 import fj.P;
 import fj.P2;
@@ -10,8 +11,8 @@ import fj.data.TreeMap;
 import static fj.data.relation.R1.r1$;
 import fj.pre.Monoid;
 import fj.pre.Ord;
-import fj.pre.Semigroup;
 import static fj.pre.Ord.p2Ord;
+import fj.pre.Semigroup;
 
 import java.util.Iterator;
 
@@ -105,6 +106,10 @@ public class R2<A, B> implements Iterable<P2<A, B>> {
 
   public Iterator<P2<A, B>> iterator() {
     return body.iterator();
+  }
+
+  public F<A, F<B, Boolean>> toPredicate() {
+    return compose2(Set.<P2<A, B>>member().f(body), P.<A, B>p2());
   }
 
 }

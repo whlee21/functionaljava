@@ -133,7 +133,7 @@ public abstract class Set<A> implements Iterable<A> {
    *
    * @return A function that returns true if the given element if a member of the given set.
    */
-  public F<Set<A>, F<A, Boolean>> member() {
+  public static <A> F<Set<A>, F<A, Boolean>> member() {
     return curry(new F2<Set<A>, A, Boolean>() {
       public Boolean f(final Set<A> s, final A a) {
         return s.member(a);
@@ -301,7 +301,7 @@ public abstract class Set<A> implements Iterable<A> {
    * @return A new set which is the intersection of this set and the given set.
    */
   public Set<A> intersect(final Set<A> s) {
-    return filter(member().f(s));
+    return filter(Set.<A>member().f(s));
   }
 
   /**
@@ -311,7 +311,7 @@ public abstract class Set<A> implements Iterable<A> {
    * @return A new set which contains only the elements of this set that do not occur in the given set.
    */
   public Set<A> minus(final Set<A> s) {
-    return filter(compose(not, member().f(s)));
+    return filter(compose(not, Set.<A>member().f(s)));
   }
 
   /**
