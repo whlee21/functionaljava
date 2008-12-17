@@ -3,8 +3,10 @@ package fj.pre;
 import fj.F;
 import fj.F2;
 import fj.Function;
+import fj.P;
 import fj.P1;
 import fj.P2;
+import fj.P3;
 import fj.Unit;
 import static fj.Function.compose;
 import static fj.Function.curry;
@@ -538,6 +540,24 @@ public final class Ord<A> {
     return ord(curry(new F2<P2<A, B>, P2<A, B>, Ordering>() {
       public Ordering f(final P2<A, B> a, final P2<A, B> b) {
         return oa.eq(a._1(), b._1()) ? ob.compare(a._2(), b._2()) : oa.compare(a._1(), b._1());
+      }
+    }));
+  }
+
+  /**
+   * An order instance for a product-3, with the first factor considered most significant.
+   *
+   * @param oa An order instance for the first factor.
+   * @param ob An order instance for the second factor.
+   * @param oc An order instance for the third factor.
+   * @return An order instance for a product-3, with the first factor considered most significant.
+   */
+  public static <A, B, C> Ord<P3<A, B, C>> p3Ord(final Ord<A> oa, final Ord<B> ob, final Ord<C> oc) {
+    return ord(curry(new F2<P3<A, B, C>, P3<A, B, C>, Ordering>() {
+      public Ordering f(final P3<A, B, C> a, final P3<A, B, C> b) {
+        return oa.eq(a._1(), b._1()) ?
+            p2Ord(ob, oc).compare(P.p(a._2(), a._3()), P.p(b._2(), b._3()))
+            : oa.compare(a._1(), b._1());
       }
     }));
   }
