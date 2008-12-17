@@ -8,7 +8,9 @@ import fj.P2;
 import fj.data.Set;
 import fj.data.TreeMap;
 import static fj.data.relation.R1.r1$;
+import fj.pre.Monoid;
 import fj.pre.Ord;
+import fj.pre.Semigroup;
 
 import java.util.Iterator;
 
@@ -70,6 +72,30 @@ public class R2<A, B> implements Iterable<P2<A, B>> {
 
   public R2<A, B> selectBy2(final B b) {
     return r2(map2.get(b).orSome(Set.<A>empty(ord1())).map(body.ord(), flip(P.<A, B>p2()).f(b)));
+  }
+
+  public R2<A, B> union(final R2<A, B> r) {
+    return r2(body.union(r.body));
+  }
+
+  public static <A, B> F2<R2<A, B>, R2<A, B>, R2<A, B>> union() {
+    return new F2<R2<A, B>, R2<A, B>, R2<A, B>>() {
+      public R2<A, B> f(final R2<A, B> r1, final R2<A, B> r2) {
+        return r1.union(r2);
+      }
+    };
+  }
+
+  public static <A, B> Semigroup<R2<A, B>> r2Semigroup() {
+    return Semigroup.semigroup(R2.<A, B>union());
+  }
+
+  public static <A, B> Monoid<R2<A, B>> r2Monoid(Ord<P2<A, B>> o) {
+    return Monoid.monoid(R2.<A, B>r2Semigroup(), r2(Set.empty(o)));
+  }
+
+  public Set<P2<A, B>> toSet() {
+    return body;
   }
 
   public Iterator<P2<A, B>> iterator() {

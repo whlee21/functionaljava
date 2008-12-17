@@ -1,12 +1,14 @@
 package fj.data.relation;
 
-import static fj.Function.flip;
 import fj.*;
+import static fj.Function.flip;
 import fj.data.Set;
 import fj.data.TreeMap;
 import static fj.data.relation.R1.r1$;
 import static fj.data.relation.R2.r2;
+import fj.pre.Monoid;
 import fj.pre.Ord;
+import fj.pre.Semigroup;
 
 import java.util.Iterator;
 
@@ -14,7 +16,7 @@ import java.util.Iterator;
  * A position-indexed ternary relation, or a tri-directional map.
  * Represents the extension of a ternary predicate.
  */
-public class R3<A, B, C> implements Iterable<P3<A, B, C>> {
+public final class R3<A, B, C> implements Iterable<P3<A, B, C>> {
 
   private final Set<P3<A, B, C>> body;
   private final TreeMap<A, R2<B, C>> map1;
@@ -51,29 +53,17 @@ public class R3<A, B, C> implements Iterable<P3<A, B, C>> {
   }
 
   private Ord<P2<A, B>> ordab() {
-    return body.ord().comap(new F<P2<A, B>, P3<A, B, C>>() {
-      public P3<A, B, C> f(final P2<A, B> p) {
-        return P.p(p._1(), p._2(), null); 
-      }
-    });
+    return Ord.p2Ord(orda(), ordb());
   }
 
   private Ord<P2<A, C>> ordac() {
-    return body.ord().comap(new F<P2<A, C>, P3<A, B, C>>() {
-      public P3<A, B, C> f(final P2<A, C> p) {
-        return P.p(p._1(), null, p._2()); 
-      }
-    });
+    return Ord.p2Ord(orda(), ordc());
   }
 
   private Ord<P2<B, C>> ordbc() {
-    return body.ord().comap(new F<P2<B, C>, P3<A, B, C>>() {
-      public P3<A, B, C> f(final P2<B, C> p) {
-        return P.p(null, p._1(), p._2());
-      }
-    });
+    return Ord.p2Ord(ordb(), ordc());
   }
-  
+
   public static <A, B, C> R3<A, B, C> r3(final Set<P3<A, B, C>> s) {
     return new R3<A, B, C>(s);
   }
@@ -88,6 +78,69 @@ public class R3<A, B, C> implements Iterable<P3<A, B, C>> {
 
   public R1<C> project3() {
     return r1$(body.map(ordc(), P3.<A, B, C>__3()));
+  }
+
+  public R2<B, C> projectBut1() {
+    return r2(Set.iterableSet(ordbc(), R2.r2Monoid(ordbc()).sumLeft(map1.values())));
+  }
+
+  public R2<A, C> projectBut2() {
+    return r2(Set.iterableSet(ordac(), R2.r2Monoid(ordac()).sumLeft(map2.values())));
+  }
+
+  public R2<A, B> projectBut3() {
+    return r2(Set.iterableSet(ordab(), R2.r2Monoid(ordab()).sumLeft(map3.values())));
+  }
+
+  public R3<A, B, C> selectBy1(final A a) {
+    return r3(map1.get(a).orSome(r2(Set.<P2<B, C>>empty(ordbc()))).toSet().map(
+        body.ord(), new F<P2<B, C>, P3<A, B, C>>() {
+          public P3<A, B, C> f(final P2<B, C> p) {
+            return P.p(a, p._1(), p._2());
+          }
+        }));
+  }
+
+  public R3<A, B, C> selectBy2(final B b) {
+    return r3(map2.get(b).orSome(r2(Set.<P2<A, C>>empty(ordac()))).toSet().map(
+        body.ord(), new F<P2<A, C>, P3<A, B, C>>() {
+          public P3<A, B, C> f(final P2<A, C> p) {
+            return P.p(p._1(), b, p._2());
+          }
+        }));
+  }
+
+  public R3<A, B, C> selectBy3(final C c) {
+    return r3(map3.get(c).orSome(r2(Set.<P2<A, B>>empty(ordab()))).toSet().map(
+        body.ord(), new F<P2<A, B>, P3<A, B, C>>() {
+          public P3<A, B, C> f(final P2<A, B> p) {
+            return P.p(p._1(), p._2(), c);
+          }
+        }));
+  }
+
+  public R3<A, B, C> union(final R3<A, B, C> r) {
+    return r3(body.union(r.body));
+  }
+
+  public static <A, B, C> F2<R3<A, B, C>, R3<A, B, C>, R3<A, B, C>> union() {
+    return new F2<R3<A, B, C>, R3<A, B, C>, R3<A, B, C>>() {
+      public R3<A, B, C> f(final R3<A, B, C> r1, final R3<A, B, C> r2) {
+        return r1.union(r2);
+      }
+    };
+  }
+
+  public static <A, B, C> Semigroup<R3<A, B, C>> r3Semigroup() {
+    return Semigroup.semigroup(R3.<A, B, C>union());
+  }
+
+  public static <A, B, C> Monoid<R3<A, B, C>> r2Monoid(Ord<P3<A, B, C>> o) {
+    return Monoid.monoid(R3.<A, B, C>r3Semigroup(), r3(Set.empty(o)));
+  }
+
+  public Set<P3<A, B, C>> toSet() {
+    return body;
   }
 
   public Iterator<P3<A, B, C>> iterator() {

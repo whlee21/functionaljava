@@ -40,4 +40,8 @@ public class R1<A> implements Iterable<A> {
   public Iterator<A> iterator() {
     return IterableW.wrap(body).map(P1.<A>__1()).iterator();
   }
+
+  public Set<A> toSet() {
+    return body.map(body.ord().comap(P.<A>p1()), P1.<A>__1());
+  }
 }
