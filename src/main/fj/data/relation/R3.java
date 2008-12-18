@@ -17,7 +17,7 @@ import java.util.Iterator;
  * Represents the extension of a ternary predicate.
  */
 public final class R3<A, B, C> implements Iterable<P3<A, B, C>> {
-
+  
   private final Set<P3<A, B, C>> body;
   private final TreeMap<A, R2<B, C>> map1;
   private final TreeMap<B, R2<A, C>> map2;
