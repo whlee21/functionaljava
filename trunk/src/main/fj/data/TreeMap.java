@@ -3,6 +3,7 @@ package fj.data;
 import static fj.Function.compose;
 import fj.P;
 import fj.P2;
+import fj.P3;
 import static fj.data.IterableW.join;
 import static fj.data.List.iterableList;
 import fj.pre.Ord;
@@ -47,13 +48,16 @@ public final class TreeMap<K, V> implements Iterable<P2<K, V>> {
 
   /**
    * Inserts the given key and value association into the tree map.
+   * If the given key is already mapped to a value, the old value is replaced with the given one.
    *
    * @param k The key to insert.
    * @param v The value to insert.
    * @return A new tree map with the given value mapped to the given key.
    */
   public TreeMap<K, V> set(final K k, final V v) {
-    return new TreeMap<K, V>(tree.insert(P.p(k, Option.some(v))));
+    final P3<Set<P2<K, Option<V>>>, Option<P2<K, Option<V>>>, Set<P2<K, Option<V>>>> x
+        = tree.split(P.p(k, Option.<V>none()));
+    return new TreeMap<K, V>(x._1().union(x._3().insert(P.p(k, Option.some(v)))));
   }
 
   /**
