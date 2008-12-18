@@ -45,7 +45,12 @@ public class R1<A> implements Iterable<A> {
     return body.map(body.ord().comap(P.<A>p1()), P1.<A>__1());
   }
 
+  public Set<P1<A>> body() {
+    return body;
+  }
+  
   public F<A, Boolean> toPredicate() {
     return compose(Set.<P1<A>>member().f(body), P.<A>p1());
   }
+
 }
