@@ -10,37 +10,37 @@ import List.{nil, single, join, iterateWhile}
 import Implicit._
 
 object CheckList {
-  val prop_isEmpty = property((a: List[Int]) =>
+  val prop_isEmpty = forAll((a: List[Int]) =>
     a.isEmpty != a.isNotEmpty)
 
-  val prop_isNotEmpty = property((a: List[Int]) =>
+  val prop_isNotEmpty = forAll((a: List[Int]) =>
     a.length > 0 ==> a.isNotEmpty)
 
-  val prop_orHead = property((a: List[Int], n: P1[Int]) =>
+  val prop_orHead = forAll((a: List[Int], n: P1[Int]) =>
     a.isNotEmpty ==>
     (a.orHead(n) == a.head))
 
-  val prop_orTail = property((a: List[String], n: P1[List[String]]) =>
+  val prop_orTail = forAll((a: List[String], n: P1[List[String]]) =>
     a.isNotEmpty ==>
     (listEqual(stringEqual).eq(a.orTail(n), a.tail)))
 
-  val prop_toOption = property((a: List[Int]) =>
+  val prop_toOption = forAll((a: List[Int]) =>
     a.toOption.isNone || a.toOption.some == a.head)
 
   // crashes the type checker for unknown reason
   // val prop_toEither = property((a: List[Int], n: P1[Int]) =>
   //   (a.toEither(n).isLeft && a.toEither(n).left.value == n._1) || (a.toEither(n).right.value == a.head))
 
-  val prop_cons1 = property((a: List[Int], n: Int) =>
+  val prop_cons1 = forAll((a: List[Int], n: Int) =>
     a.cons(n).head == n)
 
-  val prop_cons2 = property((a: List[Int], n: Int) =>
+  val prop_cons2 = forAll((a: List[Int], n: Int) =>
     a.cons(n).length == a.length + 1)
 
-  val prop_mapId = property((a: List[String]) =>
+  val prop_mapId = forAll((a: List[String]) =>
     listEqual(stringEqual).eq(a.map((x: String) => x), a))
 
-  val prop_mapCompose = property((a: List[String]) => {
+  val prop_mapCompose = forAll((a: List[String]) => {
     def f(s: String) = s.toLowerCase
     def g(s: String) = s.toUpperCase
     listEqual(stringEqual).eq(a.map((x: String) => f(g(x))), a.map((x: String) => g(x)).map((x: String) => f(x)))})
@@ -63,117 +63,117 @@ object CheckList {
   //   i == j
   // })
 
-  val prop_filter1 = property((a: List[Int]) =>
+  val prop_filter1 = forAll((a: List[Int]) =>
     a.filter((x: Int) => ((x % 2 == 0): java.lang.Boolean)).forall((x: Int) => ((x % 2 == 0): java.lang.Boolean)))
 
-  val prop_filter2 = property((a: List[Int]) =>
+  val prop_filter2 = forAll((a: List[Int]) =>
     a.filter((x: Int) => ((x % 2 == 0): java.lang.Boolean)).length <= a.length)
 
-  val prop_bindLeftIdentity = property((s: String) => {
+  val prop_bindLeftIdentity = forAll((s: String) => {
     def f(s: String) = single[String](s.reverse)
     listEqual(stringEqual).eq(
       single[String](s).bind(f(_: String)),
       f(s))})
 
-  val prop_bindRightIdentity = property((a: List[String]) =>
+  val prop_bindRightIdentity = forAll((a: List[String]) =>
     listEqual(stringEqual).eq(
       a.bind((x: String) => single[String](x)),
       a))
 
-  val prop_bindAssociativity = property((a: List[String]) => {
+  val prop_bindAssociativity = forAll((a: List[String]) => {
     def f(s: String) = single[String](s.reverse)
     def g(s: String) = single[String](s.toUpperCase)
     listEqual(stringEqual).eq(
       a.bind(f(_: String)).bind(g(_: String)),
       a.bind(f(_: String).bind(g(_: String))))})
 
-  val prop_sequence = property((a: List[String], b: List[String]) =>
+  val prop_sequence = forAll((a: List[String], b: List[String]) =>
     listEqual(stringEqual).eq(
       a.sequence(b),
       a.bind((x: String) => b)))
 
-  val prop_append = property((a: List[String], b: String) =>
+  val prop_append = forAll((a: List[String], b: String) =>
     listEqual(stringEqual).eq(
       single(b).append(a),
       a.cons(b)))
 
-  val prop_foldRight = property((a: List[String]) => listEqual(stringEqual).eq(
+  val prop_foldRight = forAll((a: List[String]) => listEqual(stringEqual).eq(
       a.foldRight((a: String, b: List[String]) => b.cons(a), nil[String]), a))
 
-  val prop_foldLeft = property((a: List[String], s: String) =>
+  val prop_foldLeft = forAll((a: List[String], s: String) =>
     listEqual(stringEqual).eq(
       a.foldLeft(((a: List[String], b: String) => single(b).append(a)), nil[String]),
       a.reverse.foldRight((a: String, b: List[String]) => single(a).append(b), nil[String])))
 
-  val prop_length = property((a: List[String]) =>
+  val prop_length = forAll((a: List[String]) =>
     a.length != 0 ==>
     (a.length - 1 == a.tail.length))
 
-  val prop_reverse = property((a: List[String], b: List[String]) =>
+  val prop_reverse = forAll((a: List[String], b: List[String]) =>
     listEqual(stringEqual).eq(
       (a append b).reverse,
       b.reverse.append(a.reverse)))
 
-  val prop_index = property((a: List[String], n: Int) =>
+  val prop_index = forAll((a: List[String], n: Int) =>
     (n > 0 && n < a.length) ==>
     (a.index(n) == a.tail.index(n - 1)))
 
-  val prop_snoc = property((a: List[String], s: String) =>
+  val prop_snoc = forAll((a: List[String], s: String) =>
     listEqual(stringEqual).eq(
       a.snoc(s),
       a.append(single(s))))
 
-  val prop_take = property((a: List[String], n: Int) =>
+  val prop_take = forAll((a: List[String], n: Int) =>
     a.take(n).length() <= a.length())
 
-  val prop_drop = property((a: List[String], n: Int) =>
+  val prop_drop = forAll((a: List[String], n: Int) =>
     a.drop(n).length() <= a.length())
 
-  val prop_splitAt = property((a: List[String], n: Int) =>
+  val prop_splitAt = forAll((a: List[String], n: Int) =>
     p2Equal(listEqual(stringEqual), listEqual(stringEqual)).eq(
       a.splitAt(n),
       p(a.take(n), a.drop(n))))
 
-  val prop_partition = property((a: List[String], n: Int) => (a.length > 0 && n > 0) ==>
+  val prop_partition = forAll((a: List[String], n: Int) => (a.length > 0 && n > 0) ==>
     {
       val as = a.partition(n)
       listEqual(stringEqual).eq(join(as), a) && as.forall((x: List[String]) => (x.length <= n):java.lang.Boolean)
     })
 
-  val prop_inits = property((a: List[String]) =>
+  val prop_inits = forAll((a: List[String]) =>
     a.isEmpty || a.inits.length == a.length + 1 && join(a.inits).length == 1.to(a.length).foldLeft(0)(_+_))
 
-  val prop_tails = property((a: List[String]) =>
+  val prop_tails = forAll((a: List[String]) =>
     a.isEmpty || a.tails.length == a.length + 1 && join(a.tails).length == 1.to(a.length).foldLeft(0)(_+_))
 
-  val prop_sort = property((a: List[String]) =>
+  val prop_sort = forAll((a: List[String]) =>
     {
       val s = a.sort(fj.pre.Ord.stringOrd)
       s.isEmpty || s.tail.isEmpty || s.head.compareTo(s.tail.head) <= 0
     })
 
-  val prop_forall = property((a: List[Int]) =>
+  val prop_forall = forAll((a: List[Int]) =>
     a.forall((x: Int) => ((x % 2 == 0): java.lang.Boolean)) ==
     !a.exists((x: Int) => ((x % 2 != 0): java.lang.Boolean)))
 
-  val prop_exists = property((a: List[Int]) =>
+  val prop_exists = forAll((a: List[Int]) =>
     a.exists((x: Int) => ((x % 2 == 0): java.lang.Boolean)) ==
     !a.forall((x: Int) => ((x % 2 != 0): java.lang.Boolean)))
 
-  val prop_find = property((a: List[Int]) => {
+  val prop_find = forAll((a: List[Int]) => {
     val s = a.find((x: Int) => (x % 2 == 0): java.lang.Boolean)
     s.forall((x: Int) => (x % 2 == 0): java.lang.Boolean)
   })
 
-  val prop_nub = property((a: List[String], b: List[String]) =>
+  val prop_nub = forAll((a: List[String], b: List[String]) =>
     listEqual(stringEqual).eq(a append b nub, a.nub.append(b.nub).nub))
 
-  val prop_join = property((a: List[List[String]]) =>
+  val prop_join = forAll((a: List[List[String]]) =>
     listEqual(stringEqual).eq(
       a.foldRight((a: List[String], b: List[String]) => a.append(b), nil[String]),
       join(a)))
 
-  val prop_iterateWhile = property((n: Int) => n > 0 ==>
+  val prop_iterateWhile = forAll((n: Int) => n > 0 ==>
     (iterateWhile(((x:Int) => x - 1), ((x:Int) => ((x > 0): java.lang.Boolean)), n).length == n))
 
   val tests = scala.List(

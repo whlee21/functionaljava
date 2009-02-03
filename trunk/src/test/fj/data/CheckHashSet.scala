@@ -10,25 +10,25 @@ object CheckHashSet {
   implicit val equalInt: pre.Equal[Int] = intEqual comap ((x: Int) => (x: java.lang.Integer))
   implicit val hashInt: pre.Hash[Int] = intHash comap ((x: Int) => (x: java.lang.Integer))
 
-  val prop_eq = property((s: HashSet[Int], x: Int, y: Int) => s.eq(x, y) == equalInt.eq(x, y))
+  val prop_eq = forAll((s: HashSet[Int], x: Int, y: Int) => s.eq(x, y) == equalInt.eq(x, y))
 
-  val prop_hash = property((s: HashSet[Int], x: Int) => s.hash(x) == hashInt.hash(x))
+  val prop_hash = forAll((s: HashSet[Int], x: Int) => s.hash(x) == hashInt.hash(x))
 
-  val prop_set = property((s: HashSet[Int], x: Int) => {
+  val prop_set = forAll((s: HashSet[Int], x: Int) => {
     s.set(x)
     s.contains(x)
   })
 
-  val prop_clear = property((s: HashSet[Int], k: Int) => {
+  val prop_clear = forAll((s: HashSet[Int], k: Int) => {
     s.clear
     !s.contains(k)
   })
 
-  val prop_isEmpty = property((s: HashSet[Int], k: Int) => !s.contains(k) || !s.isEmpty)
+  val prop_isEmpty = forAll((s: HashSet[Int], k: Int) => !s.contains(k) || !s.isEmpty)
 
-  val prop_size = property((s: HashSet[Int], k: Int) => !s.contains(k) || s.size != 0)
+  val prop_size = forAll((s: HashSet[Int], k: Int) => !s.contains(k) || s.size != 0)
 
-  val prop_delete = property((s: HashSet[Int], k: Int) => {
+  val prop_delete = forAll((s: HashSet[Int], k: Int) => {
     s.delete(k)
     !s.contains(k)
   })

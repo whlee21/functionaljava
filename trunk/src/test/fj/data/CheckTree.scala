@@ -11,20 +11,20 @@ import fj.pre.Monoid
 
 object CheckTree {
 
-  val prop_root = property((a: Tree[Int]) =>
+  val prop_root = forAll((a: Tree[Int]) =>
     a.root == root_[Int].f(a))
 
-  val prop_subForest = property((a: Tree[Int]) =>
+  val prop_subForest = forAll((a: Tree[Int]) =>
     a.subForest == subForest_[Int].f(a))
 
-  val prop_flatten_foldmap = property((a: Tree[Int]) => {
+  val prop_flatten_foldmap = forAll((a: Tree[Int]) => {
     def const(f: Int) = 1:java.lang.Integer
     a.foldMap[java.lang.Integer](const _, intAdditionMonoid) == a.flatten.length})
 
-  val prop_levels_length = property((a: Tree[Int]) =>
+  val prop_levels_length = forAll((a: Tree[Int]) =>
     a.flatten.length == join(a.levels).length)
 
-  val prop_fmap_assoc = property((a: Tree[String]) => {
+  val prop_fmap_assoc = forAll((a: Tree[String]) => {
     def f(s: String) = s.toUpperCase
     listEqual(stringEqual).eq(a.flatten.map(f _), a.fmap(f _).flatten)})
 

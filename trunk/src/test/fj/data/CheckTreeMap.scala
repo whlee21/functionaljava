@@ -11,7 +11,7 @@ object CheckTreeMap {
   implicit def oi : Ord[Int] = intOrd.comap(idInt _)
   implicit def os : Ord[String] = stringOrd
 
-  val prop_set = property((m: TreeMap[Int, String], k: Int, v: String) => m.set(k, v).get(k).some == v)
+  val prop_set = forAll((m: TreeMap[Int, String], k: Int, v: String) => m.set(k, v).get(k).some == v)
 
   val tests = scala.List(
       ("prop_set", prop_set)

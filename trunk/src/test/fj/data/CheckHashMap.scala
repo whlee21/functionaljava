@@ -10,36 +10,36 @@ object CheckHashMap {
   implicit val equalInt: pre.Equal[Int] = intEqual comap ((x: Int) => (x: java.lang.Integer))
   implicit val hashInt: pre.Hash[Int] = intHash comap ((x: Int) => (x: java.lang.Integer))
 
-  val prop_eq = property((m: HashMap[Int, String], x: Int, y: Int) => m.eq(x, y) == equalInt.eq(x, y))
+  val prop_eq = forAll((m: HashMap[Int, String], x: Int, y: Int) => m.eq(x, y) == equalInt.eq(x, y))
 
-  val prop_hash = property((m: HashMap[Int, String], x: Int) => m.hash(x) == hashInt.hash(x))
+  val prop_hash = forAll((m: HashMap[Int, String], x: Int) => m.hash(x) == hashInt.hash(x))
 
-  val prop_get = property((m: HashMap[Int, String], k: Int) => optionEqual(stringEqual).eq(m.get(k), m.get.f(k)))
+  val prop_get = forAll((m: HashMap[Int, String], k: Int) => optionEqual(stringEqual).eq(m.get(k), m.get.f(k)))
 
-  val prop_set = property((m: HashMap[Int, String], k: Int, v: String) => {
+  val prop_set = forAll((m: HashMap[Int, String], k: Int, v: String) => {
     m.set(k, v)
     m.get(k).some == v
   })
 
-  val prop_clear = property((m: HashMap[Int, String], k: Int) => {
+  val prop_clear = forAll((m: HashMap[Int, String], k: Int) => {
     m.clear
     m.get(k).isNone
   })
 
-  val prop_contains = property((m: HashMap[Int, String], k: Int) => m.get(k).isSome == m.contains(k))
+  val prop_contains = forAll((m: HashMap[Int, String], k: Int) => m.get(k).isSome == m.contains(k))
 
-  val prop_keys = property((m: HashMap[Int, String]) => m.keys.forall((k: Int) => (m.get(k).isSome): java.lang.Boolean))
+  val prop_keys = forAll((m: HashMap[Int, String]) => m.keys.forall((k: Int) => (m.get(k).isSome): java.lang.Boolean))
 
-  val prop_isEmpty = property((m: HashMap[Int, String], k: Int) => m.get(k).isNone || !m.isEmpty)
+  val prop_isEmpty = forAll((m: HashMap[Int, String], k: Int) => m.get(k).isNone || !m.isEmpty)
 
-  val prop_size = property((m: HashMap[Int, String], k: Int) => m.get(k).isNone || m.size != 0)
+  val prop_size = forAll((m: HashMap[Int, String], k: Int) => m.get(k).isNone || m.size != 0)
 
-  val prop_delete = property((m: HashMap[Int, String], k: Int) => {
+  val prop_delete = forAll((m: HashMap[Int, String], k: Int) => {
     m.delete(k)
     m.get(k).isNone
   })
 
-  val prop_getDelete = property((m: HashMap[Int, String], k: Int) => {
+  val prop_getDelete = forAll((m: HashMap[Int, String], k: Int) => {
     val x = m.get(k)
     val y = m.getDelete(k)
     val z = m.get(k)

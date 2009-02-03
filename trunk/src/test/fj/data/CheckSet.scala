@@ -19,43 +19,43 @@ object CheckSet {
   implicit def oi : Ord[Int] = intOrd.comap(idInt _)
   implicit def os : Ord[String] = stringOrd
 
-  val prop_isEmpty = property((a: Set[Int]) =>
+  val prop_isEmpty = forAll((a: Set[Int]) =>
     a.isEmpty == (a.size == 0))
 
-  val prop_isNotEmpty = property((a: Set[Int]) =>
+  val prop_isNotEmpty = forAll((a: Set[Int]) =>
     !a.isEmpty == (a.size > 0))
 
-  val prop_insertMember = property((a: Set[Int], n: Int) =>
+  val prop_insertMember = forAll((a: Set[Int], n: Int) =>
     a.insert(n).member(n))
 
-  val prop_deleteInsertIsId = property((a: Set[String], s: String) =>
+  val prop_deleteInsertIsId = forAll((a: Set[String], s: String) =>
     setEqual(stringEqual).eq(a.delete(s).insert(s).delete(s), a.delete(s)))
 
-  val prop_deleteSize = property((a: Set[String], s: String) =>
+  val prop_deleteSize = forAll((a: Set[String], s: String) =>
     (a.insert(s).size == a.size + 1) != a.member(s))
 
-  val prop_singleMember = property((n: Int) =>
+  val prop_singleMember = forAll((n: Int) =>
     single(oi, n).member(n))
 
-  val prop_noDupesFromList = property((a: List[String]) =>
+  val prop_noDupesFromList = forAll((a: List[String]) =>
     setEqual(stringEqual).eq(iterableSet(os, a.nub(stringEqual)), iterableSet(os, a)))
 
-  val prop_noDupesToList = property((a: List[String]) =>
+  val prop_noDupesToList = forAll((a: List[String]) =>
     iterableSet(os, a).toList().length() == a.nub(stringEqual).length())
 
-  val prop_subsetEmpty = property((a: Set[Int]) =>
+  val prop_subsetEmpty = forAll((a: Set[Int]) =>
     empty(oi).subsetOf(a))
 
-  val prop_subsetUnion = property((a: Set[Int], b: Set[Int]) =>
+  val prop_subsetUnion = forAll((a: Set[Int], b: Set[Int]) =>
     b.subsetOf(a.union(b)))
 
-  val prop_subsetSelf = property((a: Set[Int]) =>
+  val prop_subsetSelf = forAll((a: Set[Int]) =>
     a.subsetOf(a))
 
-  val prop_subsetSize = property((a: Set[Int], b: Set[Int]) =>
+  val prop_subsetSize = forAll((a: Set[Int], b: Set[Int]) =>
     a.size > b.size ==> !a.subsetOf(b))
 
-  val prop_mapId = property((a: Set[String]) =>
+  val prop_mapId = forAll((a: Set[String]) =>
     setEqual(stringEqual).eq(a.map(os, (x: String) => x), a))
 
     val tests = scala.List(
