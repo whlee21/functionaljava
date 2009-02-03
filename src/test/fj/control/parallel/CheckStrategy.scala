@@ -20,28 +20,28 @@ object CheckStrategy {
   def rev = (x: String) => x.reverse: String
   def id[A] = (x: A) => x: A
 
-  val prop_par = property((a: P1[Int], s: Strategy[Int]) => a._1 == s.par(a)._1)
+  val prop_par = forAll((a: P1[Int], s: Strategy[Int]) => a._1 == s.par(a)._1)
 
-  val prop_parMapList = property((a: List[String], s: Strategy[String]) =>
+  val prop_parMapList = forAll((a: List[String], s: Strategy[String]) =>
     listEqual(stringEqual).eq(s.parMap(rev, a)._1, a.map(compose(P1.__1[String], s.concurry[String](rev)))))
 
-  val prop_parMapArray = property((a: Array[String], s: Strategy[String]) =>
+  val prop_parMapArray = forAll((a: Array[String], s: Strategy[String]) =>
     arrayEqual(stringEqual).eq(s.parMap(rev, a)._1, a.map(compose(P1.__1[String], s.concurry[String](rev)))))
 
-  val prop_parFlatMapList = property((a: List[String], st: Strategy[List[String]]) => {
+  val prop_parFlatMapList = forAll((a: List[String], st: Strategy[List[String]]) => {
     def f = (x: String) => single[String](x)
     listEqual(stringEqual).eq(parFlatMap(st, f, a)._1, a.bind(compose(P1.__1[List[String]], st.concurry[String](f))))
   })
 
-  val prop_parFlatMapArray = property((a: Array[String], st: Strategy[Array[String]]) => {
+  val prop_parFlatMapArray = forAll((a: Array[String], st: Strategy[Array[String]]) => {
     def f = (x: String) => array[String](scala.Array(x): _*)
     arrayEqual(stringEqual).eq(parFlatMap(st, f, a)._1, a.bind(compose(P1.__1[Array[String]], st.concurry[String](f))))
   })
 
-  val prop_xmapID = property((s: Strategy[Int], n: P1[Int]) =>
+  val prop_xmapID = forAll((s: Strategy[Int], n: P1[Int]) =>
     s.xmap(id[P1[Int]], id[P1[Int]]).par(n)._1 == s.par(n)._1)
 
-  val prop_xmapCompose = property((a: Strategy[String], s: P1[String]) => {
+  val prop_xmapCompose = forAll((a: Strategy[String], s: P1[String]) => {
     def f = (s: P1[String]) => P.p(s._1.toLowerCase): P1[String]
     def g = (s: P1[String]) => P.p(s._1.toUpperCase): P1[String]
     def fr = (s: P1[String]) => P.p(rev(s._1.toLowerCase)): P1[String]
