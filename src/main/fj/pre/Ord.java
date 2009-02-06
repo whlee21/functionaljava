@@ -1,8 +1,8 @@
 package fj.pre;
 
+import fj.Function;
 import fj.F;
 import fj.F2;
-import fj.Function;
 import fj.P;
 import fj.P1;
 import fj.P2;
@@ -13,17 +13,16 @@ import static fj.Function.curry;
 import fj.data.Array;
 import fj.data.Either;
 import fj.data.List;
+import fj.data.Natural;
 import fj.data.NonEmptyList;
 import fj.data.Option;
 import fj.data.Set;
 import fj.data.Stream;
 import fj.data.Validation;
-import static fj.pre.Ordering.EQ;
-import static fj.pre.Ordering.GT;
-import static fj.pre.Ordering.LT;
+import static fj.pre.Ordering.*;
 
-import java.math.BigInteger;
 import java.math.BigDecimal;
+import java.math.BigInteger;
 
 /**
  * Tests for ordering between two objects.
@@ -562,4 +561,8 @@ public final class Ord<A> {
     }));
   }
 
+  /**
+   * An order instance for the <code>long</code> type.
+   */
+  public static final Ord<Natural> naturalOrd = bigintOrd.comap(Natural.bigIntegerValue);
 }

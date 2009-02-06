@@ -2,35 +2,22 @@ package fj.data;
 
 import fj.F;
 import fj.F2;
-import static fj.data.Option.some;
+import static fj.Function.*;
 import static fj.data.Option.none;
+import static fj.data.Option.some;
 import fj.pre.Ord;
+import static fj.pre.Ord.*;
 import fj.pre.Ordering;
-import static fj.pre.Ordering.LT;
-import static fj.pre.Ordering.EQ;
-import static fj.pre.Ordering.GT;
-import static fj.pre.Ord.intOrd;
-import static fj.pre.Ord.booleanOrd;
-import static fj.pre.Ord.byteOrd;
-import static fj.pre.Ord.charOrd;
-import static fj.pre.Ord.doubleOrd;
-import static fj.pre.Ord.floatOrd;
-import static fj.pre.Ord.longOrd;
-import static fj.pre.Ord.shortOrd;
-import static fj.pre.Ord.orderingOrd;
-import static fj.pre.Ord.bigintOrd;
-import static fj.pre.Ord.bigdecimalOrd;
-import static fj.Function.flip;
-import static fj.Function.curry;
-import static fj.Function.compose;
-import java.math.BigInteger;
+import static fj.pre.Ordering.*;
+
 import java.math.BigDecimal;
+import java.math.BigInteger;
 
 /**
  * Abstracts over a type that may have a successor and/or predecessor value. This implies ordering for that type. A user
  * may construct an enumerator with an optimised version for <code>plus</code>, otherwise a default is implemented using
  * the given successor/predecessor implementations.
- *
+ * <p/>
  * For any enumerator e, the following laws must satisfy:
  * <ul>
  * <li>forall a. e.successor(a).forall(\t -> e.predecessor(t).forall(\z -> z == a))</li>
@@ -188,19 +175,50 @@ public final class Enumerator<A> {
         max.map(f),
         min.map(f),
         order.comap(g),
-        compose(compose(fj.Function.<Long, Option<A>, Option<B>>compose().f(of), plus), g)); 
+        compose(compose(fj.Function.<Long, Option<A>, Option<B>>compose().f(of), plus), g));
   }
 
   /**
-   * Construct an enumerator.
+   * Returns a stream of the values from this enumerator, starting at the given value, counting up.
    *
-   * @param successor The successor function.
+   * @param a A value at which to begin the stream.
+   * @return a stream of the values from this enumerator, starting at the given value, counting up.
+   */
+  public Stream<A> toStream(final A a) {
+    final F<A, A> id = identity();
+    return Stream.fromFunction(this, id, a);
+  }
+
+  /**
+   * Create a new enumerator with the given minimum value.
+   *
+   * @param min A minimum value.
+   * @return A new enumerator identical to this one, but with the given minimum value.
+   */
+  public Enumerator<A> setMin(final Option<A> min) {
+    return enumerator(successor, predecessor, max, min, order, plus);
+  }
+
+  /**
+   * Create a new enumerator with the given maximum value.
+   *
+   * @param max A maximum value.
+   * @return A new enumerator identical to this one, but with the given maximum value.
+   */
+  public Enumerator<A> setMax(final Option<A> max) {
+    return enumerator(successor, predecessor, max, min, order, plus);
+  }
+
+  /**
+   * Construct an enumerator.    `
+   *
+   * @param successor   The successor function.
    * @param predecessor The predecessor function.
-   * @param max The potential maximum value.
-   * @param min The potential minimum value.
-   * @param order The ordering for the type.
-   * @param plus The function to move the enumeration a given number of times. This may be supplied for a performance
-   * enhancement for certain types.
+   * @param max         The potential maximum value.
+   * @param min         The potential minimum value.
+   * @param order       The ordering for the type.
+   * @param plus        The function to move the enumeration a given number of times. This may be supplied for a performance
+   *                    enhancement for certain types.
    * @return An enumerator with the given values.
    */
   public static <A> Enumerator<A> enumerator(final F<A, Option<A>> successor, final F<A, Option<A>> predecessor, final Option<A> max, final Option<A> min, final Ord<A> order, final F<A, F<Long, Option<A>>> plus) {
@@ -211,23 +229,23 @@ public final class Enumerator<A> {
    * Construct an enumerator. The <code>plus</code> function is derived from the <code>successor</code> and
    * <code>predecessor</code>.
    *
-   * @param successor The successor function.
+   * @param successor   The successor function.
    * @param predecessor The predecessor function.
-   * @param max The potential maximum value.
-   * @param min The potential minimum value.
-   * @param order The ordering for the type.
+   * @param max         The potential maximum value.
+   * @param min         The potential minimum value.
+   * @param order       The ordering for the type.
    * @return An enumerator with the given values.
    */
   public static <A> Enumerator<A> enumerator(final F<A, Option<A>> successor, final F<A, Option<A>> predecessor, final Option<A> max, final Option<A> min, final Ord<A> order) {
     return new Enumerator<A>(successor, predecessor, max, min, order, curry(new F2<A, Long, Option<A>>() {
       public Option<A> f(final A a, final Long l) {
-        if(l == 0L)
+        if (l == 0L)
           return some(a);
-        else if(l < 0L) {
+        else if (l < 0L) {
           A aa = a;
-          for(long x = l; x < 0; x++) {
+          for (long x = l; x < 0; x++) {
             final Option<A> s = predecessor.f(aa);
-            if(s.isNone())
+            if (s.isNone())
               return none();
             else
               aa = s.some();
@@ -235,9 +253,9 @@ public final class Enumerator<A> {
           return some(aa);
         } else {
           A aa = a;
-          for(long x = l; x > 0; x--) {
+          for (long x = l; x > 0; x--) {
             final Option<A> s = successor.f(aa);
-            if(s.isNone())
+            if (s.isNone())
               return none();
             else
               aa = s.some();
@@ -266,11 +284,11 @@ public final class Enumerator<A> {
    */
   public static final Enumerator<Byte> byteEnumerator = enumerator(new F<Byte, Option<Byte>>() {
     public Option<Byte> f(final Byte b) {
-      return b == Byte.MAX_VALUE ? Option.<Byte>none() : some((byte)(b + 1));
+      return b == Byte.MAX_VALUE ? Option.<Byte>none() : some((byte) (b + 1));
     }
   }, new F<Byte, Option<Byte>>() {
     public Option<Byte> f(final Byte b) {
-      return b == Byte.MIN_VALUE ? Option.<Byte>none() : some((byte)(b - 1));
+      return b == Byte.MIN_VALUE ? Option.<Byte>none() : some((byte) (b - 1));
     }
   }, some(Byte.MAX_VALUE), some(Byte.MIN_VALUE), byteOrd);
 
@@ -279,11 +297,11 @@ public final class Enumerator<A> {
    */
   public static final Enumerator<Character> charEnumerator = enumerator(new F<Character, Option<Character>>() {
     public Option<Character> f(final Character c) {
-      return c == Character.MAX_VALUE ? Option.<Character>none() : some((char)(c + 1));
+      return c == Character.MAX_VALUE ? Option.<Character>none() : some((char) (c + 1));
     }
   }, new F<Character, Option<Character>>() {
     public Option<Character> f(final Character c) {
-      return c == Character.MIN_VALUE ? Option.<Character>none() : some((char)(c - 1));
+      return c == Character.MIN_VALUE ? Option.<Character>none() : some((char) (c - 1));
     }
   }, some(Character.MAX_VALUE), some(Character.MIN_VALUE), charOrd);
 
@@ -370,11 +388,11 @@ public final class Enumerator<A> {
    */
   public static final Enumerator<Short> shortEnumerator = enumerator(new F<Short, Option<Short>>() {
     public Option<Short> f(final Short i) {
-      return i == Short.MAX_VALUE ? Option.<Short>none() : some((short)(i + 1));
+      return i == Short.MAX_VALUE ? Option.<Short>none() : some((short) (i + 1));
     }
   }, new F<Short, Option<Short>>() {
     public Option<Short> f(final Short i) {
-      return i == Short.MIN_VALUE ? Option.<Short>none() : some((short)(i - 1));
+      return i == Short.MIN_VALUE ? Option.<Short>none() : some((short) (i - 1));
     }
   }, some(Short.MAX_VALUE), some(Short.MIN_VALUE), shortOrd);
 
@@ -389,5 +407,18 @@ public final class Enumerator<A> {
     public Option<Ordering> f(final Ordering o) {
       return o == GT ? some(EQ) : o == EQ ? some(LT) : Option.<Ordering>none();
     }
-  }, some(GT), some(LT), orderingOrd);  
+  }, some(GT), some(LT), orderingOrd);
+
+  /**
+   * An enumerator for <code>Natural</code>
+   */
+  public static final Enumerator<Natural> naturalEnumerator = enumerator(new F<Natural, Option<Natural>>() {
+    public Option<Natural> f(final Natural n) {
+      return Option.some(n.succ());
+    }
+  }, new F<Natural, Option<Natural>>() {
+    public Option<Natural> f(final Natural n) {
+      return n.pred();
+    }
+  }, Option.<Natural>none(), some(Natural.ZERO), naturalOrd);
 }
