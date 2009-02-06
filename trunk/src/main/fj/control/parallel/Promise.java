@@ -15,6 +15,7 @@ import static fj.control.parallel.QueueActor.queueActor;
 import fj.data.Either;
 import fj.data.List;
 import fj.data.Option;
+import fj.data.Stream;
 import static fj.data.Option.none;
 import static fj.data.Option.some;
 
@@ -48,22 +49,22 @@ public final class Promise<A> {
 
   private static <A> Promise<A> mkPromise(final Strategy<Unit> s) {
     final Actor<P2<Either<P1<A>, Actor<A>>, Promise<A>>> q =
-            queueActor(s, new Effect<P2<Either<P1<A>, Actor<A>>, Promise<A>>>() {
-              public void e(final P2<Either<P1<A>, Actor<A>>, Promise<A>> p) {
-                final Promise<A> snd = p._2();
-                final Queue<Actor<A>> as = snd.waiting;
-                if (p._1().isLeft()) {
-                  final A a = p._1().left().value()._1();
-                  snd.v = some(a);
-                  snd.l.countDown();
-                  while (!as.isEmpty())
-                    as.remove().act(a);
-                } else if (snd.v.isNone())
-                  as.add(p._1().right().value());
-                else
-                  p._1().right().value().act(snd.v.some());
-              }
-            }).asActor();
+        queueActor(s, new Effect<P2<Either<P1<A>, Actor<A>>, Promise<A>>>() {
+          public void e(final P2<Either<P1<A>, Actor<A>>, Promise<A>> p) {
+            final Promise<A> snd = p._2();
+            final Queue<Actor<A>> as = snd.waiting;
+            if (p._1().isLeft()) {
+              final A a = p._1().left().value()._1();
+              snd.v = some(a);
+              snd.l.countDown();
+              while (!as.isEmpty())
+                as.remove().act(a);
+            } else if (snd.v.isNone())
+              as.add(p._1().right().value());
+            else
+              p._1().right().value().act(snd.v.some());
+          }
+        }).asActor();
     return new Promise<A>(s, q);
   }
 
@@ -230,7 +231,7 @@ public final class Promise<A> {
    * Binds the given function to this promise and the given promise, with a final join.
    *
    * @param p A promise with which to bind the given function.
-   * @param f  The function to apply to the given promised values.
+   * @param f The function to apply to the given promised values.
    * @return A new promise after performing the map, then final join.
    */
   public <B, C> Promise<C> bind(final P1<Promise<B>> p, final F<A, F<B, C>> f) {
@@ -288,7 +289,7 @@ public final class Promise<A> {
     return new F<List<A>, Promise<B>>() {
       public Promise<B> f(final List<A> as) {
         return as.isEmpty() ? promise(s, P.p(b)) : liftM2(f).f(promise(s, P.p(as.head()))).f(
-                join(s, P1.curry(this).f(as.tail())));
+            join(s, P1.curry(this).f(as.tail())));
       }
     };
   }
@@ -324,6 +325,46 @@ public final class Promise<A> {
    */
   public boolean isFulfilled() {
     return v.isSome();
+  }
+
+  /**
+   * Binds the given function across a promise of this promise (Comonad pattern).
+   *
+   * @param f A function to apply within a new promise of this promise.
+   * @return A new promise of the result of applying the given function to this promise.
+   */
+  public <B> Promise<B> cobind(final F<Promise<A>, B> f) {
+    return promise(s, new P1<B>() {
+      public B _1() {
+        return f.f(Promise.this);
+      }
+    });
+  }
+
+  /**
+   * Duplicates this promise to a promise of itself (Comonad pattern).
+   *
+   * @return a promise of this promise.
+   */
+  public Promise<Promise<A>> cojoin() {
+    final F<Promise<A>, Promise<A>> id = identity();
+    return cobind(id);
+  }
+
+  /**
+   * Applies a stream of comonadic functions to this promise, returning a stream of values.
+   *
+   * @param fs A stream of functions to apply to this promise.
+   * @return A stream of the results of applying the given stream of functions to this promise.
+   */
+  public <B> Stream<B> sequenceW(final Stream<F<Promise<A>, B>> fs) {
+    return fs.isEmpty()
+        ? Stream.<B>nil()
+        : Stream.cons(fs.head().f(this), new P1<Stream<B>>() {
+      public Stream<B> _1() {
+        return sequenceW(fs.tail()._1());
+      }
+    });
   }
 
 }
