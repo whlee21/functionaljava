@@ -1008,14 +1008,27 @@ public abstract class Stream<A> implements Iterable<A> {
    * @param f The function to convert to a stream.
    * @return A new stream of the results of the given function applied to the natural numbers, starting at 0.
    */
-  public static <A> Stream<A> fromFunction(final F<Integer, A> f) {
-    return fun2Str(f, 0);
+  public static <A> Stream<A> fromFunction(final F<Natural, A> f) {
+    return fromFunction(Enumerator.naturalEnumerator, f, Natural.ZERO);
   }
 
-  private static <A> Stream<A> fun2Str(final F<Integer, A> f, final Integer i) {
+  /**
+   * Converts a function of an enumerable type to a stream of the results of that function,
+   * starting at the given index.
+   *
+   * @param e An enumerator for the domain of the function.
+   * @param f The function to convert to a stream.
+   * @param i The index into the function at which to begin the stream.
+   * @return A new stream of the results of the given function applied to the values of the given enumerator,
+   *         starting at the given value.
+   */
+  public static <A, B> Stream<A> fromFunction(final Enumerator<B> e, final F<B, A> f, final B i) {
     return cons(f.f(i), new P1<Stream<A>>() {
       public Stream<A> _1() {
-        return fun2Str(f, i + 1);
+        final Option<B> s = e.successor(i);
+        return s.isSome()
+            ? fromFunction(e, f, s.some())
+            : Stream.<A>nil();
       }
     });
   }
