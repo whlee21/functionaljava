@@ -625,11 +625,11 @@ public abstract class Stream<A> implements Iterable<A> {
    */
   public <B> Stream<B> zapp(final Stream<F<A, B>> fs) {
     return fs.isEmpty() || isEmpty() ? Stream.<B>nil() :
-      cons(fs.head().f(head()), new P1<Stream<B>>() {
-        public Stream<B> _1() {
-          return tail()._1().zapp(fs.tail()._1());
-        }
-      });
+        cons(fs.head().f(head()), new P1<Stream<B>>() {
+          public Stream<B> _1() {
+            return tail()._1().zapp(fs.tail()._1());
+          }
+        });
   }
 
   /**
@@ -784,12 +784,12 @@ public abstract class Stream<A> implements Iterable<A> {
    */
   public Stream<A> take(final int n) {
     return n <= 0 || isEmpty() ?
-      Stream.<A>nil() :
-      cons(head(), new P1<Stream<A>>() {
-        public Stream<A> _1() {
-          return tail()._1().take(n - 1);
-        }
-      });
+        Stream.<A>nil() :
+        cons(head(), new P1<Stream<A>>() {
+          public Stream<A> _1() {
+            return tail()._1().take(n - 1);
+          }
+        });
   }
 
   /**
@@ -819,14 +819,14 @@ public abstract class Stream<A> implements Iterable<A> {
    */
   public Stream<A> takeWhile(final F<A, Boolean> f) {
     return isEmpty() ?
-      this :
-      f.f(head()) ?
-        cons(head(), new P1<Stream<A>>() {
-          public Stream<A> _1() {
-            return tail()._1().takeWhile(f);
-          }
-        }) :
-        Stream.<A>nil();
+        this :
+        f.f(head()) ?
+            cons(head(), new P1<Stream<A>>() {
+              public Stream<A> _1() {
+                return tail()._1().takeWhile(f);
+              }
+            }) :
+            Stream.<A>nil();
   }
 
   /**
@@ -947,6 +947,77 @@ public abstract class Stream<A> implements Iterable<A> {
     }
 
     return none();
+  }
+
+  /**
+   * Binds the given function across the stream of tails of this stream (Comonad pattern).
+   *
+   * @param k A function to bind across this stream and its tails.
+   * @return a new stream of the results of applying the given function to this stream and its tails.
+   */
+  public <B> Stream<B> cobind(final F<Stream<A>, B> k) {
+    return cons(k.f(this), new P1<Stream<B>>() {
+      public Stream<B> _1() {
+        return tail()._1().cobind(k);
+      }
+    });
+  }
+
+  /**
+   * Returns a stream of the tails of this stream. A stream is considered to be a tail of itself in this context.
+   *
+   * @return a stream of the tails of this stream, starting with the stream itself.
+   */
+  public Stream<Stream<A>> tails() {
+    final F<Stream<A>, Stream<A>> id = identity();
+    return cobind(id);
+  }
+
+  /**
+   * Applies a stream of comonadic functions to this stream, returning a stream of values.
+   *
+   * @param fs A stream of comonadic functions to apply to this stream.
+   * @return A new stream of the results of applying the stream of functions to this stream.
+   */
+  public <B> Stream<B> sequenceW(final Stream<F<Stream<A>, B>> fs) {
+    return fs.isEmpty()
+        ? Stream.<B>nil()
+        : cons(fs.head().f(this), new P1<Stream<B>>() {
+      public Stream<B> _1() {
+        return sequenceW(fs.tail()._1());
+      }
+    });
+  }
+
+  /**
+   * Converts this stream to a function of natural numbers.
+   *
+   * @return A function from natural numbers to values with the corresponding position in this stream.
+   */
+  public F<Integer, A> toFunction() {
+    return new F<Integer, A>() {
+      public A f(final Integer i) {
+        return index(i);
+      }
+    };
+  }
+
+  /**
+   * Converts a function of natural numbers to a stream.
+   *
+   * @param f The function to convert to a stream.
+   * @return A new stream of the results of the given function applied to the natural numbers, starting at 0.
+   */
+  public static <A> Stream<A> fromFunction(final F<Integer, A> f) {
+    return fun2Str(f, 0);
+  }
+
+  private static <A> Stream<A> fun2Str(final F<Integer, A> f, final Integer i) {
+    return cons(f.f(i), new P1<Stream<A>>() {
+      public Stream<A> _1() {
+        return fun2Str(f, i + 1);
+      }
+    });
   }
 
   /**
