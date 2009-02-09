@@ -1277,6 +1277,19 @@ public abstract class Stream<A> implements Iterable<A> {
   }
 
   /**
+   * Returns an infinite-length stream of the given elements cycling. Fails on the empty stream.
+   *
+   * @param as The elements to cycle infinitely. This must not be empty.
+   * @return An infinite-length stream of the given elements cycling.
+   */
+  public static <A> Stream<A> cycle(final Stream<A> as) {
+    if(as.isEmpty())
+      throw error("cycle on empty list");
+    else
+      return as.append(cycle(as));
+  }
+
+  /**
    * Returns a stream constructed by applying the given iteration function starting at the given value.
    *
    * @param f The iteration function.
