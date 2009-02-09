@@ -58,8 +58,7 @@ public class Natural extends Number {
   /**
    * The natural number one
    */
-  public static final Natural ONE
-      = natural(1).some();
+  public static final Natural ONE = natural(1).some();
 
   /**
    * Return the successor of this natural number
@@ -97,6 +96,27 @@ public class Natural extends Number {
    */
   public Option<Natural> subtract(final Natural n) {
     return natural(n.value.subtract(value));
+  }
+
+  /**
+   * Multiply a natural number by another.
+   *
+   * @param n A natural number to multiply by this one.
+   * @return The product of the two numbers.
+   */
+  public Natural multiply(final Natural n) {
+    return natural(n.value.multiply(value)).some();
+  }
+
+  /**
+   * Divide a natural number by another.
+   *
+   * @param n A natural number to divide this one by.
+   * @return The quotient of this number and the highest number, less than or equal to the given number,
+   *         that divides this number.
+   */
+  public Natural divide(final Natural n) {
+    return natural(n.value.divide(value)).some();
   }
 
   /**

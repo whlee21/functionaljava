@@ -14,11 +14,13 @@ import fj.P;
 import fj.P1;
 import fj.P2;
 import fj.Unit;
+import fj.function.Booleans;
 import static fj.Unit.unit;
 import static fj.data.Array.array;
 import static fj.data.Option.none;
 import static fj.data.Option.some;
 import fj.pre.Ordering;
+import fj.pre.Ord;
 import static fj.pre.Ordering.EQ;
 import static fj.pre.Ordering.GT;
 import static fj.pre.Ordering.LT;
@@ -464,6 +466,23 @@ public abstract class Stream<A> implements Iterable<A> {
           });
         }
       });
+    }
+  }
+
+  /**
+   * Sort this stream according to the given ordering, using the Quick Sort algorithm.
+   *
+   * @param o An ordering for the elements of this stream.
+   * @return A new stream with the elements of this stream sorted according to the given ordering.
+   */
+  public Stream<A> qsort(final Ord<A> o) {
+    if (isEmpty())
+      return this;
+    else {
+      final Stream<A> xs = tail()._1();
+      final A x = head();
+      final F<A, Boolean> lt = o.isLessThan(x);
+      return xs.filter(lt).qsort(o).append(single(x)).append(xs.filter(compose(Booleans.not, lt)).qsort(o));
     }
   }
 
@@ -1283,7 +1302,7 @@ public abstract class Stream<A> implements Iterable<A> {
    * @return An infinite-length stream of the given elements cycling.
    */
   public static <A> Stream<A> cycle(final Stream<A> as) {
-    if(as.isEmpty())
+    if (as.isEmpty())
       throw error("cycle on empty list");
     else
       return as.append(cycle(as));
