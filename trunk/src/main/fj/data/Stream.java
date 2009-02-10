@@ -516,7 +516,7 @@ public abstract class Stream<A> implements Iterable<A> {
     }
   }
 
-  public static <A> F<Stream<A>, Promise<Stream<A>>> qs_(final Ord<A> o, final Strategy<Unit> s) {
+  private static <A> F<Stream<A>, Promise<Stream<A>>> qs_(final Ord<A> o, final Strategy<Unit> s) {
     return new F<Stream<A>, Promise<Stream<A>>>() {
       public Promise<Stream<A>> f(final Stream<A> xs) {
         return xs.qs(o, s);
