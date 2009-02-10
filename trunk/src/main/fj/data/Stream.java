@@ -16,6 +16,7 @@ import fj.P2;
 import fj.Unit;
 import fj.control.parallel.Strategy;
 import fj.control.parallel.Promise;
+import static fj.control.parallel.Promise.promise;
 import fj.function.Booleans;
 import static fj.Unit.unit;
 import static fj.data.Array.array;
@@ -490,40 +491,46 @@ public abstract class Stream<A> implements Iterable<A> {
   }
 
   /**
-   * Sort this stream according to the given ordering, using a parallel Quick Sort algorithm that utilizes the given
+   * Sort this stream according to the given ordering, using a parallel Quick Sort algorithm that uses the given
    * parallelisation strategy.
    *
    * @param o An ordering for the elements of this stream.
    * @param s A strategy for parallelising the algorithm.
    * @return A new stream with the elements of this stream sorted according to the given ordering.
-   * @throws InterruptedException if the thread is interrupted while waiting for results of parallel threads.
    */
-  public Stream<A> qsort(final Ord<A> o, final Strategy<Unit> s) throws InterruptedException {
-    /*
+  public Stream<A> qsort(final Ord<A> o, final Strategy<Unit> s) {
+    return qs(o, s).claim();
+  }
+
+  private Promise<Stream<A>> qs(final Ord<A> o, final Strategy<Unit> s) {
     if (isEmpty())
-      return this;
+      return promise(s, P.p(this));
     else {
-      final P1<Stream<A>> xs = tail();
+      final F<Boolean, Boolean> id = identity();
       final A x = head();
-      final F<A, Boolean> lt = o.isLessThan(x);
-      final F<F<A, Boolean>, F<Stream<A>, Stream<A>>> filter = filter();
+      final P1<Stream<A>> xs = tail();
+      final Promise<Stream<A>> left = Promise.join(s, xs.map(flt(o, s, x, id)));
+      final Promise<Stream<A>> right = xs.map(flt(o, s, x, Booleans.not))._1();
       final Monoid<Stream<A>> m = Monoid.streamMonoid();
-      final class QSHelper {
-        private final F<Stream<A>, Promise<Stream<A>>> qs =
-            new F<Stream<A>, Promise<Stream<A>>>() {
-              public Promise<Stream<A>> f(final Stream<A> as) {
-                final Promise<Stream<A>> left = Promise.join(s, xs.map(flt));
-                final Promise<Stream<A>> right = Promise.join(s, xs.map(fgt));
-                return left.fmap(m.sum(single(x))).apply(right.fmap(m.sum()));
-              }
-            };
-        private final F<Stream<A>, Promise<Stream<A>>> flt = compose(qs, filter.f(lt));
-        private final F<Stream<A>, Promise<Stream<A>>> fgt = compose(qs, filter.f(compose(Booleans.not, lt)));
-      }
-      return new QSHelper().qs.f(xs._1()).claim();
+      return right.fmap(m.sum(single(x))).apply(left.fmap(m.sum()));
     }
-    */
-    return null; // todo
+  }
+
+  public static <A> F<Stream<A>, Promise<Stream<A>>> qs_(final Ord<A> o, final Strategy<Unit> s) {
+    return new F<Stream<A>, Promise<Stream<A>>>() {
+      public Promise<Stream<A>> f(final Stream<A> xs) {
+        return xs.qs(o, s);
+      }
+    };
+  }
+
+  private static <A> F<Stream<A>, Promise<Stream<A>>> flt(final Ord<A> o,
+                                                          final Strategy<Unit> s,
+                                                          final A x,
+                                                          final F<Boolean, Boolean> f) {
+    final F<F<A, Boolean>, F<Stream<A>, Stream<A>>> filter = filter();
+    final F<A, Boolean> lt = o.isLessThan(x);
+    return compose(qs_(o, s), filter.f(compose(f, lt)));
   }
 
   /**
