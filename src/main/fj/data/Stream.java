@@ -499,6 +499,7 @@ public abstract class Stream<A> implements Iterable<A> {
    * @throws InterruptedException if the thread is interrupted while waiting for results of parallel threads.
    */
   public Stream<A> qsort(final Ord<A> o, final Strategy<Unit> s) throws InterruptedException {
+    /*
     if (isEmpty())
       return this;
     else {
@@ -521,6 +522,8 @@ public abstract class Stream<A> implements Iterable<A> {
       }
       return new QSHelper().qs.f(xs._1()).claim();
     }
+    */
+    return null; // todo
   }
 
   /**
