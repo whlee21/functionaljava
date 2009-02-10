@@ -14,6 +14,9 @@ import fj.P;
 import fj.P1;
 import fj.P2;
 import fj.Unit;
+import fj.control.parallel.Strategy;
+import fj.control.parallel.Promise;
+import static fj.control.parallel.Promise.promise;
 import fj.function.Booleans;
 import static fj.Unit.unit;
 import static fj.data.Array.array;
@@ -21,6 +24,7 @@ import static fj.data.Option.none;
 import static fj.data.Option.some;
 import fj.pre.Ordering;
 import fj.pre.Ord;
+import fj.pre.Monoid;
 import static fj.pre.Ordering.EQ;
 import static fj.pre.Ordering.GT;
 import static fj.pre.Ordering.LT;
@@ -487,6 +491,40 @@ public abstract class Stream<A> implements Iterable<A> {
   }
 
   /**
+   * Sort this stream according to the given ordering, using a parallel Quick Sort algorithm that utilizes the given
+   * parallelisation strategy.
+   *
+   * @param o An ordering for the elements of this stream.
+   * @param s A strategy for parallelising the algorithm.
+   * @return A new stream with the elements of this stream sorted according to the given ordering.
+   * @throws InterruptedException if the thread is interrupted while waiting for results of parallel threads.
+   */
+  public Stream<A> qsort(final Ord<A> o, final Strategy<Unit> s) throws InterruptedException {
+    if (isEmpty())
+      return this;
+    else {
+      final P1<Stream<A>> xs = tail();
+      final A x = head();
+      final F<A, Boolean> lt = o.isLessThan(x);
+      final F<F<A, Boolean>, F<Stream<A>, Stream<A>>> filter = filter();
+      final Monoid<Stream<A>> m = Monoid.streamMonoid();
+      final class QSHelper {
+        private final F<Stream<A>, Promise<Stream<A>>> qs =
+            new F<Stream<A>, Promise<Stream<A>>>() {
+              public Promise<Stream<A>> f(final Stream<A> as) {
+                final Promise<Stream<A>> left = Promise.join(promise(s, xs.map(flt)));
+                final Promise<Stream<A>> right = Promise.join(promise(s, xs.map(fgt)));
+                return left.fmap(m.sum(single(x))).apply(right.fmap(m.sum()));
+              }
+            };
+        private final F<Stream<A>, Promise<Stream<A>>> flt = compose(qs, filter.f(lt));
+        private final F<Stream<A>, Promise<Stream<A>>> fgt = compose(qs, filter.f(compose(Booleans.not, lt)));
+      }
+      return new QSHelper().qs.f(xs._1()).claim();
+    }
+  }
+
+  /**
    * Projects an immutable collection of this stream.
    *
    * @return An immutable collection of this stream.
@@ -630,6 +668,19 @@ public abstract class Stream<A> implements Iterable<A> {
     return cons(from, new P1<Stream<Integer>>() {
       public Stream<Integer> _1() {
         return range(from + 1);
+      }
+    });
+  }
+
+  /**
+   * Returns a first-class version of the filter function.
+   *
+   * @return a function that filters a given stream using a given predicate.
+   */
+  public static <A> F<F<A, Boolean>, F<Stream<A>, Stream<A>>> filter() {
+    return curry(new F2<F<A, Boolean>, Stream<A>, Stream<A>>() {
+      public Stream<A> f(final F<A, Boolean> f, final Stream<A> as) {
+        return as.filter(f);
       }
     });
   }
