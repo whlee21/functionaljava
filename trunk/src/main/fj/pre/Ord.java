@@ -565,4 +565,23 @@ public final class Ord<A> {
    * An order instance for the <code>long</code> type.
    */
   public static final Ord<Natural> naturalOrd = bigintOrd.comap(Natural.bigIntegerValue);
+
+
+  /**
+   * An order instance for the <code>Comparable</code> interface.
+   *
+   * @return An order instance for the <code>Comparable</code> interface.
+   */
+  public static <A extends Comparable<A>> Ord<A> comparableOrd() {
+    return ord(new F<A, F<A, Ordering>>() {
+      public F<A, Ordering> f(final A a1) {
+        return new F<A, Ordering>() {
+          public Ordering f(final A a2) {
+            final int x = a1.compareTo(a2);
+            return x < 0 ? LT : x == 0 ? EQ : GT;
+          }
+        };
+      }
+    });
+  }
 }
