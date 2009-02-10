@@ -16,7 +16,6 @@ import fj.P2;
 import fj.Unit;
 import fj.control.parallel.Strategy;
 import fj.control.parallel.Promise;
-import static fj.control.parallel.Promise.promise;
 import fj.function.Booleans;
 import static fj.Unit.unit;
 import static fj.data.Array.array;
@@ -512,8 +511,8 @@ public abstract class Stream<A> implements Iterable<A> {
         private final F<Stream<A>, Promise<Stream<A>>> qs =
             new F<Stream<A>, Promise<Stream<A>>>() {
               public Promise<Stream<A>> f(final Stream<A> as) {
-                final Promise<Stream<A>> left = Promise.join(promise(s, xs.map(flt)));
-                final Promise<Stream<A>> right = Promise.join(promise(s, xs.map(fgt)));
+                final Promise<Stream<A>> left = Promise.join(s, xs.map(flt));
+                final Promise<Stream<A>> right = Promise.join(s, xs.map(fgt));
                 return left.fmap(m.sum(single(x))).apply(right.fmap(m.sum()));
               }
             };
