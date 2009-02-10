@@ -298,10 +298,13 @@ public final class Promise<A> {
    * Waits if necessary for the computation to complete, and then retrieves its result.
    *
    * @return The promised value.
-   * @throws InterruptedException if the current thread is interrupted while waiting.
    */
-  public A claim() throws InterruptedException {
-    l.await();
+  public A claim() {
+    try {
+      l.await();
+    } catch (InterruptedException e) {
+      throw new Error(e);
+    }
     return v.some();
   }
 
@@ -310,12 +313,16 @@ public final class Promise<A> {
    *
    * @param timeout the maximum time to wait
    * @param unit    the time unit of the timeout argument
-   * @return The promised value.
-   * @throws InterruptedException if the current thread is interrupted while waiting.
+   * @return The promised value, or none if the timeout was reached.
    */
-  public A claim(final long timeout, final TimeUnit unit) throws InterruptedException {
-    l.await(timeout, unit);
-    return v.some();
+  public Option<A> claim(final long timeout, final TimeUnit unit) {
+    try {
+      if (l.await(timeout, unit))
+        return v;
+    } catch (InterruptedException e) {
+      throw new Error(e);
+    }
+    return none();
   }
 
   /**
