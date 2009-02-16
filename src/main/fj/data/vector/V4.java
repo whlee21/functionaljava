@@ -264,5 +264,55 @@ public final class V4<A> implements Iterable<A> {
     };
   }
 
+  /**
+   * A first-class function to get the first element of a vector.
+   *
+   * @return a function that gets the first element of a given vector.
+   */
+  public static <A> F<V4<A>, A> __1() {
+    return new F<V4<A>, A>() {
+      public A f(final V4<A> v) {
+        return v._1();
+      }
+    };
+  }
 
+  /**
+   * A first-class function to get the second element of a vector.
+   *
+   * @return a function that gets the second element of a given vector.
+   */
+  public static <A> F<V4<A>, A> __2() {
+    return new F<V4<A>, A>() {
+      public A f(final V4<A> v) {
+        return v._2();
+      }
+    };
+  }
+
+  /**
+   * A first-class function to get the third element of a vector.
+   *
+   * @return a function that gets the third element of a given vector.
+   */
+  public static <A> F<V4<A>, A> __3() {
+    return new F<V4<A>, A>() {
+      public A f(final V4<A> v) {
+        return v._3();
+      }
+    };
+  }
+
+  /**
+   * A first-class function to get the third element of a vector.
+   *
+   * @return a function that gets the third element of a given vector.
+   */
+  public static <A> F<V4<A>, A> __4() {
+    return new F<V4<A>, A>() {
+      public A f(final V4<A> v) {
+        return v._4();
+      }
+    };
+  }
 }

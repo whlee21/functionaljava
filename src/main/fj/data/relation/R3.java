@@ -17,7 +17,7 @@ import java.util.Iterator;
  * Represents the extension of a ternary predicate.
  */
 public final class R3<A, B, C> implements Iterable<P3<A, B, C>> {
-  
+
   private final Set<P3<A, B, C>> body;
   private final TreeMap<A, R2<B, C>> map1;
   private final TreeMap<B, R2<A, C>> map2;
@@ -259,6 +259,18 @@ public final class R3<A, B, C> implements Iterable<P3<A, B, C>> {
     final F<F<C, P3<A, B, C>>, F<C, Boolean>> f =
         Function.<C, P3<A, B, C>, Boolean>compose().f(Set.<P3<A, B, C>>member().f(body));
     return compose2(f, P.<A, B, C>p3());
+  }
+
+  /**
+   * Inserts the given values, as a tuple, to this relation.
+   *
+   * @param a The first value of the tuple.
+   * @param b The second value of the tuple.
+   * @param c The third value of the tuple.
+   * @return a new relation with the addition of the given tuple.
+   */
+  public R3<A, B, C> insert(final A a, final B b, final C c) {
+    return union(r3(Set.single(Ord.p3Ord(orda, ordb, ordc), P.p(a, b, c))));
   }
 
 }
