@@ -112,4 +112,15 @@ public class R2<A, B> implements Iterable<P2<A, B>> {
     return compose2(Set.<P2<A, B>>member().f(body), P.<A, B>p2());
   }
 
+  /**
+   * Inserts the given values, as a tuple, to this relation.
+   *
+   * @param a The first value of the tuple.
+   * @param b The second value of the tuple.
+   * @return a new relation with the addition of the given tuple.
+   */
+  public R2<A, B> insert(final A a, final B b) {
+    return union(r2(Set.single(Ord.p2Ord(orda, ordb), P.p(a, b))));
+  }
+
 }

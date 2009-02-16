@@ -53,6 +53,32 @@ public final class V2<A> implements Iterable<A> {
   }
 
   /**
+   * A first-class function to get the first element of a vector.
+   *
+   * @return a function that gets the first element of a given vector.
+   */
+  public static <A> F<V2<A>, A> __1() {
+    return new F<V2<A>, A>() {
+      public A f(final V2<A> v) {
+        return v._1();
+      }
+    };
+  }
+
+  /**
+   * A first-class function to get the second element of a vector.
+   *
+   * @return a function that gets the second element of a given vector.
+   */
+  public static <A> F<V2<A>, A> __2() {
+    return new F<V2<A>, A>() {
+      public A f(final V2<A> v) {
+        return v._2();
+      }
+    };
+  }
+
+  /**
    * Returns an iterator for the elements of this vector.
    *
    * @return an iterator for the elements of this vector.

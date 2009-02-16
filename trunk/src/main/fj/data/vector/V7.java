@@ -315,4 +315,95 @@ public final class V7<A> implements Iterable<A> {
     };
   }
 
+  /**
+   * A first-class function to get the first element of a vector.
+   *
+   * @return a function that gets the first element of a given vector.
+   */
+  public static <A> F<V7<A>, A> __1() {
+    return new F<V7<A>, A>() {
+      public A f(final V7<A> v) {
+        return v._1();
+      }
+    };
+  }
+
+  /**
+   * A first-class function to get the second element of a vector.
+   *
+   * @return a function that gets the second element of a given vector.
+   */
+  public static <A> F<V7<A>, A> __2() {
+    return new F<V7<A>, A>() {
+      public A f(final V7<A> v) {
+        return v._2();
+      }
+    };
+  }
+
+  /**
+   * A first-class function to get the third element of a vector.
+   *
+   * @return a function that gets the third element of a given vector.
+   */
+  public static <A> F<V7<A>, A> __3() {
+    return new F<V7<A>, A>() {
+      public A f(final V7<A> v) {
+        return v._3();
+      }
+    };
+  }
+
+  /**
+   * A first-class function to get the third element of a vector.
+   *
+   * @return a function that gets the third element of a given vector.
+   */
+  public static <A> F<V7<A>, A> __4() {
+    return new F<V7<A>, A>() {
+      public A f(final V7<A> v) {
+        return v._4();
+      }
+    };
+  }
+
+  /**
+   * A first-class function to get the third element of a vector.
+   *
+   * @return a function that gets the third element of a given vector.
+   */
+  public static <A> F<V7<A>, A> __5() {
+    return new F<V7<A>, A>() {
+      public A f(final V7<A> v) {
+        return v._5();
+      }
+    };
+  }
+
+  /**
+   * A first-class function to get the third element of a vector.
+   *
+   * @return a function that gets the third element of a given vector.
+   */
+  public static <A> F<V7<A>, A> __6() {
+    return new F<V7<A>, A>() {
+      public A f(final V7<A> v) {
+        return v._6();
+      }
+    };
+  }
+
+  /**
+   * A first-class function to get the third element of a vector.
+   *
+   * @return a function that gets the third element of a given vector.
+   */
+  public static <A> F<V7<A>, A> __7() {
+    return new F<V7<A>, A>() {
+      public A f(final V7<A> v) {
+        return v._7();
+      }
+    };
+  }
+
 }
