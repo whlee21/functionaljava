@@ -4,6 +4,7 @@ import static fj.Function.compose;
 import fj.P;
 import fj.P2;
 import fj.P3;
+import fj.F;
 import static fj.data.IterableW.join;
 import static fj.data.List.iterableList;
 import fj.pre.Ord;
@@ -153,6 +154,19 @@ public final class TreeMap<K, V> implements Iterable<P2<K, V>> {
       t = t.set(e.getKey(), e.getValue());
     }
     return t;
+  }
+
+  /**
+   * Returns a first-class version of the get method for this TreeMap.
+   *
+   * @return a functional representation of this TreeMap.
+   */
+  public F<K, Option<V>> get() {
+    return new F<K, Option<V>>() {
+      public Option<V> f(final K k) {
+        return get(k);
+      }
+    };
   }
 
 }
