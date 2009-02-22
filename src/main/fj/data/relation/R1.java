@@ -13,7 +13,7 @@ import java.util.Iterator;
 /**
  * A position-indexed unary relation.
  */
-public class R1<A> implements Iterable<A> {
+public final class R1<A> implements Iterable<A> {
 
   private Set<P1<A>> body;
 
