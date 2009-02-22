@@ -1,20 +1,20 @@
 package fj.data;
 
 import static fj.Bottom.error;
-import static fj.Function.constant;
-import static fj.Function.identity;
 import fj.Effect;
 import fj.F;
 import fj.F2;
 import fj.P1;
 import fj.Unit;
+import static fj.Function.*;
 import static fj.Unit.unit;
 import static fj.data.Array.array;
-import static fj.data.List.cons_;
 import static fj.data.List.cons;
+import static fj.data.List.cons_;
 
-import java.util.Iterator;
+import java.lang.Class;
 import java.util.Collection;
+import java.util.Iterator;
 
 /**
  * An optional value that may be none (no value) or some (a value). This type is a replacement for
@@ -63,6 +63,32 @@ public abstract class Option<A> implements Iterable<A> {
    */
   public boolean isNone() {
     return this instanceof None;
+  }
+
+  /**
+   * A first-class version of the isSome method.
+   *
+   * @return A function that returns true if a given optional value has a value, otherwise false.
+   */
+  public static <A> F<Option<A>, Boolean> isSome_() {
+    return new F<Option<A>, Boolean>() {
+      public Boolean f(final Option<A> a) {
+        return a.isSome();
+      }
+    };
+  }
+
+  /**
+   * A first-class version of the isNone method.
+   *
+   * @return A function that returns false if a given optional value has a value, otherwise true.
+   */
+  public static <A> F<Option<A>, Boolean> isNone_() {
+    return new F<Option<A>, Boolean>() {
+      public Boolean f(final Option<A> a) {
+        return a.isNone();
+      }
+    };
   }
 
   /**
@@ -341,6 +367,20 @@ public abstract class Option<A> implements Iterable<A> {
   }
 
   /**
+   * A first-class version of the toEither method.
+   *
+   * @return A function that returns an either projection of a given optional value, given a value to
+   *         return in left.
+   */
+  public static <A, X> F<Option<A>, F<X, Either<X, A>>> toEither() {
+    return curry(new F2<Option<A>, X, Either<X, A>>() {
+      public Either<X, A> f(final Option<A> a, final X x) {
+        return a.toEither(x);
+      }
+    });
+  }
+
+  /**
    * Returns a list projection of this optional value.
    *
    * @return A list projection of this optional value.
@@ -535,11 +575,7 @@ public abstract class Option<A> implements Iterable<A> {
    * @return All the values in the given list.
    */
   public static <A> List<A> somes(final List<Option<A>> as) {
-    return as.filter(new F<Option<A>, Boolean>() {
-      public Boolean f(final Option<A> o) {
-        return o.isSome();
-      }
-    }).map(new F<Option<A>, A>() {
+    return as.filter(Option.<A>isSome_()).map(new F<Option<A>, A>() {
       public A f(final Option<A> o) {
         return o.some();
       }

@@ -20,7 +20,7 @@ import java.util.Iterator;
  * A position-indexed binary relation, or a bi-directional map.
  * Represents the extension of a binary predicate.
  */
-public class R2<A, B> implements Iterable<P2<A, B>> {
+public final class R2<A, B> implements Iterable<P2<A, B>> {
 
   private final Set<P2<A, B>> body;
   private final TreeMap<A, Set<B>> map1;
