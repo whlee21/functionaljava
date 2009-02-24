@@ -322,10 +322,10 @@ public final class IterableW<A> implements Iterable<A> {
   }
 
   /**
-   * Returns a <link>java.util.List</link> implementation for this iterable.
+   * Returns a java.util.List implementation for this iterable.
    * The returned list cannot be modified.
    *
-   * @return An immutable implementation of <link>java.util.List</link> for this iterable.
+   * @return An immutable implementation of java.util.List for this iterable.
    */
   public java.util.List<A> toStandardList() {
     return new java.util.List<A>() {

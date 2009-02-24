@@ -77,10 +77,10 @@ public class Zipper<A> {
   }
 
   /**
-   * An <link>Ord</link> instance for Zippers.
+   * An Ord instance for Zippers.
    *
-   * @param o An <link>Ord</link> instance for the element type.
-   * @return An <link>Ord</link> instance for Zippers.
+   * @param o An Ord instance for the element type.
+   * @return An Ord instance for Zippers.
    */
   public static <A> Ord<Zipper<A>> ord(final Ord<A> o) {
     final Ord<Stream<A>> so = Ord.streamOrd(o);
@@ -88,10 +88,10 @@ public class Zipper<A> {
   }
 
   /**
-   * An <link>Equal</link> instance for Zippers.
+   * An Equal instance for Zippers.
    *
-   * @param e An <link>Equal</link> instance for the element type.
-   * @return An <link>Equal</link> instance for Zippers.
+   * @param e An Equal instance for the element type.
+   * @return An Equal instance for Zippers.
    */
   public static <A> Equal<Zipper<A>> eq(final Equal<A> e) {
     final Equal<Stream<A>> se = Equal.streamEqual(e);
@@ -99,10 +99,10 @@ public class Zipper<A> {
   }
 
   /**
-   * A <link>Show</link> instance for Zippers.
+   * A Show instance for Zippers.
    *
-   * @param s A <link>Show</link> instance for the element type.
-   * @return A <link>Show</link> instance for Zippers.
+   * @param s A Show instance for the element type.
+   * @return A Show instance for Zippers.
    */
   public static <A> Show<Zipper<A>> show(final Show<A> s) {
     final Show<Stream<A>> ss = Show.streamShow(s);
