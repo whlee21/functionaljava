@@ -7,16 +7,10 @@ import static fj.data.Option.none;
 import fj.pre.Ord;
 import fj.pre.Equal;
 import fj.pre.Show;
-import fj.F;
+import fj.*;
 import fj.Function;
-import fj.P;
-import fj.P1;
-import fj.P2;
-import fj.P3;
+import static fj.Function.*;
 import fj.function.Integers;
-import static fj.Function.flip;
-import static fj.Function.compose;
-import static fj.Function.join;
 
 /**
  * Provides a pointed stream, which is a non-empty zipper-like stream structure that tracks an index (focus)
@@ -410,6 +404,19 @@ public class Zipper<A> {
       for (int i = rl - n; i > 0; i--)
         p = p.bind(Zipper.<A>next_());
     return p;
+  }
+
+  /**
+   * A first-class version of the move function.
+   *
+   * @return A function that moves the focus of the given zipper to the given index.
+   */
+  public static <A> F<Integer, F<Zipper<A>, Option<Zipper<A>>>> move() {
+    return curry(new F2<Integer, Zipper<A>, Option<Zipper<A>>>() {
+      public Option<Zipper<A>> f(final Integer i, final Zipper<A> a) {
+        return a.move(i);
+      }
+    });
   }
 
   /**

@@ -7,10 +7,11 @@ import fj.F2;
 import fj.F3;
 import fj.P1;
 import fj.P2;
+import fj.pre.Equal;
 import static fj.Function.curry;
 import static fj.Function.identity;
 
-import java.util.Iterator;
+import java.util.*;
 
 /**
  * A wrapper for Iterable that equips it with some useful functions.
@@ -318,5 +319,166 @@ public final class IterableW<A> implements Iterable<A> {
    */
   public Iterable<P2<A, Integer>> zipIndex() {
     return wrap(iterableStream(this).zipIndex());
+  }
+
+  public java.util.List<A> toStandardList() {
+    return new java.util.List<A>() {
+
+      public int size() {
+        return iterableStream(IterableW.this).length();
+      }
+
+      public boolean isEmpty() {
+        return iterableStream(IterableW.this).isEmpty();
+      }
+
+      @SuppressWarnings({"unchecked"})
+      public boolean contains(Object o) {
+        return iterableStream(IterableW.this).exists(Equal.<A>anyEqual().eq((A) o));
+      }
+
+      public Iterator<A> iterator() {
+        return IterableW.this.iterator();
+      }
+
+      public Object[] toArray() {
+        return Array.iterableArray(iterableStream(IterableW.this)).array();
+      }
+
+      @SuppressWarnings({"SuspiciousToArrayCall"})
+      public <T> T[] toArray(T[] a) {
+        return iterableStream(IterableW.this).toCollection().toArray(a);
+      }
+
+      public boolean add(A a) {
+        return false;
+      }
+
+      public boolean remove(Object o) {
+        return false;
+      }
+
+      public boolean containsAll(Collection<?> c) {
+        return iterableStream(IterableW.this).toCollection().containsAll(c);
+      }
+
+      public boolean addAll(Collection<? extends A> c) {
+        return false;
+      }
+
+      public boolean addAll(int index, Collection<? extends A> c) {
+        return false;
+      }
+
+      public boolean removeAll(Collection<?> c) {
+        return false;
+      }
+
+      public boolean retainAll(Collection<?> c) {
+        return false;
+      }
+
+      public void clear() {
+        throw new UnsupportedOperationException("Modifying an immutable List.");
+      }
+
+      public A get(int index) {
+        return iterableStream(IterableW.this).index(index);
+      }
+
+      public A set(int index, A element) {
+        throw new UnsupportedOperationException("Modifying an immutable List.");
+      }
+
+      public void add(int index, A element) {
+        throw new UnsupportedOperationException("Modifying an immutable List.");
+      }
+
+      public A remove(int index) {
+        throw new UnsupportedOperationException("Modifying an immutable List.");
+      }
+
+      public int indexOf(Object o) {
+        int i = -1;
+        for (final A a : IterableW.this) {
+          i++;
+          if (a.equals(o))
+            return i;
+        }
+        return i;
+      }
+
+      public int lastIndexOf(Object o) {
+        int i = -1;
+        int last = -1;
+        for (final A a : IterableW.this) {
+          i++;
+          if (a.equals(o))
+            last = i;
+        }
+        return last;
+      }
+
+      public ListIterator<A> listIterator() {
+        return toListIterator(IterableW.this.toZipper());
+      }
+
+      public ListIterator<A> listIterator(int index) {
+        return toListIterator(IterableW.this.toZipper().bind(Zipper.<A>move().f(index)));
+      }
+
+      public java.util.List<A> subList(int fromIndex, int toIndex) {
+        return wrap(Stream.iterableStream(IterableW.this).drop(fromIndex).take(toIndex - fromIndex)).toStandardList();
+      }
+    };
+  }
+
+  private static <A> ListIterator<A> toListIterator(final Option<Zipper<A>> z) {
+    return new ListIterator<A>() {
+
+      private Option<Zipper<A>> pz = z;
+
+      public boolean hasNext() {
+        return pz.isSome() && !pz.some().atEnd();
+      }
+
+      public A next() {
+        pz = pz.some().next();
+        return pz.some().focus();
+      }
+
+      public boolean hasPrevious() {
+        return pz.isSome() && !pz.some().atStart();
+      }
+
+      public A previous() {
+        pz = pz.some().previous();
+        return pz.some().focus();
+      }
+
+      public int nextIndex() {
+        return pz.some().index() + (pz.some().atEnd() ? 0 : 1);
+      }
+
+      public int previousIndex() {
+        return pz.some().index() - (pz.some().atStart() ? 0 : 1);
+      }
+
+      public void remove() {
+        throw new UnsupportedOperationException("Remove on immutable ListIterator");
+      }
+
+      public void set(A a) {
+        throw new UnsupportedOperationException("Set on immutable ListIterator");
+      }
+
+      public void add(A a) {
+        throw new UnsupportedOperationException("Add on immutable ListIterator");
+      }
+    };
+  }
+
+  public Option<Zipper<A>> toZipper() {
+    return Zipper.fromStream(iterableStream(this));
   }
 }
