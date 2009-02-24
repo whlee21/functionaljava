@@ -513,4 +513,22 @@ public class Zipper<A> {
     }
   }
 
+  /**
+   * Replaces the element in focus with the given element.
+   *
+   * @param a An element to replace the focused element with.
+   * @return A new zipper with the given element in focus.
+   */
+  public Zipper<A> replace(final A a) {
+    return zipper(left, a, right);
+  }
+
+  /**
+   * Returns the Stream representation of this zipper.
+   *
+   * @return A stream that contains all the elements of this zipper.
+   */
+  public Stream<A> toStream() {
+    return left.snoc(P.p(focus)).append(right);
+  }
 }
