@@ -1,6 +1,13 @@
 package fj.data;
 
-import fj.*;
+import fj.F;
+import fj.F2;
+import fj.F4;
+import fj.P;
+import fj.P2;
+import fj.P3;
+import fj.P4;
+import fj.function.Booleans;
 import static fj.data.Option.some;
 import static fj.data.Option.none;
 import static fj.data.Tree.node;
@@ -22,7 +29,10 @@ public class TreeZipper<A> {
   private final List<Tree<A>> rights;
   private final List<P3<List<Tree<A>>, A, List<Tree<A>>>> parents;
 
-  private TreeZipper(Tree<A> tree, List<Tree<A>> lefts, List<Tree<A>> rights, List<P3<List<Tree<A>>, A, List<Tree<A>>>> parents) {
+  private TreeZipper(final Tree<A> tree,
+                     final List<Tree<A>> lefts,
+                     final List<Tree<A>> rights,
+                     final List<P3<List<Tree<A>>, A, List<Tree<A>>>> parents) {
     this.tree = tree;
     this.lefts = lefts;
     this.rights = rights;
@@ -39,7 +49,10 @@ public class TreeZipper<A> {
    * @param parents The parent of the selected tree, and the parent's siblings.
    * @return A new zipper with the given tree selected, and the given forests on the left and right.
    */
-  public static <A> TreeZipper<A> treeZipper(Tree<A> tree, List<Tree<A>> lefts, List<Tree<A>> rights, List<P3<List<Tree<A>>, A, List<Tree<A>>>> parents) {
+  public static <A> TreeZipper<A> treeZipper(final Tree<A> tree,
+                                             final List<Tree<A>> lefts,
+                                             final List<Tree<A>> rights,
+                                             final List<P3<List<Tree<A>>, A, List<Tree<A>>>> parents) {
     return new TreeZipper<A>(tree, lefts, rights, parents);
   }
 
@@ -57,7 +70,7 @@ public class TreeZipper<A> {
           public TreeZipper<A> f(final Tree<A> tree,
                                  final List<Tree<A>> lefts,
                                  final List<Tree<A>> rights,
-                                 List<P3<List<Tree<A>>, A, List<Tree<A>>>> parents) {
+                                 final List<P3<List<Tree<A>>, A, List<Tree<A>>>> parents) {
             return treeZipper(tree, lefts, rights, parents);
           }
         });
@@ -218,7 +231,7 @@ public class TreeZipper<A> {
    */
   public Option<TreeZipper<A>> getChild(final int n) {
     Option<TreeZipper<A>> r = none();
-    for (P2<List<Tree<A>>, List<Tree<A>>> lr : splitChildren(List.<Tree<A>>nil(), tree.subForest(), n)) {
+    for (final P2<List<Tree<A>>, List<Tree<A>>> lr : splitChildren(List.<Tree<A>>nil(), tree.subForest(), n)) {
       r = some(treeZipper(lr._1().head(), lr._1().tail(), lr._2(), downParents()));
     }
     return r;
@@ -234,15 +247,15 @@ public class TreeZipper<A> {
   public Option<TreeZipper<A>> findChild(final F<Tree<A>, Boolean> p) {
     Option<TreeZipper<A>> r = none();
 
-    F2<List<Tree<A>>, List<Tree<A>>, Option<P3<List<Tree<A>>, Tree<A>, List<Tree<A>>>>> split =
+    final F2<List<Tree<A>>, List<Tree<A>>, Option<P3<List<Tree<A>>, Tree<A>, List<Tree<A>>>>> split =
         new F2<List<Tree<A>>, List<Tree<A>>, Option<P3<List<Tree<A>>, Tree<A>, List<Tree<A>>>>>() {
           public Option<P3<List<Tree<A>>, Tree<A>, List<Tree<A>>>> f(final List<Tree<A>> acc, final List<Tree<A>> xs) {
             return p.f(xs.head()) ? some(P.p(acc, xs.head(), xs.tail()))
-                : xs.isNotEmpty() ? this.f(acc.cons(xs.head()), xs.tail())
+                : xs.isNotEmpty() ? f(acc.cons(xs.head()), xs.tail())
                 : Option.<P3<List<Tree<A>>, Tree<A>, List<Tree<A>>>>none();
           }
         };
-    for (P3<List<Tree<A>>, Tree<A>, List<Tree<A>>> ltr : split.f(List.<Tree<A>>nil(), tree.subForest())) {
+    for (final P3<List<Tree<A>>, Tree<A>, List<Tree<A>>> ltr : split.f(List.<Tree<A>>nil(), tree.subForest())) {
       r = some(treeZipper(ltr._2(), ltr._1(), ltr._3(), downParents()));
     }
     return r;
@@ -268,7 +281,7 @@ public class TreeZipper<A> {
    * @param t A tree over which to create a new zipper.
    * @return a new tree zipper focused on the root of the given tree.
    */
-  public static <A> TreeZipper<A> fromTree(Tree<A> t) {
+  public static <A> TreeZipper<A> fromTree(final Tree<A> t) {
     return treeZipper(t, List.<Tree<A>>nil(), List.<Tree<A>>nil(), TreeZipper.<A>lp3nil());
   }
 
@@ -278,7 +291,7 @@ public class TreeZipper<A> {
    * @param ts A forest over which to create a new zipper.
    * @return a new tree zipper focused on the first element of the given forest.
    */
-  public static <A> Option<TreeZipper<A>> fromForest(List<Tree<A>> ts) {
+  public static <A> Option<TreeZipper<A>> fromForest(final List<Tree<A>> ts) {
     return ts.isNotEmpty()
         ? some(treeZipper(ts.head(), List.<Tree<A>>nil(), ts.tail(), TreeZipper.<A>lp3nil()))
         : Option.<TreeZipper<A>>none();
@@ -308,7 +321,7 @@ public class TreeZipper<A> {
    *
    * @return the tree at the currently focused node.
    */
-  public Tree<A> tree() {
+  public Tree<A> focus() {
     return tree;
   }
 
@@ -330,4 +343,218 @@ public class TreeZipper<A> {
     return rights;
   }
 
+  /**
+   * Indicates whether the current node is at the top of the tree.
+   *
+   * @return true if the current node is the root of the tree, otherwise false.
+   */
+  public boolean isRoot() {
+    return parents.isEmpty();
+  }
+
+  /**
+   * Indicates whether the current node is the leftmost tree in the current forest.
+   *
+   * @return true if the current node has no left siblings, otherwise false.
+   */
+  public boolean isFirst() {
+    return lefts.isEmpty();
+  }
+
+  /**
+   * Indicates whether the current node is the rightmost tree in the current forest.
+   *
+   * @return true if the current node has no siblings on its right, otherwise false.
+   */
+  public boolean isLast() {
+    return rights.isEmpty();
+  }
+
+  /**
+   * Indicates whether the current node is at the bottom of the tree.
+   *
+   * @return true if the current node has no child nodes, otherwise false.
+   */
+  public boolean isLeaf() {
+    return tree.subForest().isEmpty();
+  }
+
+  /**
+   * Indicates whether the current node is a child node of another node.
+   *
+   * @return true if the current node has a parent node, otherwise false.
+   */
+  public boolean isChild() {
+    return !isRoot();
+  }
+
+  /**
+   * Indicates whether the current node has any child nodes.
+   *
+   * @return true if the current node has child nodes, otherwise false.
+   */
+  public boolean hasChildren() {
+    return !isLeaf();
+  }
+
+  /**
+   * Replaces the current node with the given tree.
+   *
+   * @param t A tree with which to replace the current node.
+   * @return A new tree zipper in which the focused node is replaced with the given tree.
+   */
+  public TreeZipper<A> setTree(final Tree<A> t) {
+    return treeZipper(t, lefts, rights, parents);
+  }
+
+  /**
+   * Modifies the current node with the given function.
+   *
+   * @param f A function with which to modify the current tree.
+   * @return A new tree zipper in which the focused node has been transformed by the given function.
+   */
+  public TreeZipper<A> modifyTree(final F<Tree<A>, Tree<A>> f) {
+    return setTree(f.f(tree));
+  }
+
+  /**
+   * Modifies the label at the current node with the given function.
+   *
+   * @param f A function with which to transform the current node's label.
+   * @return A new tree zipper with the focused node's label transformed by the given function.
+   */
+  public TreeZipper<A> modifyLabel(final F<A, A> f) {
+    return setLabel(f.f(getLabel()));
+  }
+
+  /**
+   * Replaces the label of the current node with the given value.
+   *
+   * @param v The new value for the node's label.
+   * @return A new tree zipper with the focused node's label replaced by the given value.
+   */
+  public TreeZipper<A> setLabel(final A v) {
+    return modifyTree(new F<Tree<A>, Tree<A>>() {
+      public Tree<A> f(final Tree<A> t) {
+        return Tree.node(v, t.subForest());
+      }
+    });
+  }
+
+  /**
+   * Returns the label at the current node.
+   *
+   * @return the label at the current node.
+   */
+  public A getLabel() {
+    return tree.root();
+  }
+
+  /**
+   * Inserts a tree to the left of the current position. The inserted tree becomes the current tree.
+   *
+   * @param t A tree to insert to the left of the current position.
+   * @return A new tree zipper with the given tree in focus and the current tree on the right.
+   */
+  public TreeZipper<A> insertLeft(final Tree<A> t) {
+    return treeZipper(t, lefts, rights.cons(tree), parents);
+  }
+
+  /**
+   * Inserts a tree to the right of the current position. The inserted tree becomes the current tree.
+   *
+   * @param t A tree to insert to the right of the current position.
+   * @return A new tree zipper with the given tree in focus and the current tree on the left.
+   */
+  public TreeZipper<A> insertRight(final Tree<A> t) {
+    return treeZipper(t, lefts.cons(tree), rights, parents);
+  }
+
+  /**
+   * Inserts a tree as the first child of the current node. The inserted tree becomes the current tree.
+   *
+   * @param t A tree to insert.
+   * @return A new tree zipper with the given tree in focus, as the first child of the current node.
+   */
+  public TreeZipper<A> insertDownFirst(final Tree<A> t) {
+    return treeZipper(t, List.<Tree<A>>nil(), tree.subForest(), downParents());
+  }
+
+  /**
+   * Inserts a tree as the last child of the current node. The inserted tree becomes the current tree.
+   *
+   * @param t A tree to insert.
+   * @return A new tree zipper with the given tree in focus, as the last child of the current node.
+   */
+  public TreeZipper<A> insertDownLast(final Tree<A> t) {
+    return treeZipper(t, tree.subForest().reverse(), List.<Tree<A>>nil(), downParents());
+  }
+
+  /**
+   * Inserts a tree at the specified location in the current node's list of children. The inserted tree
+   * becomes the current node.
+   *
+   * @param n The index at which to insert the given tree, starting at 0.
+   * @param t A tree to insert.
+   * @return A new tree zipper with the given tree in focus, at the specified index in the current node's list
+   *         of children, or None if the current node has fewer than <code>n</code> children.
+   */
+  public Option<TreeZipper<A>> insertDownAt(final int n, final Tree<A> t) {
+    Option<TreeZipper<A>> r = none();
+    for (final P2<List<Tree<A>>, List<Tree<A>>> lr : splitChildren(List.<Tree<A>>nil(), tree.subForest(), n)) {
+      r = some(treeZipper(t, lr._1(), lr._2(), downParents()));
+    }
+    return r;
+  }
+
+  /**
+   * Removes the current node from the tree. The new position becomes the right sibling, or the left sibling
+   * if the current node has no right siblings, or the parent node if the current node has no siblings.
+   *
+   * @return A new tree zipper with the current node removed.
+   */
+  public Option<TreeZipper<A>> delete() {
+    Option<TreeZipper<A>> r = none();
+    if (rights.isNotEmpty())
+      r = some(treeZipper(rights.head(), rights.tail(), lefts, parents));
+    else if (lefts.isNotEmpty())
+      r = some(treeZipper(lefts.head(), rights, lefts.tail(), parents));
+    else for (final TreeZipper<A> loc : parent())
+        r = some(loc.modifyTree(new F<Tree<A>, Tree<A>>() {
+          public Tree<A> f(final Tree<A> t) {
+            return node(t.root(), List.<Tree<A>>nil());
+          }
+        }));
+    return r;
+  }
+
+  /**
+   * Zips the nodes in this zipper with a boolean that indicates whether that node has focus.
+   * All of the booleans will be false, except for the focused node.
+   *
+   * @return A new zipper of pairs, with each node of this zipper paired with a boolean that is true if that
+   *         node has focus, and false otherwise.
+   */
+  public TreeZipper<P2<A, Boolean>> zipWithFocus() {
+    final F<A, P2<A, Boolean>> f = flip(P.<A, Boolean>p2()).f(false);
+    return map(f).modifyLabel(P2.<A, Boolean, Boolean>map2_(Booleans.not));
+  }
+
+  /**
+   * Maps the given function across this zipper (covariant functor pattern).
+   *
+   * @param f A function to map across this zipper.
+   * @return A new zipper with the given function applied to the label of every node.
+   */
+  public <B> TreeZipper<B> map(final F<A, B> f) {
+    final F<Tree<A>, Tree<B>> g = Tree.<A, B>fmap_().f(f);
+    final F<List<Tree<A>>, List<Tree<B>>> h = List.<Tree<A>, Tree<B>>map_().f(g);
+    return treeZipper(tree.fmap(f), lefts.map(g), rights.map(g), parents.map(
+        new F<P3<List<Tree<A>>, A, List<Tree<A>>>, P3<List<Tree<B>>, B, List<Tree<B>>>>() {
+          public P3<List<Tree<B>>, B, List<Tree<B>>> f(final P3<List<Tree<A>>, A, List<Tree<A>>> p) {
+            return p.map1(h).map2(f).map3(h);
+          }
+        }));
+  }
+  
 }

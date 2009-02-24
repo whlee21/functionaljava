@@ -7,8 +7,13 @@ import static fj.data.Option.none;
 import fj.pre.Ord;
 import fj.pre.Equal;
 import fj.pre.Show;
-import fj.*;
 import fj.Function;
+import fj.F;
+import fj.F2;
+import fj.P;
+import fj.P1;
+import fj.P2;
+import fj.P3;
 import static fj.Function.*;
 import fj.function.Integers;
 
@@ -531,4 +536,5 @@ public class Zipper<A> {
   public Stream<A> toStream() {
     return left.snoc(P.p(focus)).append(right);
   }
+  
 }
