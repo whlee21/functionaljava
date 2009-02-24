@@ -3,7 +3,9 @@ package fj.data;
 import fj.F;
 import fj.F2;
 import static fj.Function.curry;
+import static fj.Function.identity;
 import fj.P2;
+import fj.P;
 import static fj.data.List.cons;
 import static fj.data.List.single;
 import static fj.data.List.iterateWhile;
@@ -14,6 +16,7 @@ import java.util.Iterator;
 
 /**
  * Provides an immutable, non-empty, multi-way tree (a rose tree).
+ *
  * @version %build.number%<br>
  *          <ul>
  *          <li>$LastChangedRevision$</li>
@@ -130,7 +133,7 @@ public final class Tree<A> implements Iterable<A> {
       }
     };
   }
-   
+
   /**
    * Provides a list of the elements of the tree at each level, in level order.
    *
@@ -205,7 +208,7 @@ public final class Tree<A> implements Iterable<A> {
   }
 
   /**
-   * Build a tree from a seed value.
+   * Builds a tree from a seed value.
    *
    * @param f A function with which to build the tree.
    * @return A function which, given a seed value, yields a tree.
@@ -214,9 +217,36 @@ public final class Tree<A> implements Iterable<A> {
     return new F<B, Tree<A>>() {
       public Tree<A> f(final B b) {
         final P2<A, List<B>> p = f.f(b);
-        return node(p._1(), List.<B, Tree<A>>map_().f(unfoldTree(f)).f(p._2()));
+        return node(p._1(), p._2().map(unfoldTree(f)));
       }
     };
   }
 
+  /**
+   * Applies the given function to all subtrees of this tree, returning a tree of the results (comonad pattern).
+   *
+   * @param f A function to bind across all the subtrees of this tree.
+   * @return A new tree, with the results of applying the given function to each subtree of this tree. The result
+   *         of applying the function to the entire tree is the root label, and the results of applying to the
+   *         root's children are labels of the root's subforest, etc.
+   */
+  public <B> Tree<B> cobind(final F<Tree<A>, B> f) {
+    return unfoldTree(new F<Tree<A>, P2<B, List<Tree<A>>>>() {
+      public P2<B, List<Tree<A>>> f(final Tree<A> t) {
+        return P.p(f.f(t), t.subForest());
+      }
+    }).f(this);
+  }
+
+  /**
+   * Expands this tree into a tree of trees, with this tree as the root label, and subtrees as the labels of
+   * child nodes (comonad pattern).
+   *
+   * @return A tree of trees, with this tree as its root label, and subtrees of this tree as the labels of
+   *         its child nodes.
+   */
+  public Tree<Tree<A>> cojoin() {
+    final F<Tree<A>, Tree<A>> id = identity();
+    return cobind(id);
+  }
 }
