@@ -599,7 +599,7 @@ public class TreeZipper<A> {
   }
 
   /**
-   * Returns a tree zipper over the tree of all possible permutations of this tree zipper (comonad pattern).
+   * Returns a zipper over the tree of all possible permutations of this tree zipper (comonad pattern).
    * This tree zipper becomes the focused node of the new zipper.
    *
    * @return A tree zipper over the tree of all possible permutations of this tree zipper.
