@@ -11,7 +11,9 @@ import fj.function.Booleans;
 import static fj.data.Option.some;
 import static fj.data.Option.none;
 import static fj.data.Tree.node;
+import static fj.data.Tree.unfoldTree;
 import static fj.data.List.nil;
+import static fj.data.List.unfold;
 import static fj.Function.curry;
 import static fj.Function.flip;
 import fj.pre.Equal;
@@ -556,5 +558,117 @@ public class TreeZipper<A> {
           }
         }));
   }
-  
+
+  /**
+   * First-class conversion of a Tree to the corresponding tree zipper.
+   *
+   * @return A function that takes a tree to its tree zipper representation.
+   */
+  public static <A> F<Tree<A>, TreeZipper<A>> fromTree() {
+    return new F<Tree<A>, TreeZipper<A>>() {
+      public TreeZipper<A> f(final Tree<A> t) {
+        return fromTree(t);
+      }
+    };
+  }
+
+  /**
+   * A first-class version of the left() function.
+   *
+   * @return A function that focuses the given tree zipper on its left sibling.
+   */
+  public static <A> F<TreeZipper<A>, Option<TreeZipper<A>>> left_() {
+    return new F<TreeZipper<A>, Option<TreeZipper<A>>>() {
+      public Option<TreeZipper<A>> f(TreeZipper<A> z) {
+        return z.left();
+      }
+    };
+  }
+
+  /**
+   * A first-class version of the right() function.
+   *
+   * @return A function that focuses the given tree zipper on its right sibling.
+   */
+  public static <A> F<TreeZipper<A>, Option<TreeZipper<A>>> right_() {
+    return new F<TreeZipper<A>, Option<TreeZipper<A>>>() {
+      public Option<TreeZipper<A>> f(TreeZipper<A> z) {
+        return z.right();
+      }
+    };
+  }
+
+  /**
+   * Returns a tree zipper over the tree of all possible permutations of this tree zipper (comonad pattern).
+   * This tree zipper becomes the focused node of the new zipper.
+   *
+   * @return A tree zipper over the tree of all possible permutations of this tree zipper.
+   */
+  public TreeZipper<TreeZipper<A>> positions() {
+    final Tree<TreeZipper<A>> t = unfoldTree(TreeZipper.<A>dwn()).f(this);
+    final List<Tree<TreeZipper<A>>> l = uf(TreeZipper.<A>left_());
+    final List<Tree<TreeZipper<A>>> r = uf(TreeZipper.<A>right_());
+    final List<P3<List<Tree<TreeZipper<A>>>, TreeZipper<A>, List<Tree<TreeZipper<A>>>>> p = unfold(
+        new F<Option<TreeZipper<A>>,
+            Option<P2<
+                P3<List<Tree<TreeZipper<A>>>, TreeZipper<A>, List<Tree<TreeZipper<A>>>>,
+                Option<TreeZipper<A>>>>>() {
+          public Option<P2<
+              P3<List<Tree<TreeZipper<A>>>, TreeZipper<A>, List<Tree<TreeZipper<A>>>>,
+              Option<TreeZipper<A>>>> f(Option<TreeZipper<A>> o) {
+            Option<P2<
+                P3<List<Tree<TreeZipper<A>>>, TreeZipper<A>, List<Tree<TreeZipper<A>>>>,
+                Option<TreeZipper<A>>>> r = none();
+            for (TreeZipper<A> z : o) {
+              r = some(P.p(P.p(z.uf(TreeZipper.<A>left_()), z, z.uf(TreeZipper.<A>right_())), z.parent()));
+            }
+            return r;
+          }
+        }, parent());
+    return treeZipper(t, l, r, p);
+  }
+
+  private List<Tree<TreeZipper<A>>> uf(final F<TreeZipper<A>, Option<TreeZipper<A>>> f) {
+    return unfold(
+        new F<Option<TreeZipper<A>>, Option<P2<Tree<TreeZipper<A>>, Option<TreeZipper<A>>>>>() {
+          public Option<P2<Tree<TreeZipper<A>>, Option<TreeZipper<A>>>> f(final Option<TreeZipper<A>> o) {
+            Option<P2<Tree<TreeZipper<A>>, Option<TreeZipper<A>>>> r = none();
+            for (final TreeZipper<A> c : o) {
+              r = some(P.p(unfoldTree(TreeZipper.<A>dwn()).f(c), f.f(c)));
+            }
+            return r;
+          }
+        }, f.f(this));
+  }
+
+  private static <A> F<Option<TreeZipper<A>>, Option<P2<TreeZipper<A>, Option<TreeZipper<A>>>>> fwd() {
+    return new F<Option<TreeZipper<A>>, Option<P2<TreeZipper<A>, Option<TreeZipper<A>>>>>() {
+      public Option<P2<TreeZipper<A>, Option<TreeZipper<A>>>> f(final Option<TreeZipper<A>> o) {
+        Option<P2<TreeZipper<A>, Option<TreeZipper<A>>>> r = none();
+        for (final TreeZipper<A> c : o) {
+          r = some(P.p(c, c.right()));
+        }
+        return r;
+      }
+    };
+  }
+
+  private static <A> F<TreeZipper<A>, P2<TreeZipper<A>, List<TreeZipper<A>>>> dwn() {
+    return new F<TreeZipper<A>, P2<TreeZipper<A>, List<TreeZipper<A>>>>() {
+      public P2<TreeZipper<A>, List<TreeZipper<A>>> f(final TreeZipper<A> tz) {
+        return P.p(tz, unfold(TreeZipper.<A>fwd(), tz.firstChild()));
+      }
+    };
+  }
+
+  /**
+   * Maps the given function over the tree of all positions for this zipper (comonad pattern). Returns a zipper
+   * over the tree of results of the function application.
+   *
+   * @param f A function to map over the tree of all positions for this zipper.
+   * @return A zipper over the tree of results of the function application.
+   */
+  public <B> TreeZipper<B> cobind(final F<TreeZipper<A>, B> f) {
+    return positions().map(f);
+  }
 }
