@@ -24,7 +24,10 @@ import fj.pre.Ord;
 import fj.pre.Equal;
 import fj.pre.Monoid;
 
-import java.util.*;
+import java.util.AbstractCollection;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.NoSuchElementException;
 
 /**
  * Provides an in-memory, immutable, singly linked list.

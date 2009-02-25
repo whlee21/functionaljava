@@ -16,6 +16,7 @@ import static fj.Unit.unit;
 import static fj.data.Option.none;
 import static fj.data.Option.some;
 import static fj.data.List.iterableList;
+import static fj.data.Stream.stream;
 
 import static java.lang.Math.min;
 import static java.lang.System.arraycopy;
@@ -154,13 +155,7 @@ public final class Array<A> implements Iterable<A> {
    * @return A stream projection of this array.
    */
   public Stream<A> toStream() {
-    Stream<A> x = Stream.nil();
-
-    for (int i = a.length - 1; i >= 0; i--) {
-      x = x.cons(a[i]);
-    }
-
-    return x;
+    return stream(array());
   }
 
   /**
