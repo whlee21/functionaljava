@@ -588,6 +588,22 @@ public abstract class Stream<A> implements Iterable<A> {
   }
 
   /**
+   * Constructs a stream with the given elements.
+   *
+   * @param as The elements which which to construct a stream.
+   * @return a new stream with the given elements.
+   */
+  public static <A> Stream<A> stream(final A... as) {
+    return as.length == 0 ? Stream.<A>nil()
+        : unfold(P2.tuple(new F2<A[], Integer, Option<P2<A, P2<A[], Integer>>>>() {
+      public Option<P2<A, P2<A[], Integer>>> f(final A[] as, final Integer i) {
+        return i >= as.length ? Option.<P2<A, P2<A[], Integer>>>none()
+            : some(P.p(as[i], P.p(as, i + 1)));
+      }
+    }), P.p(as, 0));
+  }
+
+  /**
    * Returns a stream that is either infinite or bounded up to the maximum value of the given iterator starting at the
    * given value and stepping at increments of <code>1</code>.
    *
