@@ -25,6 +25,7 @@ import fj.data.List;
 import fj.data.Option;
 import fj.data.Set;
 import fj.data.Stream;
+import static fj.data.Stream.iterableStream;
 
 import java.math.BigInteger;
 import java.math.BigDecimal;
@@ -148,16 +149,17 @@ public final class Monoid<A> {
   }
 
   /**
-   * Intersperses the given value between each two elements of the list, and sums the resulting list.
+   * Intersperses the given value between each two elements of the iterable, and sums the result.
    *
-   * @param as The list of values to sum.
-   * @param a  The value to intersperse between values of the given list.
+   * @param as An iterable of values to sum.
+   * @param a  The value to intersperse between values of the given iterable.
    * @return The sum of the given values and the interspersed value.
    */
-  public A join(final List<A> as, final A a) {
-    return as.isEmpty() ?
-      zero :
-      as.foldLeft1(compose(sum, flip(sum).f(a)));
+  public A join(final Iterable<A> as, final A a) {
+    final Stream<A> s = iterableStream(as);
+    return s.isEmpty() ?
+        zero :
+        s.foldLeft1(compose(sum, flip(sum).f(a)));
   }
 
   /**
