@@ -177,6 +177,30 @@ public abstract class Stream<A> implements Iterable<A> {
   }
 
   /**
+   * Takes the first 2 elements of the stream and applies the function to them,
+   * then applies the function to the result and the third element and so on.
+   *
+   * @param f The function to apply on each element of the stream.
+   * @return The final result after the left-fold reduction.
+   */
+  public A foldLeft1(final F2<A, A, A> f) {
+    return foldLeft1(curry(f));
+  }
+
+  /**
+   * Takes the first 2 elements of the stream and applies the function to them,
+   * then applies the function to the result and the third element and so on.
+   *
+   * @param f The function to apply on each element of the stream.
+   * @return The final result after the left-fold reduction.
+   */
+  public A foldLeft1(final F<A, F<A, A>> f) {
+    if (isEmpty())
+      throw error("Undefined: foldLeft1 on empty list");
+    return tail()._1().foldLeft(f, head());
+  }
+
+  /**
    * Returns the head of this stream if there is one or the given argument if this stream is empty.
    *
    * @param a The argument to return if this stream is empty.

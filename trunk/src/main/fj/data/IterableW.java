@@ -249,6 +249,28 @@ public final class IterableW<A> implements Iterable<A> {
   }
 
   /**
+   * Takes the first 2 elements of the iterable and applies the function to them,
+   * then applies the function to the result and the third element and so on.
+   *
+   * @param f The function to apply on each element of the iterable.
+   * @return The final result after the left-fold reduction.
+   */
+  public A foldLeft1(final F2<A, A, A> f) {
+    return foldLeft1(curry(f));
+  }
+
+  /**
+   * Takes the first 2 elements of the iterable and applies the function to them,
+   * then applies the function to the result and the third element and so on.
+   *
+   * @param f The function to apply on each element of the iterable.
+   * @return The final result after the left-fold reduction.
+   */
+  public A foldLeft1(final F<A, F<A, A>> f) {
+    return iterableStream(this).foldLeft1(f);
+  }
+
+  /**
    * The catamorphism for Iterables, implemented as a right fold.
    *
    * @param f The function with which to fold the wrapped iterable.
