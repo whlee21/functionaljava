@@ -10,6 +10,7 @@ import static fj.P.p2;
 import fj.Effect;
 import fj.F;
 import fj.F2;
+import fj.F3;
 import fj.P;
 import fj.P1;
 import fj.P2;
@@ -1167,6 +1168,19 @@ public abstract class Stream<A> implements Iterable<A> {
     }, P.p(Stream.<A>nil(), Stream.<B>nil()));
   }
 
+  /**
+   * A first-class version of the zipWith function.
+   *
+   * @return a function that zips two given streams with a given function.
+   */
+  public static <A, B, C> F<Stream<A>, F<Stream<B>, F<F<A, F<B, C>>, Stream<C>>>> zipWith() {
+    return curry(new F3<Stream<A>, Stream<B>, F<A, F<B, C>>, Stream<C>>() {
+      public Stream<C> f(final Stream<A> as, final Stream<B> bs, final F<A, F<B, C>> f) {
+        return as.zipWith(bs, f);
+      }
+    });
+  }
+
   private static final class Nil<A> extends Stream<A> {
     public A head() {
       throw error("head on empty stream");
@@ -1419,6 +1433,20 @@ public abstract class Stream<A> implements Iterable<A> {
     return cons(a, new P1<Stream<A>>() {
       public Stream<A> _1() {
         return iterate(f, f.f(a));
+      }
+    });
+  }
+
+  /**
+   * A first-class version of the iterate function.
+   *
+   * @return A function that returns a stream constructed by applying a given iteration function
+   *         starting at a given value.
+   */
+  public static <A> F<F<A, A>, F<A, Stream<A>>> iterate() {
+    return curry(new F2<F<A, A>, A, Stream<A>>() {
+      public Stream<A> f(final F<A, A> f, final A a) {
+        return iterate(f, a);
       }
     });
   }
