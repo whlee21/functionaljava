@@ -139,30 +139,26 @@ public final class Function {
   }
 
   /**
-   * Restricts the domain of a function to a subtype of the domain.
+   * Simultaneously covaries and contravaries a function.
    *
-   * @param f The function to restrict to input values of type B.
+   * @param f The function to vary.
    * @return A function that invokes f on its argument.
    */
-  public static <A, B extends A, C> F<B, C> contravariant(final F<A, C> f) {
-    return new F<B, C>() {
-      public C f(B b) {
-        return f.f(b);
+  public static <A, B> F<A, B> vary(final F<? super A, ? extends B> f) {
+    return new F<A, B>() {
+      public B f(A a) {
+        return f.f(a);
       }
     };
   }
 
   /**
-   * Restricts the domain of a function to a subtype of the domain.
+   * Simultaneously covaries and contravaries a function.
    */
-  public static <A, B extends A, C> F<F<A, C>, F<B, C>> contravariant() {
-    return new F<F<A, C>, F<B, C>>() {
-      public F<B, C> f(final F<A, C> f) {
-        return new F<B, C>() {
-          public C f(B b) {
-            return f.f(b);
-          }
-        };
+  public static <C, A extends C, B, D extends B> F<F<C, D>, F<A, B>> vary() {
+    return new F<F<C, D>, F<A, B>>() {
+      public F<A, B> f(final F<C, D> f) {
+        return Function.<A, B>vary(f);
       }
     };
   }
