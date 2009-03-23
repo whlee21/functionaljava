@@ -139,6 +139,35 @@ public final class Function {
   }
 
   /**
+   * Restricts the domain of a function to a subtype of the domain.
+   *
+   * @param f The function to restrict to input values of type B.
+   * @return A function that invokes f on its argument.
+   */
+  public static <A, B extends A, C> F<B, C> contravariant(final F<A, C> f) {
+    return new F<B, C>() {
+      public C f(B b) {
+        return f.f(b);
+      }
+    };
+  }
+
+  /**
+   * Restricts the domain of a function to a subtype of the domain.
+   */
+  public static <A, B extends A, C> F<F<A, C>, F<B, C>> contravariant() {
+    return new F<F<A, C>, F<B, C>>() {
+      public F<B, C> f(final F<A, C> f) {
+        return new F<B, C>() {
+          public C f(B b) {
+            return f.f(b);
+          }
+        };
+      }
+    };
+  }
+
+  /**
    * Function argument flipping.
    *
    * @return A function that takes a function and flips its arguments.
