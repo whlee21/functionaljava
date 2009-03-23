@@ -1076,7 +1076,7 @@ public abstract class Stream<A> implements Iterable<A> {
    * @return a new stream of the results of applying the given function to this stream and its tails.
    */
   public <B> Stream<B> cobind(final F<Stream<A>, B> k) {
-    return cons(k.f(this), new P1<Stream<B>>() {
+    return isEmpty() ? Stream.<B>nil() : cons(k.f(this), new P1<Stream<B>>() {
       public Stream<B> _1() {
         return tail()._1().cobind(k);
       }
