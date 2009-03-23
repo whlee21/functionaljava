@@ -146,7 +146,7 @@ public final class Show<A> {
   }
 
   /**
-   * Returns a show instance using the given funcion.
+   * Returns a show instance using the given function.
    *
    * @param f The function to use for the returned show instance.
    * @return A show instance.
@@ -156,7 +156,7 @@ public final class Show<A> {
   }
 
   /**
-   * Returns a show instance using the given funcion.
+   * Returns a show instance using the given function.
    *
    * @param f The function to use for the returned show instance.
    * @return A show instance.
