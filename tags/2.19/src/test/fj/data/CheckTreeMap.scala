@@ -1,0 +1,22 @@
+package fj.data
+
+import pre.Ord.{intOrd, stringOrd}
+import pre.Ord
+import org.scalacheck.Prop._
+import ArbitraryTreeMap._
+import fjs.F._
+
+object CheckTreeMap {
+  def idInt(n: Int) = n:java.lang.Integer
+  implicit def oi : Ord[Int] = intOrd.comap(idInt _)
+  implicit def os : Ord[String] = stringOrd
+
+  val prop_set = forAll((m: TreeMap[Int, String], k: Int, v: String) => m.set(k, v).get(k).some == v)
+
+  val tests = scala.List(
+      ("prop_set", prop_set)
+  ).map { case (n, p) => ("TreeMap." + n, p) }
+
+  def main(args: scala.Array[String]) = Tests.run(tests)
+
+}
