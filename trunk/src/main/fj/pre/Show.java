@@ -213,12 +213,12 @@ public final class Show<A> {
   public static final Show<Integer> intShow = anyShow();
 
   /**
-   * A show instance for the <code>int</code> type.
+   * A show instance for the <code>BigInteger</code> type.
    */
   public static final Show<BigInteger> bigintShow = anyShow();
 
   /**
-   * A show instance for the <code>int</code> type.
+   * A show instance for the <code>BigDecimal</code> type.
    */
   public static final Show<BigDecimal> bigdecimalShow = anyShow();
 
