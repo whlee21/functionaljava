@@ -18,11 +18,11 @@
   <licenses>
     <license>
       <name>The BSD License</name>
-      <url>http://projects.workingmouse.com/public/functionaljava/artifacts/latest/LICENCE</url>
+      <url>http://functionaljava.googlecode.com/svn/artifacts/latest/LICENCE</url>
       <distribution>repo</distribution>
     </license>
   </licenses>
   <scm>
-    <url>https://projects.workingmouse.com/public/functionaljava/</url>
+    <url>https://functionaljava.googlecode.com/svn/</url>
   </scm>
 </project>
