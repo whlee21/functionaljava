@@ -13,7 +13,7 @@
   <packaging>jar</packaging>
   <name>Functional Java</name>
   <description>Functional Java is an open source library that aims to prepare the Java programming language for the inclusion of closures.</description>
-  <version>2.18</version>
+  <version>2.19</version>
   <url>http://functionaljava.org/</url>
   <licenses>
     <license>
