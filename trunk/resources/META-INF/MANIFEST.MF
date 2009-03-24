@@ -1,0 +1,4 @@
+Implementation-Title: Functional Java
+Implementation-URL: http://functiona.java.org/
+Implementation-Vendor: Tony Morris, Runar Bjarnason, Tom Adams, Brad Clow, Ricky Clarkson
+Sealed: true
