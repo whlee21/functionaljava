@@ -359,6 +359,21 @@ public abstract class List<A> implements Iterable<A> {
     return P.p(b.toList(), List.<A>nil());
   }
 
+  /**
+   * Groups elements according to the given equality implementation.
+   *
+   * @param e The equality implementation for the elements.
+   * @return A list of grouped elements.
+   */
+  public List<List<A>> group(final Equal<A> e) {
+    if(isEmpty())
+      return nil();
+    else {
+      final P2<List<A>, List<A>> z = tail().span(e.eq(head()));
+      return cons(z._1().cons(head()), z._2().group(e));
+    }
+  }
+
 
   /**
    * Binds the given function across each element of this list with a final join.
