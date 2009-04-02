@@ -4,6 +4,7 @@ import fj.F;
 import fj.F2;
 import fj.F4;
 import fj.P;
+import fj.P1;
 import fj.P2;
 import fj.P3;
 import fj.P4;
@@ -210,7 +211,7 @@ public class TreeZipper<A> {
    * @return A new tree zipper focused on the first child of the current node, or none if the node has no children.
    */
   public Option<TreeZipper<A>> firstChild() {
-    final Stream<Tree<A>> ts = tree.subForest();
+    final Stream<Tree<A>> ts = tree.subForest()._1();
     return ts.isEmpty() ? Option.<TreeZipper<A>>none()
         : some(treeZipper(ts.head(), Stream.<Tree<A>>nil(), ts.tail()._1(), downParents()));
   }
@@ -221,7 +222,7 @@ public class TreeZipper<A> {
    * @return A new tree zipper focused on the last child of the current node, or none if the node has no children.
    */
   public Option<TreeZipper<A>> lastChild() {
-    final Stream<Tree<A>> ts = tree.subForest().reverse();
+    final Stream<Tree<A>> ts = tree.subForest()._1().reverse();
     return ts.isEmpty() ? Option.<TreeZipper<A>>none()
         : some(treeZipper(ts.head(), ts.tail()._1(), Stream.<Tree<A>>nil(), downParents()));
   }
@@ -234,7 +235,8 @@ public class TreeZipper<A> {
    */
   public Option<TreeZipper<A>> getChild(final int n) {
     Option<TreeZipper<A>> r = none();
-    for (final P2<Stream<Tree<A>>, Stream<Tree<A>>> lr : splitChildren(Stream.<Tree<A>>nil(), tree.subForest(), n)) {
+    for (final P2<Stream<Tree<A>>, Stream<Tree<A>>> lr
+        : splitChildren(Stream.<Tree<A>>nil(), tree.subForest()._1(), n)) {
       r = some(treeZipper(lr._1().head(), lr._1().tail()._1(), lr._2(), downParents()));
     }
     return r;
@@ -252,13 +254,15 @@ public class TreeZipper<A> {
 
     final F2<Stream<Tree<A>>, Stream<Tree<A>>, Option<P3<Stream<Tree<A>>, Tree<A>, Stream<Tree<A>>>>> split =
         new F2<Stream<Tree<A>>, Stream<Tree<A>>, Option<P3<Stream<Tree<A>>, Tree<A>, Stream<Tree<A>>>>>() {
-          public Option<P3<Stream<Tree<A>>, Tree<A>, Stream<Tree<A>>>> f(final Stream<Tree<A>> acc, final Stream<Tree<A>> xs) {
+          public Option<P3<Stream<Tree<A>>, Tree<A>, Stream<Tree<A>>>> f(final Stream<Tree<A>> acc,
+                                                                         final Stream<Tree<A>> xs) {
             return p.f(xs.head()) ? some(P.p(acc, xs.head(), xs.tail()._1()))
                 : xs.isNotEmpty() ? f(acc.cons(xs.head()), xs.tail()._1())
                 : Option.<P3<Stream<Tree<A>>, Tree<A>, Stream<Tree<A>>>>none();
           }
         };
-    for (final P3<Stream<Tree<A>>, Tree<A>, Stream<Tree<A>>> ltr : split.f(Stream.<Tree<A>>nil(), tree.subForest())) {
+    for (final P3<Stream<Tree<A>>, Tree<A>, Stream<Tree<A>>> ltr
+        : split.f(Stream.<Tree<A>>nil(), tree.subForest()._1())) {
       r = some(treeZipper(ltr._2(), ltr._1(), ltr._3(), downParents()));
     }
     return r;
@@ -268,7 +272,9 @@ public class TreeZipper<A> {
     return parents.cons(P.p(lefts, tree.root(), rights));
   }
 
-  private static <A> Option<P2<Stream<A>, Stream<A>>> splitChildren(final Stream<A> acc, final Stream<A> xs, final int n) {
+  private static <A> Option<P2<Stream<A>, Stream<A>>> splitChildren(final Stream<A> acc,
+                                                                    final Stream<A> xs,
+                                                                    final int n) {
     return n == 0 ? some(P.p(acc, xs))
         : xs.isNotEmpty() ? splitChildren(acc.cons(xs.head()), xs.tail()._1(), n - 1)
         : Option.<P2<Stream<A>, Stream<A>>>none();
@@ -379,7 +385,7 @@ public class TreeZipper<A> {
    * @return true if the current node has no child nodes, otherwise false.
    */
   public boolean isLeaf() {
-    return tree.subForest().isEmpty();
+    return tree.subForest()._1().isEmpty();
   }
 
   /**
@@ -480,7 +486,7 @@ public class TreeZipper<A> {
    * @return A new tree zipper with the given tree in focus, as the first child of the current node.
    */
   public TreeZipper<A> insertDownFirst(final Tree<A> t) {
-    return treeZipper(t, Stream.<Tree<A>>nil(), tree.subForest(), downParents());
+    return treeZipper(t, Stream.<Tree<A>>nil(), tree.subForest()._1(), downParents());
   }
 
   /**
@@ -490,7 +496,7 @@ public class TreeZipper<A> {
    * @return A new tree zipper with the given tree in focus, as the last child of the current node.
    */
   public TreeZipper<A> insertDownLast(final Tree<A> t) {
-    return treeZipper(t, tree.subForest().reverse(), Stream.<Tree<A>>nil(), downParents());
+    return treeZipper(t, tree.subForest()._1().reverse(), Stream.<Tree<A>>nil(), downParents());
   }
 
   /**
@@ -504,7 +510,8 @@ public class TreeZipper<A> {
    */
   public Option<TreeZipper<A>> insertDownAt(final int n, final Tree<A> t) {
     Option<TreeZipper<A>> r = none();
-    for (final P2<Stream<Tree<A>>, Stream<Tree<A>>> lr : splitChildren(Stream.<Tree<A>>nil(), tree.subForest(), n)) {
+    for (final P2<Stream<Tree<A>>, Stream<Tree<A>>> lr
+        : splitChildren(Stream.<Tree<A>>nil(), tree.subForest()._1(), n)) {
       r = some(treeZipper(t, lr._1(), lr._2(), downParents()));
     }
     return r;
@@ -642,22 +649,26 @@ public class TreeZipper<A> {
         }, f.f(this));
   }
 
-  private static <A> F<TreeZipper<A>, P2<TreeZipper<A>, Stream<TreeZipper<A>>>> dwn() {
-    return new F<TreeZipper<A>, P2<TreeZipper<A>, Stream<TreeZipper<A>>>>() {
-      private F<Option<TreeZipper<A>>, Option<P2<TreeZipper<A>, Option<TreeZipper<A>>>>> fwd() {
-        return new F<Option<TreeZipper<A>>, Option<P2<TreeZipper<A>, Option<TreeZipper<A>>>>>() {
-          public Option<P2<TreeZipper<A>, Option<TreeZipper<A>>>> f(final Option<TreeZipper<A>> o) {
-            Option<P2<TreeZipper<A>, Option<TreeZipper<A>>>> r = none();
-            for (final TreeZipper<A> c : o) {
-              r = some(P.p(c, c.right()));
-            }
-            return r;
+  private static <A> F<TreeZipper<A>, P2<TreeZipper<A>, P1<Stream<TreeZipper<A>>>>> dwn() {
+    return new F<TreeZipper<A>, P2<TreeZipper<A>, P1<Stream<TreeZipper<A>>>>>() {
+      public P2<TreeZipper<A>, P1<Stream<TreeZipper<A>>>> f(final TreeZipper<A> tz) {
+        return P.<TreeZipper<A>, P1<Stream<TreeZipper<A>>>>p(tz, new P1<Stream<TreeZipper<A>>>() {
+          private F<Option<TreeZipper<A>>, Option<P2<TreeZipper<A>, Option<TreeZipper<A>>>>> fwd() {
+            return new F<Option<TreeZipper<A>>, Option<P2<TreeZipper<A>, Option<TreeZipper<A>>>>>() {
+              public Option<P2<TreeZipper<A>, Option<TreeZipper<A>>>> f(final Option<TreeZipper<A>> o) {
+                Option<P2<TreeZipper<A>, Option<TreeZipper<A>>>> r = none();
+                for (final TreeZipper<A> c : o) {
+                  r = some(P.p(c, c.right()));
+                }
+                return r;
+              }
+            };
           }
-        };
-      }
 
-      public P2<TreeZipper<A>, Stream<TreeZipper<A>>> f(final TreeZipper<A> tz) {
-        return P.p(tz, unfold(fwd(), tz.firstChild()));
+          public Stream<TreeZipper<A>> _1() {
+            return unfold(fwd(), tz.firstChild());
+          }
+        });
       }
     };
   }

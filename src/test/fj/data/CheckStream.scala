@@ -1,12 +1,15 @@
 package fj.data
 
+import control.parallel.Strategy
 import org.scalacheck.Prop._
 import ArbitraryStream.arbitraryStream
+import control.parallel.ArbitraryStrategy.arbitraryStrategy
 import ArbitraryP.arbitraryP1
 import fj.pre.Equal.{streamEqual, stringEqual}
 import Implicit._
 import fj.Unit.unit
 import Stream.{nil, single, join}
+import fj.pre.Ord.stringOrd
 
 object CheckStream {
   val prop_isEmpty = forAll((a: Stream[Int]) =>
@@ -135,6 +138,18 @@ object CheckStream {
       a.foldRight((a: Stream[String], b: P1[Stream[String]]) => a.append(b._1), nil[String]),
       join(a)))
 
+  val prop_qsort = forAll((a: Stream[String]) => {
+    val d = a.qsort(stringOrd)
+    val e = streamEqual(stringEqual)
+    e.eq(d, a.toList.sort(stringOrd).toStream)
+  })
+
+  val prop_parallel_qsort = forAll((a: Stream[String], s: Strategy[Unit]) => {
+    val d = a.qsort(stringOrd, s)
+    val e = streamEqual(stringEqual)
+    e.eq(d, a.qsort(stringOrd))
+  })
+
   val tests = scala.List(
       ("prop_isEmpty", prop_isEmpty),
       ("prop_isNotEmpty", prop_isNotEmpty),
@@ -161,7 +176,9 @@ object CheckStream {
       ("prop_forall", prop_forall),
       ("prop_exists", prop_exists),
       ("prop_find", prop_find),
-      ("prop_join", prop_join)
+      ("prop_join", prop_join),
+      ("prop_qsort", prop_qsort),
+      ("prop_parallel_qsort", prop_parallel_qsort)
   ).map { case (n, p) => ("Stream." + n, p) }
 
   def main(args: scala.Array[String]) = Tests.run(tests)
