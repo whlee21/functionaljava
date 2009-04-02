@@ -284,7 +284,7 @@ public final class Hash<A> {
    * @return A hash instance for the {@link Tree} type.
    */
   public static <A> Hash<Tree<A>> treeHash(final Hash<A> ha) {
-    return listHash(ha).comap(Tree.<A>flatten_());
+    return streamHash(ha).comap(Tree.<A>flatten_());
   }
 
   /**

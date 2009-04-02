@@ -2,9 +2,9 @@ package fj.data
 
 import org.scalacheck.Prop._
 import ArbitraryTree.arbitraryTree
-import fj.pre.Equal.{treeEqual, listEqual, stringEqual}
+import fj.pre.Equal.{treeEqual, streamEqual, stringEqual}
 import Tree.{root_, subForest_}
-import List.{join}
+import Stream.{join}
 import Implicit._
 import fj.pre.Monoid.{intAdditionMonoid}
 import fj.pre.Monoid
@@ -26,7 +26,7 @@ object CheckTree {
 
   val prop_fmap_assoc = forAll((a: Tree[String]) => {
     def f(s: String) = s.toUpperCase
-    listEqual(stringEqual).eq(a.flatten.map(f _), a.fmap(f _).flatten)})
+    streamEqual(stringEqual).eq(a.flatten.map(f _), a.fmap(f _).flatten)})
 
   /*val prop_unfoldTree = property((s: String, p: Tuple2[Int, List[String]]) => {
     def f(s: String) = p

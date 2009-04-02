@@ -991,15 +991,7 @@ public abstract class Stream<A> implements Iterable<A> {
    * @return The length of this stream.
    */
   public int length() {
-    return foldLeft(new F<Integer, F<A, Integer>>() {
-      public F<A, Integer> f(final Integer i) {
-        return new F<A, Integer>() {
-          public Integer f(final A a) {
-            return i + 1;
-          }
-        };
-      }
-    }, 0);
+    return toList().length();
   }
 
   /**
@@ -1372,6 +1364,30 @@ public abstract class Stream<A> implements Iterable<A> {
   }
 
   /**
+   * Creates a stream where the first item is calculated by applying the function on the third argument,
+   * the second item by applying the function on the previous result and so on.
+   *
+   * @param f The function to iterate with.
+   * @param p The predicate which must be true for the next item in order to continue the iteration.
+   * @param a The input to the first iteration.
+   * @return A stream where the first item is calculated by applying the function on the third argument,
+   *         the second item by applying the function on the previous result and so on.
+   */
+  public static <A> Stream<A> iterateWhile(final F<A, A> f, final F<A, Boolean> p, final A a) {
+    return unfold(
+        new F<A, Option<P2<A, A>>>() {
+          public Option<P2<A, A>> f(final A o) {
+            return Option.iif(new F<P2<A, A>, Boolean>() {
+              public Boolean f(final P2<A, A> p2) {
+                return p.f(o);
+              }
+            }, P.p(o, f.f(o)));
+          }
+        }
+        , a);
+  }
+
+  /**
    * Takes the given iterable to a stream.
    *
    * @param i The iterable to take to a stream.
@@ -1451,4 +1467,16 @@ public abstract class Stream<A> implements Iterable<A> {
     });
   }
 
+  /**
+   * A first-class version of the bind function.
+   *
+   * @return A function that binds a given function across a given stream, joining the resulting streams.
+   */
+  public static <A, B> F<F<A, Stream<B>>, F<Stream<A>, Stream<B>>> bind_() {
+    return curry(new F2<F<A, Stream<B>>, Stream<A>, Stream<B>>() {
+      public Stream<B> f(final F<A, Stream<B>> f, final Stream<A> as) {
+        return as.bind(f);
+      }
+    });
+  }
 }

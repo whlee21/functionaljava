@@ -1,21 +1,22 @@
 package fj.data;
 
+import static fj.Function.identity;
+import static fj.Function.curry;
 import fj.F;
 import fj.F2;
-import static fj.Function.curry;
-import static fj.Function.identity;
-import fj.P2;
 import fj.P;
-import static fj.data.List.cons;
-import static fj.data.List.single;
-import static fj.data.List.iterateWhile;
+import fj.P1;
+import fj.P2;
+import static fj.data.Stream.cons;
+import static fj.data.Stream.single;
+import static fj.data.Stream.iterateWhile;
 import fj.pre.Monoid;
 
 import java.util.Collection;
 import java.util.Iterator;
 
 /**
- * Provides an immutable, non-empty, multi-way tree (a rose tree).
+ * Provides a lazy, immutable, non-empty, multi-way tree (a rose tree).
  *
  * @version %build.number%<br>
  *          <ul>
@@ -35,9 +36,9 @@ public final class Tree<A> implements Iterable<A> {
   }
 
   private final A root;
-  private final List<Tree<A>> subForest;
+  private final Stream<Tree<A>> subForest;
 
-  private Tree(final A root, final List<Tree<A>> subForest) {
+  private Tree(final A root, final Stream<Tree<A>> subForest) {
     this.root = root;
     this.subForest = subForest;
   }
@@ -49,18 +50,29 @@ public final class Tree<A> implements Iterable<A> {
    * @return A nullary tree with the root element in it.
    */
   public static <A> Tree<A> leaf(final A root) {
-    return node(root, List.<Tree<A>>nil());
+    return node(root, Stream.<Tree<A>>nil());
   }
 
   /**
-   * Creates a new n-ary tree given a root and a subforest of length n.
+   * Creates a new tree given a root and a (potentially infinite) subforest.
+   *
+   * @param root   The root element of the tree.
+   * @param forest A stream of the tree's subtrees.
+   * @return A newly sprouted tree.
+   */
+  public static <A> Tree<A> node(final A root, final Stream<Tree<A>> forest) {
+    return new Tree<A>(root, forest);
+  }
+
+  /**
+   * Creates a new n-ary given a root and a subforest of length n.
    *
    * @param root   The root element of the tree.
    * @param forest A list of the tree's subtrees.
    * @return A newly sprouted tree.
    */
   public static <A> Tree<A> node(final A root, final List<Tree<A>> forest) {
-    return new Tree<A>(root, forest);
+    return node(root, forest.toStream());
   }
 
   /**
@@ -73,11 +85,11 @@ public final class Tree<A> implements Iterable<A> {
   }
 
   /**
-   * Returns a list of the tree's subtrees.
+   * Returns a stream of the tree's subtrees.
    *
-   * @return A list of the tree's subtrees.
+   * @return A stream of the tree's subtrees.
    */
-  public List<Tree<A>> subForest() {
+  public Stream<Tree<A>> subForest() {
     return subForest;
   }
 
@@ -99,50 +111,53 @@ public final class Tree<A> implements Iterable<A> {
    *
    * @return A transformation from a tree to its subforest.
    */
-  public static <A> F<Tree<A>, List<Tree<A>>> subForest_() {
-    return new F<Tree<A>, List<Tree<A>>>() {
-      public List<Tree<A>> f(final Tree<A> a) {
+  public static <A> F<Tree<A>, Stream<Tree<A>>> subForest_() {
+    return new F<Tree<A>, Stream<Tree<A>>>() {
+      public Stream<Tree<A>> f(final Tree<A> a) {
         return a.subForest();
       }
     };
   }
 
   /**
-   * Puts the elements of the tree into a List, in pre-order.
+   * Puts the elements of the tree into a Stream, in pre-order.
    *
    * @return The elements of the tree in pre-order.
    */
-  public List<A> flatten() {
-    final F2<Tree<A>, List<A>, List<A>> squish = new F2<Tree<A>, List<A>, List<A>>() {
-      public List<A> f(final Tree<A> t, final List<A> xs) {
-        return cons(t.root(), t.subForest().foldRight(curry(this), xs));
+  public Stream<A> flatten() {
+    final F2<Tree<A>, P1<Stream<A>>, Stream<A>> squish = new F2<Tree<A>, P1<Stream<A>>, Stream<A>>() {
+      public Stream<A> f(final Tree<A> t, final P1<Stream<A>> xs) {
+        return cons(t.root(), P.p(t.subForest().foldRight(this, xs._1())));
       }
     };
-    return squish.f(this, List.<A>nil());
+    return squish.f(this, P.p(Stream.<A>nil()));
   }
 
   /**
-   * Puts the elements of the tree into a List, in pre-order.
+   * flatten :: Tree a -> [a]
+   * flatten t = squish t []
+   * where squish (Node x ts) xs = x:Prelude.foldr squish xs ts
+   * Puts the elements of the tree into a Stream, in pre-order.
    *
    * @return The elements of the tree in pre-order.
    */
-  public static <A> F<Tree<A>, List<A>> flatten_() {
-    return new F<Tree<A>, List<A>>() {
-      public List<A> f(final Tree<A> t) {
+  public static <A> F<Tree<A>, Stream<A>> flatten_() {
+    return new F<Tree<A>, Stream<A>>() {
+      public Stream<A> f(final Tree<A> t) {
         return t.flatten();
       }
     };
   }
 
   /**
-   * Provides a list of the elements of the tree at each level, in level order.
+   * Provides a stream of the elements of the tree at each level, in level order.
    *
    * @return The elements of the tree at each level.
    */
-  public List<List<A>> levels() {
-    final F<List<Tree<A>>, List<Tree<A>>> flatSubForests = List.<Tree<A>, Tree<A>>bind_().f(Tree.<A>subForest_());
-    final F<List<Tree<A>>, List<A>> roots = List.<Tree<A>, A>map_().f(Tree.<A>root_());
-    return iterateWhile(flatSubForests, List.<Tree<A>>isNotEmpty_(), single(this)).map(roots);
+  public Stream<Stream<A>> levels() {
+    final F<Stream<Tree<A>>, Stream<Tree<A>>> flatSubForests = Stream.<Tree<A>, Tree<A>>bind_().f(Tree.<A>subForest_());
+    final F<Stream<Tree<A>>, Stream<A>> roots = Stream.<Tree<A>, A>map_().f(Tree.<A>root_());
+    return iterateWhile(flatSubForests, Stream.<Tree<A>>isNotEmpty_(), single(this)).map(roots);
   }
 
   /**
@@ -180,7 +195,7 @@ public final class Tree<A> implements Iterable<A> {
    * @return The result of folding the tree with the given monoid.
    */
   public <B> B foldMap(final F<A, B> f, final Monoid<B> m) {
-    return m.sum(f.f(root()), m.sumRight(subForest().map(foldMap_(f, m))));
+    return m.sum(f.f(root()), m.sumRight(subForest().map(foldMap_(f, m)).toList()));
   }
 
   /**
@@ -213,10 +228,10 @@ public final class Tree<A> implements Iterable<A> {
    * @param f A function with which to build the tree.
    * @return A function which, given a seed value, yields a tree.
    */
-  public static <A, B> F<B, Tree<A>> unfoldTree(final F<B, P2<A, List<B>>> f) {
+  public static <A, B> F<B, Tree<A>> unfoldTree(final F<B, P2<A, Stream<B>>> f) {
     return new F<B, Tree<A>>() {
       public Tree<A> f(final B b) {
-        final P2<A, List<B>> p = f.f(b);
+        final P2<A, Stream<B>> p = f.f(b);
         return node(p._1(), p._2().map(unfoldTree(f)));
       }
     };
@@ -231,8 +246,8 @@ public final class Tree<A> implements Iterable<A> {
    *         root's children are labels of the root's subforest, etc.
    */
   public <B> Tree<B> cobind(final F<Tree<A>, B> f) {
-    return unfoldTree(new F<Tree<A>, P2<B, List<Tree<A>>>>() {
-      public P2<B, List<Tree<A>>> f(final Tree<A> t) {
+    return unfoldTree(new F<Tree<A>, P2<B, Stream<Tree<A>>>>() {
+      public P2<B, Stream<Tree<A>>> f(final Tree<A> t) {
         return P.p(f.f(t), t.subForest());
       }
     }).f(this);
