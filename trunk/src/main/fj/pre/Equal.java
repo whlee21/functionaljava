@@ -372,7 +372,7 @@ public final class Equal<A> {
   public static <A> Equal<Tree<A>> treeEqual(final Equal<A> ea) {
     return new Equal<Tree<A>>(curry(new F2<Tree<A>, Tree<A>, Boolean>() {
       public Boolean f(final Tree<A> t1, final Tree<A> t2) {
-        return ea.eq(t1.root(), t2.root()) && streamEqual(treeEqual(ea)).eq(t2.subForest(), t1.subForest());
+        return ea.eq(t1.root(), t2.root()) && p1Equal(streamEqual(treeEqual(ea))).eq(t2.subForest(), t1.subForest());
       }
     }));
   }

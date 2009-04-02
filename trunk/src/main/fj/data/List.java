@@ -366,7 +366,7 @@ public abstract class List<A> implements Iterable<A> {
    * @return A list of grouped elements.
    */
   public List<List<A>> group(final Equal<A> e) {
-    if(isEmpty())
+    if (isEmpty())
       return nil();
     else {
       final P2<List<A>, List<A>> z = tail().span(e.eq(head()));
@@ -964,13 +964,26 @@ public abstract class List<A> implements Iterable<A> {
   /**
    * Returns the index of the first element in this list which is equal (by the given equality) to the
    * query element, or None if there is no such element.
+   *
    * @param e An equality for this list's elements.
-   * @param a A query element.                                       
+   * @param a A query element.
    * @return The index of the first element in this list which is equal (by the given equality) to the
-   * query element, or None if there is no such element.
+   *         query element, or None if there is no such element.
    */
   public Option<Integer> elementIndex(final Equal<A> e, final A a) {
     return lookup(e, zipIndex(), a);
+  }
+
+  /**
+   * Returns the last element of this list. Undefined for the empty list.
+   *
+   * @return The last element of this list or throws an error if this list is empty.
+   */
+  public A last() {
+    A a = head();
+    for (List<A> xs = tail(); xs.isNotEmpty(); xs = xs.tail())
+      a = xs.head();
+    return a;
   }
 
   /**

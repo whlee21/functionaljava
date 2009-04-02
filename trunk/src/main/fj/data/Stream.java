@@ -1479,4 +1479,17 @@ public abstract class Stream<A> implements Iterable<A> {
       }
     });
   }
+
+  /**
+   * A first-class version of the foldRight function.
+   *
+   * @return A function that folds a given stream with a given function.
+   */
+  public static <A, B> F<F<A, F<P1<B>, B>>, F<B, F<Stream<A>, B>>> foldRight() {
+    return curry(new F3<F<A, F<P1<B>, B>>, B, Stream<A>, B>() {
+      public B f(final F<A, F<P1<B>, B>> f, final B b, final Stream<A> as) {
+        return as.foldRight(f, b);
+      }
+    });
+  }
 }

@@ -344,7 +344,7 @@ public final class Show<A> {
         final List.Buffer<Character> b = List.Buffer.empty();
 
         b.append(sa.f.f(a.root()));
-        b.append(streamShow(treeShow(sa)).f.f(a.subForest()));
+        b.append(p1Show(streamShow(treeShow(sa))).f.f(a.subForest()));
         b.snoc(')');
         return cons('(', b.toList());
       }

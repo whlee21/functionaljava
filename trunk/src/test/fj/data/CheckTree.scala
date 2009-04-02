@@ -2,7 +2,7 @@ package fj.data
 
 import org.scalacheck.Prop._
 import ArbitraryTree.arbitraryTree
-import fj.pre.Equal.{treeEqual, streamEqual, stringEqual}
+import fj.pre.Equal.{treeEqual, streamEqual, stringEqual, p1Equal}
 import Tree.{root_, subForest_}
 import Stream.{join}
 import Implicit._
