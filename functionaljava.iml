@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <module relativePaths="true" type="JAVA_MODULE" version="4">
+  <component name="FacetManager">
+    <facet type="Scala" name="Scala">
+      <configuration />
+    </facet>
+  </component>
   <component name="NewModuleRootManager" inherit-compiler-output="false">
     <output url="file://$MODULE_DIR$/classes/main" />
     <output-test url="file://$MODULE_DIR$/classes/test" />
@@ -16,7 +21,7 @@
       <excludeFolder url="file://$MODULE_DIR$/src/main/fjs" />
       <excludeFolder url="file://$MODULE_DIR$/src/test" />
     </content>
-    <orderEntry type="library" name="scala-2.7.2.final" level="project" />
+    <orderEntry type="library" name="scala-2.7.3.final" level="project" />
     <orderEntry type="jdk" jdkName="1.6" jdkType="JavaSDK" />
     <orderEntry type="sourceFolder" forTests="false" />
   </component>
