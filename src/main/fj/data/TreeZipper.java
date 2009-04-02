@@ -672,4 +672,17 @@ public class TreeZipper<A> {
   public <B> TreeZipper<B> cobind(final F<TreeZipper<A>, B> f) {
     return positions().map(f);
   }
+
+  /**
+   * A first-class version of the findChild function.
+   *
+   * @return a function that finds the first child, of a given tree zipper, that matches a given predicate.
+   */
+  public static <A> F2<F<Tree<A>, Boolean>, TreeZipper<A>, Option<TreeZipper<A>>> findChild() {
+    return new F2<F<Tree<A>, Boolean>, TreeZipper<A>, Option<TreeZipper<A>>>() {
+      public Option<TreeZipper<A>> f(final F<Tree<A>, Boolean> f, final TreeZipper<A> az) {
+        return az.findChild(f);
+      }
+    };
+  }
 }
