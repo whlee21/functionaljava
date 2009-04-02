@@ -181,9 +181,10 @@ public abstract class HList<A extends HList<A>> {
 
     /**
      * A function application operator for concatenating heterogeneous lists.
+     *
      * @param <A> The type of the list to which to append.
      * @param <B> The type of the list to append.
-     * @param <C> The type of the concatenated list. 
+     * @param <C> The type of the concatenated list.
      * @return an operator that concatenates heterogeneous lists.
      */
     public static <A, B, C> Apply<HAppend<A, B, C>, P2<A, B>, C> append() {
@@ -215,7 +216,7 @@ public abstract class HList<A extends HList<A>> {
      * A fold instance for the empty list.
      *
      * @param <G> The type of the function with which to fold.
-     * @param <V>  The type of value that this fold returns.
+     * @param <V> The type of value that this fold returns.
      * @return a fold instance for the empty list.
      */
     public static <G, V> HFoldr<G, V, HNil, V> hFoldr() {
@@ -267,7 +268,7 @@ public abstract class HList<A extends HList<A>> {
   }
 
   /**
- * The nonempty list
+   * The nonempty list
    */
   public static final class HCons<E, L extends HList<L>> extends HList<HCons<E, L>> {
     private E e;
