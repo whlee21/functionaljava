@@ -15,8 +15,7 @@ import static fj.Function.compose;
 
 public class Comonad_example {
   public static void main(final String[] args) {
-    final String s = "abc";
-    for (final Stream<Character> p : perms.f(fromString(s).toStream())) {
+    for (final Stream<Character> p : perms.f(fromString(args[0]).toStream())) {
       System.out.println(asString(p.toList()));
     }
   }
