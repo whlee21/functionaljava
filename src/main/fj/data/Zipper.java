@@ -218,7 +218,7 @@ public class Zipper<A> {
    *         focus, otherwise None.
    */
   public Option<Zipper<A>> previous() {
-    return right.isEmpty() ? Option.<Zipper<A>>none() : some(tryPrevious());
+    return left.isEmpty() ? Option.<Zipper<A>>none() : some(tryPrevious());
   }
 
   /**
@@ -291,7 +291,9 @@ public class Zipper<A> {
   public Option<Zipper<A>> deleteLeft() {
     return left.isEmpty() && right.isEmpty()
         ? Option.<Zipper<A>>none()
-        : some(zipper(left, left.isEmpty() ? right.head() : left.head(), right));
+        : some(zipper(left.isEmpty() ? left : left.tail()._1(),
+        left.isEmpty() ? right.head() : left.head(),
+        left.isEmpty() ? right.tail()._1() : right));
   }
 
   /**
@@ -305,7 +307,9 @@ public class Zipper<A> {
   public Option<Zipper<A>> deleteRight() {
     return left.isEmpty() && right.isEmpty()
         ? Option.<Zipper<A>>none()
-        : some(zipper(left, right.isEmpty() ? left.head() : right.head(), right));
+        : some(zipper(right.isEmpty() ? left.tail()._1() : left,
+        right.isEmpty() ? left.head() : right.head(),
+        right.isEmpty() ? right : right.tail()._1()));
   }
 
   /**
@@ -534,7 +538,25 @@ public class Zipper<A> {
    * @return A stream that contains all the elements of this zipper.
    */
   public Stream<A> toStream() {
-    return left.snoc(P.p(focus)).append(right);
+    return left.reverse().snoc(P.p(focus)).append(right);
   }
-  
+
+  /**
+   * Returns a Stream of the elements to the left of focus.
+   *
+   * @return a Stream of the elements to the left of focus.
+   */
+  public Stream<A> lefts() {
+    return left;
+  }
+
+  /**
+   * Returns a Stream of the elements to the right of focus.
+   *
+   * @return a Stream of the elements to the right of focus.
+   */
+  public Stream<A> rights() {
+    return right;
+  }
+
 }
