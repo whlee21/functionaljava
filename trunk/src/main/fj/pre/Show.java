@@ -536,7 +536,8 @@ public final class Show<A> {
    */
   public static <A, B, C, D, E, F$, G> Show<P7<A, B, C, D, E, F$, G>> p7Show(final Show<A> sa, final Show<B> sb,
                                                                              final Show<C> sc, final Show<D> sd,
-                                                                             final Show<E> se, final Show<F$> sf, final Show<G> sg) {
+                                                                             final Show<E> se, final Show<F$> sf,
+                                                                             final Show<G> sg) {
     return new Show<P7<A, B, C, D, E, F$, G>>(new F<P7<A, B, C, D, E, F$, G>, List<Character>>() {
       public List<Character> f(final P7<A, B, C, D, E, F$, G> p) {
         return cons('(', sa.show(p._1())).snoc(',').append(sb.show(p._2())).snoc(',')

@@ -22,7 +22,7 @@ public enum Ordering {
   EQ,
 
   /**
-   * Greater than. 
+   * Greater than.
    */
   GT
 }

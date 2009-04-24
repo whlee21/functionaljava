@@ -258,7 +258,7 @@ public class TreeZipper<A> {
                                                                          final Stream<Tree<A>> xs) {
             return p.f(xs.head()) ? some(P.p(acc, xs.head(), xs.tail()._1()))
                 : xs.isNotEmpty() ? f(acc.cons(xs.head()), xs.tail()._1())
-                : Option.<P3<Stream<Tree<A>>, Tree<A>, Stream<Tree<A>>>>none();
+                    : Option.<P3<Stream<Tree<A>>, Tree<A>, Stream<Tree<A>>>>none();
           }
         };
     for (final P3<Stream<Tree<A>>, Tree<A>, Stream<Tree<A>>> ltr
@@ -277,7 +277,7 @@ public class TreeZipper<A> {
                                                                     final int n) {
     return n == 0 ? some(P.p(acc, xs))
         : xs.isNotEmpty() ? splitChildren(acc.cons(xs.head()), xs.tail()._1(), n - 1)
-        : Option.<P2<Stream<A>, Stream<A>>>none();
+            : Option.<P2<Stream<A>, Stream<A>>>none();
   }
 
   private static <A> Stream<P3<Stream<Tree<A>>, A, Stream<Tree<A>>>> lp3nil() {

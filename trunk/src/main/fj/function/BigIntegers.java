@@ -25,29 +25,32 @@ public final class BigIntegers {
   /**
    * Curried Integer addition.
    */
-  public static final F<BigInteger, F<BigInteger, BigInteger>> add = curry(new F2<BigInteger, BigInteger, BigInteger>() {
-    public BigInteger f(final BigInteger a1, final BigInteger a2) {
-      return a1.add(a2);
-    }
-  });
+  public static final F<BigInteger, F<BigInteger, BigInteger>> add =
+      curry(new F2<BigInteger, BigInteger, BigInteger>() {
+        public BigInteger f(final BigInteger a1, final BigInteger a2) {
+          return a1.add(a2);
+        }
+      });
 
   /**
    * Curried Integer multiplication.
    */
-  public static final F<BigInteger, F<BigInteger, BigInteger>> multiply = curry(new F2<BigInteger, BigInteger, BigInteger>() {
-    public BigInteger f(final BigInteger a1, final BigInteger a2) {
-      return a1.multiply(a2);
-    }
-  });
+  public static final F<BigInteger, F<BigInteger, BigInteger>> multiply =
+      curry(new F2<BigInteger, BigInteger, BigInteger>() {
+        public BigInteger f(final BigInteger a1, final BigInteger a2) {
+          return a1.multiply(a2);
+        }
+      });
 
   /**
    * Curried Integer subtraction.
    */
-  public static final F<BigInteger, F<BigInteger, BigInteger>> subtract = curry(new F2<BigInteger, BigInteger, BigInteger>() {
-    public BigInteger f(final BigInteger a1, final BigInteger a2) {
-      return a1.subtract(a2);
-    }
-  });
+  public static final F<BigInteger, F<BigInteger, BigInteger>> subtract =
+      curry(new F2<BigInteger, BigInteger, BigInteger>() {
+        public BigInteger f(final BigInteger a1, final BigInteger a2) {
+          return a1.subtract(a2);
+        }
+      });
 
   /**
    * Negation.
@@ -70,11 +73,12 @@ public final class BigIntegers {
   /**
    * Remainder.
    */
-  public static final F<BigInteger, F<BigInteger, BigInteger>> remainder = curry(new F2<BigInteger, BigInteger, BigInteger>() {
-    public BigInteger f(final BigInteger a1, final BigInteger a2) {
-      return a1.remainder(a2);
-    }
-  });
+  public static final F<BigInteger, F<BigInteger, BigInteger>> remainder =
+      curry(new F2<BigInteger, BigInteger, BigInteger>() {
+        public BigInteger f(final BigInteger a1, final BigInteger a2) {
+          return a1.remainder(a2);
+        }
+      });
 
   /**
    * Power.

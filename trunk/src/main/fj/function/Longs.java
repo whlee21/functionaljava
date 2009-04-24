@@ -19,8 +19,8 @@ import static java.lang.Math.abs;
  */
 public final class Longs {
   private Longs() {
-      throw new UnsupportedOperationException();
-    }
+    throw new UnsupportedOperationException();
+  }
 
   /**
    * Curried Long addition.
@@ -40,7 +40,7 @@ public final class Longs {
       return x - y;
     }
   });
-  
+
   /**
    * Negation.
    */

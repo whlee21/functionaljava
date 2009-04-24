@@ -220,7 +220,8 @@ public abstract class Option<A> implements Iterable<A> {
    *           value.
    * @return A new optional value after performing the map, then final join.
    */
-  public <B, C, D, E> Option<E> bind(final Option<B> ob, final Option<C> oc, final Option<D> od, final F<A, F<B, F<C, F<D, E>>>> f) {
+  public <B, C, D, E> Option<E> bind(final Option<B> ob, final Option<C> oc, final Option<D> od,
+                                     final F<A, F<B, F<C, F<D, E>>>> f) {
     return od.apply(bind(ob, oc, f));
   }
 
@@ -236,7 +237,8 @@ public abstract class Option<A> implements Iterable<A> {
    *           value.
    * @return A new optional value after performing the map, then final join.
    */
-  public <B, C, D, E, F$> Option<F$> bind(final Option<B> ob, final Option<C> oc, final Option<D> od, final Option<E> oe, final F<A, F<B, F<C, F<D, F<E, F$>>>>> f) {
+  public <B, C, D, E, F$> Option<F$> bind(final Option<B> ob, final Option<C> oc, final Option<D> od,
+                                          final Option<E> oe, final F<A, F<B, F<C, F<D, F<E, F$>>>>> f) {
     return oe.apply(bind(ob, oc, od, f));
   }
 
@@ -253,7 +255,9 @@ public abstract class Option<A> implements Iterable<A> {
    *           value.
    * @return A new optional value after performing the map, then final join.
    */
-  public <B, C, D, E, F$, G> Option<G> bind(final Option<B> ob, final Option<C> oc, final Option<D> od, final Option<E> oe, final Option<F$> of, final F<A, F<B, F<C, F<D, F<E, F<F$, G>>>>>> f) {
+  public <B, C, D, E, F$, G> Option<G> bind(final Option<B> ob, final Option<C> oc, final Option<D> od,
+                                            final Option<E> oe, final Option<F$> of,
+                                            final F<A, F<B, F<C, F<D, F<E, F<F$, G>>>>>> f) {
     return of.apply(bind(ob, oc, od, oe, f));
   }
 
@@ -271,7 +275,9 @@ public abstract class Option<A> implements Iterable<A> {
    *           value.
    * @return A new optional value after performing the map, then final join.
    */
-  public <B, C, D, E, F$, G, H> Option<H> bind(final Option<B> ob, final Option<C> oc, final Option<D> od, final Option<E> oe, final Option<F$> of, final Option<G> og, final F<A, F<B, F<C, F<D, F<E, F<F$, F<G, H>>>>>>> f) {
+  public <B, C, D, E, F$, G, H> Option<H> bind(final Option<B> ob, final Option<C> oc, final Option<D> od,
+                                               final Option<E> oe, final Option<F$> of, final Option<G> og,
+                                               final F<A, F<B, F<C, F<D, F<E, F<F$, F<G, H>>>>>>> f) {
     return og.apply(bind(ob, oc, od, oe, of, f));
   }
 
@@ -290,7 +296,10 @@ public abstract class Option<A> implements Iterable<A> {
    *           value.
    * @return A new optional value after performing the map, then final join.
    */
-  public <B, C, D, E, F$, G, H, I> Option<I> bind(final Option<B> ob, final Option<C> oc, final Option<D> od, final Option<E> oe, final Option<F$> of, final Option<G> og, final Option<H> oh, final F<A, F<B, F<C, F<D, F<E, F<F$, F<G, F<H, I>>>>>>>> f) {
+  public <B, C, D, E, F$, G, H, I> Option<I> bind(final Option<B> ob, final Option<C> oc, final Option<D> od,
+                                                  final Option<E> oe, final Option<F$> of, final Option<G> og,
+                                                  final Option<H> oh,
+                                                  final F<A, F<B, F<C, F<D, F<E, F<F$, F<G, F<H, I>>>>>>>> f) {
     return oh.apply(bind(ob, oc, od, oe, of, og, f));
   }
 

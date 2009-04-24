@@ -174,7 +174,7 @@ public final class Gen<A> {
     return new Gen<B>(new F<Integer, F<Rand, B>>() {
       public F<Rand, B> f(final Integer i) {
         return new F<Rand, B>() {
-          public B f(final Rand r) {            
+          public B f(final Rand r) {
             return f.f(gen(i, r)).f.f(i).f(r);
           }
         };

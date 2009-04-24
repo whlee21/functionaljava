@@ -4,7 +4,7 @@ import static fj.Unit.unit;
 
 /**
  * Represents a side-effect.
- * 
+ *
  * @version %build.number%<br>
  *          <ul>
  *          <li>$LastChangedRevision$</li>

@@ -28,6 +28,7 @@ import fj.data.Option;
 import fj.data.Stream;
 
 import static fj.test.Variant.variant;
+
 import static java.lang.Double.doubleToRawLongBits;
 import static java.lang.Float.floatToRawIntBits;
 import java.math.BigDecimal;
@@ -69,7 +70,7 @@ import java.util.concurrent.SynchronousQueue;
 /**
  * Transforms a type and a generator to produce a new generator. This function is used to generate
  * {@link Arbitrary arbitrary} functions.
- * 
+ *
  * @version %build.number%<br>
  *          <ul>
  *          <li>$LastChangedRevision$</li>
@@ -90,7 +91,7 @@ public abstract class Coarbitrary<A> {
 
   /**
    * A curried version of {@link #coarbitrary(Object, Gen)}.
-   * 
+   *
    * @param a The value to produce the generator from.
    * @return A curried version of {@link #coarbitrary(Object, Gen)}.
    */
@@ -104,7 +105,7 @@ public abstract class Coarbitrary<A> {
 
   /**
    * Composes the given function with this coarbitrary to produce a new coarbitrary.
-   * 
+   *
    * @param f The function to compose.
    * @return A new coarbitrary composed with the given function.
    */
@@ -118,7 +119,7 @@ public abstract class Coarbitrary<A> {
 
   /**
    * Co-maps this coarbitrary using the given function.
-   * 
+   *
    * @param f The function to co-map with.
    * @return A co-mapped coarbitrary.
    */
@@ -132,7 +133,7 @@ public abstract class Coarbitrary<A> {
 
   /**
    * A coarbitrary for a function.
-   * 
+   *
    * @param a An arbitrary for the domain of the function.
    * @param c A coarbitrary for the codomain of the function.
    * @return A coarbitrary for a function.
@@ -154,10 +155,11 @@ public abstract class Coarbitrary<A> {
    *
    * @param aa An arbitrary for part of the domain of the function.
    * @param ab An arbitrary for part of the domain of the function.
-   * @param c A coarbitrary for the codomain of the function.
+   * @param c  A coarbitrary for the codomain of the function.
    * @return A coarbitrary for a function-2.
    */
-  public static <A, B, C> Coarbitrary<F2<A, B, C>> coarbF2(final Arbitrary<A> aa, final Arbitrary<B> ab, final Coarbitrary<C> c) {
+  public static <A, B, C> Coarbitrary<F2<A, B, C>> coarbF2(final Arbitrary<A> aa, final Arbitrary<B> ab,
+                                                           final Coarbitrary<C> c) {
     return new Coarbitrary<F2<A, B, C>>() {
       public <X> Gen<X> coarbitrary(final F2<A, B, C> f, final Gen<X> g) {
         return coarbF(aa, coarbF(ab, c)).coarbitrary(curry(f), g);
@@ -171,10 +173,11 @@ public abstract class Coarbitrary<A> {
    * @param aa An arbitrary for part of the domain of the function.
    * @param ab An arbitrary for part of the domain of the function.
    * @param ac An arbitrary for part of the domain of the function.
-   * @param c A coarbitrary for the codomain of the function.
+   * @param c  A coarbitrary for the codomain of the function.
    * @return A coarbitrary for a function-3.
    */
-  public static <A, B, C, D> Coarbitrary<F3<A, B, C, D>> coarbF3(final Arbitrary<A> aa, final Arbitrary<B> ab, final Arbitrary<C> ac, final Coarbitrary<D> c) {
+  public static <A, B, C, D> Coarbitrary<F3<A, B, C, D>> coarbF3(final Arbitrary<A> aa, final Arbitrary<B> ab,
+                                                                 final Arbitrary<C> ac, final Coarbitrary<D> c) {
     return new Coarbitrary<F3<A, B, C, D>>() {
       public <X> Gen<X> coarbitrary(final F3<A, B, C, D> f, final Gen<X> g) {
         return coarbF(aa, coarbF(ab, coarbF(ac, c))).coarbitrary(curry(f), g);
@@ -189,10 +192,12 @@ public abstract class Coarbitrary<A> {
    * @param ab An arbitrary for part of the domain of the function.
    * @param ac An arbitrary for part of the domain of the function.
    * @param ad An arbitrary for part of the domain of the function.
-   * @param c A coarbitrary for the codomain of the function.
+   * @param c  A coarbitrary for the codomain of the function.
    * @return A coarbitrary for a function-4.
    */
-  public static <A, B, C, D, E> Coarbitrary<F4<A, B, C, D, E>> coarbF4(final Arbitrary<A> aa, final Arbitrary<B> ab, final Arbitrary<C> ac, final Arbitrary<D> ad, final Coarbitrary<E> c) {
+  public static <A, B, C, D, E> Coarbitrary<F4<A, B, C, D, E>> coarbF4(final Arbitrary<A> aa, final Arbitrary<B> ab,
+                                                                       final Arbitrary<C> ac, final Arbitrary<D> ad,
+                                                                       final Coarbitrary<E> c) {
     return new Coarbitrary<F4<A, B, C, D, E>>() {
       public <X> Gen<X> coarbitrary(final F4<A, B, C, D, E> f, final Gen<X> g) {
         return coarbF(aa, coarbF(ab, coarbF(ac, coarbF(ad, c)))).coarbitrary(curry(f), g);
@@ -208,10 +213,15 @@ public abstract class Coarbitrary<A> {
    * @param ac An arbitrary for part of the domain of the function.
    * @param ad An arbitrary for part of the domain of the function.
    * @param ae An arbitrary for part of the domain of the function.
-   * @param c A coarbitrary for the codomain of the function.
+   * @param c  A coarbitrary for the codomain of the function.
    * @return A coarbitrary for a function-5.
    */
-  public static <A, B, C, D, E, F$> Coarbitrary<F5<A, B, C, D, E, F$>> coarbF5(final Arbitrary<A> aa, final Arbitrary<B> ab, final Arbitrary<C> ac, final Arbitrary<D> ad, final Arbitrary<E> ae, final Coarbitrary<F$> c) {
+  public static <A, B, C, D, E, F$> Coarbitrary<F5<A, B, C, D, E, F$>> coarbF5(final Arbitrary<A> aa,
+                                                                               final Arbitrary<B> ab,
+                                                                               final Arbitrary<C> ac,
+                                                                               final Arbitrary<D> ad,
+                                                                               final Arbitrary<E> ae,
+                                                                               final Coarbitrary<F$> c) {
     return new Coarbitrary<F5<A, B, C, D, E, F$>>() {
       public <X> Gen<X> coarbitrary(final F5<A, B, C, D, E, F$> f, final Gen<X> g) {
         return coarbF(aa, coarbF(ab, coarbF(ac, coarbF(ad, coarbF(ae, c))))).coarbitrary(curry(f), g);
@@ -228,10 +238,16 @@ public abstract class Coarbitrary<A> {
    * @param ad An arbitrary for part of the domain of the function.
    * @param ae An arbitrary for part of the domain of the function.
    * @param af An arbitrary for part of the domain of the function.
-   * @param c A coarbitrary for the codomain of the function.
+   * @param c  A coarbitrary for the codomain of the function.
    * @return A coarbitrary for a function-6.
    */
-  public static <A, B, C, D, E, F$, G> Coarbitrary<F6<A, B, C, D, E, F$, G>> coarbF6(final Arbitrary<A> aa, final Arbitrary<B> ab, final Arbitrary<C> ac, final Arbitrary<D> ad, final Arbitrary<E> ae, final Arbitrary<F$> af, final Coarbitrary<G> c) {
+  public static <A, B, C, D, E, F$, G> Coarbitrary<F6<A, B, C, D, E, F$, G>> coarbF6(final Arbitrary<A> aa,
+                                                                                     final Arbitrary<B> ab,
+                                                                                     final Arbitrary<C> ac,
+                                                                                     final Arbitrary<D> ad,
+                                                                                     final Arbitrary<E> ae,
+                                                                                     final Arbitrary<F$> af,
+                                                                                     final Coarbitrary<G> c) {
     return new Coarbitrary<F6<A, B, C, D, E, F$, G>>() {
       public <X> Gen<X> coarbitrary(final F6<A, B, C, D, E, F$, G> f, final Gen<X> g) {
         return coarbF(aa, coarbF(ab, coarbF(ac, coarbF(ad, coarbF(ae, coarbF(af, c)))))).coarbitrary(curry(f), g);
@@ -249,13 +265,21 @@ public abstract class Coarbitrary<A> {
    * @param ae An arbitrary for part of the domain of the function.
    * @param af An arbitrary for part of the domain of the function.
    * @param ag An arbitrary for part of the domain of the function.
-   * @param c A coarbitrary for the codomain of the function.
+   * @param c  A coarbitrary for the codomain of the function.
    * @return A coarbitrary for a function-7.
    */
-  public static <A, B, C, D, E, F$, G, H> Coarbitrary<F7<A, B, C, D, E, F$, G, H>> coarbF7(final Arbitrary<A> aa, final Arbitrary<B> ab, final Arbitrary<C> ac, final Arbitrary<D> ad, final Arbitrary<E> ae, final Arbitrary<F$> af, final Arbitrary<G> ag, final Coarbitrary<H> c) {
+  public static <A, B, C, D, E, F$, G, H> Coarbitrary<F7<A, B, C, D, E, F$, G, H>> coarbF7(final Arbitrary<A> aa,
+                                                                                           final Arbitrary<B> ab,
+                                                                                           final Arbitrary<C> ac,
+                                                                                           final Arbitrary<D> ad,
+                                                                                           final Arbitrary<E> ae,
+                                                                                           final Arbitrary<F$> af,
+                                                                                           final Arbitrary<G> ag,
+                                                                                           final Coarbitrary<H> c) {
     return new Coarbitrary<F7<A, B, C, D, E, F$, G, H>>() {
       public <X> Gen<X> coarbitrary(final F7<A, B, C, D, E, F$, G, H> f, final Gen<X> g) {
-        return coarbF(aa, coarbF(ab, coarbF(ac, coarbF(ad, coarbF(ae, coarbF(af, coarbF(ag, c))))))).coarbitrary(curry(f), g);
+        return coarbF(aa, coarbF(ab, coarbF(ac, coarbF(ad, coarbF(ae, coarbF(af, coarbF(ag, c)))))))
+            .coarbitrary(curry(f), g);
       }
     };
   }
@@ -271,13 +295,22 @@ public abstract class Coarbitrary<A> {
    * @param af An arbitrary for part of the domain of the function.
    * @param ag An arbitrary for part of the domain of the function.
    * @param ah An arbitrary for part of the domain of the function.
-   * @param c A coarbitrary for the codomain of the function.
+   * @param c  A coarbitrary for the codomain of the function.
    * @return A coarbitrary for a function-8.
    */
-  public static <A, B, C, D, E, F$, G, H, I> Coarbitrary<F8<A, B, C, D, E, F$, G, H, I>> coarbF8(final Arbitrary<A> aa, final Arbitrary<B> ab, final Arbitrary<C> ac, final Arbitrary<D> ad, final Arbitrary<E> ae, final Arbitrary<F$> af, final Arbitrary<G> ag, final Arbitrary<H> ah, final Coarbitrary<I> c) {
+  public static <A, B, C, D, E, F$, G, H, I> Coarbitrary<F8<A, B, C, D, E, F$, G, H, I>> coarbF8(final Arbitrary<A> aa,
+                                                                                                 final Arbitrary<B> ab,
+                                                                                                 final Arbitrary<C> ac,
+                                                                                                 final Arbitrary<D> ad,
+                                                                                                 final Arbitrary<E> ae,
+                                                                                                 final Arbitrary<F$> af,
+                                                                                                 final Arbitrary<G> ag,
+                                                                                                 final Arbitrary<H> ah,
+                                                                                                 final Coarbitrary<I> c) {
     return new Coarbitrary<F8<A, B, C, D, E, F$, G, H, I>>() {
       public <X> Gen<X> coarbitrary(final F8<A, B, C, D, E, F$, G, H, I> f, final Gen<X> g) {
-        return coarbF(aa, coarbF(ab, coarbF(ac, coarbF(ad, coarbF(ae, coarbF(af, coarbF(ag, coarbF(ah, c)))))))).coarbitrary(curry(f), g);
+        return coarbF(aa, coarbF(ab, coarbF(ac, coarbF(ad, coarbF(ae, coarbF(af, coarbF(ag, coarbF(ah, c))))))))
+            .coarbitrary(curry(f), g);
       }
     };
   }
@@ -356,7 +389,7 @@ public abstract class Coarbitrary<A> {
 
   /**
    * A coarbitrary for the optional value.
-   * 
+   *
    * @param ca A coarbitrary for the type of the optional value.
    * @return A coarbitrary for the optional value.
    */
@@ -476,7 +509,7 @@ public abstract class Coarbitrary<A> {
    * A coarbitrary for throwables.
    */
   public static final Coarbitrary<Throwable> coarbThrowable =
-    coarbThrowable(coarbString);
+      coarbThrowable(coarbString);
 
   // BEGIN java.util
 
@@ -490,7 +523,7 @@ public abstract class Coarbitrary<A> {
     return new Coarbitrary<ArrayList<A>>() {
       @SuppressWarnings({"unchecked"})
       public <B> Gen<B> coarbitrary(final ArrayList<A> as, final Gen<B> g) {
-        return coarbArray(ca).coarbitrary(array(as.toArray((A[])new Object[as.size()])), g);
+        return coarbArray(ca).coarbitrary(array(as.toArray((A[]) new Object[as.size()])), g);
       }
     };
   }
@@ -502,10 +535,10 @@ public abstract class Coarbitrary<A> {
     public <B> Gen<B> coarbitrary(final BitSet s, final Gen<B> g) {
       List<Boolean> x = nil();
 
-      for(int i = 0; i < s.size(); i++) {
+      for (int i = 0; i < s.size(); i++) {
         x = x.snoc(s.get(i));
       }
-      
+
       return coarbList(coarbBoolean).coarbitrary(x, g);
     }
   };
@@ -535,7 +568,8 @@ public abstract class Coarbitrary<A> {
    * @param cv A coarbitrary for the map values.
    * @return A coarbitrary for enum maps.
    */
-  public static <K extends Enum<K>, V> Coarbitrary<EnumMap<K, V>> coarbEnumMap(final Coarbitrary<K> ck, final Coarbitrary<V> cv) {
+  public static <K extends Enum<K>, V> Coarbitrary<EnumMap<K, V>> coarbEnumMap(final Coarbitrary<K> ck,
+                                                                               final Coarbitrary<V> cv) {
     return new Coarbitrary<EnumMap<K, V>>() {
       @SuppressWarnings({"UseOfObsoleteCollectionType"})
       public <B> Gen<B> coarbitrary(final EnumMap<K, V> m, final Gen<B> g) {
@@ -594,7 +628,7 @@ public abstract class Coarbitrary<A> {
     return new Coarbitrary<HashSet<A>>() {
       @SuppressWarnings({"unchecked"})
       public <B> Gen<B> coarbitrary(final HashSet<A> as, final Gen<B> g) {
-        return coarbArray(c).coarbitrary(array(as.toArray((A[])new Object[as.size()])), g);
+        return coarbArray(c).coarbitrary(array(as.toArray((A[]) new Object[as.size()])), g);
       }
     };
   }
@@ -612,10 +646,10 @@ public abstract class Coarbitrary<A> {
       public <B> Gen<B> coarbitrary(final Hashtable<K, V> h, final Gen<B> g) {
         List<P2<K, V>> x = nil();
 
-        for(final K k : h.keySet()) {
+        for (final K k : h.keySet()) {
           x = x.snoc(p(k, h.get(k)));
         }
-        
+
         return coarbList(coarbP2(ck, cv)).coarbitrary(x, g);
       }
     };
@@ -628,7 +662,8 @@ public abstract class Coarbitrary<A> {
    * @param cv A coarbitrary for the map values.
    * @return A coarbitrary for identity hash maps.
    */
-  public static <K, V> Coarbitrary<IdentityHashMap<K, V>> coarbIdentityHashMap(final Coarbitrary<K> ck, final Coarbitrary<V> cv) {
+  public static <K, V> Coarbitrary<IdentityHashMap<K, V>> coarbIdentityHashMap(final Coarbitrary<K> ck,
+                                                                               final Coarbitrary<V> cv) {
     return new Coarbitrary<IdentityHashMap<K, V>>() {
       @SuppressWarnings({"UseOfObsoleteCollectionType"})
       public <B> Gen<B> coarbitrary(final IdentityHashMap<K, V> m, final Gen<B> g) {
@@ -644,7 +679,8 @@ public abstract class Coarbitrary<A> {
    * @param cv A coarbitrary for the map values.
    * @return A coarbitrary for linked hash maps.
    */
-  public static <K, V> Coarbitrary<LinkedHashMap<K, V>> coarbLinkedHashMap(final Coarbitrary<K> ck, final Coarbitrary<V> cv) {
+  public static <K, V> Coarbitrary<LinkedHashMap<K, V>> coarbLinkedHashMap(final Coarbitrary<K> ck,
+                                                                           final Coarbitrary<V> cv) {
     return new Coarbitrary<LinkedHashMap<K, V>>() {
       @SuppressWarnings({"UseOfObsoleteCollectionType"})
       public <B> Gen<B> coarbitrary(final LinkedHashMap<K, V> m, final Gen<B> g) {
@@ -678,7 +714,7 @@ public abstract class Coarbitrary<A> {
     return new Coarbitrary<LinkedList<A>>() {
       @SuppressWarnings({"unchecked"})
       public <B> Gen<B> coarbitrary(final LinkedList<A> as, final Gen<B> g) {
-        return coarbArray(c).coarbitrary(array(as.toArray((A[])new Object[as.size()])), g);
+        return coarbArray(c).coarbitrary(array(as.toArray((A[]) new Object[as.size()])), g);
       }
     };
   }
@@ -693,7 +729,7 @@ public abstract class Coarbitrary<A> {
     return new Coarbitrary<PriorityQueue<A>>() {
       @SuppressWarnings({"unchecked"})
       public <B> Gen<B> coarbitrary(final PriorityQueue<A> as, final Gen<B> g) {
-        return coarbArray(c).coarbitrary(array(as.toArray((A[])new Object[as.size()])), g);
+        return coarbArray(c).coarbitrary(array(as.toArray((A[]) new Object[as.size()])), g);
       }
     };
   }
@@ -706,8 +742,8 @@ public abstract class Coarbitrary<A> {
     public <B> Gen<B> coarbitrary(final Properties p, final Gen<B> g) {
       final Hashtable<String, String> t = new Hashtable<String, String>();
 
-      for(final Object s : p.keySet()) {
-        t.put((String)s, p.getProperty((String)s));  
+      for (final Object s : p.keySet()) {
+        t.put((String) s, p.getProperty((String) s));
       }
 
       return coarbHashtable(coarbString, coarbString).coarbitrary(t, g);
@@ -724,7 +760,7 @@ public abstract class Coarbitrary<A> {
     return new Coarbitrary<Stack<A>>() {
       @SuppressWarnings({"unchecked"})
       public <B> Gen<B> coarbitrary(final Stack<A> as, final Gen<B> g) {
-        return coarbArray(c).coarbitrary(array(as.toArray((A[])new Object[as.size()])), g);
+        return coarbArray(c).coarbitrary(array(as.toArray((A[]) new Object[as.size()])), g);
       }
     };
   }
@@ -770,7 +806,7 @@ public abstract class Coarbitrary<A> {
     return new Coarbitrary<Vector<A>>() {
       @SuppressWarnings({"unchecked", "UseOfObsoleteCollectionType"})
       public <B> Gen<B> coarbitrary(final Vector<A> as, final Gen<B> g) {
-        return coarbArray(c).coarbitrary(array(as.toArray((A[])new Object[as.size()])), g);
+        return coarbArray(c).coarbitrary(array(as.toArray((A[]) new Object[as.size()])), g);
       }
     };
   }
@@ -782,7 +818,8 @@ public abstract class Coarbitrary<A> {
    * @param cv A coarbitrary for the map values.
    * @return A coarbitrary for weak hash maps.
    */
-  public static <K, V> Coarbitrary<WeakHashMap<K, V>> coarbWeakHashMap(final Coarbitrary<K> ck, final Coarbitrary<V> cv) {
+  public static <K, V> Coarbitrary<WeakHashMap<K, V>> coarbWeakHashMap(final Coarbitrary<K> ck,
+                                                                       final Coarbitrary<V> cv) {
     return new Coarbitrary<WeakHashMap<K, V>>() {
       @SuppressWarnings({"UseOfObsoleteCollectionType"})
       public <B> Gen<B> coarbitrary(final WeakHashMap<K, V> m, final Gen<B> g) {
@@ -805,7 +842,7 @@ public abstract class Coarbitrary<A> {
     return new Coarbitrary<ArrayBlockingQueue<A>>() {
       @SuppressWarnings({"unchecked"})
       public <B> Gen<B> coarbitrary(final ArrayBlockingQueue<A> as, final Gen<B> g) {
-        return coarbArray(c).coarbitrary(array(as.toArray((A[])new Object[as.size()])), g);
+        return coarbArray(c).coarbitrary(array(as.toArray((A[]) new Object[as.size()])), g);
       }
     };
   }
@@ -817,7 +854,8 @@ public abstract class Coarbitrary<A> {
    * @param cv A coarbitrary for the map values.
    * @return A coarbitrary for concurrent hash maps.
    */
-  public static <K, V> Coarbitrary<ConcurrentHashMap<K, V>> coarbConcurrentHashMap(final Coarbitrary<K> ck, final Coarbitrary<V> cv) {
+  public static <K, V> Coarbitrary<ConcurrentHashMap<K, V>> coarbConcurrentHashMap(final Coarbitrary<K> ck,
+                                                                                   final Coarbitrary<V> cv) {
     return new Coarbitrary<ConcurrentHashMap<K, V>>() {
       @SuppressWarnings({"UseOfObsoleteCollectionType"})
       public <B> Gen<B> coarbitrary(final ConcurrentHashMap<K, V> m, final Gen<B> g) {
@@ -836,7 +874,7 @@ public abstract class Coarbitrary<A> {
     return new Coarbitrary<ConcurrentLinkedQueue<A>>() {
       @SuppressWarnings({"unchecked"})
       public <B> Gen<B> coarbitrary(final ConcurrentLinkedQueue<A> as, final Gen<B> g) {
-        return coarbArray(c).coarbitrary(array(as.toArray((A[])new Object[as.size()])), g);
+        return coarbArray(c).coarbitrary(array(as.toArray((A[]) new Object[as.size()])), g);
       }
     };
   }
@@ -851,7 +889,7 @@ public abstract class Coarbitrary<A> {
     return new Coarbitrary<CopyOnWriteArrayList<A>>() {
       @SuppressWarnings({"unchecked"})
       public <B> Gen<B> coarbitrary(final CopyOnWriteArrayList<A> as, final Gen<B> g) {
-        return coarbArray(c).coarbitrary(array(as.toArray((A[])new Object[as.size()])), g);
+        return coarbArray(c).coarbitrary(array(as.toArray((A[]) new Object[as.size()])), g);
       }
     };
   }
@@ -866,7 +904,7 @@ public abstract class Coarbitrary<A> {
     return new Coarbitrary<CopyOnWriteArraySet<A>>() {
       @SuppressWarnings({"unchecked"})
       public <B> Gen<B> coarbitrary(final CopyOnWriteArraySet<A> as, final Gen<B> g) {
-        return coarbArray(c).coarbitrary(array(as.toArray((A[])new Object[as.size()])), g);
+        return coarbArray(c).coarbitrary(array(as.toArray((A[]) new Object[as.size()])), g);
       }
     };
   }
@@ -881,7 +919,7 @@ public abstract class Coarbitrary<A> {
     return new Coarbitrary<DelayQueue<A>>() {
       @SuppressWarnings({"unchecked"})
       public <B> Gen<B> coarbitrary(final DelayQueue<A> as, final Gen<B> g) {
-        return coarbArray(c).coarbitrary(array(as.toArray((A[])new Object[as.size()])), g);
+        return coarbArray(c).coarbitrary(array(as.toArray((A[]) new Object[as.size()])), g);
       }
     };
   }
@@ -896,7 +934,7 @@ public abstract class Coarbitrary<A> {
     return new Coarbitrary<LinkedBlockingQueue<A>>() {
       @SuppressWarnings({"unchecked"})
       public <B> Gen<B> coarbitrary(final LinkedBlockingQueue<A> as, final Gen<B> g) {
-        return coarbArray(c).coarbitrary(array(as.toArray((A[])new Object[as.size()])), g);
+        return coarbArray(c).coarbitrary(array(as.toArray((A[]) new Object[as.size()])), g);
       }
     };
   }
@@ -911,7 +949,7 @@ public abstract class Coarbitrary<A> {
     return new Coarbitrary<PriorityBlockingQueue<A>>() {
       @SuppressWarnings({"unchecked"})
       public <B> Gen<B> coarbitrary(final PriorityBlockingQueue<A> as, final Gen<B> g) {
-        return coarbArray(c).coarbitrary(array(as.toArray((A[])new Object[as.size()])), g);
+        return coarbArray(c).coarbitrary(array(as.toArray((A[]) new Object[as.size()])), g);
       }
     };
   }
@@ -926,7 +964,7 @@ public abstract class Coarbitrary<A> {
     return new Coarbitrary<SynchronousQueue<A>>() {
       @SuppressWarnings({"unchecked"})
       public <B> Gen<B> coarbitrary(final SynchronousQueue<A> as, final Gen<B> g) {
-        return coarbArray(c).coarbitrary(array(as.toArray((A[])new Object[as.size()])), g);
+        return coarbArray(c).coarbitrary(array(as.toArray((A[]) new Object[as.size()])), g);
       }
     };
   }
@@ -958,7 +996,7 @@ public abstract class Coarbitrary<A> {
   // BEGIN java.math
 
   public static final Coarbitrary<BigInteger> coarbBigInteger = new Coarbitrary<BigInteger>() {
-    public <B> Gen<B> coarbitrary(final BigInteger i, final Gen<B> g) {      
+    public <B> Gen<B> coarbitrary(final BigInteger i, final Gen<B> g) {
       return variant((i.compareTo(BigInteger.ZERO) >= 0 ?
           i.multiply(BigInteger.valueOf(2L)) :
           i.multiply(BigInteger.valueOf(-2L).add(BigInteger.ONE))).longValue(), g);
@@ -1012,7 +1050,8 @@ public abstract class Coarbitrary<A> {
    * @param cc A coarbitrary for one of the types over which the product-3 is defined.
    * @return A coarbitrary for product-3 values.
    */
-  public static <A, B, C> Coarbitrary<P3<A, B, C>> coarbP3(final Coarbitrary<A> ca, final Coarbitrary<B> cb, final Coarbitrary<C> cc) {
+  public static <A, B, C> Coarbitrary<P3<A, B, C>> coarbP3(final Coarbitrary<A> ca, final Coarbitrary<B> cb,
+                                                           final Coarbitrary<C> cc) {
     return new Coarbitrary<P3<A, B, C>>() {
       public <X> Gen<X> coarbitrary(final P3<A, B, C> p, final Gen<X> g) {
         return ca.coarbitrary(p._1(), cb.coarbitrary(p._2(), cc.coarbitrary(p._3(), g)));
@@ -1029,7 +1068,8 @@ public abstract class Coarbitrary<A> {
    * @param cd A coarbitrary for one of the types over which the product-4 is defined.
    * @return A coarbitrary for product-4 values.
    */
-  public static <A, B, C, D> Coarbitrary<P4<A, B, C, D>> coarbP4(final Coarbitrary<A> ca, final Coarbitrary<B> cb, final Coarbitrary<C> cc, final Coarbitrary<D> cd) {
+  public static <A, B, C, D> Coarbitrary<P4<A, B, C, D>> coarbP4(final Coarbitrary<A> ca, final Coarbitrary<B> cb,
+                                                                 final Coarbitrary<C> cc, final Coarbitrary<D> cd) {
     return new Coarbitrary<P4<A, B, C, D>>() {
       public <X> Gen<X> coarbitrary(final P4<A, B, C, D> p, final Gen<X> g) {
         return ca.coarbitrary(p._1(), cb.coarbitrary(p._2(), cc.coarbitrary(p._3(), cd.coarbitrary(p._4(), g))));
@@ -1047,10 +1087,13 @@ public abstract class Coarbitrary<A> {
    * @param ce A coarbitrary for one of the types over which the product-5 is defined.
    * @return A coarbitrary for product-5 values.
    */
-  public static <A, B, C, D, E> Coarbitrary<P5<A, B, C, D, E>> coarbP5(final Coarbitrary<A> ca, final Coarbitrary<B> cb, final Coarbitrary<C> cc, final Coarbitrary<D> cd, final Coarbitrary<E> ce) {
+  public static <A, B, C, D, E> Coarbitrary<P5<A, B, C, D, E>> coarbP5(final Coarbitrary<A> ca, final Coarbitrary<B> cb,
+                                                                       final Coarbitrary<C> cc, final Coarbitrary<D> cd,
+                                                                       final Coarbitrary<E> ce) {
     return new Coarbitrary<P5<A, B, C, D, E>>() {
       public <X> Gen<X> coarbitrary(final P5<A, B, C, D, E> p, final Gen<X> g) {
-        return ca.coarbitrary(p._1(), cb.coarbitrary(p._2(), cc.coarbitrary(p._3(), cd.coarbitrary(p._4(), ce.coarbitrary(p._5(), g)))));
+        return ca.coarbitrary(p._1(),
+            cb.coarbitrary(p._2(), cc.coarbitrary(p._3(), cd.coarbitrary(p._4(), ce.coarbitrary(p._5(), g)))));
       }
     };
   }
@@ -1066,10 +1109,16 @@ public abstract class Coarbitrary<A> {
    * @param cf A coarbitrary for one of the types over which the product-6 is defined.
    * @return A coarbitrary for product-6 values.
    */
-  public static <A, B, C, D, E, F$> Coarbitrary<P6<A, B, C, D, E, F$>> coarbP6(final Coarbitrary<A> ca, final Coarbitrary<B> cb, final Coarbitrary<C> cc, final Coarbitrary<D> cd, final Coarbitrary<E> ce, final Coarbitrary<F$> cf) {
+  public static <A, B, C, D, E, F$> Coarbitrary<P6<A, B, C, D, E, F$>> coarbP6(final Coarbitrary<A> ca,
+                                                                               final Coarbitrary<B> cb,
+                                                                               final Coarbitrary<C> cc,
+                                                                               final Coarbitrary<D> cd,
+                                                                               final Coarbitrary<E> ce,
+                                                                               final Coarbitrary<F$> cf) {
     return new Coarbitrary<P6<A, B, C, D, E, F$>>() {
       public <X> Gen<X> coarbitrary(final P6<A, B, C, D, E, F$> p, final Gen<X> g) {
-        return ca.coarbitrary(p._1(), cb.coarbitrary(p._2(), cc.coarbitrary(p._3(), cd.coarbitrary(p._4(), ce.coarbitrary(p._5(), cf.coarbitrary(p._6(), g))))));
+        return ca.coarbitrary(p._1(), cb.coarbitrary(p._2(),
+            cc.coarbitrary(p._3(), cd.coarbitrary(p._4(), ce.coarbitrary(p._5(), cf.coarbitrary(p._6(), g))))));
       }
     };
   }
@@ -1086,10 +1135,17 @@ public abstract class Coarbitrary<A> {
    * @param cg A coarbitrary for one of the types over which the product-7 is defined.
    * @return A coarbitrary for product-7 values.
    */
-  public static <A, B, C, D, E, F$, G> Coarbitrary<P7<A, B, C, D, E, F$, G>> coarbP7(final Coarbitrary<A> ca, final Coarbitrary<B> cb, final Coarbitrary<C> cc, final Coarbitrary<D> cd, final Coarbitrary<E> ce, final Coarbitrary<F$> cf, final Coarbitrary<G> cg) {
+  public static <A, B, C, D, E, F$, G> Coarbitrary<P7<A, B, C, D, E, F$, G>> coarbP7(final Coarbitrary<A> ca,
+                                                                                     final Coarbitrary<B> cb,
+                                                                                     final Coarbitrary<C> cc,
+                                                                                     final Coarbitrary<D> cd,
+                                                                                     final Coarbitrary<E> ce,
+                                                                                     final Coarbitrary<F$> cf,
+                                                                                     final Coarbitrary<G> cg) {
     return new Coarbitrary<P7<A, B, C, D, E, F$, G>>() {
       public <X> Gen<X> coarbitrary(final P7<A, B, C, D, E, F$, G> p, final Gen<X> g) {
-        return ca.coarbitrary(p._1(), cb.coarbitrary(p._2(), cc.coarbitrary(p._3(), cd.coarbitrary(p._4(), ce.coarbitrary(p._5(), cf.coarbitrary(p._6(), cg.coarbitrary(p._7(), g)))))));
+        return ca.coarbitrary(p._1(), cb.coarbitrary(p._2(), cc.coarbitrary(p._3(),
+            cd.coarbitrary(p._4(), ce.coarbitrary(p._5(), cf.coarbitrary(p._6(), cg.coarbitrary(p._7(), g)))))));
       }
     };
   }
@@ -1107,10 +1163,18 @@ public abstract class Coarbitrary<A> {
    * @param ch A coarbitrary for one of the types over which the product-8 is defined.
    * @return A coarbitrary for product-8 values.
    */
-  public static <A, B, C, D, E, F$, G, H> Coarbitrary<P8<A, B, C, D, E, F$, G, H>> coarbP8(final Coarbitrary<A> ca, final Coarbitrary<B> cb, final Coarbitrary<C> cc, final Coarbitrary<D> cd, final Coarbitrary<E> ce, final Coarbitrary<F$> cf, final Coarbitrary<G> cg, final Coarbitrary<H> ch) {
+  public static <A, B, C, D, E, F$, G, H> Coarbitrary<P8<A, B, C, D, E, F$, G, H>> coarbP8(final Coarbitrary<A> ca,
+                                                                                           final Coarbitrary<B> cb,
+                                                                                           final Coarbitrary<C> cc,
+                                                                                           final Coarbitrary<D> cd,
+                                                                                           final Coarbitrary<E> ce,
+                                                                                           final Coarbitrary<F$> cf,
+                                                                                           final Coarbitrary<G> cg,
+                                                                                           final Coarbitrary<H> ch) {
     return new Coarbitrary<P8<A, B, C, D, E, F$, G, H>>() {
       public <X> Gen<X> coarbitrary(final P8<A, B, C, D, E, F$, G, H> p, final Gen<X> g) {
-        return ca.coarbitrary(p._1(), cb.coarbitrary(p._2(), cc.coarbitrary(p._3(), cd.coarbitrary(p._4(), ce.coarbitrary(p._5(), cf.coarbitrary(p._6(), cg.coarbitrary(p._7(), ch.coarbitrary(p._8(), g))))))));
+        return ca.coarbitrary(p._1(), cb.coarbitrary(p._2(), cc.coarbitrary(p._3(), cd.coarbitrary(p._4(),
+            ce.coarbitrary(p._5(), cf.coarbitrary(p._6(), cg.coarbitrary(p._7(), ch.coarbitrary(p._8(), g))))))));
       }
     };
   }

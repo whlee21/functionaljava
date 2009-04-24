@@ -515,7 +515,7 @@ public final class Strategy<A> {
   public Strategy<A> errorStrategy(final Effect<Error> e) {
     return errorStrategy(this, e);
   }
-                                                      
+
   /**
    * Provides an error-handling strategy. Captures any uncaught runtime errors encountered by the given strategy
    * and applies the given side-effect to them.

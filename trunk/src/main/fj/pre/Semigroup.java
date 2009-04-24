@@ -106,38 +106,42 @@ public final class Semigroup<A> {
   /**
    * A semigroup that adds big integers.
    */
-  public static final Semigroup<BigInteger> bigintAdditionSemigroup = semigroup(new F2<BigInteger, BigInteger, BigInteger>() {
-    public BigInteger f(final BigInteger i1, final BigInteger i2) {
-      return i1.add(i2);
-    }
-  });
+  public static final Semigroup<BigInteger> bigintAdditionSemigroup =
+      semigroup(new F2<BigInteger, BigInteger, BigInteger>() {
+        public BigInteger f(final BigInteger i1, final BigInteger i2) {
+          return i1.add(i2);
+        }
+      });
 
   /**
    * A semigroup that multiplies big integers.
    */
-  public static final Semigroup<BigInteger> bigintMultiplicationSemigroup = semigroup(new F2<BigInteger, BigInteger, BigInteger>() {
-    public BigInteger f(final BigInteger i1, final BigInteger i2) {
-      return i1.multiply(i2);
-    }
-  });
+  public static final Semigroup<BigInteger> bigintMultiplicationSemigroup =
+      semigroup(new F2<BigInteger, BigInteger, BigInteger>() {
+        public BigInteger f(final BigInteger i1, final BigInteger i2) {
+          return i1.multiply(i2);
+        }
+      });
 
   /**
    * A semigroup that adds big decimals.
    */
-  public static final Semigroup<BigDecimal> bigdecimalAdditionSemigroup = semigroup(new F2<BigDecimal, BigDecimal, BigDecimal>() {
-    public BigDecimal f(final BigDecimal i1, final BigDecimal i2) {
-      return i1.add(i2);
-    }
-  });
+  public static final Semigroup<BigDecimal> bigdecimalAdditionSemigroup =
+      semigroup(new F2<BigDecimal, BigDecimal, BigDecimal>() {
+        public BigDecimal f(final BigDecimal i1, final BigDecimal i2) {
+          return i1.add(i2);
+        }
+      });
 
   /**
    * A semigroup that multiplies big decimals.
    */
-  public static final Semigroup<BigDecimal> bigdecimalMultiplicationSemigroup = semigroup(new F2<BigDecimal, BigDecimal, BigDecimal>() {
-    public BigDecimal f(final BigDecimal i1, final BigDecimal i2) {
-      return i1.multiply(i2);
-    }
-  });
+  public static final Semigroup<BigDecimal> bigdecimalMultiplicationSemigroup =
+      semigroup(new F2<BigDecimal, BigDecimal, BigDecimal>() {
+        public BigDecimal f(final BigDecimal i1, final BigDecimal i2) {
+          return i1.multiply(i2);
+        }
+      });
 
   /**
    * A semigroup that adds longs.
@@ -196,20 +200,22 @@ public final class Semigroup<A> {
   /**
    * A semigroup that appends string buffers.
    */
-  public static final Semigroup<StringBuffer> stringBufferSemigroup = semigroup(new F2<StringBuffer, StringBuffer, StringBuffer>() {
-    public StringBuffer f(final StringBuffer s1, final StringBuffer s2) {
-      return new StringBuffer(s1).append(s2);
-    }
-  });
+  public static final Semigroup<StringBuffer> stringBufferSemigroup =
+      semigroup(new F2<StringBuffer, StringBuffer, StringBuffer>() {
+        public StringBuffer f(final StringBuffer s1, final StringBuffer s2) {
+          return new StringBuffer(s1).append(s2);
+        }
+      });
 
   /**
    * A semigroup that appends string builders.
    */
-  public static final Semigroup<StringBuilder> stringBuilderSemigroup = semigroup(new F2<StringBuilder, StringBuilder, StringBuilder>() {
-    public StringBuilder f(final StringBuilder s1, final StringBuilder s2) {
-      return new StringBuilder(s1).append(s2);
-    }
-  });
+  public static final Semigroup<StringBuilder> stringBuilderSemigroup =
+      semigroup(new F2<StringBuilder, StringBuilder, StringBuilder>() {
+        public StringBuilder f(final StringBuilder s1, final StringBuilder s2) {
+          return new StringBuilder(s1).append(s2);
+        }
+      });
 
   /**
    * A semigroup for functions.

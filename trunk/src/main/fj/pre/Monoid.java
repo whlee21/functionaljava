@@ -215,17 +215,20 @@ public final class Monoid<A> {
   /**
    * A monoid that multiplies big integers.
    */
-  public static final Monoid<BigInteger> bigintMultiplicationMonoid = monoid(bigintMultiplicationSemigroup, BigInteger.ONE);
+  public static final Monoid<BigInteger> bigintMultiplicationMonoid =
+      monoid(bigintMultiplicationSemigroup, BigInteger.ONE);
 
   /**
    * A monoid that adds big decimals.
    */
-  public static final Monoid<BigDecimal> bigdecimalAdditionMonoid = monoid(bigdecimalAdditionSemigroup, BigDecimal.ZERO);
+  public static final Monoid<BigDecimal> bigdecimalAdditionMonoid =
+      monoid(bigdecimalAdditionSemigroup, BigDecimal.ZERO);
 
   /**
    * A monoid that multiplies big decimals.
    */
-  public static final Monoid<BigDecimal> bigdecimalMultiplicationMonoid = monoid(bigdecimalMultiplicationSemigroup, BigDecimal.ONE);
+  public static final Monoid<BigDecimal> bigdecimalMultiplicationMonoid =
+      monoid(bigdecimalMultiplicationSemigroup, BigDecimal.ONE);
 
   /**
    * A monoid that adds longs.

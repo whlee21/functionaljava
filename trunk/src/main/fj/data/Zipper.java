@@ -292,8 +292,8 @@ public class Zipper<A> {
     return left.isEmpty() && right.isEmpty()
         ? Option.<Zipper<A>>none()
         : some(zipper(left.isEmpty() ? left : left.tail()._1(),
-        left.isEmpty() ? right.head() : left.head(),
-        left.isEmpty() ? right.tail()._1() : right));
+            left.isEmpty() ? right.head() : left.head(),
+            left.isEmpty() ? right.tail()._1() : right));
   }
 
   /**
@@ -308,8 +308,8 @@ public class Zipper<A> {
     return left.isEmpty() && right.isEmpty()
         ? Option.<Zipper<A>>none()
         : some(zipper(right.isEmpty() ? left.tail()._1() : left,
-        right.isEmpty() ? left.head() : right.head(),
-        right.isEmpty() ? right : right.tail()._1()));
+            right.isEmpty() ? left.head() : right.head(),
+            right.isEmpty() ? right : right.tail()._1()));
   }
 
   /**

@@ -185,40 +185,42 @@ public final class Equal<A> {
   /**
    * An equal instance for the {@link StringBuffer} type.
    */
-  public static final Equal<StringBuffer> stringBufferEqual = new Equal<StringBuffer>(new F<StringBuffer, F<StringBuffer, Boolean>>() {
-    public F<StringBuffer, Boolean> f(final StringBuffer sb1) {
-      return new F<StringBuffer, Boolean>() {
-        public Boolean f(final StringBuffer sb2) {
-          if (sb1.length() == sb2.length()) {
-            for (int i = 0; i < sb1.length(); i++)
-              if (sb1.charAt(i) != sb2.charAt(i))
+  public static final Equal<StringBuffer> stringBufferEqual =
+      new Equal<StringBuffer>(new F<StringBuffer, F<StringBuffer, Boolean>>() {
+        public F<StringBuffer, Boolean> f(final StringBuffer sb1) {
+          return new F<StringBuffer, Boolean>() {
+            public Boolean f(final StringBuffer sb2) {
+              if (sb1.length() == sb2.length()) {
+                for (int i = 0; i < sb1.length(); i++)
+                  if (sb1.charAt(i) != sb2.charAt(i))
+                    return false;
+                return true;
+              } else
                 return false;
-            return true;
-          } else
-            return false;
+            }
+          };
         }
-      };
-    }
-  });
+      });
 
   /**
    * An equal instance for the {@link StringBuilder} type.
    */
-  public static final Equal<StringBuilder> stringBuilderEqual = new Equal<StringBuilder>(new F<StringBuilder, F<StringBuilder, Boolean>>() {
-    public F<StringBuilder, Boolean> f(final StringBuilder sb1) {
-      return new F<StringBuilder, Boolean>() {
-        public Boolean f(final StringBuilder sb2) {
-          if (sb1.length() == sb2.length()) {
-            for (int i = 0; i < sb1.length(); i++)
-              if (sb1.charAt(i) != sb2.charAt(i))
+  public static final Equal<StringBuilder> stringBuilderEqual =
+      new Equal<StringBuilder>(new F<StringBuilder, F<StringBuilder, Boolean>>() {
+        public F<StringBuilder, Boolean> f(final StringBuilder sb1) {
+          return new F<StringBuilder, Boolean>() {
+            public Boolean f(final StringBuilder sb2) {
+              if (sb1.length() == sb2.length()) {
+                for (int i = 0; i < sb1.length(); i++)
+                  if (sb1.charAt(i) != sb2.charAt(i))
+                    return false;
+                return true;
+              } else
                 return false;
-            return true;
-          } else
-            return false;
+            }
+          };
         }
-      };
-    }
-  });
+      });
 
   /**
    * An equal instance for the {@link Either} type.
@@ -233,7 +235,7 @@ public final class Equal<A> {
         return new F<Either<A, B>, Boolean>() {
           public Boolean f(final Either<A, B> e2) {
             return e1.isLeft() && e2.isLeft() && ea.f.f(e1.left().value()).f(e2.left().value()) ||
-              e1.isRight() && e2.isRight() && eb.f.f(e1.right().value()).f(e2.right().value());
+                e1.isRight() && e2.isRight() && eb.f.f(e1.right().value()).f(e2.right().value());
           }
         };
       }
@@ -302,7 +304,7 @@ public final class Equal<A> {
         return new F<Option<A>, Boolean>() {
           public Boolean f(final Option<A> o2) {
             return o1.isNone() && o2.isNone() ||
-              o1.isSome() && o2.isSome() && ea.f.f(o1.some()).f(o2.some());
+                o1.isSome() && o2.isSome() && ea.f.f(o1.some()).f(o2.some());
           }
         };
       }
@@ -443,13 +445,14 @@ public final class Equal<A> {
    * @param ed Equality across the fourth element of the product.
    * @return An equal instance for a product-4.
    */
-  public static <A, B, C, D> Equal<P4<A, B, C, D>> p4Equal(final Equal<A> ea, final Equal<B> eb, final Equal<C> ec, final Equal<D> ed) {
+  public static <A, B, C, D> Equal<P4<A, B, C, D>> p4Equal(final Equal<A> ea, final Equal<B> eb, final Equal<C> ec,
+                                                           final Equal<D> ed) {
     return new Equal<P4<A, B, C, D>>(new F<P4<A, B, C, D>, F<P4<A, B, C, D>, Boolean>>() {
       public F<P4<A, B, C, D>, Boolean> f(final P4<A, B, C, D> p1) {
         return new F<P4<A, B, C, D>, Boolean>() {
           public Boolean f(final P4<A, B, C, D> p2) {
             return ea.eq(p1._1(), p2._1()) && eb.eq(p1._2(), p2._2()) && ec.eq(p1._3(), p2._3()) &&
-              ed.eq(p1._4(), p2._4());
+                ed.eq(p1._4(), p2._4());
           }
         };
       }
@@ -466,13 +469,15 @@ public final class Equal<A> {
    * @param ee Equality across the fifth element of the product.
    * @return An equal instance for a product-5.
    */
-  public static <A, B, C, D, E> Equal<P5<A, B, C, D, E>> p5Equal(final Equal<A> ea, final Equal<B> eb, final Equal<C> ec, final Equal<D> ed, final Equal<E> ee) {
+  public static <A, B, C, D, E> Equal<P5<A, B, C, D, E>> p5Equal(final Equal<A> ea, final Equal<B> eb,
+                                                                 final Equal<C> ec, final Equal<D> ed,
+                                                                 final Equal<E> ee) {
     return new Equal<P5<A, B, C, D, E>>(new F<P5<A, B, C, D, E>, F<P5<A, B, C, D, E>, Boolean>>() {
       public F<P5<A, B, C, D, E>, Boolean> f(final P5<A, B, C, D, E> p1) {
         return new F<P5<A, B, C, D, E>, Boolean>() {
           public Boolean f(final P5<A, B, C, D, E> p2) {
             return ea.eq(p1._1(), p2._1()) && eb.eq(p1._2(), p2._2()) && ec.eq(p1._3(), p2._3()) &&
-              ed.eq(p1._4(), p2._4()) && ee.eq(p1._5(), p2._5());
+                ed.eq(p1._4(), p2._4()) && ee.eq(p1._5(), p2._5());
           }
         };
       }
@@ -490,13 +495,15 @@ public final class Equal<A> {
    * @param ef Equality across the sixth element of the product.
    * @return An equal instance for a product-6.
    */
-  public static <A, B, C, D, E, F$> Equal<P6<A, B, C, D, E, F$>> p6Equal(final Equal<A> ea, final Equal<B> eb, final Equal<C> ec, final Equal<D> ed, final Equal<E> ee, final Equal<F$> ef) {
+  public static <A, B, C, D, E, F$> Equal<P6<A, B, C, D, E, F$>> p6Equal(final Equal<A> ea, final Equal<B> eb,
+                                                                         final Equal<C> ec, final Equal<D> ed,
+                                                                         final Equal<E> ee, final Equal<F$> ef) {
     return new Equal<P6<A, B, C, D, E, F$>>(new F<P6<A, B, C, D, E, F$>, F<P6<A, B, C, D, E, F$>, Boolean>>() {
       public F<P6<A, B, C, D, E, F$>, Boolean> f(final P6<A, B, C, D, E, F$> p1) {
         return new F<P6<A, B, C, D, E, F$>, Boolean>() {
           public Boolean f(final P6<A, B, C, D, E, F$> p2) {
             return ea.eq(p1._1(), p2._1()) && eb.eq(p1._2(), p2._2()) && ec.eq(p1._3(), p2._3()) &&
-              ed.eq(p1._4(), p2._4()) && ee.eq(p1._5(), p2._5()) && ef.eq(p1._6(), p2._6());
+                ed.eq(p1._4(), p2._4()) && ee.eq(p1._5(), p2._5()) && ef.eq(p1._6(), p2._6());
           }
         };
       }
@@ -515,14 +522,17 @@ public final class Equal<A> {
    * @param eg Equality across the seventh element of the product.
    * @return An equal instance for a product-7.
    */
-  public static <A, B, C, D, E, F$, G> Equal<P7<A, B, C, D, E, F$, G>> p7Equal(final Equal<A> ea, final Equal<B> eb, final Equal<C> ec, final Equal<D> ed, final Equal<E> ee, final Equal<F$> ef, final Equal<G> eg) {
+  public static <A, B, C, D, E, F$, G> Equal<P7<A, B, C, D, E, F$, G>> p7Equal(final Equal<A> ea, final Equal<B> eb,
+                                                                               final Equal<C> ec, final Equal<D> ed,
+                                                                               final Equal<E> ee, final Equal<F$> ef,
+                                                                               final Equal<G> eg) {
     return new Equal<P7<A, B, C, D, E, F$, G>>(new F<P7<A, B, C, D, E, F$, G>, F<P7<A, B, C, D, E, F$, G>, Boolean>>() {
       public F<P7<A, B, C, D, E, F$, G>, Boolean> f(final P7<A, B, C, D, E, F$, G> p1) {
         return new F<P7<A, B, C, D, E, F$, G>, Boolean>() {
           public Boolean f(final P7<A, B, C, D, E, F$, G> p2) {
             return ea.eq(p1._1(), p2._1()) && eb.eq(p1._2(), p2._2()) && ec.eq(p1._3(), p2._3()) &&
-              ed.eq(p1._4(), p2._4()) && ee.eq(p1._5(), p2._5()) && ef.eq(p1._6(), p2._6()) &&
-              eg.eq(p1._7(), p2._7());
+                ed.eq(p1._4(), p2._4()) && ee.eq(p1._5(), p2._5()) && ef.eq(p1._6(), p2._6()) &&
+                eg.eq(p1._7(), p2._7());
           }
         };
       }
@@ -542,18 +552,26 @@ public final class Equal<A> {
    * @param eh Equality across the eighth element of the product.
    * @return An equal instance for a product-8.
    */
-  public static <A, B, C, D, E, F$, G, H> Equal<P8<A, B, C, D, E, F$, G, H>> p8Equal(final Equal<A> ea, final Equal<B> eb, final Equal<C> ec, final Equal<D> ed, final Equal<E> ee, final Equal<F$> ef, final Equal<G> eg, final Equal<H> eh) {
-    return new Equal<P8<A, B, C, D, E, F$, G, H>>(new F<P8<A, B, C, D, E, F$, G, H>, F<P8<A, B, C, D, E, F$, G, H>, Boolean>>() {
-      public F<P8<A, B, C, D, E, F$, G, H>, Boolean> f(final P8<A, B, C, D, E, F$, G, H> p1) {
-        return new F<P8<A, B, C, D, E, F$, G, H>, Boolean>() {
-          public Boolean f(final P8<A, B, C, D, E, F$, G, H> p2) {
-            return ea.eq(p1._1(), p2._1()) && eb.eq(p1._2(), p2._2()) && ec.eq(p1._3(), p2._3()) &&
-              ed.eq(p1._4(), p2._4()) && ee.eq(p1._5(), p2._5()) && ef.eq(p1._6(), p2._6()) &&
-              eg.eq(p1._7(), p2._7()) && eh.eq(p1._8(), p2._8());
+  public static <A, B, C, D, E, F$, G, H> Equal<P8<A, B, C, D, E, F$, G, H>> p8Equal(final Equal<A> ea,
+                                                                                     final Equal<B> eb,
+                                                                                     final Equal<C> ec,
+                                                                                     final Equal<D> ed,
+                                                                                     final Equal<E> ee,
+                                                                                     final Equal<F$> ef,
+                                                                                     final Equal<G> eg,
+                                                                                     final Equal<H> eh) {
+    return new Equal<P8<A, B, C, D, E, F$, G, H>>(
+        new F<P8<A, B, C, D, E, F$, G, H>, F<P8<A, B, C, D, E, F$, G, H>, Boolean>>() {
+          public F<P8<A, B, C, D, E, F$, G, H>, Boolean> f(final P8<A, B, C, D, E, F$, G, H> p1) {
+            return new F<P8<A, B, C, D, E, F$, G, H>, Boolean>() {
+              public Boolean f(final P8<A, B, C, D, E, F$, G, H> p2) {
+                return ea.eq(p1._1(), p2._1()) && eb.eq(p1._2(), p2._2()) && ec.eq(p1._3(), p2._3()) &&
+                    ed.eq(p1._4(), p2._4()) && ee.eq(p1._5(), p2._5()) && ef.eq(p1._6(), p2._6()) &&
+                    eg.eq(p1._7(), p2._7()) && eh.eq(p1._8(), p2._8());
+              }
+            };
           }
-        };
-      }
-    });
+        });
   }
 
   /**

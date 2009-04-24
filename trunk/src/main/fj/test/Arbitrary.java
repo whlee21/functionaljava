@@ -41,6 +41,7 @@ import static fj.test.Gen.oneOf;
 import static fj.test.Gen.promote;
 import static fj.test.Gen.sized;
 import static fj.test.Gen.value;
+
 import static java.lang.Math.abs;
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -144,10 +145,11 @@ public final class Arbitrary<A> {
    *
    * @param ca A coarbitrary for the part of the domain of the function.
    * @param cb A coarbitrary for the part of the domain of the function.
-   * @param a An arbitrary for the codomain of the function.
+   * @param a  An arbitrary for the codomain of the function.
    * @return An arbitrary for function-2.
    */
-  public static <A, B, C> Arbitrary<F2<A, B, C>> arbF2(final Coarbitrary<A> ca, final Coarbitrary<B> cb, final Arbitrary<C> a) {
+  public static <A, B, C> Arbitrary<F2<A, B, C>> arbF2(final Coarbitrary<A> ca, final Coarbitrary<B> cb,
+                                                       final Arbitrary<C> a) {
     return arbitrary(arbF(ca, arbF(cb, a)).gen.map(Function.<A, B, C>uncurryF2()));
   }
 
@@ -158,7 +160,8 @@ public final class Arbitrary<A> {
    * @return An arbitrary for function-2.
    */
   public static <A, B, C> Arbitrary<F2<A, B, C>> arbF2Invariant(final Arbitrary<C> a) {
-    return arbitrary(a.gen.map(compose(Function.<A, B, C>uncurryF2(), compose(Function.<A, F<B, C>>constant(), Function.<B, C>constant()))));
+    return arbitrary(a.gen.map(
+        compose(Function.<A, B, C>uncurryF2(), compose(Function.<A, F<B, C>>constant(), Function.<B, C>constant()))));
   }
 
   /**
@@ -167,10 +170,11 @@ public final class Arbitrary<A> {
    * @param ca A coarbitrary for the part of the domain of the function.
    * @param cb A coarbitrary for the part of the domain of the function.
    * @param cc A coarbitrary for the part of the domain of the function.
-   * @param a An arbitrary for the codomain of the function.
+   * @param a  An arbitrary for the codomain of the function.
    * @return An arbitrary for function-3.
    */
-  public static <A, B, C, D> Arbitrary<F3<A, B, C, D>> arbF3(final Coarbitrary<A> ca, final Coarbitrary<B> cb, final Coarbitrary<C> cc, final Arbitrary<D> a) {
+  public static <A, B, C, D> Arbitrary<F3<A, B, C, D>> arbF3(final Coarbitrary<A> ca, final Coarbitrary<B> cb,
+                                                             final Coarbitrary<C> cc, final Arbitrary<D> a) {
     return arbitrary(arbF(ca, arbF(cb, arbF(cc, a))).gen.map(Function.<A, B, C, D>uncurryF3()));
   }
 
@@ -181,7 +185,8 @@ public final class Arbitrary<A> {
    * @return An arbitrary for function-3.
    */
   public static <A, B, C, D> Arbitrary<F3<A, B, C, D>> arbF3Invariant(final Arbitrary<D> a) {
-    return arbitrary(a.gen.map(compose(Function.<A, B, C, D>uncurryF3(), compose(Function.<A, F<B, F<C, D>>>constant(), compose(Function.<B, F<C, D>>constant(), Function.<C, D>constant())))));
+    return arbitrary(a.gen.map(compose(Function.<A, B, C, D>uncurryF3(), compose(Function.<A, F<B, F<C, D>>>constant(),
+        compose(Function.<B, F<C, D>>constant(), Function.<C, D>constant())))));
   }
 
   /**
@@ -191,10 +196,12 @@ public final class Arbitrary<A> {
    * @param cb A coarbitrary for the part of the domain of the function.
    * @param cc A coarbitrary for the part of the domain of the function.
    * @param cd A coarbitrary for the part of the domain of the function.
-   * @param a An arbitrary for the codomain of the function.
+   * @param a  An arbitrary for the codomain of the function.
    * @return An arbitrary for function-4.
    */
-  public static <A, B, C, D, E> Arbitrary<F4<A, B, C, D, E>> arbF4(final Coarbitrary<A> ca, final Coarbitrary<B> cb, final Coarbitrary<C> cc, final Coarbitrary<D> cd, final Arbitrary<E> a) {
+  public static <A, B, C, D, E> Arbitrary<F4<A, B, C, D, E>> arbF4(final Coarbitrary<A> ca, final Coarbitrary<B> cb,
+                                                                   final Coarbitrary<C> cc, final Coarbitrary<D> cd,
+                                                                   final Arbitrary<E> a) {
     return arbitrary(arbF(ca, arbF(cb, arbF(cc, arbF(cd, a)))).gen.map(Function.<A, B, C, D, E>uncurryF4()));
   }
 
@@ -205,7 +212,9 @@ public final class Arbitrary<A> {
    * @return An arbitrary for function-4.
    */
   public static <A, B, C, D, E> Arbitrary<F4<A, B, C, D, E>> arbF4Invariant(final Arbitrary<E> a) {
-    return arbitrary(a.gen.map(compose(Function.<A, B, C, D, E>uncurryF4(), compose(Function.<A, F<B, F<C, F<D, E>>>>constant(), compose(Function.<B, F<C, F<D, E>>>constant(), compose(Function.<C, F<D, E>>constant(), Function.<D, E>constant()))))));
+    return arbitrary(a.gen.map(compose(Function.<A, B, C, D, E>uncurryF4(),
+        compose(Function.<A, F<B, F<C, F<D, E>>>>constant(), compose(Function.<B, F<C, F<D, E>>>constant(),
+            compose(Function.<C, F<D, E>>constant(), Function.<D, E>constant()))))));
   }
 
   /**
@@ -216,11 +225,17 @@ public final class Arbitrary<A> {
    * @param cc A coarbitrary for the part of the domain of the function.
    * @param cd A coarbitrary for the part of the domain of the function.
    * @param ce A coarbitrary for the part of the domain of the function.
-   * @param a An arbitrary for the codomain of the function.
+   * @param a  An arbitrary for the codomain of the function.
    * @return An arbitrary for function-5.
    */
-  public static <A, B, C, D, E, F$> Arbitrary<F5<A, B, C, D, E, F$>> arbF5(final Coarbitrary<A> ca, final Coarbitrary<B> cb, final Coarbitrary<C> cc, final Coarbitrary<D> cd, final Coarbitrary<E> ce, final Arbitrary<F$> a) {
-    return arbitrary(arbF(ca, arbF(cb, arbF(cc, arbF(cd, arbF(ce, a))))).gen.map(Function.<A, B, C, D, E, F$>uncurryF5()));
+  public static <A, B, C, D, E, F$> Arbitrary<F5<A, B, C, D, E, F$>> arbF5(final Coarbitrary<A> ca,
+                                                                           final Coarbitrary<B> cb,
+                                                                           final Coarbitrary<C> cc,
+                                                                           final Coarbitrary<D> cd,
+                                                                           final Coarbitrary<E> ce,
+                                                                           final Arbitrary<F$> a) {
+    return arbitrary(
+        arbF(ca, arbF(cb, arbF(cc, arbF(cd, arbF(ce, a))))).gen.map(Function.<A, B, C, D, E, F$>uncurryF5()));
   }
 
   /**
@@ -230,9 +245,12 @@ public final class Arbitrary<A> {
    * @return An arbitrary for function-5.
    */
   public static <A, B, C, D, E, F$> Arbitrary<F5<A, B, C, D, E, F$>> arbF5Invariant(final Arbitrary<F$> a) {
-    return arbitrary(a.gen.map(compose(Function.<A, B, C, D, E, F$>uncurryF5(), compose(Function.<A, F<B, F<C, F<D, F<E, F$>>>>>constant(), compose(Function.<B, F<C, F<D, F<E, F$>>>>constant(), compose(Function.<C, F<D, F<E, F$>>>constant(), compose(Function.<D, F<E, F$>>constant(), Function.<E, F$>constant())))))));
+    return arbitrary(a.gen.map(compose(Function.<A, B, C, D, E, F$>uncurryF5(),
+        compose(Function.<A, F<B, F<C, F<D, F<E, F$>>>>>constant(),
+            compose(Function.<B, F<C, F<D, F<E, F$>>>>constant(), compose(Function.<C, F<D, F<E, F$>>>constant(),
+                compose(Function.<D, F<E, F$>>constant(), Function.<E, F$>constant())))))));
   }
-  
+
   /**
    * An arbitrary for function-6.
    *
@@ -242,11 +260,18 @@ public final class Arbitrary<A> {
    * @param cd A coarbitrary for the part of the domain of the function.
    * @param ce A coarbitrary for the part of the domain of the function.
    * @param cf A coarbitrary for the part of the domain of the function.
-   * @param a An arbitrary for the codomain of the function.
+   * @param a  An arbitrary for the codomain of the function.
    * @return An arbitrary for function-6.
    */
-  public static <A, B, C, D, E, F$, G> Arbitrary<F6<A, B, C, D, E, F$, G>> arbF6(final Coarbitrary<A> ca, final Coarbitrary<B> cb, final Coarbitrary<C> cc, final Coarbitrary<D> cd, final Coarbitrary<E> ce, final Coarbitrary<F$> cf, final Arbitrary<G> a) {
-    return arbitrary(arbF(ca, arbF(cb, arbF(cc, arbF(cd, arbF(ce, arbF(cf, a)))))).gen.map(Function.<A, B, C, D, E, F$, G>uncurryF6()));
+  public static <A, B, C, D, E, F$, G> Arbitrary<F6<A, B, C, D, E, F$, G>> arbF6(final Coarbitrary<A> ca,
+                                                                                 final Coarbitrary<B> cb,
+                                                                                 final Coarbitrary<C> cc,
+                                                                                 final Coarbitrary<D> cd,
+                                                                                 final Coarbitrary<E> ce,
+                                                                                 final Coarbitrary<F$> cf,
+                                                                                 final Arbitrary<G> a) {
+    return arbitrary(arbF(ca, arbF(cb, arbF(cc, arbF(cd, arbF(ce, arbF(cf, a)))))).gen.map(
+        Function.<A, B, C, D, E, F$, G>uncurryF6()));
   }
 
   /**
@@ -256,7 +281,11 @@ public final class Arbitrary<A> {
    * @return An arbitrary for function-6.
    */
   public static <A, B, C, D, E, F$, G> Arbitrary<F6<A, B, C, D, E, F$, G>> arbF6Invariant(final Arbitrary<G> a) {
-    return arbitrary(a.gen.map(compose(Function.<A, B, C, D, E, F$, G>uncurryF6(), compose(Function.<A, F<B, F<C, F<D, F<E, F<F$, G>>>>>>constant(), compose(Function.<B, F<C, F<D, F<E, F<F$, G>>>>>constant(), compose(Function.<C, F<D, F<E, F<F$, G>>>>constant(), compose(Function.<D, F<E, F<F$, G>>>constant(), compose(Function.<E, F<F$, G>>constant(), Function.<F$, G>constant()))))))));
+    return arbitrary(a.gen.map(compose(Function.<A, B, C, D, E, F$, G>uncurryF6(),
+        compose(Function.<A, F<B, F<C, F<D, F<E, F<F$, G>>>>>>constant(),
+            compose(Function.<B, F<C, F<D, F<E, F<F$, G>>>>>constant(),
+                compose(Function.<C, F<D, F<E, F<F$, G>>>>constant(), compose(Function.<D, F<E, F<F$, G>>>constant(),
+                    compose(Function.<E, F<F$, G>>constant(), Function.<F$, G>constant()))))))));
   }
 
   /**
@@ -269,11 +298,19 @@ public final class Arbitrary<A> {
    * @param ce A coarbitrary for the part of the domain of the function.
    * @param cf A coarbitrary for the part of the domain of the function.
    * @param cg A coarbitrary for the part of the domain of the function.
-   * @param a An arbitrary for the codomain of the function.
+   * @param a  An arbitrary for the codomain of the function.
    * @return An arbitrary for function-7.
    */
-  public static <A, B, C, D, E, F$, G, H> Arbitrary<F7<A, B, C, D, E, F$, G, H>> arbF7(final Coarbitrary<A> ca, final Coarbitrary<B> cb, final Coarbitrary<C> cc, final Coarbitrary<D> cd, final Coarbitrary<E> ce, final Coarbitrary<F$> cf, final Coarbitrary<G> cg, final Arbitrary<H> a) {
-    return arbitrary(arbF(ca, arbF(cb, arbF(cc, arbF(cd, arbF(ce, arbF(cf, arbF(cg, a))))))).gen.map(Function.<A, B, C, D, E, F$, G, H>uncurryF7()));
+  public static <A, B, C, D, E, F$, G, H> Arbitrary<F7<A, B, C, D, E, F$, G, H>> arbF7(final Coarbitrary<A> ca,
+                                                                                       final Coarbitrary<B> cb,
+                                                                                       final Coarbitrary<C> cc,
+                                                                                       final Coarbitrary<D> cd,
+                                                                                       final Coarbitrary<E> ce,
+                                                                                       final Coarbitrary<F$> cf,
+                                                                                       final Coarbitrary<G> cg,
+                                                                                       final Arbitrary<H> a) {
+    return arbitrary(arbF(ca, arbF(cb, arbF(cc, arbF(cd, arbF(ce, arbF(cf, arbF(cg, a))))))).gen.map(
+        Function.<A, B, C, D, E, F$, G, H>uncurryF7()));
   }
 
   /**
@@ -283,7 +320,13 @@ public final class Arbitrary<A> {
    * @return An arbitrary for function-7.
    */
   public static <A, B, C, D, E, F$, G, H> Arbitrary<F7<A, B, C, D, E, F$, G, H>> arbF7Invariant(final Arbitrary<H> a) {
-    return arbitrary(a.gen.map(compose(Function.<A, B, C, D, E, F$, G, H>uncurryF7(), compose(Function.<A, F<B, F<C, F<D, F<E, F<F$, F<G, H>>>>>>>constant(), compose(Function.<B, F<C, F<D, F<E, F<F$, F<G, H>>>>>>constant(), compose(Function.<C, F<D, F<E, F<F$, F<G, H>>>>>constant(), compose(Function.<D, F<E, F<F$, F<G, H>>>>constant(), compose(Function.<E, F<F$, F<G, H>>>constant(), compose(Function.<F$, F<G, H>>constant(), Function.<G, H>constant())))))))));
+    return arbitrary(a.gen.map(compose(Function.<A, B, C, D, E, F$, G, H>uncurryF7(),
+        compose(Function.<A, F<B, F<C, F<D, F<E, F<F$, F<G, H>>>>>>>constant(),
+            compose(Function.<B, F<C, F<D, F<E, F<F$, F<G, H>>>>>>constant(),
+                compose(Function.<C, F<D, F<E, F<F$, F<G, H>>>>>constant(),
+                    compose(Function.<D, F<E, F<F$, F<G, H>>>>constant(),
+                        compose(Function.<E, F<F$, F<G, H>>>constant(),
+                            compose(Function.<F$, F<G, H>>constant(), Function.<G, H>constant())))))))));
   }
 
   /**
@@ -297,11 +340,20 @@ public final class Arbitrary<A> {
    * @param cf A coarbitrary for the part of the domain of the function.
    * @param cg A coarbitrary for the part of the domain of the function.
    * @param ch A coarbitrary for the part of the domain of the function.
-   * @param a An arbitrary for the codomain of the function.
+   * @param a  An arbitrary for the codomain of the function.
    * @return An arbitrary for function-8.
    */
-  public static <A, B, C, D, E, F$, G, H, I> Arbitrary<F8<A, B, C, D, E, F$, G, H, I>> arbF8(final Coarbitrary<A> ca, final Coarbitrary<B> cb, final Coarbitrary<C> cc, final Coarbitrary<D> cd, final Coarbitrary<E> ce, final Coarbitrary<F$> cf, final Coarbitrary<G> cg, final Coarbitrary<H> ch, final Arbitrary<I> a) {
-    return arbitrary(arbF(ca, arbF(cb, arbF(cc, arbF(cd, arbF(ce, arbF(cf, arbF(cg, arbF(ch, a)))))))).gen.map(Function.<A, B, C, D, E, F$, G, H, I>uncurryF8()));
+  public static <A, B, C, D, E, F$, G, H, I> Arbitrary<F8<A, B, C, D, E, F$, G, H, I>> arbF8(final Coarbitrary<A> ca,
+                                                                                             final Coarbitrary<B> cb,
+                                                                                             final Coarbitrary<C> cc,
+                                                                                             final Coarbitrary<D> cd,
+                                                                                             final Coarbitrary<E> ce,
+                                                                                             final Coarbitrary<F$> cf,
+                                                                                             final Coarbitrary<G> cg,
+                                                                                             final Coarbitrary<H> ch,
+                                                                                             final Arbitrary<I> a) {
+    return arbitrary(arbF(ca, arbF(cb, arbF(cc, arbF(cd, arbF(ce, arbF(cf, arbF(cg, arbF(ch, a)))))))).gen.map(
+        Function.<A, B, C, D, E, F$, G, H, I>uncurryF8()));
   }
 
   /**
@@ -310,8 +362,16 @@ public final class Arbitrary<A> {
    * @param a The arbitrary for the function codomain.
    * @return An arbitrary for function-8.
    */
-  public static <A, B, C, D, E, F$, G, H, I> Arbitrary<F8<A, B, C, D, E, F$, G, H, I>> arbF8Invariant(final Arbitrary<I> a) {
-    return arbitrary(a.gen.map(compose(Function.<A, B, C, D, E, F$, G, H, I>uncurryF8(), compose(Function.<A, F<B, F<C, F<D, F<E, F<F$, F<G, F<H, I>>>>>>>>constant(), compose(Function.<B, F<C, F<D, F<E, F<F$, F<G, F<H, I>>>>>>>constant(), compose(Function.<C, F<D, F<E, F<F$, F<G, F<H, I>>>>>>constant(), compose(Function.<D, F<E, F<F$, F<G, F<H, I>>>>>constant(), compose(Function.<E, F<F$, F<G, F<H, I>>>>constant(), compose(Function.<F$, F<G, F<H, I>>>constant(), compose(Function.<G, F<H, I>>constant(), Function.<H, I>constant()))))))))));
+  public static <A, B, C, D, E, F$, G, H, I> Arbitrary<F8<A, B, C, D, E, F$, G, H, I>> arbF8Invariant(
+      final Arbitrary<I> a) {
+    return arbitrary(a.gen.map(compose(Function.<A, B, C, D, E, F$, G, H, I>uncurryF8(),
+        compose(Function.<A, F<B, F<C, F<D, F<E, F<F$, F<G, F<H, I>>>>>>>>constant(),
+            compose(Function.<B, F<C, F<D, F<E, F<F$, F<G, F<H, I>>>>>>>constant(),
+                compose(Function.<C, F<D, F<E, F<F$, F<G, F<H, I>>>>>>constant(),
+                    compose(Function.<D, F<E, F<F$, F<G, F<H, I>>>>>constant(),
+                        compose(Function.<E, F<F$, F<G, F<H, I>>>>constant(),
+                            compose(Function.<F$, F<G, F<H, I>>>constant(),
+                                compose(Function.<G, F<H, I>>constant(), Function.<H, I>constant()))))))))));
   }
 
   /**
@@ -350,17 +410,18 @@ public final class Arbitrary<A> {
   /**
    * An arbitrary implementation for long values.
    */
-  public static final Arbitrary<Long> arbLong = arbitrary(arbInteger.gen.bind(arbInteger.gen, new F<Integer, F<Integer, Long>>() {
-    public F<Integer, Long> f(final Integer i1) {
-      return new F<Integer, Long>() {
-        public Long f(final Integer i2) {
-          //No it isn't
-          //noinspection RedundantCast
-          return (long)i1 << 32L & i2;
+  public static final Arbitrary<Long> arbLong =
+      arbitrary(arbInteger.gen.bind(arbInteger.gen, new F<Integer, F<Integer, Long>>() {
+        public F<Integer, Long> f(final Integer i1) {
+          return new F<Integer, Long>() {
+            public Long f(final Integer i2) {
+              //No it isn't
+              //noinspection RedundantCast
+              return (long) i1 << 32L & i2;
+            }
+          };
         }
-      };
-    }
-  }));
+      }));
 
   /**
    * An arbitrary implementation for long values that checks boundary values <code>(0, 1, -1, max,
@@ -386,7 +447,7 @@ public final class Arbitrary<A> {
    */
   public static final Arbitrary<Byte> arbByte = arbitrary(arbInteger.gen.map(new F<Integer, Byte>() {
     public Byte f(final Integer i) {
-      return (byte)i.intValue();
+      return (byte) i.intValue();
     }
   }));
 
@@ -398,13 +459,13 @@ public final class Arbitrary<A> {
   public static final Arbitrary<Byte> arbByteBoundaries = arbitrary(sized(new F<Integer, Gen<Byte>>() {
     @SuppressWarnings("unchecked")
     public Gen<Byte> f(final Integer i) {
-      return frequency(list(p(1, value((byte)0)),
-          p(1, value((byte)1)),
-          p(1, value((byte)-1)),
+      return frequency(list(p(1, value((byte) 0)),
+          p(1, value((byte) 1)),
+          p(1, value((byte) -1)),
           p(1, value(Byte.MAX_VALUE)),
           p(1, value(Byte.MIN_VALUE)),
-          p(1, value((byte)(Byte.MAX_VALUE - 1))),
-          p(1, value((byte)(Byte.MIN_VALUE + 1))),
+          p(1, value((byte) (Byte.MAX_VALUE - 1))),
+          p(1, value((byte) (Byte.MIN_VALUE + 1))),
           p(93, arbByte.gen)));
     }
   }));
@@ -414,7 +475,7 @@ public final class Arbitrary<A> {
    */
   public static final Arbitrary<Short> arbShort = arbitrary(arbInteger.gen.map(new F<Integer, Short>() {
     public Short f(final Integer i) {
-      return (short)i.intValue();
+      return (short) i.intValue();
     }
   }));
 
@@ -426,13 +487,13 @@ public final class Arbitrary<A> {
   public static final Arbitrary<Short> arbShortBoundaries = arbitrary(sized(new F<Integer, Gen<Short>>() {
     @SuppressWarnings("unchecked")
     public Gen<Short> f(final Integer i) {
-      return frequency(list(p(1, value((short)0)),
-          p(1, value((short)1)),
-          p(1, value((short)-1)),
+      return frequency(list(p(1, value((short) 0)),
+          p(1, value((short) 1)),
+          p(1, value((short) -1)),
           p(1, value(Short.MAX_VALUE)),
           p(1, value(Short.MIN_VALUE)),
-          p(1, value((short)(Short.MAX_VALUE - 1))),
-          p(1, value((short)(Short.MIN_VALUE + 1))),
+          p(1, value((short) (Short.MAX_VALUE - 1))),
+          p(1, value((short) (Short.MIN_VALUE + 1))),
           p(93, arbShort.gen)));
     }
   }));
@@ -442,7 +503,7 @@ public final class Arbitrary<A> {
    */
   public static final Arbitrary<Character> arbCharacter = arbitrary(choose(0, 65536).map(new F<Integer, Character>() {
     public Character f(final Integer i) {
-      return (char)i.intValue();
+      return (char) i.intValue();
     }
   }));
 
@@ -455,9 +516,9 @@ public final class Arbitrary<A> {
     @SuppressWarnings("unchecked")
     public Gen<Character> f(final Integer i) {
       return frequency(list(p(1, value(Character.MIN_VALUE)),
-          p(1, value((char)(Character.MIN_VALUE + 1))),
+          p(1, value((char) (Character.MIN_VALUE + 1))),
           p(1, value(Character.MAX_VALUE)),
-          p(1, value((char)(Character.MAX_VALUE - 1))),
+          p(1, value((char) (Character.MAX_VALUE - 1))),
           p(95, arbCharacter.gen)));
     }
   }));
@@ -467,7 +528,7 @@ public final class Arbitrary<A> {
    */
   public static final Arbitrary<Double> arbDouble = arbitrary(sized(new F<Integer, Gen<Double>>() {
     public Gen<Double> f(final Integer i) {
-      return choose((double)-i, i);
+      return choose((double) -i, i);
     }
   }));
 
@@ -497,7 +558,7 @@ public final class Arbitrary<A> {
    */
   public static final Arbitrary<Float> arbFloat = arbitrary(arbDouble.gen.map(new F<Double, Float>() {
     public Float f(final Double d) {
-      return (float)d.doubleValue();
+      return (float) d.doubleValue();
     }
   }));
 
@@ -525,50 +586,54 @@ public final class Arbitrary<A> {
   /**
    * An arbitrary implementation for string values.
    */
-  public static final Arbitrary<String> arbString = arbitrary(arbList(arbCharacter).gen.map(new F<List<Character>, String>() {
-    public String f(final List<Character> cs) {
-      return asString(cs);
-    }
-  }));
+  public static final Arbitrary<String> arbString =
+      arbitrary(arbList(arbCharacter).gen.map(new F<List<Character>, String>() {
+        public String f(final List<Character> cs) {
+          return asString(cs);
+        }
+      }));
 
   /**
    * An arbitrary implementation for string values with characters in the US-ASCII range.
    */
-  public static final Arbitrary<String> arbUSASCIIString = arbitrary(arbList(arbCharacter).gen.map(new F<List<Character>, String>() {
-    public String f(final List<Character> cs) {
-      return asString(cs.map(new F<Character, Character>() {
-        public Character f(final Character c) {
-          return (char)(c % 128);
+  public static final Arbitrary<String> arbUSASCIIString =
+      arbitrary(arbList(arbCharacter).gen.map(new F<List<Character>, String>() {
+        public String f(final List<Character> cs) {
+          return asString(cs.map(new F<Character, Character>() {
+            public Character f(final Character c) {
+              return (char) (c % 128);
+            }
+          }));
         }
       }));
-    }
-  }));
 
   /**
    * An arbitrary implementation for string values with alpha-numeric characters.
    */
   public static final Arbitrary<String> arbAlphaNumString =
       arbitrary(arbList(arbitrary(elements(range(charEnumerator, 'a', 'z').append(
-                                           range(charEnumerator, 'A', 'Z')).append(
-                                           range(charEnumerator, '0', '9')).toArray().array()))).gen.map(asString()));
+          range(charEnumerator, 'A', 'Z')).append(
+          range(charEnumerator, '0', '9')).toArray().array()))).gen.map(asString()));
 
   /**
    * An arbitrary implementation for string buffer values.
    */
-  public static final Arbitrary<StringBuffer> arbStringBuffer = arbitrary(arbString.gen.map(new F<String, StringBuffer>() {
-    public StringBuffer f(final String s) {
-      return new StringBuffer(s);
-    }
-  }));
+  public static final Arbitrary<StringBuffer> arbStringBuffer =
+      arbitrary(arbString.gen.map(new F<String, StringBuffer>() {
+        public StringBuffer f(final String s) {
+          return new StringBuffer(s);
+        }
+      }));
 
   /**
    * An arbitrary implementation for string builder values.
    */
-  public static final Arbitrary<StringBuilder> arbStringBuilder = arbitrary(arbString.gen.map(new F<String, StringBuilder>() {
-    public StringBuilder f(final String s) {
-      return new StringBuilder(s);
-    }
-  }));
+  public static final Arbitrary<StringBuilder> arbStringBuilder =
+      arbitrary(arbString.gen.map(new F<String, StringBuilder>() {
+        public StringBuilder f(final String s) {
+          return new StringBuilder(s);
+        }
+      }));
 
   /**
    * Returns an arbitrary implementation for generators.
@@ -579,7 +644,7 @@ public final class Arbitrary<A> {
   public static <A> Arbitrary<Gen<A>> arbGen(final Arbitrary<A> aa) {
     return arbitrary(sized(new F<Integer, Gen<Gen<A>>>() {
       public Gen<Gen<A>> f(final Integer i) {
-        if(i == 0)
+        if (i == 0)
           return fail();
         else
           return aa.gen.map(new F<A, Gen<A>>() {
@@ -603,10 +668,10 @@ public final class Arbitrary<A> {
         return i == 0 ?
             value(Option.<A>none()) :
             aa.gen.map(new F<A, Option<A>>() {
-          public Option<A> f(final A a) {
-            return some(a);
-          }
-        }).resize(i - 1);
+              public Option<A> f(final A a) {
+                return some(a);
+              }
+            }).resize(i - 1);
       }
     }));
   }
@@ -712,17 +777,18 @@ public final class Arbitrary<A> {
   /**
    * An arbitrary implementation for bit sets.
    */
-  public static final Arbitrary<BitSet> arbBitSet = arbitrary(arbList(arbBoolean).gen.map(new F<List<Boolean>, BitSet>() {
-    public BitSet f(final List<Boolean> bs) {
-      final BitSet s = new BitSet(bs.length());
-      bs.zipIndex().foreach(new Effect<P2<Boolean, Integer>>() {
-        public void e(final P2<Boolean, Integer> bi) {
-          s.set(bi._2(), bi._1());
+  public static final Arbitrary<BitSet> arbBitSet =
+      arbitrary(arbList(arbBoolean).gen.map(new F<List<Boolean>, BitSet>() {
+        public BitSet f(final List<Boolean> bs) {
+          final BitSet s = new BitSet(bs.length());
+          bs.zipIndex().foreach(new Effect<P2<Boolean, Integer>>() {
+            public void e(final P2<Boolean, Integer> bi) {
+              s.set(bi._2(), bi._1());
+            }
+          });
+          return s;
         }
-      });
-      return s;
-    }
-  }));
+      }));
 
   /**
    * An arbitrary implementation for calendars.
@@ -762,7 +828,8 @@ public final class Arbitrary<A> {
    *           defined.
    * @return An arbitrary implementation for enum maps.
    */
-  public static <K extends Enum<K>, V> Arbitrary<EnumMap<K, V>> arbEnumMap(final Arbitrary<K> ak, final Arbitrary<V> av) {
+  public static <K extends Enum<K>, V> Arbitrary<EnumMap<K, V>> arbEnumMap(final Arbitrary<K> ak,
+                                                                           final Arbitrary<V> av) {
     return arbitrary(arbHashtable(ak, av).gen.map(new F<Hashtable<K, V>, EnumMap<K, V>>() {
       @SuppressWarnings({"UseOfObsoleteCollectionType"})
       public EnumMap<K, V> f(final Hashtable<K, V> ht) {
@@ -788,13 +855,14 @@ public final class Arbitrary<A> {
   /**
    * An arbitrary implementation for gregorian calendars.
    */
-  public static final Arbitrary<GregorianCalendar> arbGregorianCalendar = arbitrary(arbLong.gen.map(new F<Long, GregorianCalendar>() {
-    public GregorianCalendar f(final Long i) {
-      final GregorianCalendar c = new GregorianCalendar();
-      c.setTimeInMillis(i);
-      return c;
-    }
-  }));
+  public static final Arbitrary<GregorianCalendar> arbGregorianCalendar =
+      arbitrary(arbLong.gen.map(new F<Long, GregorianCalendar>() {
+        public GregorianCalendar f(final Long i) {
+          final GregorianCalendar c = new GregorianCalendar();
+          c.setTimeInMillis(i);
+          return c;
+        }
+      }));
 
   /**
    * Returns an arbitrary implementation for hash maps.
@@ -866,7 +934,8 @@ public final class Arbitrary<A> {
    *           are defined.
    * @return An arbitrary implementation for identity hash maps.
    */
-  public static <K, V> Arbitrary<IdentityHashMap<K, V>> arbIdentityHashMap(final Arbitrary<K> ak, final Arbitrary<V> av) {
+  public static <K, V> Arbitrary<IdentityHashMap<K, V>> arbIdentityHashMap(final Arbitrary<K> ak,
+                                                                           final Arbitrary<V> av) {
     return arbitrary(arbHashtable(ak, av).gen.map(new F<Hashtable<K, V>, IdentityHashMap<K, V>>() {
       @SuppressWarnings({"UseOfObsoleteCollectionType"})
       public IdentityHashMap<K, V> f(final Hashtable<K, V> ht) {
@@ -938,18 +1007,19 @@ public final class Arbitrary<A> {
   /**
    * An arbitrary implementation for properties.
    */
-  public static final Arbitrary<Properties> arbProperties = arbitrary(arbHashtable(arbString, arbString).gen.map(new F<Hashtable<String, String>, Properties>() {
-    @SuppressWarnings({"UseOfObsoleteCollectionType"})
-    public Properties f(final Hashtable<String, String> ht) {
-      final Properties p = new Properties();
+  public static final Arbitrary<Properties> arbProperties =
+      arbitrary(arbHashtable(arbString, arbString).gen.map(new F<Hashtable<String, String>, Properties>() {
+        @SuppressWarnings({"UseOfObsoleteCollectionType"})
+        public Properties f(final Hashtable<String, String> ht) {
+          final Properties p = new Properties();
 
-      for(final String k : ht.keySet()) {
-        p.setProperty(k, ht.get(k));
-      }
+          for (final String k : ht.keySet()) {
+            p.setProperty(k, ht.get(k));
+          }
 
-      return p;
-    }
-  }));
+          return p;
+        }
+      }));
 
   /**
    * Returns an arbitrary implementation for stacks.
@@ -1046,19 +1116,20 @@ public final class Arbitrary<A> {
    * @return An arbitrary implementation for array blocking queues.
    */
   public static <A> Arbitrary<ArrayBlockingQueue<A>> arbArrayBlockingQueue(final Arbitrary<A> aa) {
-    return arbitrary(arbArray(aa).gen.bind(arbInteger.gen, arbBoolean.gen, new F<Array<A>, F<Integer, F<Boolean, ArrayBlockingQueue<A>>>>() {
-      public F<Integer, F<Boolean, ArrayBlockingQueue<A>>> f(final Array<A> a) {
-        return new F<Integer, F<Boolean, ArrayBlockingQueue<A>>>() {
-          public F<Boolean, ArrayBlockingQueue<A>> f(final Integer capacity) {
-            return new F<Boolean, ArrayBlockingQueue<A>>() {
-              public ArrayBlockingQueue<A> f(final Boolean fair) {
-                return new ArrayBlockingQueue<A>(a.length() + abs(capacity), fair, asList(a.array()));
+    return arbitrary(arbArray(aa).gen.bind(arbInteger.gen, arbBoolean.gen,
+        new F<Array<A>, F<Integer, F<Boolean, ArrayBlockingQueue<A>>>>() {
+          public F<Integer, F<Boolean, ArrayBlockingQueue<A>>> f(final Array<A> a) {
+            return new F<Integer, F<Boolean, ArrayBlockingQueue<A>>>() {
+              public F<Boolean, ArrayBlockingQueue<A>> f(final Integer capacity) {
+                return new F<Boolean, ArrayBlockingQueue<A>>() {
+                  public ArrayBlockingQueue<A> f(final Boolean fair) {
+                    return new ArrayBlockingQueue<A>(a.length() + abs(capacity), fair, asList(a.array()));
+                  }
+                };
               }
             };
           }
-        };
-      }
-    }));
+        }));
   }
 
   /**
@@ -1070,7 +1141,8 @@ public final class Arbitrary<A> {
    *           are defined.
    * @return An arbitrary implementation for concurrent hash maps.
    */
-  public static <K, V> Arbitrary<ConcurrentHashMap<K, V>> arbConcurrentHashMap(final Arbitrary<K> ak, final Arbitrary<V> av) {
+  public static <K, V> Arbitrary<ConcurrentHashMap<K, V>> arbConcurrentHashMap(final Arbitrary<K> ak,
+                                                                               final Arbitrary<V> av) {
     return arbitrary(arbHashtable(ak, av).gen.map(new F<Hashtable<K, V>, ConcurrentHashMap<K, V>>() {
       @SuppressWarnings({"UseOfObsoleteCollectionType"})
       public ConcurrentHashMap<K, V> f(final Hashtable<K, V> ht) {
@@ -1227,32 +1299,34 @@ public final class Arbitrary<A> {
   /**
    * An arbitrary implementation for big integers.
    */
-  public static final Arbitrary<BigInteger> arbBigInteger = arbitrary(arbArray(arbByte).gen.bind(arbByte.gen, new F<Array<Byte>, F<Byte, BigInteger>>() {
-    public F<Byte, BigInteger> f(final Array<Byte> a) {
-      return new F<Byte, BigInteger>() {
-        public BigInteger f(final Byte b) {
-          final byte[] x = new byte[a.length() + 1];
+  public static final Arbitrary<BigInteger> arbBigInteger =
+      arbitrary(arbArray(arbByte).gen.bind(arbByte.gen, new F<Array<Byte>, F<Byte, BigInteger>>() {
+        public F<Byte, BigInteger> f(final Array<Byte> a) {
+          return new F<Byte, BigInteger>() {
+            public BigInteger f(final Byte b) {
+              final byte[] x = new byte[a.length() + 1];
 
-          for(int i = 0; i < a.array().length; i++) {
-            x[i] = a.array()[i];
-          }
+              for (int i = 0; i < a.array().length; i++) {
+                x[i] = a.array()[i];
+              }
 
-          x[a.length()] = b;
+              x[a.length()] = b;
 
-          return new BigInteger(x);
+              return new BigInteger(x);
+            }
+          };
         }
-      };
-    }
-  }));
+      }));
 
   /**
    * An arbitrary implementation for big decimals.
    */
-  public static final Arbitrary<BigDecimal> arbBigDecimal = arbitrary(arbBigInteger.gen.map(new F<BigInteger, BigDecimal>() {
-    public BigDecimal f(final BigInteger i) {
-      return new BigDecimal(i);
-    }
-  }));
+  public static final Arbitrary<BigDecimal> arbBigDecimal =
+      arbitrary(arbBigInteger.gen.map(new F<BigInteger, BigDecimal>() {
+        public BigDecimal f(final BigInteger i) {
+          return new BigDecimal(i);
+        }
+      }));
 
   // END java.math
 
@@ -1307,7 +1381,8 @@ public final class Arbitrary<A> {
    *           defined.
    * @return An arbitrary implementation for product-3 values.
    */
-  public static <A, B, C> Arbitrary<P3<A, B, C>> arbP3(final Arbitrary<A> aa, final Arbitrary<B> ab, final Arbitrary<C> ac) {
+  public static <A, B, C> Arbitrary<P3<A, B, C>> arbP3(final Arbitrary<A> aa, final Arbitrary<B> ab,
+                                                       final Arbitrary<C> ac) {
     return arbitrary(aa.gen.bind(ab.gen, ac.gen, new F<A, F<B, F<C, P3<A, B, C>>>>() {
       public F<B, F<C, P3<A, B, C>>> f(final A a) {
         return new F<B, F<C, P3<A, B, C>>>() {
@@ -1336,7 +1411,8 @@ public final class Arbitrary<A> {
    *           defined.
    * @return An arbitrary implementation for product-4 values.
    */
-  public static <A, B, C, D> Arbitrary<P4<A, B, C, D>> arbP4(final Arbitrary<A> aa, final Arbitrary<B> ab, final Arbitrary<C> ac, final Arbitrary<D> ad) {
+  public static <A, B, C, D> Arbitrary<P4<A, B, C, D>> arbP4(final Arbitrary<A> aa, final Arbitrary<B> ab,
+                                                             final Arbitrary<C> ac, final Arbitrary<D> ad) {
     return arbitrary(aa.gen.bind(ab.gen, ac.gen, ad.gen, new F<A, F<B, F<C, F<D, P4<A, B, C, D>>>>>() {
       public F<B, F<C, F<D, P4<A, B, C, D>>>> f(final A a) {
         return new F<B, F<C, F<D, P4<A, B, C, D>>>>() {
@@ -1371,7 +1447,9 @@ public final class Arbitrary<A> {
    *           defined.
    * @return An arbitrary implementation for product-5 values.
    */
-  public static <A, B, C, D, E> Arbitrary<P5<A, B, C, D, E>> arbP5(final Arbitrary<A> aa, final Arbitrary<B> ab, final Arbitrary<C> ac, final Arbitrary<D> ad, final Arbitrary<E> ae) {
+  public static <A, B, C, D, E> Arbitrary<P5<A, B, C, D, E>> arbP5(final Arbitrary<A> aa, final Arbitrary<B> ab,
+                                                                   final Arbitrary<C> ac, final Arbitrary<D> ad,
+                                                                   final Arbitrary<E> ae) {
     return arbitrary(aa.gen.bind(ab.gen, ac.gen, ad.gen, ae.gen, new F<A, F<B, F<C, F<D, F<E, P5<A, B, C, D, E>>>>>>() {
       public F<B, F<C, F<D, F<E, P5<A, B, C, D, E>>>>> f(final A a) {
         return new F<B, F<C, F<D, F<E, P5<A, B, C, D, E>>>>>() {
@@ -1412,20 +1490,26 @@ public final class Arbitrary<A> {
    *           defined.
    * @return An arbitrary implementation for product-6 values.
    */
-  public static <A, B, C, D, E, F$> Arbitrary<P6<A, B, C, D, E, F$>> arbP6(final Arbitrary<A> aa, final Arbitrary<B> ab, final Arbitrary<C> ac, final Arbitrary<D> ad, final Arbitrary<E> ae, final Arbitrary<F$> af) {
-    return arbitrary(aa.gen.bind(ab.gen, ac.gen, ad.gen, ae.gen, af.gen, new F<A, F<B, F<C, F<D, F<E, F<F$, P6<A, B, C, D, E, F$>>>>>>>() {
-      public F<B, F<C, F<D, F<E, F<F$, P6<A, B, C, D, E, F$>>>>>> f(final A a) {
-        return new F<B, F<C, F<D, F<E, F<F$, P6<A, B, C, D, E, F$>>>>>>() {
-          public F<C, F<D, F<E, F<F$, P6<A, B, C, D, E, F$>>>>> f(final B b) {
-            return new F<C, F<D, F<E, F<F$, P6<A, B, C, D, E, F$>>>>>() {
-              public F<D, F<E, F<F$, P6<A, B, C, D, E, F$>>>> f(final C c) {
-                return new F<D, F<E, F<F$, P6<A, B, C, D, E, F$>>>>() {
-                  public F<E, F<F$, P6<A, B, C, D, E, F$>>> f(final D d) {
-                    return new F<E, F<F$, P6<A, B, C, D, E, F$>>>() {
-                      public F<F$, P6<A, B, C, D, E, F$>> f(final E e) {
-                        return new F<F$, P6<A, B, C, D, E, F$>>() {
-                          public P6<A, B, C, D, E, F$> f(final F$ f) {
-                            return p(a, b, c, d, e, f);
+  public static <A, B, C, D, E, F$> Arbitrary<P6<A, B, C, D, E, F$>> arbP6(final Arbitrary<A> aa, final Arbitrary<B> ab,
+                                                                           final Arbitrary<C> ac, final Arbitrary<D> ad,
+                                                                           final Arbitrary<E> ae,
+                                                                           final Arbitrary<F$> af) {
+    return arbitrary(aa.gen.bind(ab.gen, ac.gen, ad.gen, ae.gen, af.gen,
+        new F<A, F<B, F<C, F<D, F<E, F<F$, P6<A, B, C, D, E, F$>>>>>>>() {
+          public F<B, F<C, F<D, F<E, F<F$, P6<A, B, C, D, E, F$>>>>>> f(final A a) {
+            return new F<B, F<C, F<D, F<E, F<F$, P6<A, B, C, D, E, F$>>>>>>() {
+              public F<C, F<D, F<E, F<F$, P6<A, B, C, D, E, F$>>>>> f(final B b) {
+                return new F<C, F<D, F<E, F<F$, P6<A, B, C, D, E, F$>>>>>() {
+                  public F<D, F<E, F<F$, P6<A, B, C, D, E, F$>>>> f(final C c) {
+                    return new F<D, F<E, F<F$, P6<A, B, C, D, E, F$>>>>() {
+                      public F<E, F<F$, P6<A, B, C, D, E, F$>>> f(final D d) {
+                        return new F<E, F<F$, P6<A, B, C, D, E, F$>>>() {
+                          public F<F$, P6<A, B, C, D, E, F$>> f(final E e) {
+                            return new F<F$, P6<A, B, C, D, E, F$>>() {
+                              public P6<A, B, C, D, E, F$> f(final F$ f) {
+                                return p(a, b, c, d, e, f);
+                              }
+                            };
                           }
                         };
                       }
@@ -1435,9 +1519,7 @@ public final class Arbitrary<A> {
               }
             };
           }
-        };
-      }
-    }));
+        }));
   }
 
   /**
@@ -1459,22 +1541,31 @@ public final class Arbitrary<A> {
    *           defined.
    * @return An arbitrary implementation for product-7 values.
    */
-  public static <A, B, C, D, E, F$, G> Arbitrary<P7<A, B, C, D, E, F$, G>> arbP7(final Arbitrary<A> aa, final Arbitrary<B> ab, final Arbitrary<C> ac, final Arbitrary<D> ad, final Arbitrary<E> ae, final Arbitrary<F$> af, final Arbitrary<G> ag) {
-    return arbitrary(aa.gen.bind(ab.gen, ac.gen, ad.gen, ae.gen, af.gen, ag.gen, new F<A, F<B, F<C, F<D, F<E, F<F$, F<G, P7<A, B, C, D, E, F$, G>>>>>>>>() {
-      public F<B, F<C, F<D, F<E, F<F$, F<G, P7<A, B, C, D, E, F$, G>>>>>>> f(final A a) {
-        return new F<B, F<C, F<D, F<E, F<F$, F<G, P7<A, B, C, D, E, F$, G>>>>>>>() {
-          public F<C, F<D, F<E, F<F$, F<G, P7<A, B, C, D, E, F$, G>>>>>> f(final B b) {
-            return new F<C, F<D, F<E, F<F$, F<G, P7<A, B, C, D, E, F$, G>>>>>>() {
-              public F<D, F<E, F<F$, F<G, P7<A, B, C, D, E, F$, G>>>>> f(final C c) {
-                return new F<D, F<E, F<F$, F<G, P7<A, B, C, D, E, F$, G>>>>>() {
-                  public F<E, F<F$, F<G, P7<A, B, C, D, E, F$, G>>>> f(final D d) {
-                    return new F<E, F<F$, F<G, P7<A, B, C, D, E, F$, G>>>>() {
-                      public F<F$, F<G, P7<A, B, C, D, E, F$, G>>> f(final E e) {
-                        return new F<F$, F<G, P7<A, B, C, D, E, F$, G>>>() {
-                          public F<G, P7<A, B, C, D, E, F$, G>> f(final F$ f) {
-                            return new F<G, P7<A, B, C, D, E, F$, G>>() {
-                              public P7<A, B, C, D, E, F$, G> f(final G g) {
-                                return p(a, b, c, d, e, f, g);
+  public static <A, B, C, D, E, F$, G> Arbitrary<P7<A, B, C, D, E, F$, G>> arbP7(final Arbitrary<A> aa,
+                                                                                 final Arbitrary<B> ab,
+                                                                                 final Arbitrary<C> ac,
+                                                                                 final Arbitrary<D> ad,
+                                                                                 final Arbitrary<E> ae,
+                                                                                 final Arbitrary<F$> af,
+                                                                                 final Arbitrary<G> ag) {
+    return arbitrary(aa.gen.bind(ab.gen, ac.gen, ad.gen, ae.gen, af.gen, ag.gen,
+        new F<A, F<B, F<C, F<D, F<E, F<F$, F<G, P7<A, B, C, D, E, F$, G>>>>>>>>() {
+          public F<B, F<C, F<D, F<E, F<F$, F<G, P7<A, B, C, D, E, F$, G>>>>>>> f(final A a) {
+            return new F<B, F<C, F<D, F<E, F<F$, F<G, P7<A, B, C, D, E, F$, G>>>>>>>() {
+              public F<C, F<D, F<E, F<F$, F<G, P7<A, B, C, D, E, F$, G>>>>>> f(final B b) {
+                return new F<C, F<D, F<E, F<F$, F<G, P7<A, B, C, D, E, F$, G>>>>>>() {
+                  public F<D, F<E, F<F$, F<G, P7<A, B, C, D, E, F$, G>>>>> f(final C c) {
+                    return new F<D, F<E, F<F$, F<G, P7<A, B, C, D, E, F$, G>>>>>() {
+                      public F<E, F<F$, F<G, P7<A, B, C, D, E, F$, G>>>> f(final D d) {
+                        return new F<E, F<F$, F<G, P7<A, B, C, D, E, F$, G>>>>() {
+                          public F<F$, F<G, P7<A, B, C, D, E, F$, G>>> f(final E e) {
+                            return new F<F$, F<G, P7<A, B, C, D, E, F$, G>>>() {
+                              public F<G, P7<A, B, C, D, E, F$, G>> f(final F$ f) {
+                                return new F<G, P7<A, B, C, D, E, F$, G>>() {
+                                  public P7<A, B, C, D, E, F$, G> f(final G g) {
+                                    return p(a, b, c, d, e, f, g);
+                                  }
+                                };
                               }
                             };
                           }
@@ -1486,9 +1577,7 @@ public final class Arbitrary<A> {
               }
             };
           }
-        };
-      }
-    }));
+        }));
   }
 
   /**
@@ -1512,24 +1601,34 @@ public final class Arbitrary<A> {
    *           defined.
    * @return An arbitrary implementation for product-8 values.
    */
-  public static <A, B, C, D, E, F$, G, H> Arbitrary<P8<A, B, C, D, E, F$, G, H>> arbP8(final Arbitrary<A> aa, final Arbitrary<B> ab, final Arbitrary<C> ac, final Arbitrary<D> ad, final Arbitrary<E> ae, final Arbitrary<F$> af, final Arbitrary<G> ag, final Arbitrary<H> ah) {
-    return arbitrary(aa.gen.bind(ab.gen, ac.gen, ad.gen, ae.gen, af.gen, ag.gen, ah.gen, new F<A, F<B, F<C, F<D, F<E, F<F$, F<G, F<H, P8<A, B, C, D, E, F$, G, H>>>>>>>>>() {
-      public F<B, F<C, F<D, F<E, F<F$, F<G, F<H, P8<A, B, C, D, E, F$, G, H>>>>>>>> f(final A a) {
-        return new F<B, F<C, F<D, F<E, F<F$, F<G, F<H, P8<A, B, C, D, E, F$, G, H>>>>>>>>() {
-          public F<C, F<D, F<E, F<F$, F<G, F<H, P8<A, B, C, D, E, F$, G, H>>>>>>> f(final B b) {
-            return new F<C, F<D, F<E, F<F$, F<G, F<H, P8<A, B, C, D, E, F$, G, H>>>>>>>() {
-              public F<D, F<E, F<F$, F<G, F<H, P8<A, B, C, D, E, F$, G, H>>>>>> f(final C c) {
-                return new F<D, F<E, F<F$, F<G, F<H, P8<A, B, C, D, E, F$, G, H>>>>>>() {
-                  public F<E, F<F$, F<G, F<H, P8<A, B, C, D, E, F$, G, H>>>>> f(final D d) {
-                    return new F<E, F<F$, F<G, F<H, P8<A, B, C, D, E, F$, G, H>>>>>() {
-                      public F<F$, F<G, F<H, P8<A, B, C, D, E, F$, G, H>>>> f(final E e) {
-                        return new F<F$, F<G, F<H, P8<A, B, C, D, E, F$, G, H>>>>() {
-                          public F<G, F<H, P8<A, B, C, D, E, F$, G, H>>> f(final F$ f) {
-                            return new F<G, F<H, P8<A, B, C, D, E, F$, G, H>>>() {
-                              public F<H, P8<A, B, C, D, E, F$, G, H>> f(final G g) {
-                                return new F<H, P8<A, B, C, D, E, F$, G, H>>() {
-                                  public P8<A, B, C, D, E, F$, G, H> f(final H h) {
-                                    return p(a, b, c, d, e, f, g, h);
+  public static <A, B, C, D, E, F$, G, H> Arbitrary<P8<A, B, C, D, E, F$, G, H>> arbP8(final Arbitrary<A> aa,
+                                                                                       final Arbitrary<B> ab,
+                                                                                       final Arbitrary<C> ac,
+                                                                                       final Arbitrary<D> ad,
+                                                                                       final Arbitrary<E> ae,
+                                                                                       final Arbitrary<F$> af,
+                                                                                       final Arbitrary<G> ag,
+                                                                                       final Arbitrary<H> ah) {
+    return arbitrary(aa.gen.bind(ab.gen, ac.gen, ad.gen, ae.gen, af.gen, ag.gen, ah.gen,
+        new F<A, F<B, F<C, F<D, F<E, F<F$, F<G, F<H, P8<A, B, C, D, E, F$, G, H>>>>>>>>>() {
+          public F<B, F<C, F<D, F<E, F<F$, F<G, F<H, P8<A, B, C, D, E, F$, G, H>>>>>>>> f(final A a) {
+            return new F<B, F<C, F<D, F<E, F<F$, F<G, F<H, P8<A, B, C, D, E, F$, G, H>>>>>>>>() {
+              public F<C, F<D, F<E, F<F$, F<G, F<H, P8<A, B, C, D, E, F$, G, H>>>>>>> f(final B b) {
+                return new F<C, F<D, F<E, F<F$, F<G, F<H, P8<A, B, C, D, E, F$, G, H>>>>>>>() {
+                  public F<D, F<E, F<F$, F<G, F<H, P8<A, B, C, D, E, F$, G, H>>>>>> f(final C c) {
+                    return new F<D, F<E, F<F$, F<G, F<H, P8<A, B, C, D, E, F$, G, H>>>>>>() {
+                      public F<E, F<F$, F<G, F<H, P8<A, B, C, D, E, F$, G, H>>>>> f(final D d) {
+                        return new F<E, F<F$, F<G, F<H, P8<A, B, C, D, E, F$, G, H>>>>>() {
+                          public F<F$, F<G, F<H, P8<A, B, C, D, E, F$, G, H>>>> f(final E e) {
+                            return new F<F$, F<G, F<H, P8<A, B, C, D, E, F$, G, H>>>>() {
+                              public F<G, F<H, P8<A, B, C, D, E, F$, G, H>>> f(final F$ f) {
+                                return new F<G, F<H, P8<A, B, C, D, E, F$, G, H>>>() {
+                                  public F<H, P8<A, B, C, D, E, F$, G, H>> f(final G g) {
+                                    return new F<H, P8<A, B, C, D, E, F$, G, H>>() {
+                                      public P8<A, B, C, D, E, F$, G, H> f(final H h) {
+                                        return p(a, b, c, d, e, f, g, h);
+                                      }
+                                    };
                                   }
                                 };
                               }
@@ -1543,8 +1642,6 @@ public final class Arbitrary<A> {
               }
             };
           }
-        };
-      }
-    }));
+        }));
   }
 }

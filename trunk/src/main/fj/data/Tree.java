@@ -1,17 +1,14 @@
 package fj.data;
 
-import static fj.Function.identity;
-import static fj.Function.curry;
-import static fj.Function.compose;
 import fj.F;
 import fj.F2;
 import fj.P;
 import fj.P1;
 import fj.P2;
-import static fj.data.Stream.cons;
-import static fj.data.Stream.single;
-import static fj.data.Stream.iterateWhile;
+import static fj.Function.*;
+import static fj.data.Stream.*;
 import fj.pre.Monoid;
+import fj.pre.Show;
 
 import java.util.Collection;
 import java.util.Iterator;
@@ -276,5 +273,43 @@ public final class Tree<A> implements Iterable<A> {
   public Tree<Tree<A>> cojoin() {
     final F<Tree<A>, Tree<A>> id = identity();
     return cobind(id);
+  }
+
+  private static <A> Stream<String> drawSubTrees(final Show<A> s, final Stream<Tree<A>> ts) {
+    return ts.isEmpty() ? Stream.<String>nil()
+        : ts.tail()._1().isEmpty() ? shift("`- ", "   ", ts.head().drawTree(s)).cons("|")
+            : shift("+- ", "|  ", ts.head().drawTree(s)).append(drawSubTrees(s, ts.tail()._1()));
+  }
+
+  private static Stream<String> shift(final String f, final String o, final Stream<String> s) {
+    return Stream.repeat(o).cons(f).zipWith(s, Monoid.stringMonoid.sum());
+  }
+
+  private Stream<String> drawTree(final Show<A> s) {
+    return drawSubTrees(s, subForest._1()).cons(s.showS(root));
+  }
+
+  /**
+   * Draws a 2-dimensional representation of a tree.
+   *
+   * @param s A show instance for the elements of the tree.
+   * @return a String showing this tree in two dimensions.
+   */
+  public String draw(final Show<A> s) {
+    return Monoid.stringMonoid.join(drawTree(s), "\n");
+  }
+
+  /**
+   * Provides a show instance that draws a 2-dimensional representation of a tree.
+   *
+   * @param s A show instance for the elements of the tree.
+   * @return a show instance that draws a 2-dimensional representation of a tree.
+   */
+  public static <A> Show<Tree<A>> show2D(final Show<A> s) {
+    return Show.showS(new F<Tree<A>, String>() {
+      public String f(final Tree<A> tree) {
+        return tree.draw(s);
+      }
+    });
   }
 }

@@ -138,7 +138,7 @@ public final class Hash<A> {
       final int p = 419;
       int r = 239;
 
-      for(int i = 0; i < sb.length(); i++)
+      for (int i = 0; i < sb.length(); i++)
         r = p * r + sb.charAt(i);
 
       return r;
@@ -153,7 +153,7 @@ public final class Hash<A> {
       final int p = 419;
       int r = 239;
 
-      for(int i = 0; i < sb.length(); i++)
+      for (int i = 0; i < sb.length(); i++)
         r = p * r + sb.charAt(i);
 
       return r;
@@ -162,7 +162,7 @@ public final class Hash<A> {
 
   /**
    * A hash instance for the {@link Either} type.
-   * 
+   *
    * @param ha Hash the left side of <code>Either</code>.
    * @param hb Hash the right side of <code>Either</code>.
    * @return A hash instance for the {@link Either} type.
@@ -199,7 +199,7 @@ public final class Hash<A> {
         int r = 239;
         List<A> aas = as;
 
-        while(!aas.isEmpty()) {
+        while (!aas.isEmpty()) {
           r = p * r + ha.hash(aas.head());
           aas = aas.tail();
         }
@@ -246,7 +246,7 @@ public final class Hash<A> {
         int r = 239;
         Stream<A> aas = as;
 
-        while(!aas.isEmpty()) {
+        while (!aas.isEmpty()) {
           r = p * r + ha.hash(aas.head());
           aas = aas.tail()._1();
         }
@@ -268,7 +268,7 @@ public final class Hash<A> {
         final int p = 419;
         int r = 239;
 
-        for(int i = 0; i < as.length(); i++) {
+        for (int i = 0; i < as.length(); i++) {
           r = p * r + ha.hash(as.get(i));
         }
 
@@ -350,7 +350,8 @@ public final class Hash<A> {
    * @param hd A hash for the fourth element of the product.
    * @return A hash instance for a product-4.
    */
-  public static <A, B, C, D> Hash<P4<A, B, C, D>> p4Hash(final Hash<A> ha, final Hash<B> hb, final Hash<C> hc, final Hash<D> hd) {
+  public static <A, B, C, D> Hash<P4<A, B, C, D>> p4Hash(final Hash<A> ha, final Hash<B> hb, final Hash<C> hc,
+                                                         final Hash<D> hd) {
     return new Hash<P4<A, B, C, D>>(new F<P4<A, B, C, D>, Integer>() {
       public Integer f(final P4<A, B, C, D> p4) {
         final int p = 419;
@@ -376,7 +377,8 @@ public final class Hash<A> {
    * @param he A hash for the fifth element of the product.
    * @return A hash instance for a product-5.
    */
-  public static <A, B, C, D, E> Hash<P5<A, B, C, D, E>> p5Hash(final Hash<A> ha, final Hash<B> hb, final Hash<C> hc, final Hash<D> hd, final Hash<E> he) {
+  public static <A, B, C, D, E> Hash<P5<A, B, C, D, E>> p5Hash(final Hash<A> ha, final Hash<B> hb, final Hash<C> hc,
+                                                               final Hash<D> hd, final Hash<E> he) {
     return new Hash<P5<A, B, C, D, E>>(new F<P5<A, B, C, D, E>, Integer>() {
       public Integer f(final P5<A, B, C, D, E> p5) {
         final int p = 419;
@@ -404,7 +406,9 @@ public final class Hash<A> {
    * @param hf A hash for the sixth element of the product.
    * @return A hash instance for a product-6.
    */
-  public static <A, B, C, D, E, F$> Hash<P6<A, B, C, D, E, F$>> p6Hash(final Hash<A> ha, final Hash<B> hb, final Hash<C> hc, final Hash<D> hd, final Hash<E> he, final Hash<F$> hf) {
+  public static <A, B, C, D, E, F$> Hash<P6<A, B, C, D, E, F$>> p6Hash(final Hash<A> ha, final Hash<B> hb,
+                                                                       final Hash<C> hc, final Hash<D> hd,
+                                                                       final Hash<E> he, final Hash<F$> hf) {
     return new Hash<P6<A, B, C, D, E, F$>>(new F<P6<A, B, C, D, E, F$>, Integer>() {
       public Integer f(final P6<A, B, C, D, E, F$> p6) {
         final int p = 419;
@@ -434,7 +438,10 @@ public final class Hash<A> {
    * @param hg A hash for the seventh element of the product.
    * @return A hash instance for a product-7.
    */
-  public static <A, B, C, D, E, F$, G> Hash<P7<A, B, C, D, E, F$, G>> p7Hash(final Hash<A> ha, final Hash<B> hb, final Hash<C> hc, final Hash<D> hd, final Hash<E> he, final Hash<F$> hf, final Hash<G> hg) {
+  public static <A, B, C, D, E, F$, G> Hash<P7<A, B, C, D, E, F$, G>> p7Hash(final Hash<A> ha, final Hash<B> hb,
+                                                                             final Hash<C> hc, final Hash<D> hd,
+                                                                             final Hash<E> he, final Hash<F$> hf,
+                                                                             final Hash<G> hg) {
     return new Hash<P7<A, B, C, D, E, F$, G>>(new F<P7<A, B, C, D, E, F$, G>, Integer>() {
       public Integer f(final P7<A, B, C, D, E, F$, G> p7) {
         final int p = 419;
@@ -466,7 +473,10 @@ public final class Hash<A> {
    * @param hh A hash for the eighth element of the product.
    * @return A hash instance for a product-8.
    */
-  public static <A, B, C, D, E, F$, G, H> Hash<P8<A, B, C, D, E, F$, G, H>> p8Hash(final Hash<A> ha, final Hash<B> hb, final Hash<C> hc, final Hash<D> hd, final Hash<E> he, final Hash<F$> hf, final Hash<G> hg, final Hash<H> hh) {
+  public static <A, B, C, D, E, F$, G, H> Hash<P8<A, B, C, D, E, F$, G, H>> p8Hash(final Hash<A> ha, final Hash<B> hb,
+                                                                                   final Hash<C> hc, final Hash<D> hd,
+                                                                                   final Hash<E> he, final Hash<F$> hf,
+                                                                                   final Hash<G> hg, final Hash<H> hh) {
     return new Hash<P8<A, B, C, D, E, F$, G, H>>(new F<P8<A, B, C, D, E, F$, G, H>, Integer>() {
       public Integer f(final P8<A, B, C, D, E, F$, G, H> p8) {
         final int p = 419;

@@ -375,7 +375,8 @@ public abstract class Stream<A> implements Iterable<A> {
    * @param f  The function to apply to each element of this stream and the given streams.
    * @return A new stream after performing the map, then final join.
    */
-  public <B, C, D, E> Stream<E> bind(final Stream<B> sb, final Stream<C> sc, final Stream<D> sd, final F<A, F<B, F<C, F<D, E>>>> f) {
+  public <B, C, D, E> Stream<E> bind(final Stream<B> sb, final Stream<C> sc, final Stream<D> sd,
+                                     final F<A, F<B, F<C, F<D, E>>>> f) {
     return sd.apply(bind(sb, sc, f));
   }
 
@@ -390,7 +391,8 @@ public abstract class Stream<A> implements Iterable<A> {
    * @param f  The function to apply to each element of this stream and the given streams.
    * @return A new stream after performing the map, then final join.
    */
-  public <B, C, D, E, F$> Stream<F$> bind(final Stream<B> sb, final Stream<C> sc, final Stream<D> sd, final Stream<E> se, final F<A, F<B, F<C, F<D, F<E, F$>>>>> f) {
+  public <B, C, D, E, F$> Stream<F$> bind(final Stream<B> sb, final Stream<C> sc, final Stream<D> sd,
+                                          final Stream<E> se, final F<A, F<B, F<C, F<D, F<E, F$>>>>> f) {
     return se.apply(bind(sb, sc, sd, f));
   }
 
@@ -406,7 +408,9 @@ public abstract class Stream<A> implements Iterable<A> {
    * @param f  The function to apply to each element of this stream and the given streams.
    * @return A new stream after performing the map, then final join.
    */
-  public <B, C, D, E, F$, G> Stream<G> bind(final Stream<B> sb, final Stream<C> sc, final Stream<D> sd, final Stream<E> se, final Stream<F$> sf, final F<A, F<B, F<C, F<D, F<E, F<F$, G>>>>>> f) {
+  public <B, C, D, E, F$, G> Stream<G> bind(final Stream<B> sb, final Stream<C> sc, final Stream<D> sd,
+                                            final Stream<E> se, final Stream<F$> sf,
+                                            final F<A, F<B, F<C, F<D, F<E, F<F$, G>>>>>> f) {
     return sf.apply(bind(sb, sc, sd, se, f));
   }
 
@@ -423,7 +427,9 @@ public abstract class Stream<A> implements Iterable<A> {
    * @param f  The function to apply to each element of this stream and the given streams.
    * @return A new stream after performing the map, then final join.
    */
-  public <B, C, D, E, F$, G, H> Stream<H> bind(final Stream<B> sb, final Stream<C> sc, final Stream<D> sd, final Stream<E> se, final Stream<F$> sf, final Stream<G> sg, final F<A, F<B, F<C, F<D, F<E, F<F$, F<G, H>>>>>>> f) {
+  public <B, C, D, E, F$, G, H> Stream<H> bind(final Stream<B> sb, final Stream<C> sc, final Stream<D> sd,
+                                               final Stream<E> se, final Stream<F$> sf, final Stream<G> sg,
+                                               final F<A, F<B, F<C, F<D, F<E, F<F$, F<G, H>>>>>>> f) {
     return sg.apply(bind(sb, sc, sd, se, sf, f));
   }
 
@@ -441,7 +447,10 @@ public abstract class Stream<A> implements Iterable<A> {
    * @param f  The function to apply to each element of this stream and the given streams.
    * @return A new stream after performing the map, then final join.
    */
-  public <B, C, D, E, F$, G, H, I> Stream<I> bind(final Stream<B> sb, final Stream<C> sc, final Stream<D> sd, final Stream<E> se, final Stream<F$> sf, final Stream<G> sg, final Stream<H> sh, final F<A, F<B, F<C, F<D, F<E, F<F$, F<G, F<H, I>>>>>>>> f) {
+  public <B, C, D, E, F$, G, H, I> Stream<I> bind(final Stream<B> sb, final Stream<C> sc, final Stream<D> sd,
+                                                  final Stream<E> se, final Stream<F$> sf, final Stream<G> sg,
+                                                  final Stream<H> sh,
+                                                  final F<A, F<B, F<C, F<D, F<E, F<F$, F<G, F<H, I>>>>>>>> f) {
     return sh.apply(bind(sb, sc, sd, se, sf, sg, f));
   }
 
@@ -621,11 +630,11 @@ public abstract class Stream<A> implements Iterable<A> {
   public static <A> Stream<A> stream(final A... as) {
     return as.length == 0 ? Stream.<A>nil()
         : unfold(P2.tuple(new F2<A[], Integer, Option<P2<A, P2<A[], Integer>>>>() {
-      public Option<P2<A, P2<A[], Integer>>> f(final A[] as, final Integer i) {
-        return i >= as.length ? Option.<P2<A, P2<A[], Integer>>>none()
-            : some(P.p(as[i], P.p(as, i + 1)));
-      }
-    }), P.p(as, 0));
+          public Option<P2<A, P2<A[], Integer>>> f(final A[] as, final Integer i) {
+            return i >= as.length ? Option.<P2<A, P2<A[], Integer>>>none()
+                : some(P.p(as[i], P.p(as, i + 1)));
+          }
+        }), P.p(as, 0));
   }
 
   /**
@@ -1095,10 +1104,10 @@ public abstract class Stream<A> implements Iterable<A> {
     return fs.isEmpty()
         ? Stream.<B>nil()
         : cons(fs.head().f(this), new P1<Stream<B>>() {
-      public Stream<B> _1() {
-        return sequenceW(fs.tail()._1());
-      }
-    });
+          public Stream<B> _1() {
+            return sequenceW(fs.tail()._1());
+          }
+        });
   }
 
   /**

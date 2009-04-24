@@ -237,6 +237,7 @@ public final class HPre {
 
     /**
      * Zero is equal to itself.
+     *
      * @param a Zero
      * @param b Zero
      * @return Equality for Zero
@@ -274,6 +275,7 @@ public final class HPre {
    */
   public static final class HAdd<A extends HNat<A>, B extends HNat<B>, C extends HNat<C>> {
     private final C sum;
+
     private HAdd(final C sum) {
       this.sum = sum;
     }
@@ -293,7 +295,7 @@ public final class HPre {
     }
 
     /**
-     * The sum of numbers a and b is one greater than the sum of b and the predecessor of a. 
+     * The sum of numbers a and b is one greater than the sum of b and the predecessor of a.
      */
     public static <N extends HNat<N>, M extends HNat<M>, R extends HNat<R>, H extends HAdd<N, HSucc<M>, R>>
     HAdd<HSucc<N>, HSucc<M>, HSucc<R>> add(final HSucc<N> a, final HSucc<M> b, final H h) {

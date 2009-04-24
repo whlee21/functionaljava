@@ -13,12 +13,12 @@ import java.util.Iterator;
 /**
  * A mutable hash map providing O(1) lookup.
  *
- * @see java.util.HashMap
  * @version %build.number%<br>
  *          <ul>
  *          <li>$LastChangedRevision$</li>
  *          <li>$LastChangedDate$</li>
  *          </ul>
+ * @see java.util.HashMap
  */
 public final class HashMap<K, V> implements Iterable<K> {
   private final class Key<K> {
@@ -38,7 +38,7 @@ public final class HashMap<K, V> implements Iterable<K> {
 
     @SuppressWarnings({"unchecked"})
     public boolean equals(final Object o) {
-      return o instanceof Key && e.eq(k, (K)((Key<?>)o).k());
+      return o instanceof Key && e.eq(k, (K) ((Key<?>) o).k());
     }
 
     public int hashCode() {
@@ -54,7 +54,7 @@ public final class HashMap<K, V> implements Iterable<K> {
   public Iterator<K> iterator() {
     return keys().iterator();
   }
-  
+
   private final java.util.HashMap<Key<K>, V> m;
 
   private final Equal<K> e;
@@ -75,8 +75,8 @@ public final class HashMap<K, V> implements Iterable<K> {
   /**
    * Construct a hash map with the given equality and hashing strategy.
    *
-   * @param e The equality strategy.
-   * @param h The hashing strategy.
+   * @param e               The equality strategy.
+   * @param h               The hashing strategy.
    * @param initialCapacity The initial capacity.
    */
   public HashMap(final Equal<K> e, final Hash<K> h, final int initialCapacity) {
@@ -88,10 +88,10 @@ public final class HashMap<K, V> implements Iterable<K> {
   /**
    * Construct a hash map with the given equality and hashing strategy.
    *
-   * @param e The equality strategy.
-   * @param h The hashing strategy.
+   * @param e               The equality strategy.
+   * @param h               The hashing strategy.
    * @param initialCapacity The initial capacity.
-   * @param loadFactor The load factor.
+   * @param loadFactor      The load factor.
    */
   public HashMap(final Equal<K> e, final Hash<K> h, final int initialCapacity, final float loadFactor) {
     m = new java.util.HashMap<Key<K>, V>(initialCapacity, loadFactor);
@@ -104,8 +104,7 @@ public final class HashMap<K, V> implements Iterable<K> {
    *
    * @return A new hash map that uses {@link Object#equals} and {@link Object#hashCode}.
    */
-  public static <K, V> HashMap<K, V> hashMap()
-  {
+  public static <K, V> HashMap<K, V> hashMap() {
     final Equal<K> e = Equal.anyEqual();
     final Hash<K> h = Hash.anyHash();
     return new HashMap<K, V>(e, h);
@@ -179,8 +178,8 @@ public final class HashMap<K, V> implements Iterable<K> {
    */
   public List<K> keys() {
     final List.Buffer<K> b = new List.Buffer<K>();
-    
-    for(final Key<K> k : m.keySet()) {
+
+    for (final Key<K> k : m.keySet()) {
       b.snoc(k.k());
     }
 
@@ -220,7 +219,7 @@ public final class HashMap<K, V> implements Iterable<K> {
 
   /**
    * Inserts the given key and value association into the hash map.
-   * 
+   *
    * @param k The key to insert.
    * @param v The value to insert.
    */
@@ -239,7 +238,7 @@ public final class HashMap<K, V> implements Iterable<K> {
 
   /**
    * Deletes the entry in the hash map that corresponds to the given key and returns any associated value.
-   * 
+   *
    * @param k The key to delete from this hash map.
    * @return The value that was associated with the given key, if there was one.
    */
@@ -250,7 +249,7 @@ public final class HashMap<K, V> implements Iterable<K> {
   /**
    * Projects an immutable collection of this hash map.
    *
-   * @return An immutable collection of this hash map.  
+   * @return An immutable collection of this hash map.
    */
   public Collection<P2<K, V>> toCollection() {
     return keys().map(new F<K, P2<K, V>>() {

@@ -440,7 +440,8 @@ public abstract class List<A> implements Iterable<A> {
    * @param f  The function to apply to each element of this list and the given lists.
    * @return A new list after performing the map, then final join.
    */
-  public <B, C, D, E> List<E> bind(final List<B> lb, final List<C> lc, final List<D> ld, final F<A, F<B, F<C, F<D, E>>>> f) {
+  public <B, C, D, E> List<E> bind(final List<B> lb, final List<C> lc, final List<D> ld,
+                                   final F<A, F<B, F<C, F<D, E>>>> f) {
     return ld.apply(bind(lb, lc, f));
   }
 
@@ -455,7 +456,8 @@ public abstract class List<A> implements Iterable<A> {
    * @param f  The function to apply to each element of this list and the given lists.
    * @return A new list after performing the map, then final join.
    */
-  public <B, C, D, E, F$> List<F$> bind(final List<B> lb, final List<C> lc, final List<D> ld, final List<E> le, final F<A, F<B, F<C, F<D, F<E, F$>>>>> f) {
+  public <B, C, D, E, F$> List<F$> bind(final List<B> lb, final List<C> lc, final List<D> ld, final List<E> le,
+                                        final F<A, F<B, F<C, F<D, F<E, F$>>>>> f) {
     return le.apply(bind(lb, lc, ld, f));
   }
 
@@ -471,7 +473,8 @@ public abstract class List<A> implements Iterable<A> {
    * @param f  The function to apply to each element of this list and the given lists.
    * @return A new list after performing the map, then final join.
    */
-  public <B, C, D, E, F$, G> List<G> bind(final List<B> lb, final List<C> lc, final List<D> ld, final List<E> le, final List<F$> lf, final F<A, F<B, F<C, F<D, F<E, F<F$, G>>>>>> f) {
+  public <B, C, D, E, F$, G> List<G> bind(final List<B> lb, final List<C> lc, final List<D> ld, final List<E> le,
+                                          final List<F$> lf, final F<A, F<B, F<C, F<D, F<E, F<F$, G>>>>>> f) {
     return lf.apply(bind(lb, lc, ld, le, f));
   }
 
@@ -488,7 +491,9 @@ public abstract class List<A> implements Iterable<A> {
    * @param f  The function to apply to each element of this list and the given lists.
    * @return A new list after performing the map, then final join.
    */
-  public <B, C, D, E, F$, G, H> List<H> bind(final List<B> lb, final List<C> lc, final List<D> ld, final List<E> le, final List<F$> lf, final List<G> lg, final F<A, F<B, F<C, F<D, F<E, F<F$, F<G, H>>>>>>> f) {
+  public <B, C, D, E, F$, G, H> List<H> bind(final List<B> lb, final List<C> lc, final List<D> ld, final List<E> le,
+                                             final List<F$> lf, final List<G> lg,
+                                             final F<A, F<B, F<C, F<D, F<E, F<F$, F<G, H>>>>>>> f) {
     return lg.apply(bind(lb, lc, ld, le, lf, f));
   }
 
@@ -506,7 +511,9 @@ public abstract class List<A> implements Iterable<A> {
    * @param f  The function to apply to each element of this list and the given lists.
    * @return A new list after performing the map, then final join.
    */
-  public <B, C, D, E, F$, G, H, I> List<I> bind(final List<B> lb, final List<C> lc, final List<D> ld, final List<E> le, final List<F$> lf, final List<G> lg, final List<H> lh, final F<A, F<B, F<C, F<D, F<E, F<F$, F<G, F<H, I>>>>>>>> f) {
+  public <B, C, D, E, F$, G, H, I> List<I> bind(final List<B> lb, final List<C> lc, final List<D> ld, final List<E> le,
+                                                final List<F$> lf, final List<G> lg, final List<H> lh,
+                                                final F<A, F<B, F<C, F<D, F<E, F<F$, F<G, F<H, I>>>>>>>> f) {
     return lh.apply(bind(lb, lc, ld, le, lf, lg, f));
   }
 

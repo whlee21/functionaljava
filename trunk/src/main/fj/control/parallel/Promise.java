@@ -368,10 +368,10 @@ public final class Promise<A> {
     return fs.isEmpty()
         ? Stream.<B>nil()
         : Stream.cons(fs.head().f(this), new P1<Stream<B>>() {
-      public Stream<B> _1() {
-        return sequenceW(fs.tail()._1());
-      }
-    });
+          public Stream<B> _1() {
+            return sequenceW(fs.tail()._1());
+          }
+        });
   }
 
 }
