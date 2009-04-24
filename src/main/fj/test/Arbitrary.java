@@ -743,6 +743,16 @@ public final class Arbitrary<A> {
       return new Date(i);
     }
   }));
+  
+  /**
+   * Returns an arbitrary implementation for a Java enumeration.
+   * 
+   * @param clazz The type of enum to return an arbtrary of.
+   * @return An arbitrary for instances of the supplied enum type.
+   */
+  public static <A extends Enum<A>> Arbitrary<A> arbEnumValue(final Class<A> clazz) {
+    return arbitrary(Gen.elements(clazz.getEnumConstants()));
+  }
 
   /**
    * Returns an arbitrary implementation for enum maps.
