@@ -147,6 +147,7 @@ public final class Function {
       }
     };
   }
+
   /**
    * A function that converts arrays to eithers.
    *
@@ -197,17 +198,18 @@ public final class Function {
   /**
    * A function that converts arrays to string builders.
    */
-  public static final F<Array<Character>, StringBuilder> Array_StringBuilder = new F<Array<Character>, StringBuilder>() {
-    public StringBuilder f(final Array<Character> cs) {
-      final StringBuilder sb = new StringBuilder();
-      cs.foreach(new Effect<Character>() {
-        public void e(final Character c) {
-          sb.append(c);
+  public static final F<Array<Character>, StringBuilder> Array_StringBuilder =
+      new F<Array<Character>, StringBuilder>() {
+        public StringBuilder f(final Array<Character> cs) {
+          final StringBuilder sb = new StringBuilder();
+          cs.foreach(new Effect<Character>() {
+            public void e(final Character c) {
+              sb.append(c);
+            }
+          });
+          return sb;
         }
-      });
-      return sb;
-    }
-  };
+      };
 
   // END Array ->
 
@@ -287,32 +289,34 @@ public final class Function {
   /**
    * A function that converts streams to string buffers.
    */
-  public static final F<Stream<Character>, StringBuffer> Stream_StringBuffer = new F<Stream<Character>, StringBuffer>() {
-    public StringBuffer f(final Stream<Character> cs) {
-      final StringBuffer sb = new StringBuffer();
-      cs.foreach(new Effect<Character>() {
-        public void e(final Character c) {
-          sb.append(c);
+  public static final F<Stream<Character>, StringBuffer> Stream_StringBuffer =
+      new F<Stream<Character>, StringBuffer>() {
+        public StringBuffer f(final Stream<Character> cs) {
+          final StringBuffer sb = new StringBuffer();
+          cs.foreach(new Effect<Character>() {
+            public void e(final Character c) {
+              sb.append(c);
+            }
+          });
+          return sb;
         }
-      });
-      return sb;
-    }
-  };
+      };
 
   /**
    * A function that converts streams to string builders.
    */
-  public static final F<Stream<Character>, StringBuilder> Stream_StringBuilder = new F<Stream<Character>, StringBuilder>() {
-    public StringBuilder f(final Stream<Character> cs) {
-      final StringBuilder sb = new StringBuilder();
-      cs.foreach(new Effect<Character>() {
-        public void e(final Character c) {
-          sb.append(c);
+  public static final F<Stream<Character>, StringBuilder> Stream_StringBuilder =
+      new F<Stream<Character>, StringBuilder>() {
+        public StringBuilder f(final Stream<Character> cs) {
+          final StringBuilder sb = new StringBuilder();
+          cs.foreach(new Effect<Character>() {
+            public void e(final Character c) {
+              sb.append(c);
+            }
+          });
+          return sb;
         }
-      });
-      return sb;
-    }
-  };
+      };
 
   // END Stream ->
 
@@ -373,7 +377,7 @@ public final class Function {
       }
     };
   }
-  
+
   /**
    * A function that converts options to strings.
    */
@@ -386,20 +390,22 @@ public final class Function {
   /**
    * A function that converts options to string buffers.
    */
-  public static final F<Option<Character>, StringBuffer> Option_StringBuffer = new F<Option<Character>, StringBuffer>() {
-    public StringBuffer f(final Option<Character> o) {
-      return new StringBuffer(asString(o.toList()));
-    }
-  };
+  public static final F<Option<Character>, StringBuffer> Option_StringBuffer =
+      new F<Option<Character>, StringBuffer>() {
+        public StringBuffer f(final Option<Character> o) {
+          return new StringBuffer(asString(o.toList()));
+        }
+      };
 
   /**
    * A function that converts options to string builders.
    */
-  public static final F<Option<Character>, StringBuilder> Option_StringBuilder = new F<Option<Character>, StringBuilder>() {
-    public StringBuilder f(final Option<Character> o) {
-      return new StringBuilder(asString(o.toList()));
-    }
-  };
+  public static final F<Option<Character>, StringBuilder> Option_StringBuilder =
+      new F<Option<Character>, StringBuilder>() {
+        public StringBuilder f(final Option<Character> o) {
+          return new StringBuilder(asString(o.toList()));
+        }
+      };
 
   // END Option ->
 
@@ -588,7 +594,7 @@ public final class Function {
   }
 
   // END Either ->
-   
+
   // BEGIN String ->
 
   /**
@@ -687,20 +693,22 @@ public final class Function {
   /**
    * A function that converts string buffers to streams.
    */
-  public static final F<StringBuffer, Stream<Character>> StringBuffer_Stream = new F<StringBuffer, Stream<Character>>() {
-    public Stream<Character> f(final StringBuffer s) {
-      return fromString(s.toString()).toStream();
-    }
-  };
+  public static final F<StringBuffer, Stream<Character>> StringBuffer_Stream =
+      new F<StringBuffer, Stream<Character>>() {
+        public Stream<Character> f(final StringBuffer s) {
+          return fromString(s.toString()).toStream();
+        }
+      };
 
   /**
    * A function that converts string buffers to options.
    */
-  public static final F<StringBuffer, Option<Character>> StringBuffer_Option = new F<StringBuffer, Option<Character>>() {
-    public Option<Character> f(final StringBuffer s) {
-      return fromString(s.toString()).toOption();
-    }
-  };
+  public static final F<StringBuffer, Option<Character>> StringBuffer_Option =
+      new F<StringBuffer, Option<Character>>() {
+        public Option<Character> f(final StringBuffer s) {
+          return fromString(s.toString()).toOption();
+        }
+      };
 
   /**
    * A function that converts string buffers to eithers.
@@ -753,29 +761,32 @@ public final class Function {
   /**
    * A function that converts string builders to arrays.
    */
-  public static final F<StringBuilder, Array<Character>> StringBuilder_Array = new F<StringBuilder, Array<Character>>() {
-    public Array<Character> f(final StringBuilder s) {
-      return fromString(s.toString()).toArray();
-    }
-  };
+  public static final F<StringBuilder, Array<Character>> StringBuilder_Array =
+      new F<StringBuilder, Array<Character>>() {
+        public Array<Character> f(final StringBuilder s) {
+          return fromString(s.toString()).toArray();
+        }
+      };
 
   /**
    * A function that converts string builders to streams.
    */
-  public static final F<StringBuilder, Stream<Character>> StringBuilder_Stream = new F<StringBuilder, Stream<Character>>() {
-    public Stream<Character> f(final StringBuilder s) {
-      return fromString(s.toString()).toStream();
-    }
-  };
+  public static final F<StringBuilder, Stream<Character>> StringBuilder_Stream =
+      new F<StringBuilder, Stream<Character>>() {
+        public Stream<Character> f(final StringBuilder s) {
+          return fromString(s.toString()).toStream();
+        }
+      };
 
   /**
    * A function that converts string builders to options.
    */
-  public static final F<StringBuilder, Option<Character>> StringBuilder_Option = new F<StringBuilder, Option<Character>>() {
-    public Option<Character> f(final StringBuilder s) {
-      return fromString(s.toString()).toOption();
-    }
-  };
+  public static final F<StringBuilder, Option<Character>> StringBuilder_Option =
+      new F<StringBuilder, Option<Character>>() {
+        public Option<Character> f(final StringBuilder s) {
+          return fromString(s.toString()).toOption();
+        }
+      };
 
   /**
    * A function that converts string builders to eithers.
@@ -811,6 +822,6 @@ public final class Function {
       return new StringBuffer(s);
     }
   };
-  
+
   // END StringBuilder ->
 }

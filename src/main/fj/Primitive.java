@@ -21,7 +21,7 @@ public final class Primitive {
    */
   public static final F<Boolean, Byte> Boolean_Byte = new F<Boolean, Byte>() {
     public Byte f(final Boolean b) {
-      return (byte)(b ? 1 : 0);
+      return (byte) (b ? 1 : 0);
     }
   };
 
@@ -30,7 +30,7 @@ public final class Primitive {
    */
   public static final F<Boolean, Character> Boolean_Character = new F<Boolean, Character>() {
     public Character f(final Boolean b) {
-      return (char)(b ? 1 : 0);
+      return (char) (b ? 1 : 0);
     }
   };
 
@@ -75,7 +75,7 @@ public final class Primitive {
    */
   public static final F<Boolean, Short> Boolean_Short = new F<Boolean, Short>() {
     public Short f(final Boolean b) {
-      return (short)(b ? 1 : 0);
+      return (short) (b ? 1 : 0);
     }
   };
 
@@ -97,7 +97,7 @@ public final class Primitive {
    */
   public static final F<Byte, Character> Byte_Character = new F<Byte, Character>() {
     public Character f(final Byte b) {
-      return (char)(byte)b;
+      return (char) (byte) b;
     }
   };
 
@@ -108,7 +108,7 @@ public final class Primitive {
     public Double f(final Byte b) {
       //No it isn't
       //noinspection RedundantCast
-      return (double)b;
+      return (double) b;
     }
   };
 
@@ -119,7 +119,7 @@ public final class Primitive {
     public Float f(final Byte b) {
       //No it isn't
       //noinspection RedundantCast
-      return (float)b;
+      return (float) b;
     }
   };
 
@@ -130,7 +130,7 @@ public final class Primitive {
     public Integer f(final Byte b) {
       //No it isn't
       //noinspection RedundantCast
-      return (int)b;
+      return (int) b;
     }
   };
 
@@ -141,7 +141,7 @@ public final class Primitive {
     public Long f(final Byte b) {
       //No it isn't
       //noinspection RedundantCast
-      return (long)b;
+      return (long) b;
     }
   };
 
@@ -152,7 +152,7 @@ public final class Primitive {
     public Short f(final Byte b) {
       //No it isn't
       //noinspection RedundantCast
-      return (short)b;
+      return (short) b;
     }
   };
 
@@ -174,7 +174,7 @@ public final class Primitive {
    */
   public static final F<Character, Byte> Character_Byte = new F<Character, Byte>() {
     public Byte f(final Character c) {
-      return (byte)(char)c;
+      return (byte) (char) c;
     }
   };
 
@@ -183,7 +183,7 @@ public final class Primitive {
    */
   public static final F<Character, Double> Character_Double = new F<Character, Double>() {
     public Double f(final Character c) {
-      return (double)(char)c;
+      return (double) (char) c;
     }
   };
 
@@ -192,7 +192,7 @@ public final class Primitive {
    */
   public static final F<Character, Float> Character_Float = new F<Character, Float>() {
     public Float f(final Character c) {
-      return (float)(char)c;
+      return (float) (char) c;
     }
   };
 
@@ -201,7 +201,7 @@ public final class Primitive {
    */
   public static final F<Character, Integer> Character_Integer = new F<Character, Integer>() {
     public Integer f(final Character c) {
-      return (int)(char)c;
+      return (int) (char) c;
     }
   };
 
@@ -210,7 +210,7 @@ public final class Primitive {
    */
   public static final F<Character, Long> Character_Long = new F<Character, Long>() {
     public Long f(final Character c) {
-      return (long)(char)c;
+      return (long) (char) c;
     }
   };
 
@@ -219,7 +219,7 @@ public final class Primitive {
    */
   public static final F<Character, Short> Character_Short = new F<Character, Short>() {
     public Short f(final Character c) {
-      return (short)(char)c;
+      return (short) (char) c;
     }
   };
 
@@ -241,7 +241,7 @@ public final class Primitive {
    */
   public static final F<Double, Byte> Double_Byte = new F<Double, Byte>() {
     public Byte f(final Double d) {
-      return (byte)(double)d;
+      return (byte) (double) d;
     }
   };
 
@@ -250,7 +250,7 @@ public final class Primitive {
    */
   public static final F<Double, Character> Double_Character = new F<Double, Character>() {
     public Character f(final Double d) {
-      return (char)(double)d;
+      return (char) (double) d;
     }
   };
 
@@ -259,7 +259,7 @@ public final class Primitive {
    */
   public static final F<Double, Float> Double_Float = new F<Double, Float>() {
     public Float f(final Double d) {
-      return (float)(double)d;
+      return (float) (double) d;
     }
   };
 
@@ -268,7 +268,7 @@ public final class Primitive {
    */
   public static final F<Double, Integer> Double_Integer = new F<Double, Integer>() {
     public Integer f(final Double d) {
-      return (int)(double)d;
+      return (int) (double) d;
     }
   };
 
@@ -277,7 +277,7 @@ public final class Primitive {
    */
   public static final F<Double, Long> Double_Long = new F<Double, Long>() {
     public Long f(final Double d) {
-      return (long)(double)d;
+      return (long) (double) d;
     }
   };
 
@@ -286,7 +286,7 @@ public final class Primitive {
    */
   public static final F<Double, Short> Double_Short = new F<Double, Short>() {
     public Short f(final Double d) {
-      return (short)(double)d;
+      return (short) (double) d;
     }
   };
 
@@ -308,7 +308,7 @@ public final class Primitive {
    */
   public static final F<Float, Byte> Float_Byte = new F<Float, Byte>() {
     public Byte f(final Float f) {
-      return (byte)(float)f;
+      return (byte) (float) f;
     }
   };
 
@@ -317,7 +317,7 @@ public final class Primitive {
    */
   public static final F<Float, Character> Float_Character = new F<Float, Character>() {
     public Character f(final Float f) {
-      return (char)(float)f;
+      return (char) (float) f;
     }
   };
 
@@ -326,7 +326,7 @@ public final class Primitive {
    */
   public static final F<Float, Double> Float_Double = new F<Float, Double>() {
     public Double f(final Float f) {
-      return (double)(float)f;
+      return (double) (float) f;
     }
   };
 
@@ -335,7 +335,7 @@ public final class Primitive {
    */
   public static final F<Float, Integer> Float_Integer = new F<Float, Integer>() {
     public Integer f(final Float f) {
-      return (int)(float)f;
+      return (int) (float) f;
     }
   };
 
@@ -344,7 +344,7 @@ public final class Primitive {
    */
   public static final F<Float, Long> Float_Long = new F<Float, Long>() {
     public Long f(final Float f) {
-      return (long)(float)f;
+      return (long) (float) f;
     }
   };
 
@@ -353,7 +353,7 @@ public final class Primitive {
    */
   public static final F<Float, Short> Float_Short = new F<Float, Short>() {
     public Short f(final Float f) {
-      return (short)(float)f;
+      return (short) (float) f;
     }
   };
 
@@ -375,7 +375,7 @@ public final class Primitive {
    */
   public static final F<Integer, Byte> Integer_Byte = new F<Integer, Byte>() {
     public Byte f(final Integer i) {
-      return (byte)(int)i;
+      return (byte) (int) i;
     }
   };
 
@@ -384,7 +384,7 @@ public final class Primitive {
    */
   public static final F<Integer, Character> Integer_Character = new F<Integer, Character>() {
     public Character f(final Integer i) {
-      return (char)(int)i;
+      return (char) (int) i;
     }
   };
 
@@ -395,7 +395,7 @@ public final class Primitive {
     public Double f(final Integer i) {
       //No it isn't
       //noinspection RedundantCast
-      return (double)i;
+      return (double) i;
     }
   };
 
@@ -406,7 +406,7 @@ public final class Primitive {
     public Float f(final Integer i) {
       //No it isn't
       //noinspection RedundantCast
-      return (float)i;
+      return (float) i;
     }
   };
 
@@ -417,7 +417,7 @@ public final class Primitive {
     public Long f(final Integer i) {
       //No it isn't
       //noinspection RedundantCast
-      return (long)i;
+      return (long) i;
     }
   };
 
@@ -428,7 +428,7 @@ public final class Primitive {
     public Short f(final Integer i) {
       //No it isn't
       //noinspection RedundantCast
-      return (short)(int)i;
+      return (short) (int) i;
     }
   };
 
@@ -450,7 +450,7 @@ public final class Primitive {
    */
   public static final F<Long, Byte> Long_Byte = new F<Long, Byte>() {
     public Byte f(final Long l) {
-      return (byte)(long)l;
+      return (byte) (long) l;
     }
   };
 
@@ -459,7 +459,7 @@ public final class Primitive {
    */
   public static final F<Long, Character> Long_Character = new F<Long, Character>() {
     public Character f(final Long l) {
-      return (char)(long)l;
+      return (char) (long) l;
     }
   };
 
@@ -468,7 +468,7 @@ public final class Primitive {
    */
   public static final F<Long, Double> Long_Double = new F<Long, Double>() {
     public Double f(final Long l) {
-      return (double)(long)l;
+      return (double) (long) l;
     }
   };
 
@@ -477,7 +477,7 @@ public final class Primitive {
    */
   public static final F<Long, Float> Long_Float = new F<Long, Float>() {
     public Float f(final Long l) {
-      return (float)(long)l;
+      return (float) (long) l;
     }
   };
 
@@ -486,7 +486,7 @@ public final class Primitive {
    */
   public static final F<Long, Integer> Long_Integer = new F<Long, Integer>() {
     public Integer f(final Long l) {
-      return (int)(long)l;
+      return (int) (long) l;
     }
   };
 
@@ -495,7 +495,7 @@ public final class Primitive {
    */
   public static final F<Long, Short> Long_Short = new F<Long, Short>() {
     public Short f(final Long l) {
-      return (short)(long)l;
+      return (short) (long) l;
     }
   };
 
@@ -517,7 +517,7 @@ public final class Primitive {
    */
   public static final F<Short, Byte> Short_Byte = new F<Short, Byte>() {
     public Byte f(final Short s) {
-      return (byte)(short)s;
+      return (byte) (short) s;
     }
   };
 
@@ -526,7 +526,7 @@ public final class Primitive {
    */
   public static final F<Short, Character> Short_Character = new F<Short, Character>() {
     public Character f(final Short s) {
-      return (char)(short)s;
+      return (char) (short) s;
     }
   };
 
@@ -535,7 +535,7 @@ public final class Primitive {
    */
   public static final F<Short, Double> Short_Double = new F<Short, Double>() {
     public Double f(final Short s) {
-      return (double)(short)s;
+      return (double) (short) s;
     }
   };
 
@@ -544,7 +544,7 @@ public final class Primitive {
    */
   public static final F<Short, Float> Short_Float = new F<Short, Float>() {
     public Float f(final Short s) {
-      return (float)(short)s;
+      return (float) (short) s;
     }
   };
 
@@ -553,7 +553,7 @@ public final class Primitive {
    */
   public static final F<Short, Integer> Short_Integer = new F<Short, Integer>() {
     public Integer f(final Short s) {
-      return (int)(short)s;
+      return (int) (short) s;
     }
   };
 
@@ -562,7 +562,7 @@ public final class Primitive {
    */
   public static final F<Short, Long> Short_Long = new F<Short, Long>() {
     public Long f(final Short s) {
-      return (long)(short)s;
+      return (long) (short) s;
     }
   };
 

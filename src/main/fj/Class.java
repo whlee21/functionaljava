@@ -32,25 +32,28 @@ public final class Class<T> {
    * @return The inheritance hierarchy of this class.
    */
   public List<Class<? super T>> inheritance() {
-    return unfold(new F<java.lang.Class<? super T>, Option<P2<java.lang.Class<? super T>, java.lang.Class<? super T>>>>() {
-      public Option<P2<java.lang.Class<? super T>, java.lang.Class<? super T>>> f(final java.lang.Class<? super T> c) {
-        if (c == null)
-          return none();
-        else {
-          final P2<java.lang.Class<? super T>, java.lang.Class<? super T>> p = new P2<java.lang.Class<? super T>, java.lang.Class<? super T>>() {
-            public java.lang.Class<? super T> _1() {
-              return c;
-            }
+    return unfold(
+        new F<java.lang.Class<? super T>, Option<P2<java.lang.Class<? super T>, java.lang.Class<? super T>>>>() {
+          public Option<P2<java.lang.Class<? super T>, java.lang.Class<? super T>>> f(
+              final java.lang.Class<? super T> c) {
+            if (c == null)
+              return none();
+            else {
+              final P2<java.lang.Class<? super T>, java.lang.Class<? super T>> p =
+                  new P2<java.lang.Class<? super T>, java.lang.Class<? super T>>() {
+                    public java.lang.Class<? super T> _1() {
+                      return c;
+                    }
 
-            @SuppressWarnings({"unchecked"})
-            public java.lang.Class<? super T> _2() {
-              return c.getSuperclass();
+                    @SuppressWarnings({"unchecked"})
+                    public java.lang.Class<? super T> _2() {
+                      return c.getSuperclass();
+                    }
+                  };
+              return some(p);
             }
-          };
-          return some(p);
-        }
-      }
-    }, c).map(new F<java.lang.Class<? super T>, Class<? super T>>() {
+          }
+        }, c).map(new F<java.lang.Class<? super T>, Class<? super T>>() {
       public Class<? super T> f(final java.lang.Class<? super T> c) {
         return clas(c);
       }
@@ -81,7 +84,8 @@ public final class Class<T> {
 
   /**
    * Provides this class's interface type parameter information as a list of trees.
-   * @return A list of trees representing the type expressions for this class's interfaces. 
+   *
+   * @return A list of trees representing the type expressions for this class's interfaces.
    */
   public List<Tree<Type>> interfaceParameters() {
     List<Tree<Type>> ts = List.nil();

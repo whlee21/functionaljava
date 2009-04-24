@@ -36,16 +36,16 @@ public final class QueueActor<A> {
       }
     });
     selfish =
-            actor(s, new Effect<A>() {
-              public void e(final A a) {
-                act(a);
-              }
-            });
+        actor(s, new Effect<A>() {
+          public void e(final A a) {
+            act(a);
+          }
+        });
   }
 
   private P1<Unit> work() {
     return suspended.compareAndSet(!mbox.isEmpty(), false) ?
-            act.act(Unit.unit()) : P.p(Unit.unit());
+        act.act(Unit.unit()) : P.p(Unit.unit());
   }
 
   /**

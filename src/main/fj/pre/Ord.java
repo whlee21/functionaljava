@@ -320,28 +320,30 @@ public final class Ord<A> {
   /**
    * An order instance for the {@link StringBuffer} type.
    */
-  public static final Ord<StringBuffer> stringBufferOrd = new Ord<StringBuffer>(new F<StringBuffer, F<StringBuffer, Ordering>>() {
-    public F<StringBuffer, Ordering> f(final StringBuffer a1) {
-      return new F<StringBuffer, Ordering>() {
-        public Ordering f(final StringBuffer a2) {
-          return stringOrd.compare(a1.toString(), a2.toString());
+  public static final Ord<StringBuffer> stringBufferOrd =
+      new Ord<StringBuffer>(new F<StringBuffer, F<StringBuffer, Ordering>>() {
+        public F<StringBuffer, Ordering> f(final StringBuffer a1) {
+          return new F<StringBuffer, Ordering>() {
+            public Ordering f(final StringBuffer a2) {
+              return stringOrd.compare(a1.toString(), a2.toString());
+            }
+          };
         }
-      };
-    }
-  });
+      });
 
   /**
    * An order instance for the {@link StringBuffer} type.
    */
-  public static final Ord<StringBuilder> stringBuilderOrd = new Ord<StringBuilder>(new F<StringBuilder, F<StringBuilder, Ordering>>() {
-    public F<StringBuilder, Ordering> f(final StringBuilder a1) {
-      return new F<StringBuilder, Ordering>() {
-        public Ordering f(final StringBuilder a2) {
-          return stringOrd.compare(a1.toString(), a2.toString());
+  public static final Ord<StringBuilder> stringBuilderOrd =
+      new Ord<StringBuilder>(new F<StringBuilder, F<StringBuilder, Ordering>>() {
+        public F<StringBuilder, Ordering> f(final StringBuilder a1) {
+          return new F<StringBuilder, Ordering>() {
+            public Ordering f(final StringBuilder a2) {
+              return stringOrd.compare(a1.toString(), a2.toString());
+            }
+          };
         }
-      };
-    }
-  });
+      });
 
   /**
    * An order instance for the {@link Option} type.

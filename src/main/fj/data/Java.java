@@ -579,7 +579,7 @@ public final class Java {
               }
 
               public A next() {
-                if(x.isEmpty())
+                if (x.isEmpty())
                   throw new NoSuchElementException("Empty iterator");
                 else {
                   final A a = x.head();

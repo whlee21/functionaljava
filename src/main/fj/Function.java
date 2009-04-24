@@ -473,7 +473,8 @@ public final class Function {
    * @param c An argument to the curried function.
    * @return A curried form of the given function.
    */
-  public static <A, B, C, D, E, F$> F<D, F<E, F$>> curry(final F5<A, B, C, D, E, F$> f, final A a, final B b, final C c) {
+  public static <A, B, C, D, E, F$> F<D, F<E, F$>> curry(final F5<A, B, C, D, E, F$> f, final A a, final B b,
+                                                         final C c) {
     return curry(f).f(a).f(b).f(c);
   }
 
@@ -487,7 +488,8 @@ public final class Function {
    * @param d An argument to the curried function.
    * @return A curried form of the given function.
    */
-  public static <A, B, C, D, E, F$> F<E, F$> curry(final F5<A, B, C, D, E, F$> f, final A a, final B b, final C c, final D d) {
+  public static <A, B, C, D, E, F$> F<E, F$> curry(final F5<A, B, C, D, E, F$> f, final A a, final B b, final C c,
+                                                   final D d) {
     return curry(f).f(a).f(b).f(c).f(d);
   }
 
@@ -571,7 +573,8 @@ public final class Function {
    * @param f The function to uncurry.
    * @return An uncurried function.
    */
-  public static <A, B, C, D, E, F$, G> F6<A, B, C, D, E, F$, G> uncurryF6(final F<A, F<B, F<C, F<D, F<E, F<F$, G>>>>>> f) {
+  public static <A, B, C, D, E, F$, G> F6<A, B, C, D, E, F$, G> uncurryF6(
+      final F<A, F<B, F<C, F<D, F<E, F<F$, G>>>>>> f) {
     return new F6<A, B, C, D, E, F$, G>() {
       public G f(final A a, final B b, final C c, final D d, final E e, final F$ f$) {
         return f.f(a).f(b).f(c).f(d).f(e).f(f$);
@@ -585,7 +588,8 @@ public final class Function {
    * @param f The function to curry.
    * @return A curried form of the given function.
    */
-  public static <A, B, C, D, E, F$, G, H> F<A, F<B, F<C, F<D, F<E, F<F$, F<G, H>>>>>>> curry(final F7<A, B, C, D, E, F$, G, H> f) {
+  public static <A, B, C, D, E, F$, G, H> F<A, F<B, F<C, F<D, F<E, F<F$, F<G, H>>>>>>> curry(
+      final F7<A, B, C, D, E, F$, G, H> f) {
     return new F<A, F<B, F<C, F<D, F<E, F<F$, F<G, H>>>>>>>() {
       public F<B, F<C, F<D, F<E, F<F$, F<G, H>>>>>> f(final A a) {
         return new F<B, F<C, F<D, F<E, F<F$, F<G, H>>>>>>() {
@@ -624,7 +628,8 @@ public final class Function {
    * @param a An argument to the curried function.
    * @return A curried form of the given function.
    */
-  public static <A, B, C, D, E, F$, G, H> F<B, F<C, F<D, F<E, F<F$, F<G, H>>>>>> curry(final F7<A, B, C, D, E, F$, G, H> f, final A a) {
+  public static <A, B, C, D, E, F$, G, H> F<B, F<C, F<D, F<E, F<F$, F<G, H>>>>>> curry(
+      final F7<A, B, C, D, E, F$, G, H> f, final A a) {
     return curry(f).f(a);
   }
 
@@ -636,7 +641,8 @@ public final class Function {
    * @param b An argument to the curried function.
    * @return A curried form of the given function.
    */
-  public static <A, B, C, D, E, F$, G, H> F<C, F<D, F<E, F<F$, F<G, H>>>>> curry(final F7<A, B, C, D, E, F$, G, H> f, final A a, final B b) {
+  public static <A, B, C, D, E, F$, G, H> F<C, F<D, F<E, F<F$, F<G, H>>>>> curry(final F7<A, B, C, D, E, F$, G, H> f,
+                                                                                 final A a, final B b) {
     return curry(f).f(a).f(b);
   }
 
@@ -649,7 +655,8 @@ public final class Function {
    * @param c An argument to the curried function.
    * @return A curried form of the given function.
    */
-  public static <A, B, C, D, E, F$, G, H> F<D, F<E, F<F$, F<G, H>>>> curry(final F7<A, B, C, D, E, F$, G, H> f, final A a, final B b, final C c) {
+  public static <A, B, C, D, E, F$, G, H> F<D, F<E, F<F$, F<G, H>>>> curry(final F7<A, B, C, D, E, F$, G, H> f,
+                                                                           final A a, final B b, final C c) {
     return curry(f).f(a).f(b).f(c);
   }
 
@@ -663,7 +670,8 @@ public final class Function {
    * @param d An argument to the curried function.
    * @return A curried form of the given function.
    */
-  public static <A, B, C, D, E, F$, G, H> F<E, F<F$, F<G, H>>> curry(final F7<A, B, C, D, E, F$, G, H> f, final A a, final B b, final C c, final D d) {
+  public static <A, B, C, D, E, F$, G, H> F<E, F<F$, F<G, H>>> curry(final F7<A, B, C, D, E, F$, G, H> f, final A a,
+                                                                     final B b, final C c, final D d) {
     return curry(f).f(a).f(b).f(c).f(d);
   }
 
@@ -678,7 +686,8 @@ public final class Function {
    * @param e An argument to the curried function.
    * @return A curried form of the given function.
    */
-  public static <A, B, C, D, E, F$, G, H> F<F$, F<G, H>> curry(final F7<A, B, C, D, E, F$, G, H> f, final A a, final B b, final C c, final D d, final E e) {
+  public static <A, B, C, D, E, F$, G, H> F<F$, F<G, H>> curry(final F7<A, B, C, D, E, F$, G, H> f, final A a,
+                                                               final B b, final C c, final D d, final E e) {
     return curry(f).f(a).f(b).f(c).f(d).f(e);
   }
 
@@ -694,7 +703,8 @@ public final class Function {
    * @param f$ An argument to the curried function.
    * @return A curried form of the given function.
    */
-  public static <A, B, C, D, E, F$, G, H> F<G, H> curry(final F7<A, B, C, D, E, F$, G, H> f, final A a, final B b, final C c, final D d, final E e, final F$ f$) {
+  public static <A, B, C, D, E, F$, G, H> F<G, H> curry(final F7<A, B, C, D, E, F$, G, H> f, final A a, final B b,
+                                                        final C c, final D d, final E e, final F$ f$) {
     return curry(f).f(a).f(b).f(c).f(d).f(e).f(f$);
   }
 
@@ -717,7 +727,8 @@ public final class Function {
    * @param f The function to uncurry.
    * @return An uncurried function.
    */
-  public static <A, B, C, D, E, F$, G, H> F7<A, B, C, D, E, F$, G, H> uncurryF7(final F<A, F<B, F<C, F<D, F<E, F<F$, F<G, H>>>>>>> f) {
+  public static <A, B, C, D, E, F$, G, H> F7<A, B, C, D, E, F$, G, H> uncurryF7(
+      final F<A, F<B, F<C, F<D, F<E, F<F$, F<G, H>>>>>>> f) {
     return new F7<A, B, C, D, E, F$, G, H>() {
       public H f(final A a, final B b, final C c, final D d, final E e, final F$ f$, final G g) {
         return f.f(a).f(b).f(c).f(d).f(e).f(f$).f(g);
@@ -731,7 +742,8 @@ public final class Function {
    * @param f The function to curry.
    * @return A curried form of the given function.
    */
-  public static <A, B, C, D, E, F$, G, H, I> F<A, F<B, F<C, F<D, F<E, F<F$, F<G, F<H, I>>>>>>>> curry(final F8<A, B, C, D, E, F$, G, H, I> f) {
+  public static <A, B, C, D, E, F$, G, H, I> F<A, F<B, F<C, F<D, F<E, F<F$, F<G, F<H, I>>>>>>>> curry(
+      final F8<A, B, C, D, E, F$, G, H, I> f) {
     return new F<A, F<B, F<C, F<D, F<E, F<F$, F<G, F<H, I>>>>>>>>() {
       public F<B, F<C, F<D, F<E, F<F$, F<G, F<H, I>>>>>>> f(final A a) {
         return new F<B, F<C, F<D, F<E, F<F$, F<G, F<H, I>>>>>>>() {
@@ -774,7 +786,8 @@ public final class Function {
    * @param a An argument to the curried function.
    * @return A curried form of the given function.
    */
-  public static <A, B, C, D, E, F$, G, H, I> F<B, F<C, F<D, F<E, F<F$, F<G, F<H, I>>>>>>> curry(final F8<A, B, C, D, E, F$, G, H, I> f, final A a) {
+  public static <A, B, C, D, E, F$, G, H, I> F<B, F<C, F<D, F<E, F<F$, F<G, F<H, I>>>>>>> curry(
+      final F8<A, B, C, D, E, F$, G, H, I> f, final A a) {
     return curry(f).f(a);
   }
 
@@ -786,7 +799,8 @@ public final class Function {
    * @param b An argument to the curried function.
    * @return A curried form of the given function.
    */
-  public static <A, B, C, D, E, F$, G, H, I> F<C, F<D, F<E, F<F$, F<G, F<H, I>>>>>> curry(final F8<A, B, C, D, E, F$, G, H, I> f, final A a, final B b) {
+  public static <A, B, C, D, E, F$, G, H, I> F<C, F<D, F<E, F<F$, F<G, F<H, I>>>>>> curry(
+      final F8<A, B, C, D, E, F$, G, H, I> f, final A a, final B b) {
     return curry(f).f(a).f(b);
   }
 
@@ -799,7 +813,8 @@ public final class Function {
    * @param c An argument to the curried function.
    * @return A curried form of the given function.
    */
-  public static <A, B, C, D, E, F$, G, H, I> F<D, F<E, F<F$, F<G, F<H, I>>>>> curry(final F8<A, B, C, D, E, F$, G, H, I> f, final A a, final B b, final C c) {
+  public static <A, B, C, D, E, F$, G, H, I> F<D, F<E, F<F$, F<G, F<H, I>>>>> curry(
+      final F8<A, B, C, D, E, F$, G, H, I> f, final A a, final B b, final C c) {
     return curry(f).f(a).f(b).f(c);
   }
 
@@ -813,7 +828,9 @@ public final class Function {
    * @param d An argument to the curried function.
    * @return A curried form of the given function.
    */
-  public static <A, B, C, D, E, F$, G, H, I> F<E, F<F$, F<G, F<H, I>>>> curry(final F8<A, B, C, D, E, F$, G, H, I> f, final A a, final B b, final C c, final D d) {
+  public static <A, B, C, D, E, F$, G, H, I> F<E, F<F$, F<G, F<H, I>>>> curry(final F8<A, B, C, D, E, F$, G, H, I> f,
+                                                                              final A a, final B b, final C c,
+                                                                              final D d) {
     return curry(f).f(a).f(b).f(c).f(d);
   }
 
@@ -828,7 +845,9 @@ public final class Function {
    * @param e An argument to the curried function.
    * @return A curried form of the given function.
    */
-  public static <A, B, C, D, E, F$, G, H, I> F<F$, F<G, F<H, I>>> curry(final F8<A, B, C, D, E, F$, G, H, I> f, final A a, final B b, final C c, final D d, final E e) {
+  public static <A, B, C, D, E, F$, G, H, I> F<F$, F<G, F<H, I>>> curry(final F8<A, B, C, D, E, F$, G, H, I> f,
+                                                                        final A a, final B b, final C c, final D d,
+                                                                        final E e) {
     return curry(f).f(a).f(b).f(c).f(d).f(e);
   }
 
@@ -844,7 +863,9 @@ public final class Function {
    * @param f$ An argument to the curried function.
    * @return A curried form of the given function.
    */
-  public static <A, B, C, D, E, F$, G, H, I> F<G, F<H, I>> curry(final F8<A, B, C, D, E, F$, G, H, I> f, final A a, final B b, final C c, final D d, final E e, final F$ f$) {
+  public static <A, B, C, D, E, F$, G, H, I> F<G, F<H, I>> curry(final F8<A, B, C, D, E, F$, G, H, I> f, final A a,
+                                                                 final B b, final C c, final D d, final E e,
+                                                                 final F$ f$) {
     return curry(f).f(a).f(b).f(c).f(d).f(e).f(f$);
   }
 
@@ -861,7 +882,8 @@ public final class Function {
    * @param g  An argument to the curried function.
    * @return A curried form of the given function.
    */
-  public static <A, B, C, D, E, F$, G, H, I> F<H, I> curry(final F8<A, B, C, D, E, F$, G, H, I> f, final A a, final B b, final C c, final D d, final E e, final F$ f$, final G g) {
+  public static <A, B, C, D, E, F$, G, H, I> F<H, I> curry(final F8<A, B, C, D, E, F$, G, H, I> f, final A a, final B b,
+                                                           final C c, final D d, final E e, final F$ f$, final G g) {
     return curry(f).f(a).f(b).f(c).f(d).f(e).f(f$).f(g);
   }
 
@@ -884,7 +906,8 @@ public final class Function {
    * @param f The function to uncurry.
    * @return An uncurried function.
    */
-  public static <A, B, C, D, E, F$, G, H, I> F8<A, B, C, D, E, F$, G, H, I> uncurryF8(final F<A, F<B, F<C, F<D, F<E, F<F$, F<G, F<H, I>>>>>>>> f) {
+  public static <A, B, C, D, E, F$, G, H, I> F8<A, B, C, D, E, F$, G, H, I> uncurryF8(
+      final F<A, F<B, F<C, F<D, F<E, F<F$, F<G, F<H, I>>>>>>>> f) {
     return new F8<A, B, C, D, E, F$, G, H, I>() {
       public I f(final A a, final B b, final C c, final D d, final E e, final F$ f$, final G g, final H h) {
         return f.f(a).f(b).f(c).f(d).f(e).f(f$).f(g).f(h);

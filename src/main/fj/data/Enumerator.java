@@ -43,7 +43,8 @@ public final class Enumerator<A> {
   private final Ord<A> order;
   private final F<A, F<Long, Option<A>>> plus;
 
-  private Enumerator(final F<A, Option<A>> successor, final F<A, Option<A>> predecessor, final Option<A> max, final Option<A> min, final Ord<A> order, final F<A, F<Long, Option<A>>> plus) {
+  private Enumerator(final F<A, Option<A>> successor, final F<A, Option<A>> predecessor, final Option<A> max,
+                     final Option<A> min, final Ord<A> order, final F<A, F<Long, Option<A>>> plus) {
     this.successor = successor;
     this.predecessor = predecessor;
     this.max = max;
@@ -221,7 +222,9 @@ public final class Enumerator<A> {
    *                    enhancement for certain types.
    * @return An enumerator with the given values.
    */
-  public static <A> Enumerator<A> enumerator(final F<A, Option<A>> successor, final F<A, Option<A>> predecessor, final Option<A> max, final Option<A> min, final Ord<A> order, final F<A, F<Long, Option<A>>> plus) {
+  public static <A> Enumerator<A> enumerator(final F<A, Option<A>> successor, final F<A, Option<A>> predecessor,
+                                             final Option<A> max, final Option<A> min, final Ord<A> order,
+                                             final F<A, F<Long, Option<A>>> plus) {
     return new Enumerator<A>(successor, predecessor, max, min, order, plus);
   }
 
@@ -236,7 +239,8 @@ public final class Enumerator<A> {
    * @param order       The ordering for the type.
    * @return An enumerator with the given values.
    */
-  public static <A> Enumerator<A> enumerator(final F<A, Option<A>> successor, final F<A, Option<A>> predecessor, final Option<A> max, final Option<A> min, final Ord<A> order) {
+  public static <A> Enumerator<A> enumerator(final F<A, Option<A>> successor, final F<A, Option<A>> predecessor,
+                                             final Option<A> max, final Option<A> min, final Ord<A> order) {
     return new Enumerator<A>(successor, predecessor, max, min, order, curry(new F2<A, Long, Option<A>>() {
       public Option<A> f(final A a, final Long l) {
         if (l == 0L)

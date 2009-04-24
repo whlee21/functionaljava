@@ -11,12 +11,12 @@ import java.util.Iterator;
 /**
  * A mutable hash set that guarantees uniqueness of its elements providing O(1) lookup.
  *
- * @see HashMap
  * @version %build.number%<br>
  *          <ul>
  *          <li>$LastChangedRevision$</li>
  *          <li>$LastChangedDate$</li>
  *          </ul>
+ * @see HashMap
  */
 public final class HashSet<A> implements Iterable<A> {
   /**
@@ -43,8 +43,8 @@ public final class HashSet<A> implements Iterable<A> {
   /**
    * Construct a hash set with the given equality and hashing strategy.
    *
-   * @param e The equality strategy.
-   * @param h The hashing strategy.
+   * @param e               The equality strategy.
+   * @param h               The hashing strategy.
    * @param initialCapacity The initial capacity.
    */
   public HashSet(final Equal<A> e, final Hash<A> h, final int initialCapacity) {
@@ -54,10 +54,10 @@ public final class HashSet<A> implements Iterable<A> {
   /**
    * Construct a hash set with the given equality and hashing strategy.
    *
-   * @param e The equality strategy.
-   * @param h The hashing strategy.
+   * @param e               The equality strategy.
+   * @param h               The hashing strategy.
    * @param initialCapacity The initial capacity.
-   * @param loadFactor The load factor.
+   * @param loadFactor      The load factor.
    */
   public HashSet(final Equal<A> e, final Hash<A> h, final int initialCapacity, final float loadFactor) {
     m = new HashMap<A, Unit>(e, h, initialCapacity, loadFactor);
@@ -93,7 +93,7 @@ public final class HashSet<A> implements Iterable<A> {
   public boolean contains(final A a) {
     return m.contains(a);
   }
-  
+
   /**
    * Insert the given element into this hash set.
    *
@@ -133,7 +133,7 @@ public final class HashSet<A> implements Iterable<A> {
    *
    * @param a The element to delete from this hash set.
    * @return <code>true</code> if this hash set contained the given element prior to deletion, <code>false</code>
-   * otherwise.
+   *         otherwise.
    */
   public boolean delete(final A a) {
     return m.getDelete(a).isSome();

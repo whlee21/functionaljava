@@ -32,7 +32,7 @@ public final class Bottom {
    *
    * @param s The message to fail with.
    * @return An error to represent undefinedness in a computation with early failure using the given
-   * message.
+   *         message.
    */
   public static Error error(final String s) {
     throw new Error(s);
@@ -41,7 +41,7 @@ public final class Bottom {
   /**
    * Represents a deconstruction failure that was non-exhaustive.
    *
-   * @param a The value being deconstructed.
+   * @param a  The value being deconstructed.
    * @param sa The rendering for the value being deconstructed.
    * @return A deconstruction failure that was non-exhaustive.
    */

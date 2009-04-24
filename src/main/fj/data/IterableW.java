@@ -11,7 +11,9 @@ import fj.pre.Equal;
 import static fj.Function.curry;
 import static fj.Function.identity;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.ListIterator;
 
 /**
  * A wrapper for Iterable that equips it with some useful functions.
@@ -151,15 +153,16 @@ public final class IterableW<A> implements Iterable<A> {
     final Stream<T> ts = iterableStream(as);
     return ts.isEmpty() ? iterable(wrap(Option.<A>none())) : wrap(ts.head()).bind(new F<A, Iterable<IterableW<A>>>() {
       public Iterable<IterableW<A>> f(final A a) {
-        return sequence(ts.tail().map(IterableW.<T, Stream<T>>wrap())._1()).bind(new F<IterableW<A>, Iterable<IterableW<A>>>() {
-          public Iterable<IterableW<A>> f(final IterableW<A> as) {
-            return iterable(wrap(Stream.cons(a, new P1<Stream<A>>() {
-              public Stream<A> _1() {
-                return iterableStream(as);
+        return sequence(ts.tail().map(IterableW.<T, Stream<T>>wrap())._1())
+            .bind(new F<IterableW<A>, Iterable<IterableW<A>>>() {
+              public Iterable<IterableW<A>> f(final IterableW<A> as) {
+                return iterable(wrap(Stream.cons(a, new P1<Stream<A>>() {
+                  public Stream<A> _1() {
+                    return iterableStream(as);
+                  }
+                })));
               }
-            })));
-          }
-        });
+            });
       }
     });
   }

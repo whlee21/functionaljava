@@ -578,14 +578,15 @@ public final class Array<A> implements Iterable<A> {
 
   /**
    * Transforms an array of pairs into an array of first components and an array of second components.
+   *
    * @param xs The array of pairs to transform.
    * @return An array of first components and an array of second components.
    */
   @SuppressWarnings({"unchecked"})
   public static <A, B> P2<Array<A>, Array<B>> unzip(final Array<P2<A, B>> xs) {
     final int len = xs.length();
-    final Array<A> aa = new Array<A>((A[])new Object[len]);
-    final Array<B> ab = new Array<B>((B[])new Object[len]);
+    final Array<A> aa = new Array<A>((A[]) new Object[len]);
+    final Array<B> ab = new Array<B>((B[]) new Object[len]);
     for (int i = len - 1; i >= 0; i--) {
       final P2<A, B> p = xs.get(i);
       aa.set(i, p._1());

@@ -27,7 +27,7 @@ public final class Arg<T> {
   /**
    * Construct a property argument with the given value and number of shrinks.
    *
-   * @param value The value to construct an argument with.
+   * @param value   The value to construct an argument with.
    * @param shrinks The number of shrinks to construct an argument with.
    * @return A new argument.
    */
@@ -46,7 +46,7 @@ public final class Arg<T> {
 
   /**
    * Returns the argument's number of shrinks following falsification.
-   * 
+   *
    * @return The argument's number of shrinks following falsification.
    */
   public int shrinks() {
@@ -58,7 +58,8 @@ public final class Arg<T> {
    */
   public static final Show<Arg<?>> argShow = showS(new F<Arg<?>, String>() {
     public String f(final Arg<?> arg) {
-      return anyShow().showS(arg.value) + (arg.shrinks > 0 ? " (" + arg.shrinks + " shrink" + (arg.shrinks == 1 ? "" : 's') + ')' : "");
+      return anyShow().showS(arg.value) +
+          (arg.shrinks > 0 ? " (" + arg.shrinks + " shrink" + (arg.shrinks == 1 ? "" : 's') + ')' : "");
     }
   });
 }

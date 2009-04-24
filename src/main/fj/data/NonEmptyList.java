@@ -66,7 +66,7 @@ public final class NonEmptyList<A> implements Iterable<A> {
     b.snoc(as.head);
     b.append(as.tail);
     final List<A> bb = b.toList();
-    return nel(head, bb); 
+    return nel(head, bb);
   }
 
   /**
@@ -174,7 +174,7 @@ public final class NonEmptyList<A> implements Iterable<A> {
    */
   public static <A> Option<NonEmptyList<A>> fromList(final List<A> as) {
     return as.isEmpty() ?
-            Option.<NonEmptyList<A>>none() :
-            some(nel(as.head(), as.tail()));
+        Option.<NonEmptyList<A>>none() :
+        some(nel(as.head(), as.tail()));
   }
 }

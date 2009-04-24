@@ -16,6 +16,7 @@ import fj.Unit;
 import static fj.Unit.unit;
 import static fj.Bottom.error;
 import fj.pre.Semigroup;
+
 import java.util.Iterator;
 
 /**
@@ -60,7 +61,7 @@ public final class Validation<E, T> implements Iterable<T> {
    * @return the failing value, or throws an error if there is no failing value.
    */
   public E fail() {
-    if(isFail())
+    if (isFail())
       return e.left().value();
     else
       throw error("Validation: fail on success value");
@@ -72,7 +73,7 @@ public final class Validation<E, T> implements Iterable<T> {
    * @return the success value, or throws an error if there is no success value.
    */
   public T success() {
-    if(isSuccess())
+    if (isSuccess())
       return e.right().value();
     else
       throw error("Validation: success on fail value");
@@ -81,7 +82,7 @@ public final class Validation<E, T> implements Iterable<T> {
   /**
    * The catamorphism for validation. Folds over this validation breaking into left or right.
    *
-   * @param fail The function to call if this failed.
+   * @param fail    The function to call if this failed.
    * @param success The function to call if this succeeded.
    * @return The reduced value.
    */
@@ -111,7 +112,7 @@ public final class Validation<E, T> implements Iterable<T> {
    * Returns the success value or fails with the given error message.
    *
    * @param err The error message to fail with.
-   * @return  The success value.
+   * @return The success value.
    */
   public T successE(final P1<String> err) {
     return e.right().valueE(err);
@@ -121,7 +122,7 @@ public final class Validation<E, T> implements Iterable<T> {
    * Returns the success value or fails with the given error message.
    *
    * @param err The error message to fail with.
-   * @return  The success value.
+   * @return The success value.
    */
   public T successE(final String err) {
     return e.right().valueE(p(err));
@@ -154,7 +155,7 @@ public final class Validation<E, T> implements Iterable<T> {
    * @return The success value or the application of the given function to the failing value.
    */
   public T on(final F<E, T> f) {
-    return e.right().on(f);    
+    return e.right().on(f);
   }
 
   /**
@@ -185,8 +186,8 @@ public final class Validation<E, T> implements Iterable<T> {
   @SuppressWarnings({"unchecked"})
   public <A> Validation<E, A> map(final F<T, A> f) {
     return isFail() ?
-            Validation.<E, A>fail(fail()) :
-            Validation.<E, A>success(f.f(success()));
+        Validation.<E, A>fail(fail()) :
+        Validation.<E, A>success(f.f(success()));
   }
 
   /**
@@ -216,7 +217,7 @@ public final class Validation<E, T> implements Iterable<T> {
    *
    * @param f The predicate function to test on this success value.
    * @return <code>None</code> if this is a failure or if the given predicate <code>p</code> does not hold for the
-   * success value, otherwise, returns a success in <code>Some</code>.
+   *         success value, otherwise, returns a success in <code>Some</code>.
    */
   public <A> Option<Validation<A, T>> filter(final F<T, Boolean> f) {
     return e.right().<A>filter(f).map(Validation.<A, T>validation());
@@ -242,19 +243,19 @@ public final class Validation<E, T> implements Iterable<T> {
    *
    * @param f The predicate function to test on this success value.
    * @return <code>true</code> if this is a failure or returns the result of the application of the given
-   * function to the success value.
+   *         function to the success value.
    */
   public boolean forall(final F<T, Boolean> f) {
     return e.right().forall(f);
   }
- 
+
   /**
    * Returns <code>false</code> if this is a failure or returns the result of the application of the given
    * function to the success value.
    *
    * @param f The predicate function to test on this success value.
    * @return <code>false</code> if this is a failure or returns the result of the application of the given
-   * function to the success value.
+   *         function to the success value.
    */
   public boolean exists(final F<T, Boolean> f) {
     return e.right().exists(f);
@@ -315,28 +316,28 @@ public final class Validation<E, T> implements Iterable<T> {
    * @param s The semigroup to accumulate errors with if
    * @param v The validating function to apply.
    * @return A failing validation if this or the given validation failed (with errors accumulated if both) or a
-   * succeeding validation if both succeeded.
+   *         succeeding validation if both succeeded.
    */
   @SuppressWarnings({"unchecked"})
   public <A> Validation<E, A> accumapply(final Semigroup<E> s, final Validation<E, F<T, A>> v) {
     return isFail() ?
-            Validation.<E, A>fail(v.isFail() ?
-                    s.sum(v.fail(), fail()) :
-                    fail()) :
-            v.isFail() ?
-                    Validation.<E, A>fail(v.fail()) :
-                    Validation.<E, A>success(v.success().f(success()));
+        Validation.<E, A>fail(v.isFail() ?
+            s.sum(v.fail(), fail()) :
+            fail()) :
+        v.isFail() ?
+            Validation.<E, A>fail(v.fail()) :
+            Validation.<E, A>success(v.success().f(success()));
   }
 
   /**
    * Accumulates errors on the failing side of this or any given validation if one or more are encountered, or applies
    * the given function if all succeeded and returns that value on the successful side.
    *
-   * @param s The semigroup to accumulate errors with if one or more validations fail.
+   * @param s  The semigroup to accumulate errors with if one or more validations fail.
    * @param va The second validation to accumulate errors with if it failed.
-   * @param f The function to apply if all validations have succeeded.
+   * @param f  The function to apply if all validations have succeeded.
    * @return A succeeding validation if all validations succeeded, or a failing validation with errors accumulated if
-   * one or more failed.
+   *         one or more failed.
    */
   public <A, B> Validation<E, B> accumulate(final Semigroup<E> s, final Validation<E, A> va, final F<T, F<A, B>> f) {
     return va.accumapply(s, map(f));
@@ -346,11 +347,11 @@ public final class Validation<E, T> implements Iterable<T> {
    * Accumulates errors on the failing side of this or any given validation if one or more are encountered, or applies
    * the given function if all succeeded and returns that value on the successful side.
    *
-   * @param s The semigroup to accumulate errors with if one or more validations fail.
+   * @param s  The semigroup to accumulate errors with if one or more validations fail.
    * @param va The second validation to accumulate errors with if it failed.
-   * @param f The function to apply if all validations have succeeded.
+   * @param f  The function to apply if all validations have succeeded.
    * @return A succeeding validation if all validations succeeded, or a failing validation with errors accumulated if
-   * one or more failed.
+   *         one or more failed.
    */
   public <A, B> Validation<E, B> accumulate(final Semigroup<E> s, final Validation<E, A> va, final F2<T, A, B> f) {
     return va.accumapply(s, map(curry(f)));
@@ -359,10 +360,10 @@ public final class Validation<E, T> implements Iterable<T> {
   /**
    * Accumulates errors anonymously.
    *
-   * @param s The semigroup to accumulate errors with if one or more validations fail.
+   * @param s  The semigroup to accumulate errors with if one or more validations fail.
    * @param va The second validation to accumulate errors with if it failed.
    * @return A <code>Some</code> if one or more validations failed (accumulated with the semigroup), otherwise,
-   * <code>None</code>.
+   *         <code>None</code>.
    */
   public <A> Option<E> accumulate(final Semigroup<E> s, final Validation<E, A> va) {
     return accumulate(s, va, new F2<T, A, Unit>() {
@@ -376,14 +377,15 @@ public final class Validation<E, T> implements Iterable<T> {
    * Accumulates errors on the failing side of this or any given validation if one or more are encountered, or applies
    * the given function if all succeeded and returns that value on the successful side.
    *
-   * @param s The semigroup to accumulate errors with if one or more validations fail.
+   * @param s  The semigroup to accumulate errors with if one or more validations fail.
    * @param va The second validation to accumulate errors with if it failed.
    * @param vb The third validation to accumulate errors with if it failed.
-   * @param f The function to apply if all validations have succeeded.
+   * @param f  The function to apply if all validations have succeeded.
    * @return A succeeding validation if all validations succeeded, or a failing validation with errors accumulated if
-   * one or more failed.
+   *         one or more failed.
    */
-  public <A, B, C> Validation<E, C> accumulate(final Semigroup<E> s, final Validation<E, A> va, final Validation<E, B> vb, final F<T, F<A, F<B, C>>> f) {
+  public <A, B, C> Validation<E, C> accumulate(final Semigroup<E> s, final Validation<E, A> va,
+                                               final Validation<E, B> vb, final F<T, F<A, F<B, C>>> f) {
     return vb.accumapply(s, accumulate(s, va, f));
   }
 
@@ -391,25 +393,26 @@ public final class Validation<E, T> implements Iterable<T> {
    * Accumulates errors on the failing side of this or any given validation if one or more are encountered, or applies
    * the given function if all succeeded and returns that value on the successful side.
    *
-   * @param s The semigroup to accumulate errors with if one or more validations fail.
+   * @param s  The semigroup to accumulate errors with if one or more validations fail.
    * @param va The second validation to accumulate errors with if it failed.
    * @param vb The third validation to accumulate errors with if it failed.
-   * @param f The function to apply if all validations have succeeded.
+   * @param f  The function to apply if all validations have succeeded.
    * @return A succeeding validation if all validations succeeded, or a failing validation with errors accumulated if
-   * one or more failed.
+   *         one or more failed.
    */
-  public <A, B, C> Validation<E, C> accumulate(final Semigroup<E> s, final Validation<E, A> va, final Validation<E, B> vb, final F3<T, A, B, C> f) {
+  public <A, B, C> Validation<E, C> accumulate(final Semigroup<E> s, final Validation<E, A> va,
+                                               final Validation<E, B> vb, final F3<T, A, B, C> f) {
     return vb.accumapply(s, accumulate(s, va, curry(f)));
   }
 
   /**
    * Accumulates errors anonymously.
    *
-   * @param s The semigroup to accumulate errors with if one or more validations fail.
+   * @param s  The semigroup to accumulate errors with if one or more validations fail.
    * @param va The second validation to accumulate errors with if it failed.
    * @param vb The third validation to accumulate errors with if it failed.
    * @return A <code>Some</code> if one or more validations failed (accumulated with the semigroup), otherwise,
-   * <code>None</code>.
+   *         <code>None</code>.
    */
   public <A, B> Option<E> accumulate(final Semigroup<E> s, final Validation<E, A> va, final Validation<E, B> vb) {
     return accumulate(s, va, vb, new F3<T, A, B, Unit>() {
@@ -423,15 +426,17 @@ public final class Validation<E, T> implements Iterable<T> {
    * Accumulates errors on the failing side of this or any given validation if one or more are encountered, or applies
    * the given function if all succeeded and returns that value on the successful side.
    *
-   * @param s The semigroup to accumulate errors with if one or more validations fail.
+   * @param s  The semigroup to accumulate errors with if one or more validations fail.
    * @param va The second validation to accumulate errors with if it failed.
    * @param vb The third validation to accumulate errors with if it failed.
    * @param vc The fourth validation to accumulate errors with if it failed.
-   * @param f The function to apply if all validations have succeeded.
+   * @param f  The function to apply if all validations have succeeded.
    * @return A succeeding validation if all validations succeeded, or a failing validation with errors accumulated if
-   * one or more failed.
+   *         one or more failed.
    */
-  public <A, B, C, D> Validation<E, D> accumulate(final Semigroup<E> s, final Validation<E, A> va, final Validation<E, B> vb, final Validation<E, C> vc, final F<T, F<A, F<B, F<C, D>>>> f) {
+  public <A, B, C, D> Validation<E, D> accumulate(final Semigroup<E> s, final Validation<E, A> va,
+                                                  final Validation<E, B> vb, final Validation<E, C> vc,
+                                                  final F<T, F<A, F<B, F<C, D>>>> f) {
     return vc.accumapply(s, accumulate(s, va, vb, f));
   }
 
@@ -439,29 +444,32 @@ public final class Validation<E, T> implements Iterable<T> {
    * Accumulates errors on the failing side of this or any given validation if one or more are encountered, or applies
    * the given function if all succeeded and returns that value on the successful side.
    *
-   * @param s The semigroup to accumulate errors with if one or more validations fail.
+   * @param s  The semigroup to accumulate errors with if one or more validations fail.
    * @param va The second validation to accumulate errors with if it failed.
    * @param vb The third validation to accumulate errors with if it failed.
    * @param vc The fourth validation to accumulate errors with if it failed.
-   * @param f The function to apply if all validations have succeeded.
+   * @param f  The function to apply if all validations have succeeded.
    * @return A succeeding validation if all validations succeeded, or a failing validation with errors accumulated if
-   * one or more failed.
+   *         one or more failed.
    */
-  public <A, B, C, D> Validation<E, D> accumulate(final Semigroup<E> s, final Validation<E, A> va, final Validation<E, B> vb, final Validation<E, C> vc, final F4<T, A, B, C, D> f) {
+  public <A, B, C, D> Validation<E, D> accumulate(final Semigroup<E> s, final Validation<E, A> va,
+                                                  final Validation<E, B> vb, final Validation<E, C> vc,
+                                                  final F4<T, A, B, C, D> f) {
     return vc.accumapply(s, accumulate(s, va, vb, curry(f)));
   }
 
   /**
    * Accumulates errors anonymously.
    *
-   * @param s The semigroup to accumulate errors with if one or more validations fail.
+   * @param s  The semigroup to accumulate errors with if one or more validations fail.
    * @param va The second validation to accumulate errors with if it failed.
    * @param vb The third validation to accumulate errors with if it failed.
    * @param vc The fourth validation to accumulate errors with if it failed.
    * @return A <code>Some</code> if one or more validations failed (accumulated with the semigroup), otherwise,
-   * <code>None</code>.
+   *         <code>None</code>.
    */
-  public <A, B, C> Option<E> accumulate(final Semigroup<E> s, final Validation<E, A> va, final Validation<E, B> vb, final Validation<E, C> vc) {
+  public <A, B, C> Option<E> accumulate(final Semigroup<E> s, final Validation<E, A> va, final Validation<E, B> vb,
+                                        final Validation<E, C> vc) {
     return accumulate(s, va, vb, vc, new F4<T, A, B, C, Unit>() {
       public Unit f(final T t, final A a, final B b, final C c) {
         return unit();
@@ -473,16 +481,19 @@ public final class Validation<E, T> implements Iterable<T> {
    * Accumulates errors on the failing side of this or any given validation if one or more are encountered, or applies
    * the given function if all succeeded and returns that value on the successful side.
    *
-   * @param s The semigroup to accumulate errors with if one or more validations fail.
+   * @param s  The semigroup to accumulate errors with if one or more validations fail.
    * @param va The second validation to accumulate errors with if it failed.
    * @param vb The third validation to accumulate errors with if it failed.
    * @param vc The fourth validation to accumulate errors with if it failed.
    * @param vd The fifth validation to accumulate errors with if it failed.
-   * @param f The function to apply if all validations have succeeded.
+   * @param f  The function to apply if all validations have succeeded.
    * @return A succeeding validation if all validations succeeded, or a failing validation with errors accumulated if
-   * one or more failed.
+   *         one or more failed.
    */
-  public <A, B, C, D, E$> Validation<E, E$> accumulate(final Semigroup<E> s, final Validation<E, A> va, final Validation<E, B> vb, final Validation<E, C> vc, final Validation<E, D> vd, final F<T, F<A, F<B, F<C, F<D, E$>>>>> f) {
+  public <A, B, C, D, E$> Validation<E, E$> accumulate(final Semigroup<E> s, final Validation<E, A> va,
+                                                       final Validation<E, B> vb, final Validation<E, C> vc,
+                                                       final Validation<E, D> vd,
+                                                       final F<T, F<A, F<B, F<C, F<D, E$>>>>> f) {
     return vd.accumapply(s, accumulate(s, va, vb, vc, f));
   }
 
@@ -490,31 +501,34 @@ public final class Validation<E, T> implements Iterable<T> {
    * Accumulates errors on the failing side of this or any given validation if one or more are encountered, or applies
    * the given function if all succeeded and returns that value on the successful side.
    *
-   * @param s The semigroup to accumulate errors with if one or more validations fail.
+   * @param s  The semigroup to accumulate errors with if one or more validations fail.
    * @param va The second validation to accumulate errors with if it failed.
    * @param vb The third validation to accumulate errors with if it failed.
    * @param vc The fourth validation to accumulate errors with if it failed.
    * @param vd The fifth validation to accumulate errors with if it failed.
-   * @param f The function to apply if all validations have succeeded.
+   * @param f  The function to apply if all validations have succeeded.
    * @return A succeeding validation if all validations succeeded, or a failing validation with errors accumulated if
-   * one or more failed.
+   *         one or more failed.
    */
-  public <A, B, C, D, E$> Validation<E, E$> accumulate(final Semigroup<E> s, final Validation<E, A> va, final Validation<E, B> vb, final Validation<E, C> vc, final Validation<E, D> vd, final F5<T, A, B, C, D, E$> f) {
+  public <A, B, C, D, E$> Validation<E, E$> accumulate(final Semigroup<E> s, final Validation<E, A> va,
+                                                       final Validation<E, B> vb, final Validation<E, C> vc,
+                                                       final Validation<E, D> vd, final F5<T, A, B, C, D, E$> f) {
     return vd.accumapply(s, accumulate(s, va, vb, vc, curry(f)));
   }
 
   /**
    * Accumulates errors anonymously.
    *
-   * @param s The semigroup to accumulate errors with if one or more validations fail.
+   * @param s  The semigroup to accumulate errors with if one or more validations fail.
    * @param va The second validation to accumulate errors with if it failed.
    * @param vb The third validation to accumulate errors with if it failed.
    * @param vc The fourth validation to accumulate errors with if it failed.
    * @param vd The fifth validation to accumulate errors with if it failed.
    * @return A <code>Some</code> if one or more validations failed (accumulated with the semigroup), otherwise,
-   * <code>None</code>.
+   *         <code>None</code>.
    */
-  public <A, B, C, D> Option<E> accumulate(final Semigroup<E> s, final Validation<E, A> va, final Validation<E, B> vb, final Validation<E, C> vc, final Validation<E, D> vd) {
+  public <A, B, C, D> Option<E> accumulate(final Semigroup<E> s, final Validation<E, A> va, final Validation<E, B> vb,
+                                           final Validation<E, C> vc, final Validation<E, D> vd) {
     return accumulate(s, va, vb, vc, vd, new F5<T, A, B, C, D, Unit>() {
       public Unit f(final T t, final A a, final B b, final C c, final D d) {
         return unit();
@@ -526,17 +540,20 @@ public final class Validation<E, T> implements Iterable<T> {
    * Accumulates errors on the failing side of this or any given validation if one or more are encountered, or applies
    * the given function if all succeeded and returns that value on the successful side.
    *
-   * @param s The semigroup to accumulate errors with if one or more validations fail.
+   * @param s  The semigroup to accumulate errors with if one or more validations fail.
    * @param va The second validation to accumulate errors with if it failed.
    * @param vb The third validation to accumulate errors with if it failed.
    * @param vc The fourth validation to accumulate errors with if it failed.
    * @param vd The fifth validation to accumulate errors with if it failed.
    * @param ve The sixth validation to accumulate errors with if it failed.
-   * @param f The function to apply if all validations have succeeded.
+   * @param f  The function to apply if all validations have succeeded.
    * @return A succeeding validation if all validations succeeded, or a failing validation with errors accumulated if
-   * one or more failed.
+   *         one or more failed.
    */
-  public <A, B, C, D, E$, F$> Validation<E, F$> accumulate(final Semigroup<E> s, final Validation<E, A> va, final Validation<E, B> vb, final Validation<E, C> vc, final Validation<E, D> vd, final Validation<E, E$> ve, final F<T, F<A, F<B, F<C, F<D, F<E$, F$>>>>>> f) {
+  public <A, B, C, D, E$, F$> Validation<E, F$> accumulate(final Semigroup<E> s, final Validation<E, A> va,
+                                                           final Validation<E, B> vb, final Validation<E, C> vc,
+                                                           final Validation<E, D> vd, final Validation<E, E$> ve,
+                                                           final F<T, F<A, F<B, F<C, F<D, F<E$, F$>>>>>> f) {
     return ve.accumapply(s, accumulate(s, va, vb, vc, vd, f));
   }
 
@@ -544,33 +561,38 @@ public final class Validation<E, T> implements Iterable<T> {
    * Accumulates errors on the failing side of this or any given validation if one or more are encountered, or applies
    * the given function if all succeeded and returns that value on the successful side.
    *
-   * @param s The semigroup to accumulate errors with if one or more validations fail.
+   * @param s  The semigroup to accumulate errors with if one or more validations fail.
    * @param va The second validation to accumulate errors with if it failed.
    * @param vb The third validation to accumulate errors with if it failed.
    * @param vc The fourth validation to accumulate errors with if it failed.
    * @param vd The fifth validation to accumulate errors with if it failed.
    * @param ve The sixth validation to accumulate errors with if it failed.
-   * @param f The function to apply if all validations have succeeded.
+   * @param f  The function to apply if all validations have succeeded.
    * @return A succeeding validation if all validations succeeded, or a failing validation with errors accumulated if
-   * one or more failed.
+   *         one or more failed.
    */
-  public <A, B, C, D, E$, F$> Validation<E, F$> accumulate(final Semigroup<E> s, final Validation<E, A> va, final Validation<E, B> vb, final Validation<E, C> vc, final Validation<E, D> vd, final Validation<E, E$> ve, final F6<T, A, B, C, D, E$, F$> f) {
+  public <A, B, C, D, E$, F$> Validation<E, F$> accumulate(final Semigroup<E> s, final Validation<E, A> va,
+                                                           final Validation<E, B> vb, final Validation<E, C> vc,
+                                                           final Validation<E, D> vd, final Validation<E, E$> ve,
+                                                           final F6<T, A, B, C, D, E$, F$> f) {
     return ve.accumapply(s, accumulate(s, va, vb, vc, vd, curry(f)));
   }
 
   /**
    * Accumulates errors anonymously.
    *
-   * @param s The semigroup to accumulate errors with if one or more validations fail.
+   * @param s  The semigroup to accumulate errors with if one or more validations fail.
    * @param va The second validation to accumulate errors with if it failed.
    * @param vb The third validation to accumulate errors with if it failed.
    * @param vc The fourth validation to accumulate errors with if it failed.
    * @param vd The fifth validation to accumulate errors with if it failed.
    * @param ve The sixth validation to accumulate errors with if it failed.
    * @return A <code>Some</code> if one or more validations failed (accumulated with the semigroup), otherwise,
-   * <code>None</code>.
+   *         <code>None</code>.
    */
-  public <A, B, C, D, E$> Option<E> accumulate(final Semigroup<E> s, final Validation<E, A> va, final Validation<E, B> vb, final Validation<E, C> vc, final Validation<E, D> vd, final Validation<E, E$> ve) {
+  public <A, B, C, D, E$> Option<E> accumulate(final Semigroup<E> s, final Validation<E, A> va,
+                                               final Validation<E, B> vb, final Validation<E, C> vc,
+                                               final Validation<E, D> vd, final Validation<E, E$> ve) {
     return accumulate(s, va, vb, vc, vd, ve, new F6<T, A, B, C, D, E$, Unit>() {
       public Unit f(final T t, final A a, final B b, final C c, final D d, final E$ e) {
         return unit();
@@ -582,18 +604,22 @@ public final class Validation<E, T> implements Iterable<T> {
    * Accumulates errors on the failing side of this or any given validation if one or more are encountered, or applies
    * the given function if all succeeded and returns that value on the successful side.
    *
-   * @param s The semigroup to accumulate errors with if one or more validations fail.
+   * @param s  The semigroup to accumulate errors with if one or more validations fail.
    * @param va The second validation to accumulate errors with if it failed.
    * @param vb The third validation to accumulate errors with if it failed.
    * @param vc The fourth validation to accumulate errors with if it failed.
    * @param vd The fifth validation to accumulate errors with if it failed.
    * @param ve The sixth validation to accumulate errors with if it failed.
    * @param vf The seventh validation to accumulate errors with if it failed.
-   * @param f The function to apply if all validations have succeeded.
+   * @param f  The function to apply if all validations have succeeded.
    * @return A succeeding validation if all validations succeeded, or a failing validation with errors accumulated if
-   * one or more failed.
+   *         one or more failed.
    */
-  public <A, B, C, D, E$, F$, G> Validation<E, G> accumulate(final Semigroup<E> s, final Validation<E, A> va, final Validation<E, B> vb, final Validation<E, C> vc, final Validation<E, D> vd, final Validation<E, E$> ve, final Validation<E, F$> vf, final F<T, F<A, F<B, F<C, F<D, F<E$, F<F$, G>>>>>>> f) {
+  public <A, B, C, D, E$, F$, G> Validation<E, G> accumulate(final Semigroup<E> s, final Validation<E, A> va,
+                                                             final Validation<E, B> vb, final Validation<E, C> vc,
+                                                             final Validation<E, D> vd, final Validation<E, E$> ve,
+                                                             final Validation<E, F$> vf,
+                                                             final F<T, F<A, F<B, F<C, F<D, F<E$, F<F$, G>>>>>>> f) {
     return vf.accumapply(s, accumulate(s, va, vb, vc, vd, ve, f));
   }
 
@@ -601,25 +627,29 @@ public final class Validation<E, T> implements Iterable<T> {
    * Accumulates errors on the failing side of this or any given validation if one or more are encountered, or applies
    * the given function if all succeeded and returns that value on the successful side.
    *
-   * @param s The semigroup to accumulate errors with if one or more validations fail.
+   * @param s  The semigroup to accumulate errors with if one or more validations fail.
    * @param va The second validation to accumulate errors with if it failed.
    * @param vb The third validation to accumulate errors with if it failed.
    * @param vc The fourth validation to accumulate errors with if it failed.
    * @param vd The fifth validation to accumulate errors with if it failed.
    * @param ve The sixth validation to accumulate errors with if it failed.
    * @param vf The seventh validation to accumulate errors with if it failed.
-   * @param f The function to apply if all validations have succeeded.
+   * @param f  The function to apply if all validations have succeeded.
    * @return A succeeding validation if all validations succeeded, or a failing validation with errors accumulated if
-   * one or more failed.
+   *         one or more failed.
    */
-  public <A, B, C, D, E$, F$, G> Validation<E, G> accumulate(final Semigroup<E> s, final Validation<E, A> va, final Validation<E, B> vb, final Validation<E, C> vc, final Validation<E, D> vd, final Validation<E, E$> ve, final Validation<E, F$> vf, final F7<T, A, B, C, D, E$, F$, G> f) {
+  public <A, B, C, D, E$, F$, G> Validation<E, G> accumulate(final Semigroup<E> s, final Validation<E, A> va,
+                                                             final Validation<E, B> vb, final Validation<E, C> vc,
+                                                             final Validation<E, D> vd, final Validation<E, E$> ve,
+                                                             final Validation<E, F$> vf,
+                                                             final F7<T, A, B, C, D, E$, F$, G> f) {
     return vf.accumapply(s, accumulate(s, va, vb, vc, vd, ve, curry(f)));
   }
 
   /**
    * Accumulates errors anonymously.
    *
-   * @param s The semigroup to accumulate errors with if one or more validations fail.
+   * @param s  The semigroup to accumulate errors with if one or more validations fail.
    * @param va The second validation to accumulate errors with if it failed.
    * @param vb The third validation to accumulate errors with if it failed.
    * @param vc The fourth validation to accumulate errors with if it failed.
@@ -627,9 +657,12 @@ public final class Validation<E, T> implements Iterable<T> {
    * @param ve The sixth validation to accumulate errors with if it failed.
    * @param vf The seventh validation to accumulate errors with if it failed.
    * @return A <code>Some</code> if one or more validations failed (accumulated with the semigroup), otherwise,
-   * <code>None</code>.
+   *         <code>None</code>.
    */
-  public <A, B, C, D, E$, F$> Option<E> accumulate(final Semigroup<E> s, final Validation<E, A> va, final Validation<E, B> vb, final Validation<E, C> vc, final Validation<E, D> vd, final Validation<E, E$> ve, final Validation<E, F$> vf) {
+  public <A, B, C, D, E$, F$> Option<E> accumulate(final Semigroup<E> s, final Validation<E, A> va,
+                                                   final Validation<E, B> vb, final Validation<E, C> vc,
+                                                   final Validation<E, D> vd, final Validation<E, E$> ve,
+                                                   final Validation<E, F$> vf) {
     return accumulate(s, va, vb, vc, vd, ve, vf, new F7<T, A, B, C, D, E$, F$, Unit>() {
       public Unit f(final T t, final A a, final B b, final C c, final D d, final E$ e, final F$ f) {
         return unit();
@@ -641,7 +674,7 @@ public final class Validation<E, T> implements Iterable<T> {
    * Accumulates errors on the failing side of this or any given validation if one or more are encountered, or applies
    * the given function if all succeeded and returns that value on the successful side.
    *
-   * @param s The semigroup to accumulate errors with if one or more validations fail.
+   * @param s  The semigroup to accumulate errors with if one or more validations fail.
    * @param va The second validation to accumulate errors with if it failed.
    * @param vb The third validation to accumulate errors with if it failed.
    * @param vc The fourth validation to accumulate errors with if it failed.
@@ -649,11 +682,15 @@ public final class Validation<E, T> implements Iterable<T> {
    * @param ve The sixth validation to accumulate errors with if it failed.
    * @param vf The seventh validation to accumulate errors with if it failed.
    * @param vg The eighth validation to accumulate errors with if it failed.
-   * @param f The function to apply if all validations have succeeded.
+   * @param f  The function to apply if all validations have succeeded.
    * @return A succeeding validation if all validations succeeded, or a failing validation with errors accumulated if
-   * one or more failed.
+   *         one or more failed.
    */
-  public <A, B, C, D, E$, F$, G, H> Validation<E, H> accumulate(final Semigroup<E> s, final Validation<E, A> va, final Validation<E, B> vb, final Validation<E, C> vc, final Validation<E, D> vd, final Validation<E, E$> ve, final Validation<E, F$> vf, final Validation<E, G> vg, final F<T, F<A, F<B, F<C, F<D, F<E$, F<F$, F<G, H>>>>>>>> f) {
+  public <A, B, C, D, E$, F$, G, H> Validation<E, H> accumulate(final Semigroup<E> s, final Validation<E, A> va,
+                                                                final Validation<E, B> vb, final Validation<E, C> vc,
+                                                                final Validation<E, D> vd, final Validation<E, E$> ve,
+                                                                final Validation<E, F$> vf, final Validation<E, G> vg,
+                                                                final F<T, F<A, F<B, F<C, F<D, F<E$, F<F$, F<G, H>>>>>>>> f) {
     return vg.accumapply(s, accumulate(s, va, vb, vc, vd, ve, vf, f));
   }
 
@@ -661,7 +698,7 @@ public final class Validation<E, T> implements Iterable<T> {
    * Accumulates errors on the failing side of this or any given validation if one or more are encountered, or applies
    * the given function if all succeeded and returns that value on the successful side.
    *
-   * @param s The semigroup to accumulate errors with if one or more validations fail.
+   * @param s  The semigroup to accumulate errors with if one or more validations fail.
    * @param va The second validation to accumulate errors with if it failed.
    * @param vb The third validation to accumulate errors with if it failed.
    * @param vc The fourth validation to accumulate errors with if it failed.
@@ -669,18 +706,22 @@ public final class Validation<E, T> implements Iterable<T> {
    * @param ve The sixth validation to accumulate errors with if it failed.
    * @param vf The seventh validation to accumulate errors with if it failed.
    * @param vg The eighth validation to accumulate errors with if it failed.
-   * @param f The function to apply if all validations have succeeded.
+   * @param f  The function to apply if all validations have succeeded.
    * @return A succeeding validation if all validations succeeded, or a failing validation with errors accumulated if
-   * one or more failed.
+   *         one or more failed.
    */
-  public <A, B, C, D, E$, F$, G, H> Validation<E, H> accumulate(final Semigroup<E> s, final Validation<E, A> va, final Validation<E, B> vb, final Validation<E, C> vc, final Validation<E, D> vd, final Validation<E, E$> ve, final Validation<E, F$> vf, final Validation<E, G> vg, final F8<T, A, B, C, D, E$, F$, G, H> f) {
+  public <A, B, C, D, E$, F$, G, H> Validation<E, H> accumulate(final Semigroup<E> s, final Validation<E, A> va,
+                                                                final Validation<E, B> vb, final Validation<E, C> vc,
+                                                                final Validation<E, D> vd, final Validation<E, E$> ve,
+                                                                final Validation<E, F$> vf, final Validation<E, G> vg,
+                                                                final F8<T, A, B, C, D, E$, F$, G, H> f) {
     return vg.accumapply(s, accumulate(s, va, vb, vc, vd, ve, vf, curry(f)));
   }
 
   /**
    * Accumulates errors anonymously.
    *
-   * @param s The semigroup to accumulate errors with if one or more validations fail.
+   * @param s  The semigroup to accumulate errors with if one or more validations fail.
    * @param va The second validation to accumulate errors with if it failed.
    * @param vb The third validation to accumulate errors with if it failed.
    * @param vc The fourth validation to accumulate errors with if it failed.
@@ -688,10 +729,13 @@ public final class Validation<E, T> implements Iterable<T> {
    * @param ve The sixth validation to accumulate errors with if it failed.
    * @param vf The seventh validation to accumulate errors with if it failed.
    * @param vg The eighth validation to accumulate errors with if it failed.
-   * @return A <code>Some</code> if one or more validations failed (accumulated with the semigroup), otherwise, 
-   * <code>None</code>.
+   * @return A <code>Some</code> if one or more validations failed (accumulated with the semigroup), otherwise,
+   *         <code>None</code>.
    */
-  public <A, B, C, D, E$, F$, G> Option<E> accumulate(final Semigroup<E> s, final Validation<E, A> va, final Validation<E, B> vb, final Validation<E, C> vc, final Validation<E, D> vd, final Validation<E, E$> ve, final Validation<E, F$> vf, final Validation<E, G> vg) {
+  public <A, B, C, D, E$, F$, G> Option<E> accumulate(final Semigroup<E> s, final Validation<E, A> va,
+                                                      final Validation<E, B> vb, final Validation<E, C> vc,
+                                                      final Validation<E, D> vd, final Validation<E, E$> ve,
+                                                      final Validation<E, F$> vf, final Validation<E, G> vg) {
     return accumulate(s, va, vb, vc, vd, ve, vf, vg, new F8<T, A, B, C, D, E$, F$, G, Unit>() {
       public Unit f(final T t, final A a, final B b, final C c, final D d, final E$ e, final F$ f, final G g) {
         return unit();
@@ -731,7 +775,7 @@ public final class Validation<E, T> implements Iterable<T> {
      * Returns the failing value or fails with the given error message.
      *
      * @param err The error message to fail with.
-     * @return  The failing value.
+     * @return The failing value.
      */
     public E failE(final P1<String> err) {
       return v.toEither().left().valueE(err);
@@ -741,7 +785,7 @@ public final class Validation<E, T> implements Iterable<T> {
      * Returns the failing value or fails with the given error message.
      *
      * @param err The error message to fail with.
-     * @return  The failing value.
+     * @return The failing value.
      */
     public E failE(final String err) {
       return failE(p(err));
@@ -836,7 +880,7 @@ public final class Validation<E, T> implements Iterable<T> {
      *
      * @param f The predicate function to test on this failing value.
      * @return <code>None</code> if this is a success or if the given predicate <code>p</code> does not hold for the
-     * failing value, otherwise, returns a fail in <code>Some</code>.
+     *         failing value, otherwise, returns a fail in <code>Some</code>.
      */
     public <A> Option<Validation<E, A>> filter(final F<E, Boolean> f) {
       return v.toEither().left().<A>filter(f).map(Validation.<E, A>validation());
@@ -862,7 +906,7 @@ public final class Validation<E, T> implements Iterable<T> {
      *
      * @param f The predicate function to test on this failing value.
      * @return <code>true</code> if this is a success or returns the result of the application of the given
-     * function to the failing value.
+     *         function to the failing value.
      */
     public boolean forall(final F<E, Boolean> f) {
       return v.toEither().left().forall(f);
@@ -874,7 +918,7 @@ public final class Validation<E, T> implements Iterable<T> {
      *
      * @param f The predicate function to test on this failing value.
      * @return <code>false</code> if this is a success or returns the result of the application of the given
-     * function to the failing value.
+     *         function to the failing value.
      */
     public boolean exists(final F<E, Boolean> f) {
       return v.toEither().left().exists(f);
@@ -939,7 +983,7 @@ public final class Validation<E, T> implements Iterable<T> {
   /**
    * Puts this validation's failing value in a non-empty list if there is one.
    *
-   * @return A validation with its failing value in a non-empty list if there is one. 
+   * @return A validation with its failing value in a non-empty list if there is one.
    */
   @SuppressWarnings({"unchecked"})
   public Validation<NonEmptyList<E>, T> nel() {
@@ -1036,7 +1080,7 @@ public final class Validation<E, T> implements Iterable<T> {
   public static Validation<NumberFormatException, Byte> parseByte(final String s) {
     try {
       return success(Byte.parseByte(s));
-    } catch(NumberFormatException e) {
+    } catch (NumberFormatException e) {
       return fail(e);
     }
   }
@@ -1050,7 +1094,7 @@ public final class Validation<E, T> implements Iterable<T> {
   public static Validation<NumberFormatException, Double> parseDouble(final String s) {
     try {
       return success(Double.parseDouble(s));
-    } catch(NumberFormatException e) {
+    } catch (NumberFormatException e) {
       return fail(e);
     }
   }
@@ -1064,7 +1108,7 @@ public final class Validation<E, T> implements Iterable<T> {
   public static Validation<NumberFormatException, Float> parseFloat(final String s) {
     try {
       return success(Float.parseFloat(s));
-    } catch(NumberFormatException e) {
+    } catch (NumberFormatException e) {
       return fail(e);
     }
   }
@@ -1078,7 +1122,7 @@ public final class Validation<E, T> implements Iterable<T> {
   public static Validation<NumberFormatException, Integer> parseInt(final String s) {
     try {
       return success(Integer.parseInt(s));
-    } catch(NumberFormatException e) {
+    } catch (NumberFormatException e) {
       return fail(e);
     }
   }
@@ -1092,7 +1136,7 @@ public final class Validation<E, T> implements Iterable<T> {
   public static Validation<NumberFormatException, Long> parseLong(final String s) {
     try {
       return success(Long.parseLong(s));
-    } catch(NumberFormatException e) {
+    } catch (NumberFormatException e) {
       return fail(e);
     }
   }
@@ -1106,7 +1150,7 @@ public final class Validation<E, T> implements Iterable<T> {
   public static Validation<NumberFormatException, Short> parseShort(final String s) {
     try {
       return success(Short.parseShort(s));
-    } catch(NumberFormatException e) {
+    } catch (NumberFormatException e) {
       return fail(e);
     }
   }

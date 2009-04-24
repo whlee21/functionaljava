@@ -3,6 +3,7 @@ package fj.parser;
 import fj.F;
 import fj.F2;
 import static fj.Function.curry;
+
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
@@ -126,7 +127,7 @@ public final class Result<I, A> implements Iterable<A> {
       }
 
       public A next() {
-        if(r)
+        if (r)
           throw new NoSuchElementException();
         else {
           r = true;

@@ -70,17 +70,27 @@ public enum Digit {
    * @return A long for this digit.
    */
   public long toLong() {
-    switch(this) {
-      case _0: return 0L;
-      case _1: return 1L;
-      case _2: return 2L;
-      case _3: return 3L;
-      case _4: return 4L;
-      case _5: return 5L;
-      case _6: return 6L;
-      case _7: return 7L;
-      case _8: return 8L;
-      default: return 9L;
+    switch (this) {
+      case _0:
+        return 0L;
+      case _1:
+        return 1L;
+      case _2:
+        return 2L;
+      case _3:
+        return 3L;
+      case _4:
+        return 4L;
+      case _5:
+        return 5L;
+      case _6:
+        return 6L;
+      case _7:
+        return 7L;
+      case _8:
+        return 8L;
+      default:
+        return 9L;
     }
   }
 
@@ -90,17 +100,27 @@ public enum Digit {
    * @return A character for this digit.
    */
   public char toChar() {
-    switch(this) {
-      case _0: return '0';
-      case _1: return '1';
-      case _2: return '2';
-      case _3: return '3';
-      case _4: return '4';
-      case _5: return '5';
-      case _6: return '6';
-      case _7: return '7';
-      case _8: return '8';
-      default: return '9';
+    switch (this) {
+      case _0:
+        return '0';
+      case _1:
+        return '1';
+      case _2:
+        return '2';
+      case _3:
+        return '3';
+      case _4:
+        return '4';
+      case _5:
+        return '5';
+      case _6:
+        return '6';
+      case _7:
+        return '7';
+      case _8:
+        return '8';
+      default:
+        return '9';
     }
   }
 
@@ -113,15 +133,15 @@ public enum Digit {
   public static Digit fromLong(final long i) {
     long x = Math.abs(i) % 10L;
     return x == 0L ? _0 :
-           x == 1L ? _1 :
-           x == 2L ? _2 :
-           x == 3L ? _3 :
-           x == 4L ? _4 :
-           x == 5L ? _5 :
-           x == 6L ? _6 :
-           x == 7L ? _7 :
-           x == 8L ? _8 :
-           _9;
+        x == 1L ? _1 :
+            x == 2L ? _2 :
+                x == 3L ? _3 :
+                    x == 4L ? _4 :
+                        x == 5L ? _5 :
+                            x == 6L ? _6 :
+                                x == 7L ? _7 :
+                                    x == 8L ? _8 :
+                                        _9;
   }
 
   /**
@@ -131,18 +151,29 @@ public enum Digit {
    * @return The character in the given long value as a digit.
    */
   public static Option<Digit> fromChar(final char c) {
-    switch(c) {
-      case '0': return some(_0);
-      case '1': return some(_1);
-      case '2': return some(_2);
-      case '3': return some(_3);
-      case '4': return some(_4);
-      case '5': return some(_5);
-      case '6': return some(_6);
-      case '7': return some(_7);
-      case '8': return some(_8);
-      case '9': return some(_9);
-      default : return none();
+    switch (c) {
+      case '0':
+        return some(_0);
+      case '1':
+        return some(_1);
+      case '2':
+        return some(_2);
+      case '3':
+        return some(_3);
+      case '4':
+        return some(_4);
+      case '5':
+        return some(_5);
+      case '6':
+        return some(_6);
+      case '7':
+        return some(_7);
+      case '8':
+        return some(_8);
+      case '9':
+        return some(_9);
+      default:
+        return none();
     }
   }
 

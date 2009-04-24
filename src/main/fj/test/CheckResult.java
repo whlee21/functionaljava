@@ -44,7 +44,8 @@ public final class CheckResult {
     Passed, Proven, Falsified, Exhausted, PropException, GenException
   }
 
-  private CheckResult(final R r, final Option<List<Arg<?>>> args, final Option<Throwable> ex, final int succeeded, final int discarded) {
+  private CheckResult(final R r, final Option<List<Arg<?>>> args, final Option<Throwable> ex, final int succeeded,
+                      final int discarded) {
     this.r = r;
     this.args = args;
     this.ex = ex;
@@ -66,7 +67,7 @@ public final class CheckResult {
   /**
    * Returns a result that the property has been proven.
    *
-   * @param args The arguments used to prove the property.
+   * @param args      The arguments used to prove the property.
    * @param succeeded The number of checks that succeeded.
    * @param discarded The number of checks that were discarded.
    * @return A result that the property has been proven.
@@ -78,7 +79,7 @@ public final class CheckResult {
   /**
    * Returns a result that the property has been falsified.
    *
-   * @param args The arguments used to falsify the property.
+   * @param args      The arguments used to falsify the property.
    * @param succeeded The number of checks that succeeded.
    * @param discarded The number of checks that were discarded.
    * @return A result that the property has been falsified.
@@ -101,13 +102,14 @@ public final class CheckResult {
   /**
    * Returns a result that checking the property threw an exception.
    *
-   * @param args The arguments used when the exception was thrown.
-   * @param ex The exception that was thrown.
+   * @param args      The arguments used when the exception was thrown.
+   * @param ex        The exception that was thrown.
    * @param succeeded The number of checks that succeeded.
    * @param discarded The number of checks that were discarded.
    * @return A result that checking the property threw an exception.
    */
-  public static CheckResult propException(final List<Arg<?>> args, final Throwable ex, final int succeeded, final int discarded) {
+  public static CheckResult propException(final List<Arg<?>> args, final Throwable ex, final int succeeded,
+                                          final int discarded) {
     return new CheckResult(R.PropException, some(args), some(ex), succeeded, discarded);
   }
 
@@ -115,7 +117,7 @@ public final class CheckResult {
   /**
    * Returns a result that generating values to check the property threw an exception.
    *
-   * @param ex The exception that was thrown.
+   * @param ex        The exception that was thrown.
    * @param succeeded The number of checks that succeeded.
    * @param discarded The number of checks that were discarded.
    * @return A result that generating values to check the property threw an exception.
@@ -166,7 +168,7 @@ public final class CheckResult {
    * <code>false</code> otherwise.
    *
    * @return <code>true</code> if this result is an exception during property execution,
-   * <code>false</code> otherwise.
+   *         <code>false</code> otherwise.
    */
   public boolean isPropException() {
     return r == R.PropException;
@@ -177,7 +179,7 @@ public final class CheckResult {
    * property checking, <code>false</code> otherwise.
    *
    * @return <code>true</code> if this result is an exception during generating of values for
-   * property checking, <code>false</code> otherwise.
+   *         property checking, <code>false</code> otherwise.
    */
   public boolean isGenException() {
     return r == R.GenException;
@@ -188,7 +190,7 @@ public final class CheckResult {
    * execution, otherwise, no arguments are returned.
    *
    * @return The arguments if the result is one of; proven, falsified or exception during property
-   * execution, otherwise, no arguments are returned.
+   *         execution, otherwise, no arguments are returned.
    */
   public Option<List<Arg<?>>> args() {
     return args;
@@ -199,7 +201,7 @@ public final class CheckResult {
    * during argument value generation, otherwise, no exception are returned.
    *
    * @return The execption if the result is one of; exception during property execution or exception
-   * during argument value generation, otherwise, no exception are returned.
+   *         during argument value generation, otherwise, no exception are returned.
    */
   public Option<Throwable> exception() {
     return ex;
@@ -237,24 +239,26 @@ public final class CheckResult {
 
       private String arguments(final CheckResult r) {
         final List<Arg<?>> args = r.args().some();
-        return args.length() == 1 ? "argument: " + sa.showS(args.head()) : "arguments: " + listShow(sa).showS(args); 
+        return args.length() == 1 ? "argument: " + sa.showS(args.head()) : "arguments: " + listShow(sa).showS(args);
       }
 
       public String f(final CheckResult r) {
-        if(r.isProven())
+        if (r.isProven())
           return "OK, property proven with " + arguments(r);
-        else if(r.isPassed())
-          return "OK, passed " + r.succeeded() + ' ' + test(r) + (r.discarded() > 0 ? " (" + r.discarded() + " discarded)" : "") + '.';
-        else if(r.isFalsified())
-          return "Falsified after " + r.succeeded() + " passed " +  test(r) + " with " + arguments(r); 
-        else if(r.isExhausted())
-          return "Gave up after " + r.succeeded() + " passed " + test(r) + " and " + r.discarded() + " discarded tests.";
-        else if(r.isPropException()) {
+        else if (r.isPassed())
+          return "OK, passed " + r.succeeded() + ' ' + test(r) +
+              (r.discarded() > 0 ? " (" + r.discarded() + " discarded)" : "") + '.';
+        else if (r.isFalsified())
+          return "Falsified after " + r.succeeded() + " passed " + test(r) + " with " + arguments(r);
+        else if (r.isExhausted())
+          return "Gave up after " + r.succeeded() + " passed " + test(r) + " and " + r.discarded() +
+              " discarded tests.";
+        else if (r.isPropException()) {
           final StringWriter sw = new StringWriter();
           final PrintWriter pw = new PrintWriter(sw);
           r.exception().some().printStackTrace(pw);
           return "Exception on property evaluation with " + arguments(r) + System.getProperty("line.separator") + sw;
-        } else if(r.isGenException()) {
+        } else if (r.isGenException()) {
           final StringWriter sw = new StringWriter();
           final PrintWriter pw = new PrintWriter(sw);
           r.exception().some().printStackTrace(pw);
@@ -267,7 +271,7 @@ public final class CheckResult {
 
   /**
    * A rendering of a check result that summarises in one line.
-   */  
+   */
   public static final Show<CheckResult> summary = summary(argShow);
 
   /**
@@ -282,15 +286,15 @@ public final class CheckResult {
    *
    * @param sa The rendering of arguments.
    * @return A rendering of a check result that summarises in one line but throws an exception in
-   * the result is a failure (falsified, property exception or generator exception).
+   *         the result is a failure (falsified, property exception or generator exception).
    */
   public static Show<CheckResult> summaryEx(final Show<Arg<?>> sa) {
     return showS(new F<CheckResult, String>() {
       public String f(final CheckResult r) {
         final String s = asString(summary(sa).show(r));
-        if(r.isProven() || r.isPassed() || r.isExhausted())
+        if (r.isProven() || r.isPassed() || r.isExhausted())
           return s;
-        else if(r.isFalsified() || r.isPropException() || r.isGenException())
+        else if (r.isFalsified() || r.isPropException() || r.isGenException())
           throw new Error(s);
         else
           throw decons(r.getClass());

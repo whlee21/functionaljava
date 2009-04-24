@@ -69,14 +69,14 @@ public abstract class Either<A, B> {
   /**
    * The catamorphism for either. Folds over this either breaking into left or right.
    *
-   * @param left The function to call if this is left.
+   * @param left  The function to call if this is left.
    * @param right The function to call if this is right.
    * @return The reduced value.
    */
   public <X> X either(final F<A, X> left, final F<B, X> right) {
     return isLeft() ?
-            left.f(left().value()) :
-            right.f(right().value());
+        left.f(left().value()) :
+        right.f(right().value());
   }
 
   /**
@@ -359,11 +359,11 @@ public abstract class Either<A, B> {
     @SuppressWarnings({"unchecked"})
     public Array<A> toArray(final Class<A[]> c) {
       if (isLeft()) {
-        final A[] a = (A[])java.lang.reflect.Array.newInstance(c.getComponentType(), 1);
+        final A[] a = (A[]) java.lang.reflect.Array.newInstance(c.getComponentType(), 1);
         a[0] = value();
         return array(a);
       } else
-        return array((A[])java.lang.reflect.Array.newInstance(c.getComponentType(), 0));
+        return array((A[]) java.lang.reflect.Array.newInstance(c.getComponentType(), 0));
     }
 
     /**
@@ -605,11 +605,11 @@ public abstract class Either<A, B> {
     @SuppressWarnings({"unchecked"})
     public Array<B> toArray(final Class<B[]> c) {
       if (isRight()) {
-        final B[] a = (B[])java.lang.reflect.Array.newInstance(c.getComponentType(), 1);
+        final B[] a = (B[]) java.lang.reflect.Array.newInstance(c.getComponentType(), 1);
         a[0] = value();
         return array(a);
       } else
-        return array((B[])java.lang.reflect.Array.newInstance(c.getComponentType(), 0));
+        return array((B[]) java.lang.reflect.Array.newInstance(c.getComponentType(), 0));
     }
 
     /**
@@ -737,12 +737,12 @@ public abstract class Either<A, B> {
    */
   public static <A, X> Either<List<A>, X> sequenceLeft(final List<Either<A, X>> a) {
     return a.isEmpty() ?
-            Either.<List<A>, X>left(List.<A>nil()) :
-            a.head().left().bind(new F<A, Either<List<A>, X>>() {
-              public Either<List<A>, X> f(final A aa) {
-                return sequenceLeft(a.tail()).left().map(cons_(aa));
-              }
-            });
+        Either.<List<A>, X>left(List.<A>nil()) :
+        a.head().left().bind(new F<A, Either<List<A>, X>>() {
+          public Either<List<A>, X> f(final A aa) {
+            return sequenceLeft(a.tail()).left().map(cons_(aa));
+          }
+        });
   }
 
   /**
@@ -753,12 +753,12 @@ public abstract class Either<A, B> {
    */
   public static <B, X> Either<X, List<B>> sequenceRight(final List<Either<X, B>> a) {
     return a.isEmpty() ?
-            Either.<X, List<B>>right(List.<B>nil()) :
-            a.head().right().bind(new F<B, Either<X, List<B>>>() {
-              public Either<X, List<B>> f(final B bb) {
-                return sequenceRight(a.tail()).right().map(cons_(bb));
-              }
-            });
+        Either.<X, List<B>>right(List.<B>nil()) :
+        a.head().right().bind(new F<B, Either<X, List<B>>>() {
+          public Either<X, List<B>> f(final B bb) {
+            return sequenceRight(a.tail()).right().map(cons_(bb));
+          }
+        });
   }
 
   /**
