@@ -20,7 +20,7 @@ public class Comonad_example {
     }
   }
 
-  public static Stream<Stream<Character>> perms(Stream<Character> s) {
+  public static Stream<Stream<Character>> perms(final Stream<Character> s) {
     Stream<Stream<Character>> r = single(Stream.<Character>nil());
     for (final Zipper<Character> z : fromStream(s))
       r = join(z.cobind(
