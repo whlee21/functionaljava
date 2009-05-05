@@ -161,7 +161,7 @@ public final class Result {
    * Returns a result from the given potential result.
    *
    * @param r The potential result.
-   * @return The result that may be {@link #noResult(Option) noResult()}.
+   * @return The result that may be {@link #noResult() noResult()}.
    */
   public static Result noResult(final Option<Result> r) {
     return r.orSome(new P1<Result>() {
