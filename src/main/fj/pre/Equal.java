@@ -13,16 +13,8 @@ import fj.P7;
 import fj.P8;
 import static fj.Function.compose;
 import static fj.Function.curry;
-import fj.data.Array;
-import fj.data.Either;
 import fj.data.hlist.HList;
-import fj.data.List;
-import fj.data.NonEmptyList;
-import fj.data.Option;
-import fj.data.Set;
-import fj.data.Stream;
-import fj.data.Tree;
-import fj.data.Validation;
+import fj.data.*;
 import fj.data.vector.V2;
 import fj.data.vector.V3;
 import fj.data.vector.V4;
@@ -235,7 +227,7 @@ public final class Equal<A> {
         return new F<Either<A, B>, Boolean>() {
           public Boolean f(final Either<A, B> e2) {
             return e1.isLeft() && e2.isLeft() && ea.f.f(e1.left().value()).f(e2.left().value()) ||
-                e1.isRight() && e2.isRight() && eb.f.f(e1.right().value()).f(e2.right().value());
+                   e1.isRight() && e2.isRight() && eb.f.f(e1.right().value()).f(e2.right().value());
           }
         };
       }
@@ -304,7 +296,7 @@ public final class Equal<A> {
         return new F<Option<A>, Boolean>() {
           public Boolean f(final Option<A> o2) {
             return o1.isNone() && o2.isNone() ||
-                o1.isSome() && o2.isSome() && ea.f.f(o1.some()).f(o2.some());
+                   o1.isSome() && o2.isSome() && ea.f.f(o1.some()).f(o2.some());
           }
         };
       }
@@ -452,7 +444,7 @@ public final class Equal<A> {
         return new F<P4<A, B, C, D>, Boolean>() {
           public Boolean f(final P4<A, B, C, D> p2) {
             return ea.eq(p1._1(), p2._1()) && eb.eq(p1._2(), p2._2()) && ec.eq(p1._3(), p2._3()) &&
-                ed.eq(p1._4(), p2._4());
+                   ed.eq(p1._4(), p2._4());
           }
         };
       }
@@ -477,7 +469,7 @@ public final class Equal<A> {
         return new F<P5<A, B, C, D, E>, Boolean>() {
           public Boolean f(final P5<A, B, C, D, E> p2) {
             return ea.eq(p1._1(), p2._1()) && eb.eq(p1._2(), p2._2()) && ec.eq(p1._3(), p2._3()) &&
-                ed.eq(p1._4(), p2._4()) && ee.eq(p1._5(), p2._5());
+                   ed.eq(p1._4(), p2._4()) && ee.eq(p1._5(), p2._5());
           }
         };
       }
@@ -503,7 +495,7 @@ public final class Equal<A> {
         return new F<P6<A, B, C, D, E, F$>, Boolean>() {
           public Boolean f(final P6<A, B, C, D, E, F$> p2) {
             return ea.eq(p1._1(), p2._1()) && eb.eq(p1._2(), p2._2()) && ec.eq(p1._3(), p2._3()) &&
-                ed.eq(p1._4(), p2._4()) && ee.eq(p1._5(), p2._5()) && ef.eq(p1._6(), p2._6());
+                   ed.eq(p1._4(), p2._4()) && ee.eq(p1._5(), p2._5()) && ef.eq(p1._6(), p2._6());
           }
         };
       }
@@ -531,8 +523,8 @@ public final class Equal<A> {
         return new F<P7<A, B, C, D, E, F$, G>, Boolean>() {
           public Boolean f(final P7<A, B, C, D, E, F$, G> p2) {
             return ea.eq(p1._1(), p2._1()) && eb.eq(p1._2(), p2._2()) && ec.eq(p1._3(), p2._3()) &&
-                ed.eq(p1._4(), p2._4()) && ee.eq(p1._5(), p2._5()) && ef.eq(p1._6(), p2._6()) &&
-                eg.eq(p1._7(), p2._7());
+                   ed.eq(p1._4(), p2._4()) && ee.eq(p1._5(), p2._5()) && ef.eq(p1._6(), p2._6()) &&
+                   eg.eq(p1._7(), p2._7());
           }
         };
       }
@@ -566,8 +558,8 @@ public final class Equal<A> {
             return new F<P8<A, B, C, D, E, F$, G, H>, Boolean>() {
               public Boolean f(final P8<A, B, C, D, E, F$, G, H> p2) {
                 return ea.eq(p1._1(), p2._1()) && eb.eq(p1._2(), p2._2()) && ec.eq(p1._3(), p2._3()) &&
-                    ed.eq(p1._4(), p2._4()) && ee.eq(p1._5(), p2._5()) && ef.eq(p1._6(), p2._6()) &&
-                    eg.eq(p1._7(), p2._7()) && eh.eq(p1._8(), p2._8());
+                       ed.eq(p1._4(), p2._4()) && ee.eq(p1._5(), p2._5()) && ef.eq(p1._6(), p2._6()) &&
+                       eg.eq(p1._7(), p2._7()) && eh.eq(p1._8(), p2._8());
               }
             };
           }
@@ -643,6 +635,11 @@ public final class Equal<A> {
   public static <A> Equal<V8<A>> v8Equal(final Equal<A> ea) {
     return streamEqual(ea).comap(V8.<A>toStream_());
   }
+
+  /**
+   * An equal instance for lazy strings.
+   */
+  public static final Equal<LazyString> eq = streamEqual(charEqual).comap(LazyString.toStream);
 
   /**
    * An equal instance for the empty heterogeneous list.

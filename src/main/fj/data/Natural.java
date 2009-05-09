@@ -2,6 +2,8 @@ package fj.data;
 
 import static fj.Bottom.error;
 import fj.F;
+import fj.data.vector.V2;
+import fj.data.vector.V;
 
 import java.math.BigInteger;
 
@@ -26,8 +28,8 @@ public class Natural extends Number {
    */
   public static Option<Natural> natural(final BigInteger i) {
     return i.compareTo(BigInteger.ZERO) < 0
-        ? Option.<Natural>none()
-        : Option.some(new Natural(i));
+           ? Option.<Natural>none()
+           : Option.some(new Natural(i));
   }
 
   /**
@@ -117,6 +119,27 @@ public class Natural extends Number {
    */
   public Natural divide(final Natural n) {
     return natural(n.value.divide(value)).some();
+  }
+
+  /**
+   * Take the remainder of a natural number division.
+   *
+   * @param n A natural number to divide this one by.
+   * @return The remainder of division of this number by the given number.
+   */
+  public Natural mod(final Natural n) {
+    return natural(n.value.mod(value)).some();
+  }
+
+  /**
+   * Divide a natural number by another yielding both the quotient and the remainder.
+   *
+   * @param n A natural number to divide this one by.
+   * @return The quotient and the remainder.
+   */
+  public V2<Natural> divmod(final Natural n) {
+    BigInteger[] x = n.value.divideAndRemainder(value);
+    return V.v(natural(x[0]).some(), natural(x[1]).some());
   }
 
   /**

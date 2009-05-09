@@ -13,19 +13,13 @@ import fj.P6;
 import fj.P7;
 import fj.P8;
 import fj.Unit;
+import static fj.P.p;
 import static fj.Unit.unit;
-import static fj.data.List.cons;
-import static fj.data.List.fromString;
-import static fj.data.List.single;
-import fj.data.Array;
-import fj.data.Either;
 import fj.data.hlist.HList;
-import fj.data.List;
-import fj.data.NonEmptyList;
-import fj.data.Option;
-import fj.data.Stream;
-import fj.data.Tree;
-import fj.data.Validation;
+import fj.data.*;
+import static fj.data.LazyString.str;
+import static fj.data.LazyString.fromStream;
+import static fj.data.Stream.*;
 import fj.data.vector.V2;
 import fj.data.vector.V3;
 import fj.data.vector.V4;
@@ -36,6 +30,7 @@ import fj.data.vector.V8;
 
 import java.math.BigInteger;
 import java.math.BigDecimal;
+import java.util.Arrays;
 
 /**
  * Renders an object for display.
@@ -47,9 +42,9 @@ import java.math.BigDecimal;
  *          </ul>
  */
 public final class Show<A> {
-  private final F<A, List<Character>> f;
+  private final F<A, Stream<Character>> f;
 
-  private Show(final F<A, List<Character>> f) {
+  private Show(final F<A, Stream<Character>> f) {
     this.f = f;
   }
 
@@ -69,7 +64,7 @@ public final class Show<A> {
    * @param a The argument to display.
    * @return The display rendering of the given argument.
    */
-  public List<Character> show(final A a) {
+  public Stream<Character> show(final A a) {
     return f.f(a);
   }
 
@@ -80,7 +75,7 @@ public final class Show<A> {
    * @return The display rendering of the given argument as a <code>String</code>.
    */
   public String showS(final A a) {
-    return List.asString(show(a));
+    return Stream.asString(show(a));
   }
 
   /**
@@ -101,19 +96,8 @@ public final class Show<A> {
    *
    * @return the transformation equivalent to this show.
    */
-  public F<A, List<Character>> show_() {
+  public F<A, Stream<Character>> show_() {
     return f;
-  }
-
-  /**
-   * Prints the given argument to the standard output stream.
-   *
-   * @param a The argument to print.
-   * @return The unit value.
-   */
-  public Unit print(final A a) {
-    System.out.print(showS(a));
-    return unit();
   }
 
   /**
@@ -123,17 +107,30 @@ public final class Show<A> {
    * @return The unit value.
    */
   public Unit println(final A a) {
-    System.out.println(showS(a));
+    print(a);
+    System.out.println();
     return unit();
   }
 
   /**
-   * Prints the given argument to the standard error stream.
+   * Prints the given argument to the standard output stream.
    *
    * @param a The argument to print.
+   * @return The unit value.
    */
-  public void printE(final A a) {
-    System.err.print(showS(a));
+  public Unit print(final A a) {
+    final char[] buffer = new char[8192];
+    int c = 0;
+    for (Stream<Character> cs = show(a); cs.isNotEmpty(); cs = cs.tail()._1()) {
+      buffer[c] = cs.head();
+      c++;
+      if (c == 8192) {
+        System.out.print(buffer);
+        c = 0;
+      }
+    }
+    System.out.print(Arrays.copyOfRange(buffer, 0, c));
+    return unit();
   }
 
   /**
@@ -151,7 +148,7 @@ public final class Show<A> {
    * @param f The function to use for the returned show instance.
    * @return A show instance.
    */
-  public static <A> Show<A> show(final F<A, List<Character>> f) {
+  public static <A> Show<A> show(final F<A, Stream<Character>> f) {
     return new Show<A>(f);
   }
 
@@ -162,8 +159,8 @@ public final class Show<A> {
    * @return A show instance.
    */
   public static <A> Show<A> showS(final F<A, String> f) {
-    return new Show<A>(new F<A, List<Character>>() {
-      public List<Character> f(final A a) {
+    return new Show<A>(new F<A, Stream<Character>>() {
+      public Stream<Character> f(final A a) {
         return fromString(f.f(a));
       }
     });
@@ -175,9 +172,9 @@ public final class Show<A> {
    * @return A show instance that uses {@link Object#toString()} to perform the display rendering.
    */
   public static <A> Show<A> anyShow() {
-    return new Show<A>(new F<A, List<Character>>() {
-      public List<Character> f(final A a) {
-        return List.fromString(a.toString());
+    return new Show<A>(new F<A, Stream<Character>>() {
+      public Stream<Character> f(final A a) {
+        return Stream.fromString(a.toString());
       }
     });
   }
@@ -254,11 +251,11 @@ public final class Show<A> {
    * @return A show instance for the {@link Option} type.
    */
   public static <A> Show<Option<A>> optionShow(final Show<A> sa) {
-    return new Show<Option<A>>(new F<Option<A>, List<Character>>() {
-      public List<Character> f(final Option<A> o) {
+    return new Show<Option<A>>(new F<Option<A>, Stream<Character>>() {
+      public Stream<Character> f(final Option<A> o) {
         return o.isNone() ?
-            fromString("None") :
-            fromString("Some(").append(sa.f.f(o.some())).append(single(')'));
+               fromString("None") :
+               fromString("Some(").append(sa.f.f(o.some())).append(single(')'));
       }
     });
   }
@@ -271,11 +268,11 @@ public final class Show<A> {
    * @return A show instance for the {@link Either} type.
    */
   public static <A, B> Show<Either<A, B>> eitherShow(final Show<A> sa, final Show<B> sb) {
-    return new Show<Either<A, B>>(new F<Either<A, B>, List<Character>>() {
-      public List<Character> f(final Either<A, B> e) {
+    return new Show<Either<A, B>>(new F<Either<A, B>, Stream<Character>>() {
+      public Stream<Character> f(final Either<A, B> e) {
         return e.isLeft() ?
-            fromString("Left(").append(sa.f.f(e.left().value())).append(single(')')) :
-            fromString("Right(").append(sb.f.f(e.right().value())).append(single(')'));
+               fromString("Left(").append(sa.f.f(e.left().value())).append(single(')')) :
+               fromString("Right(").append(sb.f.f(e.right().value())).append(single(')'));
       }
     });
   }
@@ -288,36 +285,25 @@ public final class Show<A> {
    * @return A show instance for the {@link Validation} type.
    */
   public static <A, B> Show<Validation<A, B>> validationShow(final Show<A> sa, final Show<B> sb) {
-    return new Show<Validation<A, B>>(new F<Validation<A, B>, List<Character>>() {
-      public List<Character> f(final Validation<A, B> v) {
+    return new Show<Validation<A, B>>(new F<Validation<A, B>, Stream<Character>>() {
+      public Stream<Character> f(final Validation<A, B> v) {
         return v.isFail() ?
-            fromString("Fail(").append(sa.f.f(v.fail())).append(single(')')) :
-            fromString("Success(").append(sb.f.f(v.success())).append(single(')'));
+               fromString("Fail(").append(sa.f.f(v.fail())).append(single(')')) :
+               fromString("Success(").append(sb.f.f(v.success())).append(single(')'));
       }
     });
   }
 
   /**
-   * A show instance for the {@link List} type.
+   * A show instance for the {@link Stream} type.
    *
-   * @param sa Show for the elements of the list.
-   * @return A show instance for the {@link List} type.
+   * @param sa Show for the elements of the Stream.
+   * @return A show instance for the {@link Stream} type.
    */
   public static <A> Show<List<A>> listShow(final Show<A> sa) {
-    return new Show<List<A>>(new F<List<A>, List<Character>>() {
-      public List<Character> f(final List<A> as) {
-        final List.Buffer<Character> b = List.Buffer.empty();
-
-        for (List<A> xs = as; xs.isNotEmpty(); xs = xs.tail()) {
-          b.append(sa.f.f(xs.head()));
-
-          if (xs.tail().isNotEmpty())
-            b.snoc(',');
-        }
-
-        b.snoc(']');
-
-        return cons('[', b.toList());
+    return new Show<List<A>>(new F<List<A>, Stream<Character>>() {
+      public Stream<Character> f(final List<A> as) {
+        return streamShow(sa).show(as.toStream());
       }
     });
   }
@@ -325,10 +311,10 @@ public final class Show<A> {
   /**
    * A show instance for the {@link NonEmptyList} type.
    *
-   * @param sa Show for the elements of the non-empty list.
+   * @param sa Show for the elements of the non-empty Stream.
    * @return A show instance for the {@link NonEmptyList} type.
    */
-  public static <A> Show<NonEmptyList<A>> nonEmptyListShow(final Show<A> sa) {
+  public static <A> Show<NonEmptyList<A>> NonEmptyListShow(final Show<A> sa) {
     return listShow(sa).comap(NonEmptyList.<A>toList_());
   }
 
@@ -339,14 +325,12 @@ public final class Show<A> {
    * @return A show instance for the {@link Tree} type.
    */
   public static <A> Show<Tree<A>> treeShow(final Show<A> sa) {
-    return new Show<Tree<A>>(new F<Tree<A>, List<Character>>() {
-      public List<Character> f(final Tree<A> a) {
-        final List.Buffer<Character> b = List.Buffer.empty();
-
-        b.append(sa.f.f(a.root()));
-        b.append(p1Show(streamShow(treeShow(sa))).f.f(a.subForest()));
-        b.snoc(')');
-        return cons('(', b.toList());
+    return new Show<Tree<A>>(new F<Tree<A>, Stream<Character>>() {
+      public Stream<Character> f(final Tree<A> a) {
+        Stream<Character> b = sa.f.f(a.root())
+            .append(p1Show(streamShow(treeShow(sa))).f.f(a.subForest()))
+            .snoc(')');
+        return cons('(', p(b));
       }
     });
   }
@@ -358,20 +342,9 @@ public final class Show<A> {
    * @return A show instance for the {@link Stream} type.
    */
   public static <A> Show<Stream<A>> streamShow(final Show<A> sa) {
-    return new Show<Stream<A>>(new F<Stream<A>, List<Character>>() {
-      public List<Character> f(final Stream<A> as) {
-        final List.Buffer<Character> b = List.Buffer.empty();
-
-        for (Stream<A> xs = as; xs.isNotEmpty(); xs = xs.tail()._1()) {
-          b.append(sa.f.f(xs.head()));
-
-          if (xs.tail()._1().isNotEmpty())
-            b.snoc(',');
-        }
-
-        b.snoc('>');
-
-        return cons('<', b.toList());
+    return new Show<Stream<A>>(new F<Stream<A>, Stream<Character>>() {
+      public Stream<Character> f(final Stream<A> as) {
+        return join(as.map(sa.show_()).intersperse(fromString(",")).cons(fromString("<")).snoc(p(fromString(">"))));
       }
     });
   }
@@ -383,20 +356,20 @@ public final class Show<A> {
    * @return A show instance for the {@link Array} type.
    */
   public static <A> Show<Array<A>> arrayShow(final Show<A> sa) {
-    return new Show<Array<A>>(new F<Array<A>, List<Character>>() {
-      public List<Character> f(final Array<A> as) {
-        final List.Buffer<Character> b = List.Buffer.empty();
+    return new Show<Array<A>>(new F<Array<A>, Stream<Character>>() {
+      public Stream<Character> f(final Array<A> as) {
+        Stream<Character> b = nil();
 
         for (int i = 0; i < as.length(); i++) {
-          b.append(sa.f.f(as.get(i)));
+          b = b.append(sa.f.f(as.get(i)));
 
           if (i != as.length() - 1)
-            b.snoc(',');
+            b = b.snoc(',');
         }
 
-        b.snoc('}');
+        b = b.snoc('}');
 
-        return cons('{', b.toList());
+        return cons('{', p(b));
       }
     });
   }
@@ -407,8 +380,8 @@ public final class Show<A> {
    * @return A show instance for the {@link Class} type.
    */
   public static <A> Show<Class<A>> classShow() {
-    return new Show<Class<A>>(new F<fj.Class<A>, List<Character>>() {
-      public List<Character> f(final Class<A> c) {
+    return new Show<Class<A>>(new F<fj.Class<A>, Stream<Character>>() {
+      public Stream<Character> f(final Class<A> c) {
         return anyShow().show(c.clas());
       }
     });
@@ -421,9 +394,9 @@ public final class Show<A> {
    * @return A show instance for the {@link P1 tuple-1} type.
    */
   public static <A> Show<P1<A>> p1Show(final Show<A> sa) {
-    return new Show<P1<A>>(new F<P1<A>, List<Character>>() {
-      public List<Character> f(final P1<A> p) {
-        return cons('(', sa.show(p._1())).snoc(')');
+    return new Show<P1<A>>(new F<P1<A>, Stream<Character>>() {
+      public Stream<Character> f(final P1<A> p) {
+        return cons('(', p(sa.show(p._1()))).snoc(')');
       }
     });
   }
@@ -436,9 +409,9 @@ public final class Show<A> {
    * @return A show instance for the {@link P2 tuple-2} type.
    */
   public static <A, B> Show<P2<A, B>> p2Show(final Show<A> sa, final Show<B> sb) {
-    return new Show<P2<A, B>>(new F<P2<A, B>, List<Character>>() {
-      public List<Character> f(final P2<A, B> p) {
-        return cons('(', sa.show(p._1())).snoc(',').append(sb.show(p._2())).snoc(')');
+    return new Show<P2<A, B>>(new F<P2<A, B>, Stream<Character>>() {
+      public Stream<Character> f(final P2<A, B> p) {
+        return cons('(', p(sa.show(p._1()))).snoc(',').append(sb.show(p._2())).snoc(')');
       }
     });
   }
@@ -452,9 +425,9 @@ public final class Show<A> {
    * @return A show instance for the {@link P3 tuple-3} type.
    */
   public static <A, B, C> Show<P3<A, B, C>> p3Show(final Show<A> sa, final Show<B> sb, final Show<C> sc) {
-    return new Show<P3<A, B, C>>(new F<P3<A, B, C>, List<Character>>() {
-      public List<Character> f(final P3<A, B, C> p) {
-        return cons('(', sa.show(p._1())).snoc(',').append(sb.show(p._2())).snoc(',')
+    return new Show<P3<A, B, C>>(new F<P3<A, B, C>, Stream<Character>>() {
+      public Stream<Character> f(final P3<A, B, C> p) {
+        return cons('(', p(sa.show(p._1()))).snoc(',').append(sb.show(p._2())).snoc(',')
             .append(sc.show(p._3())).snoc(')');
       }
     });
@@ -471,9 +444,9 @@ public final class Show<A> {
    */
   public static <A, B, C, D> Show<P4<A, B, C, D>> p4Show(final Show<A> sa, final Show<B> sb,
                                                          final Show<C> sc, final Show<D> sd) {
-    return new Show<P4<A, B, C, D>>(new F<P4<A, B, C, D>, List<Character>>() {
-      public List<Character> f(final P4<A, B, C, D> p) {
-        return cons('(', sa.show(p._1())).snoc(',').append(sb.show(p._2())).snoc(',')
+    return new Show<P4<A, B, C, D>>(new F<P4<A, B, C, D>, Stream<Character>>() {
+      public Stream<Character> f(final P4<A, B, C, D> p) {
+        return cons('(', p(sa.show(p._1()))).snoc(',').append(sb.show(p._2())).snoc(',')
             .append(sc.show(p._3())).snoc(',').append(sd.show(p._4())).snoc(')');
       }
     });
@@ -491,9 +464,9 @@ public final class Show<A> {
    */
   public static <A, B, C, D, E> Show<P5<A, B, C, D, E>> p5Show(final Show<A> sa, final Show<B> sb,
                                                                final Show<C> sc, final Show<D> sd, final Show<E> se) {
-    return new Show<P5<A, B, C, D, E>>(new F<P5<A, B, C, D, E>, List<Character>>() {
-      public List<Character> f(final P5<A, B, C, D, E> p) {
-        return cons('(', sa.show(p._1())).snoc(',').append(sb.show(p._2())).snoc(',')
+    return new Show<P5<A, B, C, D, E>>(new F<P5<A, B, C, D, E>, Stream<Character>>() {
+      public Stream<Character> f(final P5<A, B, C, D, E> p) {
+        return cons('(', p(sa.show(p._1()))).snoc(',').append(sb.show(p._2())).snoc(',')
             .append(sc.show(p._3())).snoc(',').append(sd.show(p._4())).snoc(',').append(se.show(p._5())).snoc(')');
       }
     });
@@ -513,9 +486,9 @@ public final class Show<A> {
   public static <A, B, C, D, E, F$> Show<P6<A, B, C, D, E, F$>> p6Show(final Show<A> sa, final Show<B> sb,
                                                                        final Show<C> sc, final Show<D> sd,
                                                                        final Show<E> se, final Show<F$> sf) {
-    return new Show<P6<A, B, C, D, E, F$>>(new F<P6<A, B, C, D, E, F$>, List<Character>>() {
-      public List<Character> f(final P6<A, B, C, D, E, F$> p) {
-        return cons('(', sa.show(p._1())).snoc(',').append(sb.show(p._2())).snoc(',')
+    return new Show<P6<A, B, C, D, E, F$>>(new F<P6<A, B, C, D, E, F$>, Stream<Character>>() {
+      public Stream<Character> f(final P6<A, B, C, D, E, F$> p) {
+        return cons('(', p(sa.show(p._1()))).snoc(',').append(sb.show(p._2())).snoc(',')
             .append(sc.show(p._3())).snoc(',').append(sd.show(p._4())).snoc(',')
             .append(se.show(p._5())).snoc(',').append(sf.show(p._6())).snoc(')');
       }
@@ -538,9 +511,9 @@ public final class Show<A> {
                                                                              final Show<C> sc, final Show<D> sd,
                                                                              final Show<E> se, final Show<F$> sf,
                                                                              final Show<G> sg) {
-    return new Show<P7<A, B, C, D, E, F$, G>>(new F<P7<A, B, C, D, E, F$, G>, List<Character>>() {
-      public List<Character> f(final P7<A, B, C, D, E, F$, G> p) {
-        return cons('(', sa.show(p._1())).snoc(',').append(sb.show(p._2())).snoc(',')
+    return new Show<P7<A, B, C, D, E, F$, G>>(new F<P7<A, B, C, D, E, F$, G>, Stream<Character>>() {
+      public Stream<Character> f(final P7<A, B, C, D, E, F$, G> p) {
+        return cons('(', p(sa.show(p._1()))).snoc(',').append(sb.show(p._2())).snoc(',')
             .append(sc.show(p._3())).snoc(',').append(sd.show(p._4())).snoc(',')
             .append(se.show(p._5())).snoc(',').append(sf.show(p._6())).snoc(',').append(sg.show(p._7())).snoc(')');
       }
@@ -564,9 +537,9 @@ public final class Show<A> {
                                                                                    final Show<C> sc, final Show<D> sd,
                                                                                    final Show<E> se, final Show<F$> sf,
                                                                                    final Show<G> sg, final Show<H> sh) {
-    return new Show<P8<A, B, C, D, E, F$, G, H>>(new F<P8<A, B, C, D, E, F$, G, H>, List<Character>>() {
-      public List<Character> f(final P8<A, B, C, D, E, F$, G, H> p) {
-        return cons('(', sa.show(p._1())).snoc(',').append(sb.show(p._2())).snoc(',')
+    return new Show<P8<A, B, C, D, E, F$, G, H>>(new F<P8<A, B, C, D, E, F$, G, H>, Stream<Character>>() {
+      public Stream<Character> f(final P8<A, B, C, D, E, F$, G, H> p) {
+        return cons('(', p(sa.show(p._1()))).snoc(',').append(sb.show(p._2())).snoc(',')
             .append(sc.show(p._3())).snoc(',').append(sd.show(p._4())).snoc(',')
             .append(se.show(p._5())).snoc(',').append(sf.show(p._6())).snoc(',')
             .append(sg.show(p._7())).snoc(',').append(sh.show(p._8())).snoc(')');
@@ -645,20 +618,56 @@ public final class Show<A> {
   }
 
   /**
-   * A show instance for the empty heterogeneous list.
+   * A show instance for natural numbers.
    */
-  public static final Show<HList.HNil> hListShow = showS(Function.<HList.HNil, String>constant("Nil"));
+  public static final Show<Natural> naturalShow = bigintShow.comap(new F<Natural, BigInteger>() {
+    public BigInteger f(final Natural natural) {
+      return natural.bigIntegerValue();
+    }
+  });
 
   /**
-   * A show instance for heterogeneous lists.
+   * A show instance for streams that splits into lines.
    *
-   * @param e A show instance for the first element of the list.
-   * @param l A show instance for the rest of the list.
-   * @return a show instance for heterogeneous lists.
+   * @param sa A show instance for the elements of a stream.
+   * @return A show instance for streams that splits into lines.
    */
-  public static <E, L extends HList<L>> Show<HList.HCons<E, L>> hListShow(final Show<E> e, final Show<L> l) {
-    return show(new F<HList.HCons<E, L>, List<Character>>() {
-      public List<Character> f(final HList.HCons<E, L> c) {
+  public static <A> Show<Stream<A>> unlineShow(final Show<A> sa) {
+    return show(new F<Stream<A>, Stream<Character>>() {
+      public Stream<Character> f(final Stream<A> stream) {
+        return streamShow(lazyStringShow).show(stream.map(new F<A, LazyString>() {
+          public LazyString f(final A a) {
+            return fromStream(sa.show(a));
+          }
+        }).intersperse(str("\n")));
+      }
+    });
+  }
+
+  /**
+   * A show instance for lazy strings.
+   */
+  public static final Show<LazyString> lazyStringShow = show(new F<LazyString, Stream<Character>>() {
+    public Stream<Character> f(final LazyString string) {
+      return string.toStream();
+    }
+  });
+
+  /**
+   * A show instance for the empty heterogeneous Stream.
+   */
+  public static final Show<HList.HNil> HListShow = showS(Function.<HList.HNil, String>constant("Nil"));
+
+  /**
+   * A show instance for heterogeneous Streams.
+   *
+   * @param e A show instance for the first element of the Stream.
+   * @param l A show instance for the rest of the Stream.
+   * @return a show instance for heterogeneous Streams.
+   */
+  public static <E, L extends HList<L>> Show<HList.HCons<E, L>> HListShow(final Show<E> e, final Show<L> l) {
+    return show(new F<HList.HCons<E, L>, Stream<Character>>() {
+      public Stream<Character> f(final HList.HCons<E, L> c) {
         return e.show(c.head()).cons('[').append(l.show(c.tail())).snoc(']');
       }
     });

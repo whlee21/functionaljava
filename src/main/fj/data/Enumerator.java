@@ -8,6 +8,7 @@ import static fj.data.Option.some;
 import fj.pre.Ord;
 import static fj.pre.Ord.*;
 import fj.pre.Ordering;
+import fj.pre.Semigroup;
 import static fj.pre.Ordering.*;
 
 import java.math.BigDecimal;
@@ -172,11 +173,11 @@ public final class Enumerator<A> {
       }
     };
     return enumerator(compose(compose(of, successor), g),
-        compose(compose(of, predecessor), g),
-        max.map(f),
-        min.map(f),
-        order.comap(g),
-        compose(compose(fj.Function.<Long, Option<A>, Option<B>>compose().f(of), plus), g));
+                      compose(compose(of, predecessor), g),
+                      max.map(f),
+                      min.map(f),
+                      order.comap(g),
+                      compose(compose(fj.Function.<Long, Option<A>, Option<B>>compose().f(of), plus), g));
   }
 
   /**
@@ -359,7 +360,12 @@ public final class Enumerator<A> {
     public Option<BigInteger> f(final BigInteger i) {
       return some(i.subtract(BigInteger.ONE));
     }
-  }, Option.<BigInteger>none(), Option.<BigInteger>none(), bigintOrd);
+  }, Option.<BigInteger>none(), Option.<BigInteger>none(), bigintOrd, curry(
+      new F2<BigInteger, Long, Option<BigInteger>>() {
+        public Option<BigInteger> f(final BigInteger i, final Long l) {
+          return some(i.add(BigInteger.valueOf(l)));
+        }
+      }));
 
   /**
    * An enumerator for <code>BigDecimal</code>.
@@ -372,7 +378,12 @@ public final class Enumerator<A> {
     public Option<BigDecimal> f(final BigDecimal i) {
       return some(i.subtract(BigDecimal.ONE));
     }
-  }, Option.<BigDecimal>none(), Option.<BigDecimal>none(), bigdecimalOrd);
+  }, Option.<BigDecimal>none(), Option.<BigDecimal>none(), bigdecimalOrd, curry(
+      new F2<BigDecimal, Long, Option<BigDecimal>>() {
+        public Option<BigDecimal> f(final BigDecimal d, final Long l) {
+          return some(d.add(BigDecimal.valueOf(l)));
+        }
+      }));
 
   /**
    * An enumerator for <code>long</code>.
@@ -424,5 +435,14 @@ public final class Enumerator<A> {
     public Option<Natural> f(final Natural n) {
       return n.pred();
     }
-  }, Option.<Natural>none(), some(Natural.ZERO), naturalOrd);
+  }, Option.<Natural>none(), some(Natural.ZERO), naturalOrd, curry(new F2<Natural, Long, Option<Natural>>() {
+    public Option<Natural> f(final Natural n, final Long l) {
+      return some(n).apply(Natural.natural(l).map(curry(new F2<Natural, Natural, Natural>() {
+        public Natural f(final Natural n1, final Natural n2) {
+          return n1.add(n2);
+        }
+      })));
+    }
+  }));
+
 }

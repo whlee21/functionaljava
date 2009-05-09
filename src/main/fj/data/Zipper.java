@@ -133,8 +133,8 @@ public class Zipper<A> {
    */
   public <B> B foldRight(final F<A, F<B, B>> f, final B z) {
     return left.foldLeft(flip(f),
-        right.cons(focus).foldRight(compose(
-            Function.<P1<B>, B, B>andThen().f(P1.<B>__1()), f), z));
+                         right.cons(focus).foldRight(compose(
+                             Function.<P1<B>, B, B>andThen().f(P1.<B>__1()), f), z));
   }
 
   /**
@@ -290,10 +290,10 @@ public class Zipper<A> {
    */
   public Option<Zipper<A>> deleteLeft() {
     return left.isEmpty() && right.isEmpty()
-        ? Option.<Zipper<A>>none()
-        : some(zipper(left.isEmpty() ? left : left.tail()._1(),
-            left.isEmpty() ? right.head() : left.head(),
-            left.isEmpty() ? right.tail()._1() : right));
+           ? Option.<Zipper<A>>none()
+           : some(zipper(left.isEmpty() ? left : left.tail()._1(),
+                         left.isEmpty() ? right.head() : left.head(),
+                         left.isEmpty() ? right.tail()._1() : right));
   }
 
   /**
@@ -306,10 +306,10 @@ public class Zipper<A> {
    */
   public Option<Zipper<A>> deleteRight() {
     return left.isEmpty() && right.isEmpty()
-        ? Option.<Zipper<A>>none()
-        : some(zipper(right.isEmpty() ? left.tail()._1() : left,
-            right.isEmpty() ? left.head() : right.head(),
-            right.isEmpty() ? right : right.tail()._1()));
+           ? Option.<Zipper<A>>none()
+           : some(zipper(right.isEmpty() ? left.tail()._1() : left,
+                         right.isEmpty() ? left.head() : right.head(),
+                         right.isEmpty() ? right : right.tail()._1()));
   }
 
   /**
@@ -429,20 +429,22 @@ public class Zipper<A> {
   }
 
   /**
-   * Moves the focus to the specified element, if it is present.
+   * Moves the focus to the element matching the given predicate, if present.
    *
-   * @param e An equality for the elements of this zipper.
-   * @param a An element to find in this zipper.
-   * @return A new zipper with the given element focused if it is present in this zipper.
+   * @param p A predicate to match.
+   * @return A new zipper with the nearest matching element focused if it is present in this zipper.
    */
-  public Option<Zipper<A>> find(final Equal<A> e, final A a) {
-    for (Option<Zipper<A>> x = some(this); x.isSome(); x = x.bind(Zipper.<A>previous_()))
-      if (e.eq(x.some().focus(), a))
-        return x;
-    for (Option<Zipper<A>> x = some(this); x.isSome(); x = x.bind(Zipper.<A>next_()))
-      if (e.eq(x.some().focus(), a))
-        return x;
-    return none();
+  public Option<Zipper<A>> find(final F<A, Boolean> p) {
+    if (p.f(focus()))
+      return some(this);
+    else {
+      final Zipper<Zipper<A>> ps = positions();
+      return ps.lefts().interleave(ps.rights()).find(new F<Zipper<A>, Boolean>() {
+        public Boolean f(final Zipper<A> zipper) {
+          return p.f(zipper.focus());
+        }
+      });
+    }
   }
 
   /**

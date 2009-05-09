@@ -1,12 +1,6 @@
 package fj.data;
 
 import static fj.Bottom.error;
-import static fj.Function.constant;
-import static fj.Function.curry;
-import static fj.Function.identity;
-import static fj.Function.compose;
-import static fj.P.p;
-import static fj.P.p2;
 import fj.Effect;
 import fj.F;
 import fj.F2;
@@ -15,20 +9,23 @@ import fj.P;
 import fj.P1;
 import fj.P2;
 import fj.Unit;
-import fj.control.parallel.Strategy;
+import static fj.Function.*;
+import static fj.P.p;
+import static fj.P.p2;
+import static fj.Unit.unit;
 import fj.control.parallel.Promise;
 import static fj.control.parallel.Promise.promise;
-import fj.function.Booleans;
-import static fj.Unit.unit;
+import fj.control.parallel.Strategy;
 import static fj.data.Array.array;
 import static fj.data.Option.none;
 import static fj.data.Option.some;
-import fj.pre.Ordering;
-import fj.pre.Ord;
+import fj.function.Booleans;
+import static fj.function.Booleans.not;
 import fj.pre.Monoid;
-import static fj.pre.Ordering.EQ;
-import static fj.pre.Ordering.GT;
-import static fj.pre.Ordering.LT;
+import fj.pre.Ord;
+import fj.pre.Ordering;
+import fj.pre.Equal;
+import static fj.pre.Ordering.*;
 
 import java.util.AbstractCollection;
 import java.util.ArrayList;
@@ -222,6 +219,24 @@ public abstract class Stream<A> implements Iterable<A> {
   }
 
   /**
+   * Intersperses the given value between each two elements of the stream.
+   *
+   * @param a The value to intersperse between values of the stream.
+   * @return A new stream with the given value between each two elements of the stream.
+   */
+  public Stream<A> intersperse(final A a) {
+    if (isEmpty()) return this;
+    else {
+      final Stream<A> t = tail()._1();
+      return t.isEmpty() ? this : cons(head(), p(cons(a, new P1<Stream<A>>() {
+        @Override public Stream<A> _1() {
+          return tail()._1().intersperse(a);
+        }
+      })));
+    }
+  }
+
+  /**
    * Maps the given function across this stream.
    *
    * @param f The function to map across this stream.
@@ -323,6 +338,60 @@ public abstract class Stream<A> implements Iterable<A> {
   }
 
   /**
+   * Returns a new stream of all the items in this stream that do not appear in the given stream.
+   *
+   * @param eq an equality for the items of the streams.
+   * @param xs a list to subtract from this stream.
+   * @return a stream of all the items in this stream that do not appear in the given stream.
+   */
+  public Stream<A> minus(final Equal<A> eq, final Stream<A> xs) {
+    return removeAll(compose(Monoid.disjunctionMonoid.sumLeftS(), xs.mapM(curry(eq.eq()))));
+  }
+
+  /**
+   * Filters elements from this stream by returning only elements which produce <code>false</code> when
+   * the given function is applied to them.
+   *
+   * @param f The predicate function to filter on.
+   * @return A new stream whose elements do not match the given predicate.
+   */
+  public Stream<A> removeAll(final F<A, Boolean> f) {
+    return filter(compose(not, f));
+  }
+
+  /**
+   * Turn a stream of functions into a function returning a stream.
+   *
+   * @param fs The stream of functions to sequence into a single function that returns a stream.
+   * @return A function that, when given an argument, applies all the functions in the given stream to it
+   *         and returns a stream of the results.
+   */
+  public static <A, B> F<B, Stream<A>> sequence(final Stream<F<B, A>> fs) {
+    return fs.foldRight(new F2<F<B, A>, P1<F<B, Stream<A>>>, F<B, Stream<A>>>() {
+      public F<B, Stream<A>> f(final F<B, A> baf, final P1<F<B, Stream<A>>> p1) {
+        return fj.Function.bind(baf, p1._1(), curry(new F2<A, Stream<A>, Stream<A>>() {
+          public Stream<A> f(final A a, final Stream<A> stream) {
+            return cons(a, p(stream));
+          }
+        }));
+      }
+    }, fj.Function
+        .<B, Stream<A>>constant(Stream.<A>nil()));
+  }
+
+  /**
+   * Maps the given function of arity-2 across this stream and returns a function that applies all the resulting
+   * functions to a given argument.
+   *
+   * @param f A function of arity-2
+   * @return A function that, when given an argument, applies the given function to that argument and every element
+   *         in this list.
+   */
+  public <B, C> F<B, Stream<C>> mapM(final F<A, F<B, C>> f) {
+    return Stream.sequence(map(f));
+  }
+
+  /**
    * Binds the given function across each element of this stream with a final join.
    *
    * @param f The function to apply to each element of this stream.
@@ -333,7 +402,7 @@ public abstract class Stream<A> implements Iterable<A> {
       public F<P1<Stream<B>>, Stream<B>> f(final A a) {
         return new F<P1<Stream<B>>, Stream<B>>() {
           public Stream<B> f(final P1<Stream<B>> bs) {
-            return f.f(a).append(bs._1());
+            return f.f(a).append(bs);
           }
         };
       }
@@ -490,21 +559,11 @@ public abstract class Stream<A> implements Iterable<A> {
    * @return A new stream with elements interleaved from this stream and the given stream.
    */
   public Stream<A> interleave(final Stream<A> as) {
-    if (isEmpty())
-      return as;
-    else if (as.isEmpty())
-      return this;
-    else {
-      return cons(head(), new P1<Stream<A>>() {
-        public Stream<A> _1() {
-          return cons(as.head(), new P1<Stream<A>>() {
-            public Stream<A> _1() {
-              return as.tail()._1().interleave(as.tail()._1());
-            }
-          });
-        }
-      });
-    }
+    return isEmpty() ? as : as.isEmpty() ? this : cons(head(), new P1<Stream<A>>() {
+      @Override public Stream<A> _1() {
+        return as.interleave(tail()._1());
+      }
+    });
   }
 
   /**
@@ -613,7 +672,7 @@ public abstract class Stream<A> implements Iterable<A> {
    * @return A stream of integers from the given <code>from</code> value (inclusive) to the given
    *         <code>to</code> value (exclusive).
    */
-  public static Stream<Integer> range(final int from, final int to) {
+  public static Stream<Integer> range(final int from, final long to) {
     return from >= to ? Stream.<Integer>nil() : cons(from, new P1<Stream<Integer>>() {
       public Stream<Integer> _1() {
         return range(from + 1, to);
@@ -629,12 +688,12 @@ public abstract class Stream<A> implements Iterable<A> {
    */
   public static <A> Stream<A> stream(final A... as) {
     return as.length == 0 ? Stream.<A>nil()
-        : unfold(P2.tuple(new F2<A[], Integer, Option<P2<A, P2<A[], Integer>>>>() {
-          public Option<P2<A, P2<A[], Integer>>> f(final A[] as, final Integer i) {
-            return i >= as.length ? Option.<P2<A, P2<A[], Integer>>>none()
-                : some(P.p(as[i], P.p(as, i + 1)));
-          }
-        }), P.p(as, 0));
+                          : unfold(P2.tuple(new F2<A[], Integer, Option<P2<A, P2<A[], Integer>>>>() {
+                            public Option<P2<A, P2<A[], Integer>>> f(final A[] as, final Integer i) {
+                              return i >= as.length ? Option.<P2<A, P2<A[], Integer>>>none()
+                                                    : some(P.p(as[i], P.p(as, i + 1)));
+                            }
+                          }), P.p(as, 0));
   }
 
   /**
@@ -754,11 +813,11 @@ public abstract class Stream<A> implements Iterable<A> {
    */
   public <B> Stream<B> zapp(final Stream<F<A, B>> fs) {
     return fs.isEmpty() || isEmpty() ? Stream.<B>nil() :
-        cons(fs.head().f(head()), new P1<Stream<B>>() {
-          public Stream<B> _1() {
-            return tail()._1().zapp(fs.tail()._1());
-          }
-        });
+           cons(fs.head().f(head()), new P1<Stream<B>>() {
+             public Stream<B> _1() {
+               return tail()._1().zapp(fs.tail()._1());
+             }
+           });
   }
 
   /**
@@ -892,7 +951,39 @@ public abstract class Stream<A> implements Iterable<A> {
   }
 
   /**
+   * Returns a string from the given stream of characters. The invers of this function is {@link
+   * #fromString(String)}.
+   *
+   * @param cs The stream of characters to produce the string from.
+   * @return A string from the given stream of characters.
+   */
+  public static String asString(final Stream<Character> cs) {
+    return LazyString.fromStream(cs).toString();
+  }
+
+  /**
+   * Returns a stream of characters from the given string. The inverse of this function is {@link
+   * #asString(Stream)}.
+   *
+   * @param s The string to produce the stream of characters from.
+   * @return A stream of characters from the given string.
+   */
+  public static Stream<Character> fromString(final String s) {
+    return LazyString.str(s).toStream();
+  }
+
+  /**
    * Append the given element to this stream to product a new stream.
+   *
+   * @param a The element to append.
+   * @return A new stream with the given element at the end.
+   */
+  public Stream<A> snoc(final A a) {
+    return snoc(p(a));
+  }
+
+  /**
+   * Append the given element to this stream to produce a new stream.
    *
    * @param a The element to append.
    * @return A new stream with the given element at the end.
@@ -913,12 +1004,12 @@ public abstract class Stream<A> implements Iterable<A> {
    */
   public Stream<A> take(final int n) {
     return n <= 0 || isEmpty() ?
-        Stream.<A>nil() :
-        cons(head(), new P1<Stream<A>>() {
-          public Stream<A> _1() {
-            return tail()._1().take(n - 1);
-          }
-        });
+           Stream.<A>nil() :
+           cons(head(), new P1<Stream<A>>() {
+             public Stream<A> _1() {
+               return tail()._1().take(n - 1);
+             }
+           });
   }
 
   /**
@@ -948,14 +1039,14 @@ public abstract class Stream<A> implements Iterable<A> {
    */
   public Stream<A> takeWhile(final F<A, Boolean> f) {
     return isEmpty() ?
-        this :
-        f.f(head()) ?
-            cons(head(), new P1<Stream<A>>() {
-              public Stream<A> _1() {
-                return tail()._1().takeWhile(f);
-              }
-            }) :
-            Stream.<A>nil();
+           this :
+           f.f(head()) ?
+           cons(head(), new P1<Stream<A>>() {
+             public Stream<A> _1() {
+               return tail()._1().takeWhile(f);
+             }
+           }) :
+           Stream.<A>nil();
   }
 
   /**
@@ -971,6 +1062,68 @@ public abstract class Stream<A> implements Iterable<A> {
     for (as = this; !as.isEmpty() && f.f(as.head()); as = as.tail()._1()) ;
 
     return as;
+  }
+
+  /**
+   * Returns a tuple where the first element is the longest prefix of this stream that satisfies
+   * the given predicate and the second element is the remainder of the stream.
+   *
+   * @param p A predicate to be satisfied by a prefix of this stream.
+   * @return A tuple where the first element is the longest prefix of this stream that satisfies
+   *         the given predicate and the second element is the remainder of the stream.
+   */
+  public P2<Stream<A>, Stream<A>> span(final F<A, Boolean> p) {
+    if (isEmpty())
+      return p(this, this);
+    else if (p.f(head())) {
+      final P1<P2<Stream<A>, Stream<A>>> yszs = new P1<P2<Stream<A>, Stream<A>>>() {
+        @Override public P2<Stream<A>, Stream<A>> _1() {
+          return tail()._1().span(p);
+        }
+      };
+      return new P2<Stream<A>, Stream<A>>() {
+        @Override public Stream<A> _1() {
+          return cons(head(), yszs.map(P2.<Stream<A>, Stream<A>>__1()));
+        }
+
+        @Override public Stream<A> _2() {
+          return yszs._1()._2();
+        }
+      };
+    } else
+      return p(Stream.<A>nil(), this);
+  }
+
+  /**
+   * Returns a new stream resulting from replacing all elements that match the given predicate with the given element.
+   *
+   * @param p The predicate to match replaced elements.
+   * @param a The element with which to replace elements.
+   * @return A new stream resulting from replacing all elements that match the given predicate with the given element.
+   */
+  public Stream<A> replace(final F<A, Boolean> p, final A a) {
+    if (isEmpty())
+      return Stream.nil();
+    else {
+      final P2<Stream<A>, Stream<A>> s = span(p);
+      return s._1().append(cons(a, new P1<Stream<A>>() {
+        @Override public Stream<A> _1() {
+          return s._2().tail()._1().replace(p, a);
+        }
+      }));
+    }
+  }
+
+  /**
+   * Returns a tuple where the first element is the longest prefix of this stream that does not satisfy
+   * the given predicate and the second element is the remainder of the stream.
+   *
+   * @param p A predicate not to be satisfied by a prefix of this stream.
+   * @return A tuple where the first element is the longest prefix of this stream that does not satisfy
+   *         the given predicate and the second element is the remainder of the stream.
+   */
+  public P2<Stream<A>, Stream<A>> split(final F<A, Boolean> p) {
+    return span(compose(Booleans.not, p));
   }
 
   /**
@@ -1071,27 +1224,67 @@ public abstract class Stream<A> implements Iterable<A> {
   }
 
   /**
-   * Binds the given function across the stream of tails of this stream (Comonad pattern).
+   * Binds the given function across the stream of substreams of this stream.
    *
-   * @param k A function to bind across this stream and its tails.
-   * @return a new stream of the results of applying the given function to this stream and its tails.
+   * @param k A function to bind across this stream and its substreams.
+   * @return a new stream of the results of applying the given function to this stream and its substreams.
    */
   public <B> Stream<B> cobind(final F<Stream<A>, B> k) {
-    return isEmpty() ? Stream.<B>nil() : cons(k.f(this), new P1<Stream<B>>() {
-      public Stream<B> _1() {
-        return tail()._1().cobind(k);
+    return substreams().map(k);
+  }
+
+  /**
+   * Returns a stream of the suffixes of this stream. A stream is considered to be a suffix of itself in this context.
+   *
+   * @return a stream of the suffixes of this stream, starting with the stream itself.
+   */
+  public Stream<Stream<A>> tails() {
+    return isEmpty() ? Stream.<Stream<A>>nil() : cons(this, new P1<Stream<Stream<A>>>() {
+      public Stream<Stream<A>> _1() {
+        return tail()._1().tails();
       }
     });
   }
 
   /**
-   * Returns a stream of the tails of this stream. A stream is considered to be a tail of itself in this context.
+   * Returns a stream of all prefixes of this stream. A stream is considered a prefix of itself in tnis context.
    *
-   * @return a stream of the tails of this stream, starting with the stream itself.
+   * @return a stream of the prefixes of this stream, starting with the stream itself.
    */
-  public Stream<Stream<A>> tails() {
-    final F<Stream<A>, Stream<A>> id = identity();
-    return cobind(id);
+  public Stream<Stream<A>> inits() {
+    final Stream<Stream<A>> nil = nil();
+    return isEmpty() ? nil : nil.append(new P1<Stream<Stream<A>>>() {
+      public Stream<Stream<A>> _1() {
+        return tail()._1().inits().map(Stream.<A>cons_().f(head()));
+      }
+    });
+  }
+
+  /**
+   * Returns a stream of all infixes of this stream. A stream is considered to contain itself.
+   *
+   * @return a stream of the infixes of this stream.
+   */
+  public Stream<Stream<A>> substreams() {
+    return tails().bind(new F<Stream<A>, Stream<Stream<A>>>() {
+      public Stream<Stream<A>> f(final Stream<A> stream) {
+        return stream.inits();
+      }
+    });
+  }
+
+  /**
+   * Returns the position of the first element matching the given predicate, if any.
+   *
+   * @param p A predicate to match.
+   * @return the position of the first element matching the given predicate, if any.
+   */
+  public Option<Integer> indexOf(final F<A, Boolean> p) {
+    return zipIndex().find(new F<P2<A, Integer>, Boolean>() {
+      public Boolean f(final P2<A, Integer> p2) {
+        return p.f(p2._1());
+      }
+    }).map(P2.<A, Integer>__2());
   }
 
   /**
@@ -1102,12 +1295,12 @@ public abstract class Stream<A> implements Iterable<A> {
    */
   public <B> Stream<B> sequenceW(final Stream<F<Stream<A>, B>> fs) {
     return fs.isEmpty()
-        ? Stream.<B>nil()
-        : cons(fs.head().f(this), new P1<Stream<B>>() {
-          public Stream<B> _1() {
-            return sequenceW(fs.tail()._1());
-          }
-        });
+           ? Stream.<B>nil()
+           : cons(fs.head().f(this), new P1<Stream<B>>() {
+             public Stream<B> _1() {
+               return sequenceW(fs.tail()._1());
+             }
+           });
   }
 
   /**
@@ -1148,8 +1341,8 @@ public abstract class Stream<A> implements Iterable<A> {
       public Stream<A> _1() {
         final Option<B> s = e.successor(i);
         return s.isSome()
-            ? fromFunction(e, f, s.some())
-            : Stream.<A>nil();
+               ? fromFunction(e, f, s.some())
+               : Stream.<A>nil();
       }
     });
   }
