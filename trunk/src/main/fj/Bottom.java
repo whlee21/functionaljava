@@ -46,7 +46,7 @@ public final class Bottom {
    * @return A deconstruction failure that was non-exhaustive.
    */
   public static <A> Error decons(final A a, final Show<A> sa) {
-    return error("Deconstruction failure on type " + a.getClass() + " with value " + asString(sa.show(a)));
+    return error("Deconstruction failure on type " + a.getClass() + " with value " + sa.show(a).toString());
   }
 
   /**

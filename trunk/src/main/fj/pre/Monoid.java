@@ -3,6 +3,7 @@ package fj.pre;
 import fj.F;
 import fj.F2;
 import fj.Function;
+import fj.P1;
 import static fj.pre.Semigroup.disjunctionSemigroup;
 import static fj.pre.Semigroup.conjunctionSemigroup;
 import static fj.pre.Semigroup.intMultiplicationSemigroup;
@@ -113,12 +114,36 @@ public final class Monoid<A> {
   }
 
   /**
+   * Sums the given values with right-fold.
+   *
+   * @param as The values to sum.
+   * @return The sum of the given values.
+   */
+  public A sumRight(final Stream<A> as) {
+    return as.foldRight(new F2<A, P1<A>, A>() {
+      public A f(final A a, final P1<A> ap1) {
+        return sum(a, ap1._1());
+      }
+    }, zero);
+  }
+
+  /**
    * Sums the given values with left-fold.
    *
    * @param as The values to sum.
    * @return The sum of the given values.
    */
   public A sumLeft(final List<A> as) {
+    return as.foldLeft(sum, zero);
+  }
+
+  /**
+   * Sums the given values with left-fold.
+   *
+   * @param as The values to sum.
+   * @return The sum of the given values.
+   */
+  public A sumLeft(final Stream<A> as) {
     return as.foldLeft(sum, zero);
   }
 
@@ -149,6 +174,19 @@ public final class Monoid<A> {
   }
 
   /**
+   * Returns a function that sums the given values with left-fold.
+   *
+   * @return a function that sums the given values with left-fold.
+   */
+  public F<Stream<A>, A> sumLeftS() {
+    return new F<Stream<A>, A>() {
+      public A f(final Stream<A> as) {
+        return sumLeft(as);
+      }
+    };
+  }
+
+  /**
    * Intersperses the given value between each two elements of the iterable, and sums the result.
    *
    * @param as An iterable of values to sum.
@@ -158,8 +196,8 @@ public final class Monoid<A> {
   public A join(final Iterable<A> as, final A a) {
     final Stream<A> s = iterableStream(as);
     return s.isEmpty() ?
-        zero :
-        s.foldLeft1(compose(sum, flip(sum).f(a)));
+           zero :
+           s.foldLeft1(compose(sum, flip(sum).f(a)));
   }
 
   /**
