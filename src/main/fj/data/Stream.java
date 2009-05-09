@@ -230,7 +230,7 @@ public abstract class Stream<A> implements Iterable<A> {
       final Stream<A> t = tail()._1();
       return t.isEmpty() ? this : cons(head(), p(cons(a, new P1<Stream<A>>() {
         @Override public Stream<A> _1() {
-          return tail()._1().intersperse(a);
+          return t.intersperse(a);
         }
       })));
     }
