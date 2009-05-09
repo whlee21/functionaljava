@@ -118,7 +118,7 @@ public class Natural extends Number {
    *         that divides this number.
    */
   public Natural divide(final Natural n) {
-    return natural(n.value.divide(value)).some();
+    return natural(value.divide(n.value)).some();
   }
 
   /**
@@ -128,7 +128,7 @@ public class Natural extends Number {
    * @return The remainder of division of this number by the given number.
    */
   public Natural mod(final Natural n) {
-    return natural(n.value.mod(value)).some();
+    return natural(value.mod(n.value)).some();
   }
 
   /**
@@ -138,7 +138,7 @@ public class Natural extends Number {
    * @return The quotient and the remainder.
    */
   public V2<Natural> divmod(final Natural n) {
-    BigInteger[] x = n.value.divideAndRemainder(value);
+    BigInteger[] x = value.divideAndRemainder(n.value);
     return V.v(natural(x[0]).some(), natural(x[1]).some());
   }
 
