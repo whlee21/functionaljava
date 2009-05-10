@@ -195,6 +195,33 @@ public final class Function {
   }
 
   /**
+   * Function argument flipping.
+   *
+   * @param f The function to flip.
+   * @return The given function flipped.
+   */
+  public static <A, B, C> F2<B, A, C> flip(final F2<A, B, C> f) {
+    return new F2<B, A, C>() {
+      public C f(final B b, final A a) {
+        return f.f(a, b);
+      }
+    };
+  }
+
+  /**
+   * Function argument flipping.
+   *
+   * @return A function that flips the arguments of a given function.
+   */
+  public static <A, B, C> F<F2<A, B, C>, F2<B, A, C>> flip2() {
+    return new F<F2<A, B, C>, F2<B, A, C>>() {
+      public F2<B, A, C> f(final F2<A, B, C> f) {
+        return flip(f);
+      }
+    };
+  }
+
+  /**
    * Curry a function of arity-2.
    *
    * @param f The function to curry.
