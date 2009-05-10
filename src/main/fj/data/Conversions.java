@@ -11,12 +11,12 @@ import static fj.data.List.fromString;
  *
  * @version %build.number%<br>
  *          <ul>
- *          <li>$LastChangedRevision$</li>
- *          <li>$LastChangedDate$</li>
+ *          <li>$LastChangedRevision: 122 $</li>
+ *          <li>$LastChangedDate: 2009-04-24 17:24:38 -0500 (Fri, 24 Apr 2009) $</li>
  *          </ul>
  */
-public final class Function {
-  private Function() {
+public final class Conversions {
+  private Conversions() {
     throw new UnsupportedOperationException();
   }
 

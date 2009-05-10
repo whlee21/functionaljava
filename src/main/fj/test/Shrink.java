@@ -30,15 +30,10 @@ import static fj.Primitive.Long_Float;
 import static fj.Primitive.Long_Integer;
 import static fj.Primitive.Long_Short;
 import static fj.Primitive.Short_Long;
-import fj.data.Array;
 import static fj.data.Array.array;
-import fj.data.Either;
-import fj.data.Function;
-import fj.data.Java;
-import fj.data.List;
+import fj.data.Conversions;
 import static fj.data.List.isNotEmpty_;
-import fj.data.Option;
-import fj.data.Stream;
+import fj.data.*;
 import static fj.data.Stream.cons;
 import static fj.data.Stream.iterate;
 import static fj.data.Stream.nil;
@@ -330,7 +325,7 @@ public final class Shrink<A> {
    * @return A shrink strategy for arrays.
    */
   public static <A> Shrink<Array<A>> shrinkArray(final Shrink<A> sa) {
-    return shrinkList(sa).map(Function.<A>List_Array(), Function.<A>Array_List());
+    return shrinkList(sa).map(Conversions.<A>List_Array(), Conversions.<A>Array_List());
   }
 
   /**
@@ -340,26 +335,26 @@ public final class Shrink<A> {
    * @return A shrink strategy for streams.
    */
   public static <A> Shrink<Stream<A>> shrinkStream(final Shrink<A> sa) {
-    return shrinkList(sa).map(Function.<A>List_Stream(), Function.<A>Stream_List());
+    return shrinkList(sa).map(Conversions.<A>List_Stream(), Conversions.<A>Stream_List());
   }
 
   /**
    * A shrink strategy for strings using the empty string as the bottom of the shrink.
    */
   public static final Shrink<String> shrinkString =
-      shrinkList(shrinkCharacter).map(Function.List_String, Function.String_List);
+      shrinkList(shrinkCharacter).map(Conversions.List_String, Conversions.String_List);
 
   /**
    * A shrink strategy for string buffers using the empty string as the bottom of the shrink.
    */
   public static final Shrink<StringBuffer> shrinkStringBuffer =
-      shrinkList(shrinkCharacter).map(Function.List_StringBuffer, Function.StringBuffer_List);
+      shrinkList(shrinkCharacter).map(Conversions.List_StringBuffer, Conversions.StringBuffer_List);
 
   /**
    * A shrink strategy for string builders using the empty string as the bottom of the shrink.
    */
   public static final Shrink<StringBuilder> shrinkStringBuilder =
-      shrinkList(shrinkCharacter).map(Function.List_StringBuilder, Function.StringBuilder_List);
+      shrinkList(shrinkCharacter).map(Conversions.List_StringBuilder, Conversions.StringBuilder_List);
 
   /**
    * A shrink strategy for throwables.
