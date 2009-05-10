@@ -314,7 +314,7 @@ public final class Show<A> {
    * @param sa Show for the elements of the non-empty Stream.
    * @return A show instance for the {@link NonEmptyList} type.
    */
-  public static <A> Show<NonEmptyList<A>> NonEmptyListShow(final Show<A> sa) {
+  public static <A> Show<NonEmptyList<A>> nonEmptyListShow(final Show<A> sa) {
     return listShow(sa).comap(NonEmptyList.<A>toList_());
   }
 
