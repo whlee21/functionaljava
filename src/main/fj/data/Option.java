@@ -142,6 +142,19 @@ public abstract class Option<A> implements Iterable<A> {
   }
 
   /**
+   * A first-class map function.
+   *
+   * @return A function that maps a given function across a given optional value.
+   */
+  public static <A, B> F<F<A, B>, F<Option<A>, Option<B>>> map() {
+    return curry(new F2<F<A, B>, Option<A>, Option<B>>() {
+      public Option<B> f(final F<A, B> abf, final Option<A> option) {
+        return option.map(abf);
+      }
+    });
+  }
+
+  /**
    * Performs a side-effect for the value of this optional value.
    *
    * @param f The side-effect to perform for the given element.
@@ -541,12 +554,12 @@ public abstract class Option<A> implements Iterable<A> {
    */
   public static <A> Option<List<A>> sequence(final List<Option<A>> a) {
     return a.isEmpty() ?
-        some(List.<A>nil()) :
-        a.head().bind(new F<A, Option<List<A>>>() {
-          public Option<List<A>> f(final A aa) {
-            return sequence(a.tail()).map(cons_(aa));
-          }
-        });
+           some(List.<A>nil()) :
+           a.head().bind(new F<A, Option<List<A>>>() {
+             public Option<List<A>> f(final A aa) {
+               return sequence(a.tail()).map(cons_(aa));
+             }
+           });
   }
 
   /**

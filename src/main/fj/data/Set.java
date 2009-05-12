@@ -7,14 +7,13 @@ import static fj.pre.Ordering.LT;
 import static fj.pre.Ordering.GT;
 import fj.F;
 import fj.F2;
+import fj.Function;
 import fj.P;
 import fj.P3;
+import static fj.Function.*;
 import static fj.data.Option.some;
+import static fj.data.Either.right;
 import static fj.function.Booleans.not;
-import static fj.Function.identity;
-import static fj.Function.curry;
-import static fj.Function.compose;
-import static fj.Function.constant;
 
 import java.util.Iterator;
 
@@ -37,7 +36,7 @@ public abstract class Set<A> implements Iterable<A> {
   }
 
   @SuppressWarnings({"ClassEscapesDefinedScope"})
-  abstract Color color();
+  protected abstract Color color();
 
   abstract Set<A> l();
 
@@ -108,6 +107,40 @@ public abstract class Set<A> implements Iterable<A> {
   }
 
   /**
+   * Updates, with the given function, the first element in the set that is equal to the given element,
+   * according to the order.
+   *
+   * @param a An element to replace.
+   * @param f A function to transforms the found element.
+   * @return A new set with the given function applied to the first set element that was equal to the given element.
+   */
+  public Set<A> update(final A a, final F<A, A> f) {
+    return isEmpty()
+           ? this
+           : tryUpdate(a, f).either(apply(Set.<A>insert(), flip(delete()).f(this)), Function.<Set<A>>identity());
+  }
+
+  private Either<A, Set<A>> tryUpdate(final A a, final F<A, A> f) {
+    if (isEmpty())
+      return right(this);
+    else if (ord.isLessThan(a, head()))
+      return l().tryUpdate(a, f).right().map(new F<Set<A>, Set<A>>() {
+        public Set<A> f(final Set<A> set) {
+          return new Tree<A>(ord, color(), set, head(), r());
+        }
+      });
+    else if (ord.eq(a, head())) {
+      final A h = f.f(head());
+      return ord.eq(head(), h) ? Either.<A, Set<A>>right(new Tree<A>(ord, color(), l(), h, r()))
+                               : Either.<A, Set<A>>left(h);
+    } else return r().tryUpdate(a, f).right().map(new F<Set<A>, Set<A>>() {
+      public Set<A> f(final Set<A> set) {
+        return new Tree<A>(ord, color(), l(), head(), set);
+      }
+    });
+  }
+
+  /**
    * The empty set.
    *
    * @param ord An order for the type of elements.
@@ -151,14 +184,27 @@ public abstract class Set<A> implements Iterable<A> {
     return ins(x).makeBlack();
   }
 
+  /**
+   * First-class insertion function.
+   *
+   * @return A function that inserts a given element into a given set.
+   */
+  public static <A> F<A, F<Set<A>, Set<A>>> insert() {
+    return curry(new F2<A, Set<A>, Set<A>>() {
+      public Set<A> f(final A a, final Set<A> set) {
+        return set.insert(a);
+      }
+    });
+  }
+
   private Set<A> ins(final A x) {
-    return isEmpty() ?
-        new Tree<A>(ord, Color.R, empty(ord), x, empty(ord)) :
-        ord.isLessThan(x, head()) ?
-            balance(ord, color(), l().ins(x), head(), r()) :
-            ord.eq(x, head()) ?
-                this :
-                balance(ord, color(), l(), head(), r().ins(x));
+    return isEmpty()
+           ? new Tree<A>(ord, Color.R, empty(ord), x, empty(ord))
+           : ord.isLessThan(x, head())
+             ? balance(ord, color(), l().ins(x), head(), r())
+             : ord.eq(x, head())
+               ? new Tree<A>(ord, color(), l(), x, r())
+               : balance(ord, color(), l(), head(), r().ins(x));
   }
 
   private Set<A> makeBlack() {
@@ -230,8 +276,8 @@ public abstract class Set<A> implements Iterable<A> {
    */
   public <B> B foldMap(final F<A, B> f, final Monoid<B> m) {
     return isEmpty() ?
-        m.zero() :
-        m.sum(m.sum(r().foldMap(f, m), f.f(head())), l().foldMap(f, m));
+           m.zero() :
+           m.sum(m.sum(r().foldMap(f, m), f.f(head())), l().foldMap(f, m));
   }
 
   /**
@@ -292,6 +338,19 @@ public abstract class Set<A> implements Iterable<A> {
    */
   public Set<A> delete(final A a) {
     return minus(single(ord, a));
+  }
+
+  /**
+   * First-class deletion function.
+   *
+   * @return A function that deletes a given element from a given set.
+   */
+  public F<A, F<Set<A>, Set<A>>> delete() {
+    return curry(new F2<A, Set<A>, Set<A>>() {
+      public Set<A> f(final A a, final Set<A> set) {
+        return set.delete(a);
+      }
+    });
   }
 
   /**

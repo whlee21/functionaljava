@@ -5,6 +5,7 @@ import fj.P;
 import fj.P2;
 import fj.P3;
 import fj.F;
+import static fj.P.p;
 import static fj.data.IterableW.join;
 import static fj.data.List.iterableList;
 import fj.pre.Ord;
@@ -167,6 +168,18 @@ public final class TreeMap<K, V> implements Iterable<P2<K, V>> {
         return get(k);
       }
     };
+  }
+
+  /**
+   * Modifies the value for the given key, if present, by applying the given function to it.
+   *
+   * @param k The key for the value to modify.
+   * @param f A function with which to modify the value.
+   * @return A new tree map with the value for the given key transformed by the given function.
+   */
+  public TreeMap<K, V> update(final K k, final F<V, V> f) {
+    return new TreeMap<K, V>(
+        tree.update(p(k, Option.<V>none()), P2.<K, Option<V>, Option<V>>map2_(Option.<V, V>map().f(f))));
   }
 
 }
