@@ -142,11 +142,11 @@ public final class Function {
    * Simultaneously covaries and contravaries a function.
    *
    * @param f The function to vary.
-   * @return A function that invokes f on its argument.
+   * @return A co- and contravariant function that invokes f on its argument.
    */
   public static <A, B> F<A, B> vary(final F<? super A, ? extends B> f) {
     return new F<A, B>() {
-      public B f(A a) {
+      public B f(final A a) {
         return f.f(a);
       }
     };
@@ -154,6 +154,8 @@ public final class Function {
 
   /**
    * Simultaneously covaries and contravaries a function.
+   *
+   * @return A function that varies and covaries a function.
    */
   public static <C, A extends C, B, D extends B> F<F<C, D>, F<A, B>> vary() {
     return new F<F<C, D>, F<A, B>>() {
