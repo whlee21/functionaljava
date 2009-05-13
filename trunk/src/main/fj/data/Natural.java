@@ -2,6 +2,8 @@ package fj.data;
 
 import static fj.Bottom.error;
 import fj.F;
+import fj.F2;
+import static fj.Function.curry;
 import fj.data.vector.V2;
 import fj.data.vector.V;
 
@@ -72,12 +74,38 @@ public class Natural extends Number {
   }
 
   /**
+   * First-class successor function.
+   *
+   * @return A function that returns the successor of a given natural number.
+   */
+  public static F<Natural, Natural> succ_() {
+    return new F<Natural, Natural>() {
+      public Natural f(final Natural natural) {
+        return natural.succ();
+      }
+    };
+  }
+
+  /**
    * Return the predecessor of this natural number
    *
    * @return the predecessor of this natural number
    */
   public Option<Natural> pred() {
     return subtract(ONE);
+  }
+
+  /**
+   * First-class predecessor function.
+   *
+   * @return A function that returns the predecessor of a given natural number, or None if it's zero.
+   */
+  public static F<Natural, Option<Natural>> pred_() {
+    return new F<Natural, Option<Natural>>() {
+      public Option<Natural> f(final Natural natural) {
+        return natural.pred();
+      }
+    };
   }
 
   /**
@@ -91,6 +119,19 @@ public class Natural extends Number {
   }
 
   /**
+   * First-class addition function.
+   *
+   * @return A function that adds two natural numbers.
+   */
+  public static F<Natural, F<Natural, Natural>> add() {
+    return curry(new F2<Natural, Natural, Natural>() {
+      public Natural f(final Natural n1, final Natural n2) {
+        return n1.add(n2);
+      }
+    });
+  }
+
+  /**
    * Subtract a natural number from another.
    *
    * @param n A natural number to subtract from this one.
@@ -101,6 +142,19 @@ public class Natural extends Number {
   }
 
   /**
+   * First-class subtraction function.
+   *
+   * @return A function that subtracts its first argument from its second.
+   */
+  public static F<Natural, F<Natural, Option<Natural>>> subtract() {
+    return curry(new F2<Natural, Natural, Option<Natural>>() {
+      public Option<Natural> f(final Natural o, final Natural o1) {
+        return o1.subtract(o);
+      }
+    });
+  }
+
+  /**
    * Multiply a natural number by another.
    *
    * @param n A natural number to multiply by this one.
@@ -108,6 +162,32 @@ public class Natural extends Number {
    */
   public Natural multiply(final Natural n) {
     return natural(n.value.multiply(value)).some();
+  }
+
+  /**
+   * First-class multiplication.
+   *
+   * @return A function that multiplies a natural number by another.
+   */
+  public static F<Natural, F<Natural, Natural>> multiply() {
+    return curry(new F2<Natural, Natural, Natural>() {
+      public Natural f(final Natural n1, final Natural n2) {
+        return n1.multiply(n2);
+      }
+    });
+  }
+
+  /**
+   * First-class division.
+   *
+   * @return A function that divides its second argument by its first.
+   */
+  public static F<Natural, F<Natural, Natural>> divide() {
+    return curry(new F2<Natural, Natural, Natural>() {
+      public Natural f(final Natural n1, final Natural n2) {
+        return n2.divide(n1);
+      }
+    });
   }
 
   /**
@@ -132,15 +212,42 @@ public class Natural extends Number {
   }
 
   /**
+   * First-class modulus.
+   *
+   * @return A function that yields the remainder of division of its second argument by its first.
+   */
+  public static F<Natural, F<Natural, Natural>> mod() {
+    return curry(new F2<Natural, Natural, Natural>() {
+      public Natural f(final Natural n1, final Natural n2) {
+        return n2.mod(n1);
+      }
+    });
+  }
+
+  /**
    * Divide a natural number by another yielding both the quotient and the remainder.
    *
    * @param n A natural number to divide this one by.
-   * @return The quotient and the remainder.
+   * @return The quotient and the remainder, in that order.
    */
   public V2<Natural> divmod(final Natural n) {
-    BigInteger[] x = value.divideAndRemainder(n.value);
+    final BigInteger[] x = value.divideAndRemainder(n.value);
     return V.v(natural(x[0]).some(), natural(x[1]).some());
   }
+
+  /**
+   * First-class division and modulus.
+   *
+   * @return A function that divides its second argument by its first, yielding both the quotient and the remainder.
+   */
+  public static F<Natural, F<Natural, V2<Natural>>> divmod() {
+    return curry(new F2<Natural, Natural, V2<Natural>>() {
+      public V2<Natural> f(final Natural n1, final Natural n2) {
+        return n2.divmod(n1);
+      }
+    });
+  }
+
 
   /**
    * Return the BigInteger value of this natural number.
