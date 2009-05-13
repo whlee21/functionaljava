@@ -1027,4 +1027,204 @@ public final class Function {
   public static <A, B> F<B, A> join(final F<B, F<B, A>> f) {
     return bind(f, Function.<F<B, A>>identity());
   }
+  
+  
+  /**
+   * Partial application of the second argument to the supplied function to get a function of type
+   * <tt>A -> C</tt>. Same as <tt>flip(f).f(b)</tt>.
+   * 
+   * @param f The function to partially apply.
+   * @param b The value to apply to the function.
+   * @return A new function based on <tt>f</tt> with its second argument applied.
+   */
+  public static <A, B, C> F<A,C> partialApply2(final F<A, F<B, C>> f, final B b) {
+    return new F<A, C>() {
+      public C f(final A a) {
+        return uncurryF2(f).f(a, b);
+      }
+    };
+  }
+  
+  /**
+   * Partial application of the third argument to the supplied function to get a function of type
+   * <tt>A -> B -> D</tt>.
+   * 
+   * @param f The function to partially apply.
+   * @param c The value to apply to the function.
+   * @return A new function based on <tt>f</tt> with its third argument applied.
+   */
+  public static <A, B, C, D> F<A, F<B, D>> partialApply3(final F<A, F<B, F<C, D>>> f, final C c) {
+    return new F<A, F<B, D>>() {
+      public F<B, D> f(final A a) {
+        return new F<B, D>() {
+          public D f(final B b) {
+            return uncurryF3(f).f(a, b, c);
+          }
+        };
+      }
+    };
+  }
+  
+  /**
+   * Partial application of the fourth argument to the supplied function to get a function of type
+   * <tt>A -> B -> C -> E</tt>.
+   * 
+   * @param f The function to partially apply.
+   * @param d The value to apply to the function.
+   * @return A new function based on <tt>f</tt> with its fourth argument applied.
+   */
+  public static <A, B, C, D, E> F<A, F<B, F<C, E>>> partialApply4(final F<A, F<B, F<C, F<D, E>>>> f, final D d) {
+    return new F<A, F<B, F<C, E>>>() {
+      public F<B, F<C, E>> f(final A a) {
+        return new F<B, F<C, E>>() {
+          public F<C, E> f(final B b) {
+            return new F<C, E>() {
+              public E f(final C c) {
+                return uncurryF4(f).f(a, b, c, d);
+              }
+            };
+          }
+        };
+      }
+    };
+  }
+  
+  /**
+   * Partial application of the fifth argument to the supplied function to get a function of type
+   * <tt>A -> B -> C -> D -> F$</tt>.
+   * 
+   * @param f The function to partially apply.
+   * @param e The value to apply to the function.
+   * @return A new function based on <tt>f</tt> with its fifth argument applied.
+   */
+  public static <A, B, C, D, E, F$> F<A, F<B, F<C, F<D, F$>>>> partialApply5(final F<A, F<B, F<C, F<D, F<E, F$>>>>>f, final E e) {
+    return new F<A, F<B, F<C, F<D, F$>>>>() {
+      public F<B, F<C, F<D, F$>>> f(final A a) {
+        return new F<B, F<C, F<D, F$>>>() {
+          public F<C, F<D, F$>> f(final B b) {
+            return new F<C, F<D, F$>>() {
+              public F<D, F$> f(final C c) {
+                return new F<D, F$>() {
+                  public F$ f(final D d) {
+                    return uncurryF5(f).f(a, b, c, d, e);
+                  }
+                };
+              }
+            };
+          }
+        };
+      }
+    };
+  }
+  
+  /**
+   * Partial application of the sixth argument to the supplied function to get a function of type
+   * <tt>A -> B -> C -> D -> E -> G</tt>.
+   * 
+   * @param f The function to partially apply.
+   * @param f$ The value to apply to the function.
+   * @return A new function based on <tt>f</tt> with its sixth argument applied.
+   */
+  public static <A, B, C, D, E, F$, G> F<A, F<B, F<C, F<D, F<E, G>>>>> partialApply6(
+      final F<A, F<B, F<C, F<D, F<E, F<F$, G>>>>>>f, final F$ f$) {
+    return new F<A, F<B, F<C, F<D, F<E, G>>>>>() {
+      public F<B, F<C, F<D, F<E, G>>>> f(final A a) {
+        return new F<B, F<C, F<D, F<E, G>>>>() {
+          public F<C, F<D, F<E, G>>> f(final B b) {
+            return new F<C, F<D, F<E, G>>>() {
+              public F<D, F<E, G>> f(final C c) {
+                return new F<D, F<E, G>>() {
+                  public F<E, G> f(final D d) {
+                    return new F<E, G>() {
+                      public G f(final E e) {
+                        return uncurryF6(f).f(a, b, c, d, e, f$);
+                      }
+                    };
+                  }
+                };
+              }
+            };
+          }
+        };
+      }
+    };
+  }
+  
+  /**
+   * Partial application of the seventh argument to the supplied function to get a function of type
+   * <tt>A -> B -> C -> D -> E -> F$ -> H</tt>.
+   * 
+   * @param f The function to partially apply.
+   * @param g The value to apply to the function.
+   * @return A new function based on <tt>f</tt> with its seventh argument applied.
+   */
+  public static <A, B, C, D, E, F$, G, H> F<A, F<B, F<C, F<D, F<E, F<F$, H>>>>>> partialApply7(
+      final F<A, F<B, F<C, F<D, F<E, F<F$, F<G, H>>>>>>>f, final G g) {
+    return new F<A, F<B, F<C, F<D, F<E, F<F$, H>>>>>>() {
+      public F<B, F<C, F<D, F<E, F<F$, H>>>>> f(final A a) {
+        return new F<B, F<C, F<D, F<E, F<F$, H>>>>>() {
+          public F<C, F<D, F<E, F<F$, H>>>> f(final B b) {
+            return new F<C, F<D, F<E, F<F$, H>>>>() {
+              public F<D, F<E, F<F$, H>>> f(final C c) {
+                return new F<D, F<E, F<F$, H>>>() {
+                  public F<E, F<F$, H>> f(final D d) {
+                    return new F<E, F<F$, H>>() {
+                      public F<F$, H> f(final E e) {
+                        return new F<F$, H>() {
+                          public H f(final F$ f$) {
+                            return uncurryF7(f).f(a, b, c, d, e, f$, g);
+                          }
+                        };
+                      }
+                    };
+                  }
+                };
+              }
+            };
+          }
+        };
+      }
+    };
+  }
+  
+  /**
+   * Partial application of the eigth argument to the supplied function to get a function of type
+   * <tt>A -> B -> C -> D -> E -> F$ -> G -> I</tt>.
+   * 
+   * @param f The function to partially apply.
+   * @param h The value to apply to the function.
+   * @return A new function based on <tt>f</tt> with its eigth argument applied.
+   */
+  public static <A, B, C, D, E, F$, G, H, I> F<A, F<B, F<C, F<D, F<E, F<F$, F<G, I>>>>>>> partialApply8(
+      final F<A, F<B, F<C, F<D, F<E, F<F$, F<G, F<H, I>>>>>>>>f, final H h) {
+    return new F<A, F<B, F<C, F<D, F<E, F<F$, F<G, I>>>>>>>() {
+      public F<B, F<C, F<D, F<E, F<F$, F<G, I>>>>>> f(final A a) {
+        return new F<B, F<C, F<D, F<E, F<F$, F<G, I>>>>>>() {
+          public F<C, F<D, F<E, F<F$, F<G, I>>>>> f(final B b) {
+            return new F<C, F<D, F<E, F<F$, F<G, I>>>>>() {
+              public F<D, F<E, F<F$, F<G, I>>>> f(final C c) {
+                return new F<D, F<E, F<F$, F<G, I>>>>() {
+                  public F<E, F<F$, F<G, I>>> f(final D d) {
+                    return new F<E, F<F$, F<G, I>>>() {
+                      public F<F$, F<G, I>> f(final E e) {
+                        return new F<F$, F<G, I>>() {
+                          public F<G, I> f(final F$ f$) {
+                            return new F<G, I>() {
+                              public I f(final G g) {
+                                return uncurryF8(f).f(a, b, c, d, e, f$, g, h);
+                              }
+                            };
+                          }
+                        };
+                      }
+                    };
+                  }
+                };
+              }
+            };
+          }
+        };
+      }
+    };
+  }
 }
