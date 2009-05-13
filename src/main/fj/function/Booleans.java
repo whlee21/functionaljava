@@ -7,6 +7,7 @@ import static fj.Function.curry;
 import static fj.Function.flip;
 import static fj.Function.compose2;
 import fj.data.List;
+import fj.data.Stream;
 import fj.pre.Monoid;
 import static fj.pre.Semigroup.disjunctionSemigroup;
 import static fj.pre.Semigroup.conjunctionSemigroup;
@@ -96,12 +97,32 @@ public final class Booleans {
   }
 
   /**
+   * Returns true if all the elements of the given stream are true.
+   *
+   * @param l A stream to check for all the elements being true.
+   * @return true if all the elements of the given stream are true. False otherwise.
+   */
+  public static boolean and(final Stream<Boolean> l) {
+    return Monoid.conjunctionMonoid.sumLeft(l);
+  }
+
+  /**
    * Returns true if any element of the given list is true.
    *
    * @param l A list to check for any element being true.
    * @return true if any element of the given list is true. False otherwise.
    */
   public static boolean or(final List<Boolean> l) {
+    return Monoid.disjunctionMonoid.sumLeft(l);
+  }
+
+  /**
+   * Returns true if any element of the given stream is true.
+   *
+   * @param l A stream to check for any element being true.
+   * @return true if any element of the given stream is true. False otherwise.
+   */
+  public static boolean or(final Stream<Boolean> l) {
     return Monoid.disjunctionMonoid.sumLeft(l);
   }
 
