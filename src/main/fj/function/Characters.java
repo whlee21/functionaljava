@@ -32,12 +32,6 @@ public final class Characters {
   public static final F<Character, Boolean> isLetterOrDigit = new F<Character, Boolean>() {
     public Boolean f(final Character ch) {return Character.isLetterOrDigit(ch);}
   };
-  public static final F<Character, Boolean> isJavaLetter = new F<Character, Boolean>() {
-    public Boolean f(final Character ch) {return Character.isJavaLetter(ch);}
-  };
-  public static final F<Character, Boolean> isJavaLetterOrDigit = new F<Character, Boolean>() {
-    public Boolean f(final Character ch) {return Character.isJavaLetterOrDigit(ch);}
-  };
   public static final F<Character, Boolean> isJavaIdentifierStart = new F<Character, Boolean>() {
     public Boolean f(final Character ch) {return Character.isJavaIdentifierStart(ch);}
   };
@@ -63,13 +57,10 @@ public final class Characters {
     public Character f(final Character ch) {return Character.toTitleCase(ch);}
   };
   public static final F<Character, F<Integer, Integer>> digit = curry(new F2<Character, Integer, Integer>() {
-    public Integer f(final Character ch, Integer radix) {return Character.digit(ch, radix);}
+    public Integer f(final Character ch, final Integer radix) {return Character.digit(ch, radix);}
   });
   public static final F<Character, Integer> getNumericValue = new F<Character, Integer>() {
     public Integer f(final Character ch) {return Character.getNumericValue(ch);}
-  };
-  public static final F<Character, Boolean> isSpace = new F<Character, Boolean>() {
-    public Boolean f(final Character ch) {return Character.isSpace(ch);}
   };
   public static final F<Character, Boolean> isSpaceChar = new F<Character, Boolean>() {
     public Boolean f(final Character ch) {return Character.isSpaceChar(ch);}

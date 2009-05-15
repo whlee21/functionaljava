@@ -633,13 +633,9 @@ public final class Show<A> {
    * @return A show instance for streams that splits into lines.
    */
   public static <A> Show<Stream<A>> unlineShow(final Show<A> sa) {
-    return show(new F<Stream<A>, Stream<Character>>() {
-      public Stream<Character> f(final Stream<A> stream) {
-        return streamShow(lazyStringShow).show(stream.map(new F<A, LazyString>() {
-          public LazyString f(final A a) {
-            return fromStream(sa.show(a));
-          }
-        }).intersperse(str("\n")));
+    return new Show<Stream<A>>(new F<Stream<A>, Stream<Character>>() {
+      public Stream<Character> f(final Stream<A> as) {
+        return join(as.map(sa.show_()).intersperse(fromString("\n")));
       }
     });
   }

@@ -227,12 +227,19 @@ public abstract class Stream<A> implements Iterable<A> {
   public Stream<A> intersperse(final A a) {
     if (isEmpty()) return this;
     else {
-      final Stream<A> t = tail()._1();
-      return t.isEmpty() ? this : cons(head(), p(cons(a, new P1<Stream<A>>() {
-        @Override public Stream<A> _1() {
-          return t.intersperse(a);
+      return cons(head(), new P1<Stream<A>>() {
+        public Stream<A> _1() {
+          return prefix(a, tail()._1());
         }
-      })));
+
+        public Stream<A> prefix(final A x, final Stream<A> xs) {
+          return xs.isEmpty() ? xs : cons(x, p(cons(xs.head(), new P1<Stream<A>>() {
+            public Stream<A> _1() {
+              return prefix(a, xs.tail()._1());
+            }
+          })));
+        }
+      });
     }
   }
 
@@ -243,15 +250,11 @@ public abstract class Stream<A> implements Iterable<A> {
    * @return A new stream after the given function has been applied to each element.
    */
   public <B> Stream<B> map(final F<A, B> f) {
-    return foldRight(new F<A, F<P1<Stream<B>>, Stream<B>>>() {
-      public F<P1<Stream<B>>, Stream<B>> f(final A a) {
-        return new F<P1<Stream<B>>, Stream<B>>() {
-          public Stream<B> f(final P1<Stream<B>> bs) {
-            return cons(f.f(a), bs);
-          }
-        };
+    return isEmpty() ? Stream.<B>nil() : cons(f.f(head()), new P1<Stream<B>>() {
+      public Stream<B> _1() {
+        return tail()._1().map(f);
       }
-    }, Stream.<B>nil());
+    });
   }
 
   /**
@@ -320,7 +323,11 @@ public abstract class Stream<A> implements Iterable<A> {
    * @return A new stream that has appended the given stream.
    */
   public Stream<A> append(final Stream<A> as) {
-    return append(P.p(as));
+    return isEmpty() ? as : cons(head(), new P1<Stream<A>>() {
+      public Stream<A> _1() {
+        return tail()._1().append(as);
+      }
+    });
   }
 
   /**
@@ -398,15 +405,7 @@ public abstract class Stream<A> implements Iterable<A> {
    * @return A new stream after performing the map, then final join.
    */
   public <B> Stream<B> bind(final F<A, Stream<B>> f) {
-    return foldRight(new F<A, F<P1<Stream<B>>, Stream<B>>>() {
-      public F<P1<Stream<B>>, Stream<B>> f(final A a) {
-        return new F<P1<Stream<B>>, Stream<B>>() {
-          public Stream<B> f(final P1<Stream<B>> bs) {
-            return f.f(a).append(bs);
-          }
-        };
-      }
-    }, Stream.<B>nil());
+    return join(map(f));
   }
 
   /**
@@ -722,11 +721,11 @@ public abstract class Stream<A> implements Iterable<A> {
   public static <A> Stream<A> forever(final Enumerator<A> e, final A from, final long step) {
     return cons(from, new P1<Stream<A>>() {
       public Stream<A> _1() {
-        return Stream.join(e.plus(from, step).map(new F<A, Stream<A>>() {
+        return e.plus(from, step).map(new F<A, Stream<A>>() {
           public Stream<A> f(final A a) {
             return forever(e, a, step);
           }
-        }).toStream());
+        }).orSome(Stream.<A>nil());
       }
     });
   }
@@ -1401,6 +1400,7 @@ public abstract class Stream<A> implements Iterable<A> {
     public P1<Stream<A>> tail() {
       return tail;
     }
+
   }
 
   /**
@@ -1520,14 +1520,13 @@ public abstract class Stream<A> implements Iterable<A> {
   }
 
   /**
-   * Joins the given stream of streams using a bind operation.
+   * Joins the given stream of streams by concatenation.
    *
    * @param o The stream of streams to join.
    * @return A new stream that is the join of the given streams.
    */
   public static <A> Stream<A> join(final Stream<Stream<A>> o) {
-    final F<Stream<A>, Stream<A>> id = identity();
-    return o.bind(id);
+    return Monoid.<A>streamMonoid().sumRight(o);
   }
 
   /**
