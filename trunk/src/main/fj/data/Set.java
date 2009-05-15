@@ -5,14 +5,11 @@ import fj.pre.Monoid;
 import fj.pre.Ordering;
 import static fj.pre.Ordering.LT;
 import static fj.pre.Ordering.GT;
-import fj.F;
-import fj.F2;
-import fj.Function;
-import fj.P;
-import fj.P3;
+import fj.*;
 import static fj.Function.*;
 import static fj.data.Option.some;
 import static fj.data.Either.right;
+import static fj.data.Either.left;
 import static fj.function.Booleans.not;
 
 import java.util.Iterator;
@@ -112,30 +109,37 @@ public abstract class Set<A> implements Iterable<A> {
    *
    * @param a An element to replace.
    * @param f A function to transforms the found element.
-   * @return A new set with the given function applied to the first set element that was equal to the given element.
+   * @return A pair of: (1) True if an element was found that matches the given element, otherwise false.
+   *         (2) A new set with the given function applied to the first set element
+   *         that was equal to the given element.
    */
-  public Set<A> update(final A a, final F<A, A> f) {
+  public P2<Boolean, Set<A>> update(final A a, final F<A, A> f) {
     return isEmpty()
-           ? this
-           : tryUpdate(a, f).either(apply(Set.<A>insert(), flip(delete()).f(this)), Function.<Set<A>>identity());
+           ? P.p(false, this)
+           : tryUpdate(a, f).either(new F<A, P2<Boolean, Set<A>>>() {
+             public P2<Boolean, Set<A>> f(final A a2) {
+               return P.p(true, delete(a).insert(a2));
+             }
+           }, Function.<P2<Boolean, Set<A>>>identity());
   }
 
-  private Either<A, Set<A>> tryUpdate(final A a, final F<A, A> f) {
+  private Either<A, P2<Boolean, Set<A>>> tryUpdate(final A a, final F<A, A> f) {
     if (isEmpty())
-      return right(this);
+      return right(P.p(false, this));
     else if (ord.isLessThan(a, head()))
-      return l().tryUpdate(a, f).right().map(new F<Set<A>, Set<A>>() {
-        public Set<A> f(final Set<A> set) {
-          return new Tree<A>(ord, color(), set, head(), r());
+      return l().tryUpdate(a, f).right().map(new F<P2<Boolean, Set<A>>, P2<Boolean, Set<A>>>() {
+        public P2<Boolean, Set<A>> f(final P2<Boolean, Set<A>> set) {
+          return set._1() ? P.p(true, (Set<A>) new Tree<A>(ord, color(), set._2(), head(), r())) : set;
         }
       });
     else if (ord.eq(a, head())) {
       final A h = f.f(head());
-      return ord.eq(head(), h) ? Either.<A, Set<A>>right(new Tree<A>(ord, color(), l(), h, r()))
-                               : Either.<A, Set<A>>left(h);
-    } else return r().tryUpdate(a, f).right().map(new F<Set<A>, Set<A>>() {
-      public Set<A> f(final Set<A> set) {
-        return new Tree<A>(ord, color(), l(), head(), set);
+      return ord.eq(head(), h) ? Either
+          .<A, P2<Boolean, Set<A>>>right(P.p(true, (Set<A>) new Tree<A>(ord, color(), l(), h, r())))
+                               : Either.<A, P2<Boolean, Set<A>>>left(h);
+    } else return r().tryUpdate(a, f).right().map(new F<P2<Boolean, Set<A>>, P2<Boolean, Set<A>>>() {
+      public P2<Boolean, Set<A>> f(final P2<Boolean, Set<A>> set) {
+        return set._1() ? P.p(true, (Set<A>) new Tree<A>(ord, color(), l(), head(), set._2())) : set;
       }
     });
   }

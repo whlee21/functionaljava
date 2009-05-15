@@ -175,11 +175,27 @@ public final class TreeMap<K, V> implements Iterable<P2<K, V>> {
    *
    * @param k The key for the value to modify.
    * @param f A function with which to modify the value.
+   * @return A new tree map with the value for the given key transformed by the given function,
+   *         paired with True if the map was modified, otherwise False.
+   */
+  public P2<Boolean, TreeMap<K, V>> update(final K k, final F<V, V> f) {
+    final P2<Boolean, Set<P2<K, Option<V>>>> up =
+        tree.update(p(k, Option.<V>none()), P2.<K, Option<V>, Option<V>>map2_(Option.<V, V>map().f(f)));
+    return P.p(up._1(), new TreeMap<K, V>(up._2()));
+  }
+
+  /**
+   * Modifies the value for the given key, if present, by applying the given function to it, or
+   * inserts the given value if the key is not present.
+   *
+   * @param k The key for the value to modify.
+   * @param f A function with which to modify the value.
+   * @param v A value to associate with the given key if the key is not already present.
    * @return A new tree map with the value for the given key transformed by the given function.
    */
-  public TreeMap<K, V> update(final K k, final F<V, V> f) {
-    return new TreeMap<K, V>(
-        tree.update(p(k, Option.<V>none()), P2.<K, Option<V>, Option<V>>map2_(Option.<V, V>map().f(f))));
+  public TreeMap<K, V> update(final K k, final F<V, V> f, final V v) {
+    final P2<Boolean, TreeMap<K, V>> up = update(k, f);
+    return up._1() ? up._2() : set(k, v);
   }
 
 }

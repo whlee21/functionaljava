@@ -3,6 +3,11 @@ package fj;
 import fj.data.List;
 import fj.data.Stream;
 import fj.data.Array;
+import fj.data.Option;
+import static fj.data.Option.none;
+import static fj.data.Option.some;
+
+import java.util.concurrent.CountDownLatch;
 
 /**
  * A product-1. Also, the identity monad.
@@ -189,6 +194,28 @@ public abstract class P1<A> {
     return new P1<Array<A>>() {
       public Array<A> _1() {
         return as.map(P1.<A>__1());
+      }
+    };
+  }
+
+  /**
+   * Provides a memoising P1 that remembers its value.
+   *
+   * @return A P1 that calls this P1 once and remembers the value for subsequent calls.
+   */
+  public P1<A> memo() {
+    final P1<A> self = this;
+    return new P1<A>() {
+      private Object latch = new Object();
+      private volatile Option<A> v = none();
+
+      public A _1() {
+        if (v.isNone())
+          synchronized (latch) {
+            if (v.isNone())
+              v = some(self._1());
+          }
+        return v.some();
       }
     };
   }
