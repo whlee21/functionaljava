@@ -1,16 +1,20 @@
 package fj.data;
 
-import fj.pre.Ord;
-import fj.pre.Monoid;
-import fj.pre.Ordering;
-import static fj.pre.Ordering.LT;
-import static fj.pre.Ordering.GT;
-import fj.*;
+import fj.F;
+import fj.F2;
+import fj.Function;
+import fj.P;
+import fj.P2;
+import fj.P3;
 import static fj.Function.*;
-import static fj.data.Option.some;
 import static fj.data.Either.right;
-import static fj.data.Either.left;
+import static fj.data.Option.some;
 import static fj.function.Booleans.not;
+import fj.pre.Monoid;
+import fj.pre.Ord;
+import fj.pre.Ordering;
+import static fj.pre.Ordering.GT;
+import static fj.pre.Ordering.LT;
 
 import java.util.Iterator;
 

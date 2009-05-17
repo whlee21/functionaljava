@@ -60,12 +60,12 @@ object CheckSet {
 
   val prop_updateId = forAll((a: Set[String], b: String) => {
     val s = a.insert(b)
-    setEqual(stringEqual).eq(s.update(b, (x: String) => x), s)
+    setEqual(stringEqual).eq(s.update(b, (x: String) => x)._2, s)
   })
   
   val prop_update = forAll((a: Set[String], b: String, c: Char) => {
     val s = a.insert(b).delete(c + b)
-    !setEqual(stringEqual).eq(s.update(b, (x: String) => c + x), s)
+    !setEqual(stringEqual).eq(s.update(b, (x: String) => c + x)._2, s)
   })
 
     val tests = scala.List(
@@ -83,7 +83,7 @@ object CheckSet {
       ("prop_subsetSize", prop_subsetSize),
       ("prop_mapId", prop_mapId),
       ("prop_updateId", prop_updateId),
-      ("prop_update", prop_update),
+      ("prop_update", prop_update)
   ).map { case (n, p) => ("Set." + n, p) }
 
   def main(args: scala.Array[String]) = Tests.run(tests)

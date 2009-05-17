@@ -12,7 +12,6 @@ import static fj.data.Array.array;
 import static fj.data.List.cons;
 import static fj.data.List.cons_;
 
-import java.lang.Class;
 import java.util.Collection;
 import java.util.Iterator;
 

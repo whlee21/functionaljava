@@ -13,9 +13,9 @@ object CheckTreeMap {
 
   val prop_set = forAll((m: TreeMap[Int, String], k: Int, v: String) => m.set(k, v).get(k).some == v)
   val prop_updateId = forAll((m: TreeMap[Int, String], k: Int, v: String) => 
-    m.set(k, v).update(k, (x: String) => x).get(k).some == v)
+    m.set(k, v).update(k, (x: String) => x)._2.get(k).some == v)
   val prop_update = forAll((m: TreeMap[Int, String], k: Int, v: String, c: Char) =>
-    m.set(k, v).update(k, (x: String) => c + x).get(k).some.equals(c + v))
+    m.set(k, v).update(k, (x: String) => c + x)._2.get(k).some.equals(c + v))
 
   val tests = scala.List(
       ("prop_set", prop_set),
