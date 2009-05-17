@@ -4,10 +4,11 @@ import fj.F;
 import static fj.P.p;
 import fj.P2;
 import fj.P1;
+import fj.F2;
 import static fj.Function.compose;
 import static fj.Function.curry;
 import static fj.function.Booleans.not;
-import static fj.function.Booleans.and;
+import static fj.function.Booleans.or;
 import static fj.function.Characters.isSpaceChar;
 import static fj.data.Option.none;
 import static fj.data.Option.some;
@@ -138,7 +139,7 @@ public final class LazyString implements CharSequence {
    * @return True if the given string is a substring of this string, otherwise False.
    */
   public boolean contains(final LazyString cs) {
-    return s.substreams().exists(eqS.eq(cs.toStream()));
+    return or(s.tails().map(compose(startsWith().f(cs), fromStream)));
   }
 
   /**
@@ -148,7 +149,7 @@ public final class LazyString implements CharSequence {
    * @return True if the given string is a suffix of this lazy string, otherwise False.
    */
   public boolean endsWith(final LazyString cs) {
-    return s.tails().exists(eqS.eq(cs.toStream()));
+    return reverse().startsWith(cs.reverse());
   }
 
   /**
@@ -158,7 +159,57 @@ public final class LazyString implements CharSequence {
    * @return True if the given string is a prefix of this lazy string, otherwise False.
    */
   public boolean startsWith(final LazyString cs) {
-    return and(s.zipWith(cs.s, curry(charEqual.eq())));
+    return cs.isEmpty() || !isEmpty() && charEqual.eq(head(), cs.head()) && tail().startsWith(cs.tail());
+  }
+
+
+  /**
+   * First-class prefix check.
+   *
+   * @return A function that yields true if the first argument is a prefix of the second.
+   */
+  public static F<LazyString, F<LazyString, Boolean>> startsWith() {
+    return curry(new F2<LazyString, LazyString, Boolean>() {
+      public Boolean f(final LazyString needle, final LazyString haystack) {
+        return haystack.startsWith(needle);
+      }
+    });
+  }
+
+  /**
+   * Returns the first character of this string.
+   *
+   * @return The first character of this string, or error if the string is empty.
+   */
+  public char head() {
+    return s.head();
+  }
+
+  /**
+   * Returns all but the first character of this string.
+   *
+   * @return All but the first character of this string, or error if the string is empty.
+   */
+  public LazyString tail() {
+    return fromStream(s.tail()._1());
+  }
+
+  /**
+   * Checks if this string is empty.
+   *
+   * @return True if there are no characters in this string, otherwise False.
+   */
+  public boolean isEmpty() {
+    return s.isEmpty();
+  }
+
+  /**
+   * Returns the reverse of this string.
+   *
+   * @return the reverse of this string.
+   */
+  public LazyString reverse() {
+    return fromStream(s.reverse());
   }
 
   /**
