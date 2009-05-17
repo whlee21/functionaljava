@@ -1,10 +1,10 @@
 package fjs.pre
 
-import fj.data.List
+import fj.data.Stream
 import F._
 
 object Show {
-  implicit def show[A](f: A => List[java.lang.Character]): fj.pre.Show[A] =
+  implicit def show[A](f: A => Stream[java.lang.Character]): fj.pre.Show[A] =
     fj.pre.Show.show(f)
 
   implicit val booleanShow = fj.pre.Show.booleanShow
