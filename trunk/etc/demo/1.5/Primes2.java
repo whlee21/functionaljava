@@ -21,7 +21,7 @@ public class Primes2 {
           public Boolean f(final Natural x) {return !naturalOrd.eq(x.mod(xs.head()), ZERO);}
         }));
       }
-    }.memo());
+    });
   }
 
   public static Stream<Natural> primes(final Natural n) {
