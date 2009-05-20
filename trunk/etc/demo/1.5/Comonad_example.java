@@ -1,13 +1,13 @@
-import fj.data.Stream;
-import fj.data.Zipper;
+import fj.F;
+import static fj.Function.compose;
+import fj.P;
 import static fj.data.List.asString;
 import static fj.data.List.fromString;
+import fj.data.Stream;
 import static fj.data.Stream.join;
 import static fj.data.Stream.single;
+import fj.data.Zipper;
 import static fj.data.Zipper.fromStream;
-import fj.F;
-import fj.P;
-import static fj.Function.compose;
 
 /**
  * Example of using a Zipper comonad to get all the permutations of a String.
