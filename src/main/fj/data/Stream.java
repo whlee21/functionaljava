@@ -1147,6 +1147,15 @@ public abstract class Stream<A> implements Iterable<A> {
   }
 
   /**
+   * Get the last element of this stream. Undefined for infinite streams.
+   *
+   * @return The last element in this stream, if there is one.
+   */
+  public A last() {
+    return reverse().head();
+  }
+
+  /**
    * The length of this stream. This function will not terminate for an infinite stream.
    *
    * @return The length of this stream.

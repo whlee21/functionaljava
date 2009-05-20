@@ -1,3 +1,5 @@
+package euler;
+
 import fj.F;
 import fj.P1;
 import static fj.data.Enumerator.naturalEnumerator;
@@ -9,12 +11,11 @@ import static fj.data.Stream.*;
 import fj.data.vector.V2;
 import static fj.pre.Ord.naturalOrd;
 import static fj.pre.Show.naturalShow;
-import static fj.pre.Show.unlineShow;
 
 /**
- * Generates a list of all primes less than n.
+ * Find the largest prime factor of a composite number.
  */
-public class Primes {
+public class Problem3 {
   // An infinite stream of all the primes.
   public static final Stream<Natural> primes = cons(natural(2).some(), new P1<Stream<Natural>>() {
     public Stream<Natural> _1() {
@@ -23,9 +24,6 @@ public class Primes {
       });
     }
   });
-
-  // Finds the prime factors of a given number.
-  public static Stream<Natural> primeFactors(final Natural n) {return factor(n, natural(2).some(), primes.tail());}
 
   // Finds factors of a given number in a given stream.
   public static Stream<Natural> factor(final Natural n, final Natural p, final P1<Stream<Natural>> ps) {
@@ -48,8 +46,10 @@ public class Primes {
     return ret;
   }
 
-  public static void main(final String[] a) {
-    // Prints primes, one per line.
-    unlineShow(naturalShow).println(primes.takeWhile(naturalOrd.isLessThan(natural(Long.valueOf(a[0])).some())));
+  // Finds the prime factors of a given number.
+  public static Stream<Natural> primeFactors(final Natural n) {return factor(n, natural(2).some(), primes.tail());}
+
+  public static void main(final String[] args) {
+    naturalShow.println(primeFactors(natural(600851475143L).some()).last());
   }
 }
