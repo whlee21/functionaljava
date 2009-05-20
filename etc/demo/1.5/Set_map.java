@@ -1,9 +1,9 @@
 import fj.F;
 import fj.data.Set;
 import static fj.data.Set.empty;
+import fj.pre.Ord;
 import static fj.pre.Show.intShow;
 import static fj.pre.Show.listShow;
-import fj.pre.Ord;
 
 public final class Set_map {
   public static void main(final String[] args) {

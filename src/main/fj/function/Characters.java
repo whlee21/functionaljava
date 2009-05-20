@@ -2,6 +2,7 @@ package fj.function;
 
 import fj.F;
 import fj.F2;
+import fj.data.Stream;
 import static fj.Function.curry;
 
 /**
@@ -85,5 +86,5 @@ public final class Characters {
   };
   public static final F<Character, Boolean> isNewLine = new F<Character, Boolean>() {
     public Boolean f(final Character c) { return c == '\n'; }
-  };
+  };  
 }

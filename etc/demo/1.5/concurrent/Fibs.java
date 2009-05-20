@@ -41,15 +41,13 @@ public class Fibs
       final Actor<List<Integer>> out = actor(su, new Effect<List<Integer>>()
         {public void e(final List<Integer> fs)
           {for (final P2<Integer, Integer> p : fs.zipIndex())
-            {System.out.println(MessageFormat.format("n={0} => {1}", p._2(), p._1()));}
+               {System.out.println(MessageFormat.format("n={0} => {1}", p._2(), p._1()));}
            pool.shutdown();}});
 
       // A parallel recursive Fibonacci function
       final F<Integer, Promise<Integer>> fib = new F<Integer, Promise<Integer>>()
         {public Promise<Integer> f(final Integer n)
-          {return n < CUTOFF ?
-              promise(su, P.p(seqFib(n)))
-            : f(n - 1).bind(f(n - 2), add);}};
+          {return n < CUTOFF ? promise(su, P.p(seqFib(n))) : f(n - 1).bind(f(n - 2), add);}};
 
       System.out.println("Calculating Fibonacci sequence in parallel...");
       join(su, spi.parMap(fib, range(0, 46)).map(Promise.<Integer>sequence(su))).to(out);}

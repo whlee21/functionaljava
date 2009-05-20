@@ -244,6 +244,7 @@
   </component>
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/../fjg/fjg.iml" filepath="$PROJECT_DIR$/../fjg/fjg.iml" />
       <module fileurl="file://$PROJECT_DIR$/functionaljava.iml" filepath="$PROJECT_DIR$/functionaljava.iml" />
     </modules>
   </component>
@@ -288,5 +289,17 @@
     <mapping directory="$PROJECT_DIR$" vcs="svn" />
   </component>
   <component name="WebServicesPlugin" addRequiredLibraries="true" />
+  <component name="libraryTable">
+    <library name="Guice2">
+      <CLASSES>
+        <root url="file://$PROJECT_DIR$/../../java/guice-2.0" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="file://$PROJECT_DIR$/../../java/guice-2.0/javadoc" />
+      </JAVADOC>
+      <SOURCES />
+      <jarDirectory url="file://$PROJECT_DIR$/../../java/guice-2.0" recursive="false" />
+    </library>
+  </component>
 </project>
 

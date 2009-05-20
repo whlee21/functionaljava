@@ -11,20 +11,24 @@ import static fj.pre.Ord.naturalOrd;
 import static fj.pre.Show.naturalShow;
 import static fj.pre.Show.unlineShow;
 
+/**
+ * Generates a list of all primes less than n.
+ */
 public class Primes {
+  // An infinite stream of all the primes.
   public static final Stream<Natural> primes = cons(natural(2).some(), new P1<Stream<Natural>>() {
     public Stream<Natural> _1() {
-      return forever(naturalEnumerator, natural(3).some(), 2)
-          .filter(new F<Natural, Boolean>() {
-            public Boolean f(final Natural n) {return primeFactors(n).length() == 1;}
-          });
+      return forever(naturalEnumerator, natural(3).some(), 2).filter(new F<Natural, Boolean>() {
+        public Boolean f(final Natural n) {return primeFactors(n).length() == 1;}
+      });
     }
   });
 
+  // Finds the prime factors of a given number.
   public static Stream<Natural> primeFactors(final Natural n) {return factor(n, natural(2).some(), primes.tail());}
 
-  public static Stream<Natural> factor(final Natural n, final Natural p,
-                                       final P1<Stream<Natural>> ps) {
+  // Finds factors of a given number in a given stream.
+  public static Stream<Natural> factor(final Natural n, final Natural p, final P1<Stream<Natural>> ps) {
     Stream<Natural> ns = cons(p, ps);
     Stream<Natural> ret = nil();
     while (ns.isNotEmpty() && ret.isEmpty()) {
@@ -45,7 +49,7 @@ public class Primes {
   }
 
   public static void main(final String[] a) {
-    unlineShow(naturalShow).println(primes.takeWhile
-        (naturalOrd.isLessThan(natural(Long.valueOf(a[0])).some())));
+    // Prints primes, one per line.
+    unlineShow(naturalShow).println(primes.takeWhile(naturalOrd.isLessThan(natural(Long.valueOf(a[0])).some())));
   }
 }

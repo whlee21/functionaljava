@@ -2,11 +2,11 @@ package fj.function;
 
 import fj.F;
 import fj.F2;
-import fj.data.List;
 import static fj.Function.curry;
+import fj.data.List;
+import fj.pre.Monoid;
 import static fj.pre.Semigroup.intAdditionSemigroup;
 import static fj.pre.Semigroup.intMultiplicationSemigroup;
-import fj.pre.Monoid;
 
 import static java.lang.Math.abs;
 
@@ -107,5 +107,5 @@ public final class Integers {
   public static int product(final List<Integer> ints) {
     return Monoid.intMultiplicationMonoid.sumLeft(ints);
   }
-
+  
 }
