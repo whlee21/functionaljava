@@ -305,15 +305,14 @@ public abstract class Stream<A> implements Iterable<A> {
    * @return A new stream whose elements all match the given predicate.
    */
   public Stream<A> filter(final F<A, Boolean> f) {
-    return foldRight(new F<A, F<P1<Stream<A>>, Stream<A>>>() {
-      public F<P1<Stream<A>>, Stream<A>> f(final A a) {
-        return new F<P1<Stream<A>>, Stream<A>>() {
-          public Stream<A> f(final P1<Stream<A>> as) {
-            return f.f(a) ? cons(a, as) : as._1();
-          }
-        };
-      }
-    }, Stream.<A>nil());
+    final Stream<A> as = dropWhile(not(f));
+    if (as.isNotEmpty())
+      return cons(as.head(), new P1<Stream<A>>() {
+        public Stream<A> _1() {
+          return as.tail()._1().filter(f);
+        }
+      });
+    else return as;
   }
 
   /**
@@ -833,6 +832,22 @@ public abstract class Stream<A> implements Iterable<A> {
     return bs.zapp(zapp(repeat(f)));
   }
 
+
+  /**
+   * Partially-applied version of zipWith.
+   * Returns a function that zips a given stream with this stream using the given function.
+   *
+   * @param f The function to zip this stream and a given stream with.
+   * @return A function that zips a given stream with this stream using the given function.
+   */
+  public <B, C> F<Stream<B>, Stream<C>> zipWith(final F<A, F<B, C>> f) {
+    return new F<Stream<B>, Stream<C>>() {
+      public Stream<C> f(final Stream<B> stream) {
+        return zipWith(stream, f);
+      }
+    };
+  }
+
   /**
    * Zips this stream with the given stream to produce a stream of pairs. If this stream and the
    * given stream have different lengths, then the longer stream is normalised so this function
@@ -1211,7 +1226,7 @@ public abstract class Stream<A> implements Iterable<A> {
    *         stream.
    */
   public boolean exists(final F<A, Boolean> f) {
-    return isNotEmpty() && (f.f(head()) || tail()._1().exists(f));
+    return dropWhile(not(f)).isNotEmpty();
   }
 
   /**

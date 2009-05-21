@@ -25,7 +25,7 @@ public class Problem3 {
     }
   });
 
-  // Finds factors of a given number in a given stream.
+  //Finds factors of a given number.
   public static Stream<Natural> factor(final Natural n, final Natural p, final P1<Stream<Natural>> ps) {
     Stream<Natural> ns = cons(p, ps);
     Stream<Natural> ret = nil();

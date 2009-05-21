@@ -603,6 +603,21 @@ public abstract class Option<A> implements Iterable<A> {
     });
   }
 
+
+  /**
+   * Returns all the values in the given stream.
+   *
+   * @param as The stream of potential values to get actual values from.
+   * @return All the values in the given stream.
+   */
+  public static <A> Stream<A> somes(final Stream<Option<A>> as) {
+    return as.filter(Option.<A>isSome_()).map(new F<Option<A>, A>() {
+      public A f(final Option<A> o) {
+        return o.some();
+      }
+    });
+  }
+
   /**
    * Returns an optional non-empty string, or no value if the given string is empty.
    *
@@ -631,6 +646,46 @@ public abstract class Option<A> implements Iterable<A> {
         return fromString(s);
       }
     };
+  }
+
+  /**
+   * Returns a function that takes an optional value to a value or errors if there is no value.
+   *
+   * @return A function that takes an optional value to a value or errors if there is no value.
+   */
+  public static <A> F<Option<A>, A> fromSome() {
+    return new F<Option<A>, A>() {
+      public A f(final Option<A> option) {
+        return option.some();
+      }
+    };
+  }
+
+  /**
+   * Promotes a function of arity-2 so that it operates over options.
+   *
+   * @param f A function to promote.
+   * @return The given function promoted to operate on options.
+   */
+  public static <A, B, C> F<Option<A>, F<Option<B>, Option<C>>> liftM2(final F<A, F<B, C>> f) {
+    return curry(new F2<Option<A>, Option<B>, Option<C>>() {
+      public Option<C> f(final Option<A> a, final Option<B> b) {
+        return a.bind(b, f);
+      }
+    });
+  }
+
+  /**
+   * First-class bind function.
+   *
+   * @return A function that binds a given function across an option with a final join.
+   */
+  public static <A, B> F<F<A, Option<B>>, F<Option<A>, Option<B>>> bind() {
+    return curry(new F2<F<A, Option<B>>, Option<A>, Option<B>>() {
+      public Option<B> f(final F<A, Option<B>> f, final Option<A> a) {
+        return a.bind(f);
+      }
+    });
   }
 
 }

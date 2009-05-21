@@ -3,9 +3,7 @@ package fj.function;
 import fj.F;
 import fj.F2;
 import fj.F3;
-import static fj.Function.curry;
-import static fj.Function.flip;
-import static fj.Function.compose2;
+import static fj.Function.*;
 import fj.data.List;
 import fj.data.Stream;
 import fj.pre.Monoid;
@@ -124,6 +122,16 @@ public final class Booleans {
    */
   public static boolean or(final Stream<Boolean> l) {
     return Monoid.disjunctionMonoid.sumLeft(l);
+  }
+
+  /**
+   * Negates the given predicate.
+   *
+   * @param p A predicate to negate.
+   * @return The negation of the given predicate.
+   */
+  public static <A> F<A, Boolean> not(final F<A, Boolean> p) {
+    return compose(not, p);
   }
 
   /**

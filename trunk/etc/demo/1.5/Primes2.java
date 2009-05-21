@@ -21,7 +21,7 @@ public class Primes2 {
   public static Stream<Natural> sieve(final Stream<Natural> xs) {
     return cons(xs.head(), new P1<Stream<Natural>>() {
       public Stream<Natural> _1() {
-        return sieve(xs.tail()._1().filter(compose(naturalOrd.equal().eq(ZERO), Natural.mod().f(xs.head()))));
+        return sieve(xs.tail()._1().filter(compose(naturalOrd.equal().eq(ZERO), Natural.mod.f(xs.head()))));
       }
     });
   }

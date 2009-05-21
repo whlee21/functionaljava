@@ -4,25 +4,13 @@ import fj.F;
 import fj.F2;
 import fj.Function;
 import fj.P1;
-import static fj.pre.Semigroup.disjunctionSemigroup;
-import static fj.pre.Semigroup.conjunctionSemigroup;
-import static fj.pre.Semigroup.intMultiplicationSemigroup;
-import static fj.pre.Semigroup.intAdditionSemigroup;
-import static fj.pre.Semigroup.stringBuilderSemigroup;
-import static fj.pre.Semigroup.stringBufferSemigroup;
-import static fj.pre.Semigroup.stringSemigroup;
-import static fj.pre.Semigroup.exclusiveDisjunctionSemiGroup;
-import static fj.pre.Semigroup.longAdditionSemigroup;
-import static fj.pre.Semigroup.longMultiplicationSemigroup;
-import static fj.pre.Semigroup.bigintAdditionSemigroup;
-import static fj.pre.Semigroup.bigintMultiplicationSemigroup;
-import static fj.pre.Semigroup.bigdecimalMultiplicationSemigroup;
-import static fj.pre.Semigroup.bigdecimalAdditionSemigroup;
+import static fj.pre.Semigroup.*;
 import static fj.Function.curry;
 import static fj.Function.compose;
 import static fj.Function.flip;
 import fj.data.Array;
 import fj.data.List;
+import fj.data.Natural;
 import fj.data.Option;
 import fj.data.Set;
 import fj.data.Stream;
@@ -267,6 +255,18 @@ public final class Monoid<A> {
    */
   public static final Monoid<BigDecimal> bigdecimalMultiplicationMonoid =
       monoid(bigdecimalMultiplicationSemigroup, BigDecimal.ONE);
+
+  /**
+   * A monoid that adds natural numbers.
+   */
+  public static final Monoid<Natural> naturalAdditionMonoid =
+      monoid(naturalMultiplicationSemigroup, Natural.ZERO);
+
+  /**
+   * A monoid that multiplies natural numbers.
+   */
+  public static final Monoid<Natural> naturalMultiplicationMonoid =
+      monoid(naturalMultiplicationSemigroup, Natural.ONE);
 
   /**
    * A monoid that adds longs.
