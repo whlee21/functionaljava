@@ -3,6 +3,8 @@ package fj.data;
 import static fj.Bottom.error;
 import fj.F;
 import fj.F2;
+import static fj.pre.Monoid.naturalAdditionMonoid;
+import static fj.pre.Monoid.naturalMultiplicationMonoid;
 import static fj.Function.curry;
 import fj.data.vector.V2;
 import fj.data.vector.V;
@@ -119,17 +121,14 @@ public class Natural extends Number {
   }
 
   /**
-   * First-class addition function.
-   *
-   * @return A function that adds two natural numbers.
+   * A function that adds two natural numbers.
    */
-  public static F<Natural, F<Natural, Natural>> add() {
-    return curry(new F2<Natural, Natural, Natural>() {
-      public Natural f(final Natural n1, final Natural n2) {
-        return n1.add(n2);
-      }
-    });
-  }
+  public static final F<Natural, F<Natural, Natural>> add = curry(new F2<Natural, Natural, Natural>() {
+    public Natural f(final Natural n1, final Natural n2) {
+      return n1.add(n2);
+    }
+  });
+
 
   /**
    * Subtract a natural number from another.
@@ -142,17 +141,14 @@ public class Natural extends Number {
   }
 
   /**
-   * First-class subtraction function.
-   *
-   * @return A function that subtracts its first argument from its second.
+   * A function that subtracts its first argument from its second.
    */
-  public static F<Natural, F<Natural, Option<Natural>>> subtract() {
-    return curry(new F2<Natural, Natural, Option<Natural>>() {
-      public Option<Natural> f(final Natural o, final Natural o1) {
-        return o1.subtract(o);
-      }
-    });
-  }
+  public static final F<Natural, F<Natural, Option<Natural>>> subtract =
+      curry(new F2<Natural, Natural, Option<Natural>>() {
+        public Option<Natural> f(final Natural o, final Natural o1) {
+          return o1.subtract(o);
+        }
+      });
 
   /**
    * Multiply a natural number by another.
@@ -165,30 +161,24 @@ public class Natural extends Number {
   }
 
   /**
-   * First-class multiplication.
-   *
-   * @return A function that multiplies a natural number by another.
+   * A function that multiplies a natural number by another.
    */
-  public static F<Natural, F<Natural, Natural>> multiply() {
-    return curry(new F2<Natural, Natural, Natural>() {
-      public Natural f(final Natural n1, final Natural n2) {
-        return n1.multiply(n2);
-      }
-    });
-  }
+  public static final F<Natural, F<Natural, Natural>> multiply = curry(new F2<Natural, Natural, Natural>() {
+    public Natural f(final Natural n1, final Natural n2) {
+      return n1.multiply(n2);
+    }
+  });
+
 
   /**
-   * First-class division.
-   *
-   * @return A function that divides its second argument by its first.
+   * A function that divides its second argument by its first.
    */
-  public static F<Natural, F<Natural, Natural>> divide() {
-    return curry(new F2<Natural, Natural, Natural>() {
-      public Natural f(final Natural n1, final Natural n2) {
-        return n2.divide(n1);
-      }
-    });
-  }
+  public static final F<Natural, F<Natural, Natural>> divide =
+      curry(new F2<Natural, Natural, Natural>() {
+        public Natural f(final Natural n1, final Natural n2) {
+          return n2.divide(n1);
+        }
+      });
 
   /**
    * Divide a natural number by another.
@@ -212,17 +202,14 @@ public class Natural extends Number {
   }
 
   /**
-   * First-class modulus.
-   *
-   * @return A function that yields the remainder of division of its second argument by its first.
+   * A function that yields the remainder of division of its second argument by its first.
    */
-  public static F<Natural, F<Natural, Natural>> mod() {
-    return curry(new F2<Natural, Natural, Natural>() {
-      public Natural f(final Natural n1, final Natural n2) {
-        return n2.mod(n1);
-      }
-    });
-  }
+  public static final F<Natural, F<Natural, Natural>> mod =
+      curry(new F2<Natural, Natural, Natural>() {
+        public Natural f(final Natural n1, final Natural n2) {
+          return n2.mod(n1);
+        }
+      });
 
   /**
    * Divide a natural number by another yielding both the quotient and the remainder.
@@ -236,17 +223,14 @@ public class Natural extends Number {
   }
 
   /**
-   * First-class division and modulus.
-   *
-   * @return A function that divides its second argument by its first, yielding both the quotient and the remainder.
+   * A function that divides its second argument by its first, yielding both the quotient and the remainder.
    */
-  public static F<Natural, F<Natural, V2<Natural>>> divmod() {
-    return curry(new F2<Natural, Natural, V2<Natural>>() {
-      public V2<Natural> f(final Natural n1, final Natural n2) {
-        return n2.divmod(n1);
-      }
-    });
-  }
+  public static final F<Natural, F<Natural, V2<Natural>>> divmod =
+      curry(new F2<Natural, Natural, V2<Natural>>() {
+        public V2<Natural> f(final Natural n1, final Natural n2) {
+          return n2.divmod(n1);
+        }
+      });
 
 
   /**
@@ -302,4 +286,44 @@ public class Natural extends Number {
       return n.bigIntegerValue();
     }
   };
+
+  /**
+   * Sums a stream of natural numbers.
+   *
+   * @param ns A stream of natural numbers.
+   * @return The sum of all the natural numbers in the stream.
+   */
+  public static Natural sum(final Stream<Natural> ns) {
+    return naturalAdditionMonoid.sumLeft(ns);
+  }
+
+  /**
+   * Takes the product of a stream of natural numbers.
+   *
+   * @param ns A stream of natural numbers.
+   * @return The product of all the natural numbers in the stream.
+   */
+  public static Natural product(final Stream<Natural> ns) {
+    return naturalMultiplicationMonoid.sumLeft(ns);
+  }
+
+  /**
+   * Sums a list of natural numbers.
+   *
+   * @param ns A list of natural numbers.
+   * @return The sum of all the natural numbers in the list.
+   */
+  public static Natural sum(final List<Natural> ns) {
+    return naturalAdditionMonoid.sumLeft(ns);
+  }
+
+  /**
+   * Takes the product of a list of natural numbers.
+   *
+   * @param ns A list of natural numbers.
+   * @return The product of all the natural numbers in the list.
+   */
+  public static Natural product(final List<Natural> ns) {
+    return naturalMultiplicationMonoid.sumLeft(ns);
+  }
 }

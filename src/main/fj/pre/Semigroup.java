@@ -6,12 +6,7 @@ import static fj.Function.curry;
 import fj.P1;
 import fj.P2;
 import fj.Unit;
-import fj.data.Array;
-import fj.data.List;
-import fj.data.NonEmptyList;
-import fj.data.Option;
-import fj.data.Set;
-import fj.data.Stream;
+import fj.data.*;
 
 import java.math.BigInteger;
 import java.math.BigDecimal;
@@ -140,6 +135,26 @@ public final class Semigroup<A> {
       semigroup(new F2<BigDecimal, BigDecimal, BigDecimal>() {
         public BigDecimal f(final BigDecimal i1, final BigDecimal i2) {
           return i1.multiply(i2);
+        }
+      });
+
+  /**
+   * A semigroup that multiplies natural numbers.
+   */
+  public static final Semigroup<Natural> naturalMultiplicationSemigroup =
+      semigroup(new F2<Natural, Natural, Natural>() {
+        public Natural f(final Natural n1, final Natural n2) {
+          return n1.multiply(n2);
+        }
+      });
+
+  /**
+   * A semigroup that multiplies natural numbers.
+   */
+  public static final Semigroup<Natural> naturalAdditionSemigroup =
+      semigroup(new F2<Natural, Natural, Natural>() {
+        public Natural f(final Natural n1, final Natural n2) {
+          return n1.add(n2);
         }
       });
 

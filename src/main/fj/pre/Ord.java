@@ -126,6 +126,61 @@ public final class Ord<A> {
   }
 
   /**
+   * Returns a function that returns true if its argument is greater than than the argument to this method.
+   *
+   * @param a A value to compare against.
+   * @return A function that returns true if its argument is greater than the argument to this method.
+   */
+  public F<A, Boolean> isGreaterThan(final A a) {
+    return new F<A, Boolean>() {
+      public Boolean f(final A a2) {
+        return compare(a2, a) == GT;
+      }
+    };
+  }
+
+  /**
+   * Returns the greater of its two arguments.
+   *
+   * @param a1 A value to compare with another.
+   * @param a2 A value to compare with another.
+   * @return The greater of the two values.
+   */
+  public A max(final A a1, final A a2) {
+    return isGreaterThan(a1, a2) ? a1 : a2;
+  }
+
+
+  /**
+   * Returns the lesser of its two arguments.
+   *
+   * @param a1 A value to compare with another.
+   * @param a2 A value to compare with another.
+   * @return The lesser of the two values.
+   */
+  public A min(final A a1, final A a2) {
+    return isLessThan(a1, a2) ? a1 : a2;
+  }
+
+  /**
+   * A function that returns the greater of its two arguments.
+   */
+  public F<A, F<A, A>> max = curry(new F2<A, A, A>() {
+    public A f(final A a, final A a1) {
+      return max(a, a1);
+    }
+  });
+
+  /**
+   * A function that returns the lesser of its two arguments.
+   */
+  public F<A, F<A, A>> min = curry(new F2<A, A, A>() {
+    public A f(final A a, final A a1) {
+      return min(a, a1);
+    }
+  });
+
+  /**
    * Returns an order instance that uses the given equality test and ordering function.
    *
    * @param f The order function.
@@ -291,14 +346,14 @@ public final class Ord<A> {
   public static final Ord<Ordering> orderingOrd = new Ord<Ordering>(curry(new F2<Ordering, Ordering, Ordering>() {
     public Ordering f(final Ordering o1, final Ordering o2) {
       return o1 == o2 ?
-          EQ :
-          o1 == LT ?
-              LT :
-              o2 == LT ?
-                  GT :
-                  o1 == EQ ?
-                      LT :
-                      GT;
+             EQ :
+             o1 == LT ?
+             LT :
+             o2 == LT ?
+             GT :
+             o1 == EQ ?
+             LT :
+             GT;
     }
   }));
 
@@ -357,12 +412,12 @@ public final class Ord<A> {
         return new F<Option<A>, Ordering>() {
           public Ordering f(final Option<A> o2) {
             return o1.isNone() ?
-                o2.isNone() ?
-                    EQ :
-                    LT :
-                o2.isNone() ?
-                    GT :
-                    oa.f.f(o1.some()).f(o2.some());
+                   o2.isNone() ?
+                   EQ :
+                   LT :
+                   o2.isNone() ?
+                   GT :
+                   oa.f.f(o1.some()).f(o2.some());
           }
         };
       }
@@ -382,12 +437,12 @@ public final class Ord<A> {
         return new F<Either<A, B>, Ordering>() {
           public Ordering f(final Either<A, B> e2) {
             return e1.isLeft() ?
-                e2.isLeft() ?
-                    oa.f.f(e1.left().value()).f(e2.left().value()) :
-                    LT :
-                e2.isLeft() ?
-                    GT :
-                    ob.f.f(e1.right().value()).f(e2.right().value());
+                   e2.isLeft() ?
+                   oa.f.f(e1.left().value()).f(e2.left().value()) :
+                   LT :
+                   e2.isLeft() ?
+                   GT :
+                   ob.f.f(e1.right().value()).f(e2.right().value());
           }
         };
       }
@@ -484,12 +539,12 @@ public final class Ord<A> {
                 return c;
             }
             return i == a1.length() ?
-                i == a2.length() ?
-                    EQ :
-                    LT :
-                i == a1.length() ?
-                    EQ :
-                    GT;
+                   i == a2.length() ?
+                   EQ :
+                   LT :
+                   i == a1.length() ?
+                   EQ :
+                   GT;
           }
         };
       }
@@ -557,8 +612,8 @@ public final class Ord<A> {
     return ord(curry(new F2<P3<A, B, C>, P3<A, B, C>, Ordering>() {
       public Ordering f(final P3<A, B, C> a, final P3<A, B, C> b) {
         return oa.eq(a._1(), b._1()) ?
-            p2Ord(ob, oc).compare(P.p(a._2(), a._3()), P.p(b._2(), b._3()))
-            : oa.compare(a._1(), b._1());
+               p2Ord(ob, oc).compare(P.p(a._2(), a._3()), P.p(b._2(), b._3()))
+                                     : oa.compare(a._1(), b._1());
       }
     }));
   }
