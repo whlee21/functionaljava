@@ -1,5 +1,7 @@
 package fj;
 
+import static fj.FW.$;
+
 /**
  * A wrapper for functions of arity 2, that decorates them with higher-order functions.
  */
@@ -38,5 +40,18 @@ public final class F2W<A, B, C> implements F2<A, B, C> {
    */
   public F2W<B, A, C> flip() {
     return $$(Function.flip(this));
+  }
+
+  /**
+   * Uncurries this function to a function on tuples.
+   *
+   * @return A new function that calls this function with the elements of a given tuple.
+   */
+  public FW<P2<A, B>, C> untuple() {
+    return $(new F<P2<A, B>, C>() {
+      public C f(final P2<A, B> p) {
+        return F2W.this.f(p._1(), p._2());
+      }
+    });
   }
 }
