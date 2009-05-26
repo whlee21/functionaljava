@@ -244,7 +244,6 @@
   </component>
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/../fjg/fjg.iml" filepath="$PROJECT_DIR$/../fjg/fjg.iml" />
       <module fileurl="file://$PROJECT_DIR$/functionaljava.iml" filepath="$PROJECT_DIR$/functionaljava.iml" />
     </modules>
   </component>

@@ -8,6 +8,7 @@ import fj.P1;
 import fj.P2;
 import fj.P3;
 import fj.Unit;
+import static fj.FW.$;
 import static fj.Function.compose;
 import static fj.Function.curry;
 import fj.data.Array;
@@ -82,7 +83,7 @@ public final class Ord<A> {
    * @return A new ord.
    */
   public <B> Ord<B> comap(final F<B, A> f) {
-    return ord(compose(compose(Function.<B, A, Ordering>andThen().f(f), this.f), f));
+    return ord($(f).<Ordering>andThen_().o(this.f).o(f));
   }
 
   /**
