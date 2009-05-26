@@ -2,7 +2,6 @@ package fj.pre;
 
 import fj.F;
 import fj.F2;
-import fj.Function;
 import fj.P1;
 import fj.P2;
 import fj.P3;
@@ -11,10 +10,19 @@ import fj.P5;
 import fj.P6;
 import fj.P7;
 import fj.P8;
-import static fj.Function.compose;
+import static fj.FW.$;
 import static fj.Function.curry;
 import fj.data.hlist.HList;
-import fj.data.*;
+import fj.data.Array;
+import fj.data.Either;
+import fj.data.LazyString;
+import fj.data.List;
+import fj.data.NonEmptyList;
+import fj.data.Option;
+import fj.data.Set;
+import fj.data.Stream;
+import fj.data.Tree;
+import fj.data.Validation;
 import fj.data.vector.V2;
 import fj.data.vector.V3;
 import fj.data.vector.V4;
@@ -87,7 +95,7 @@ public final class Equal<A> {
    * @return A new equal.
    */
   public <B> Equal<B> comap(final F<B, A> f) {
-    return equal(compose(compose(Function.<B, A, Boolean>andThen().f(f), this.f), f));
+    return equal($(f).<Boolean>andThen_().o(this.f).o(f));
   }
 
   /**
