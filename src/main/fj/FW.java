@@ -1,6 +1,7 @@
 package fj;
 
 import static fj.Function.compose;
+import fj.data.Option;
 
 /**
  * A wrapper for functions of arity 1, that decorates them with higher-order functions.
@@ -39,7 +40,7 @@ public final class FW<A, B> implements F<A, B> {
    * @return The composed function such that this function is applied last.
    */
   public <C> FW<C, B> o(final F<C, A> g) {
-    return $(compose(this, g));
+    return $(compose(f, g));
   }
 
   /**
@@ -156,5 +157,24 @@ public final class FW<A, B> implements F<A, B> {
         return on(bff);
       }
     });
+  }
+
+  /**
+   * Promotes this function so that it returns its result in a product-1. Kleisli arrow for P1.
+   *
+   * @return This function promoted to return its result in a product-1.
+   */
+  public FW<A, P1<B>> lazy() {
+    return $(P1.curry(this));
+  }
+
+  /**
+   * Promotes this function so that it returns its result in an Option. Kleisli arrow for Option.
+   *
+   * @return This function promoted to return its result in an Option.
+   */
+  @SuppressWarnings("unchecked")
+  public FW<A, Option<B>> option() {
+    return $(Option.<B>some_()).o(f);
   }
 }
