@@ -290,17 +290,6 @@ public final class Validation<E, T> implements Iterable<T> {
   }
 
   /**
-   * Returns a single element array if this is a success value, otherwise an empty list.
-   *
-   * @param c The class type of the array to return.
-   * @return A single element array if this is a success value, otherwise an empty list.
-   */
-  @SuppressWarnings({"unchecked"})
-  public Array<T> toArray(final Class<T[]> c) {
-    return e.right().toArray(c);
-  }
-
-  /**
    * Returns a single element stream if this is a success value, otherwise an empty list.
    *
    * @return A single element stream if this is a success value, otherwise an empty list.
@@ -950,17 +939,7 @@ public final class Validation<E, T> implements Iterable<T> {
     public Array<E> toArray() {
       return v.toEither().left().toArray();
     }
-
-    /**
-     * Returns a single element array if this is a failing value, otherwise an empty list.
-     *
-     * @param c The class type of the array to return.
-     * @return A single element array if this is a failing value, otherwise an empty list.
-     */
-    public Array<E> toArray(final Class<E[]> c) {
-      return v.toEither().left().toArray(c);
-    }
-
+    
     /**
      * Returns a single element stream if this is a failing value, otherwise an empty list.
      *

@@ -6,7 +6,7 @@ import static fj.data.Option.some;
 
 import static java.lang.Math.max;
 import static java.lang.Math.min;
-import java.util.Random;
+import com.google.gwt.user.client.Random;
 
 /**
  * A random number generator.
@@ -119,13 +119,6 @@ public final class Rand {
     return new Rand(f, g);
   }
 
-
-  private static final F<Long, Random> fr = new F<Long, Random>() {
-    public Random f(final Long x) {
-      return new Random(x);
-    }
-  };
-
   /**
    * A standard random generator that uses {@link Random}.
    */
@@ -137,7 +130,7 @@ public final class Rand {
             public Integer f(final Integer to) {
               final int f = min(from, to);
               final int t = max(from, to);
-              return f + seed.map(fr).orSome(new Random()).nextInt(t - f + 1);
+              return f + Random.nextInt(t - f + 1);
             }
           };
         }
@@ -151,7 +144,7 @@ public final class Rand {
             public Double f(final Double to) {
               final double f = min(from, to);
               final double t = max(from, to);
-              return seed.map(fr).orSome(new Random()).nextDouble() * (t - f) + f;
+              return Random.nextDouble() * (t - f) + f;
             }
           };
         }

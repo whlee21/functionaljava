@@ -350,42 +350,6 @@ public final class Enumerator<A> {
   }, some(Integer.MAX_VALUE), some(Integer.MIN_VALUE), intOrd);
 
   /**
-   * An enumerator for <code>BigInteger</code>.
-   */
-  public static final Enumerator<BigInteger> bigintEnumerator = enumerator(new F<BigInteger, Option<BigInteger>>() {
-    public Option<BigInteger> f(final BigInteger i) {
-      return some(i.add(BigInteger.ONE));
-    }
-  }, new F<BigInteger, Option<BigInteger>>() {
-    public Option<BigInteger> f(final BigInteger i) {
-      return some(i.subtract(BigInteger.ONE));
-    }
-  }, Option.<BigInteger>none(), Option.<BigInteger>none(), bigintOrd, curry(
-      new F2<BigInteger, Long, Option<BigInteger>>() {
-        public Option<BigInteger> f(final BigInteger i, final Long l) {
-          return some(i.add(BigInteger.valueOf(l)));
-        }
-      }));
-
-  /**
-   * An enumerator for <code>BigDecimal</code>.
-   */
-  public static final Enumerator<BigDecimal> bigdecimalEnumerator = enumerator(new F<BigDecimal, Option<BigDecimal>>() {
-    public Option<BigDecimal> f(final BigDecimal i) {
-      return some(i.add(BigDecimal.ONE));
-    }
-  }, new F<BigDecimal, Option<BigDecimal>>() {
-    public Option<BigDecimal> f(final BigDecimal i) {
-      return some(i.subtract(BigDecimal.ONE));
-    }
-  }, Option.<BigDecimal>none(), Option.<BigDecimal>none(), bigdecimalOrd, curry(
-      new F2<BigDecimal, Long, Option<BigDecimal>>() {
-        public Option<BigDecimal> f(final BigDecimal d, final Long l) {
-          return some(d.add(BigDecimal.valueOf(l)));
-        }
-      }));
-
-  /**
    * An enumerator for <code>long</code>.
    */
   public static final Enumerator<Long> longEnumerator = enumerator(new F<Long, Option<Long>>() {
@@ -423,26 +387,5 @@ public final class Enumerator<A> {
       return o == GT ? some(EQ) : o == EQ ? some(LT) : Option.<Ordering>none();
     }
   }, some(GT), some(LT), orderingOrd);
-
-  /**
-   * An enumerator for <code>Natural</code>
-   */
-  public static final Enumerator<Natural> naturalEnumerator = enumerator(new F<Natural, Option<Natural>>() {
-    public Option<Natural> f(final Natural n) {
-      return Option.some(n.succ());
-    }
-  }, new F<Natural, Option<Natural>>() {
-    public Option<Natural> f(final Natural n) {
-      return n.pred();
-    }
-  }, Option.<Natural>none(), some(Natural.ZERO), naturalOrd, curry(new F2<Natural, Long, Option<Natural>>() {
-    public Option<Natural> f(final Natural n, final Long l) {
-      return some(n).apply(Natural.natural(l).map(curry(new F2<Natural, Natural, Natural>() {
-        public Natural f(final Natural n1, final Natural n2) {
-          return n1.add(n2);
-        }
-      })));
-    }
-  }));
 
 }

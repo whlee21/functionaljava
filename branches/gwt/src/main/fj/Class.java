@@ -7,9 +7,6 @@ import static fj.data.Option.none;
 import static fj.data.Option.some;
 import fj.data.Tree;
 
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
-
 /**
  * A wrapper for a {@link java.lang.Class} that provides additional methods.
  *
@@ -58,64 +55,6 @@ public final class Class<T> {
         return clas(c);
       }
     });
-  }
-
-  /**
-   * Provides this class's type parameter information as a Tree of the type expression.
-   * Only descends into Parameterized classes. Non-abstract classes, or classes that don't implement an interface,
-   * are treated as raw types. Arrays, Type Variables, and Wildcards are treated as opaque Types.
-   *
-   * @return The rose tree representing the type expression for this class.
-   */
-  public Tree<Type> classParameters() {
-    return typeParameterTree(c);
-  }
-
-  /**
-   * Provides this class's superclass type parameter information as a Tree of the type expression.
-   * Only descends into Parameterized classes. Non-abstract classes, or classes that don't implement an interface,
-   * are treated as raw types. Arrays, Type Variables, and Wildcards are treated as opaque Types.
-   *
-   * @return The Tree representing the type expression for this class's superclass.
-   */
-  public Tree<Type> superclassParameters() {
-    return typeParameterTree(c.getGenericSuperclass());
-  }
-
-  /**
-   * Provides this class's interface type parameter information as a list of trees.
-   *
-   * @return A list of trees representing the type expressions for this class's interfaces.
-   */
-  public List<Tree<Type>> interfaceParameters() {
-    List<Tree<Type>> ts = List.nil();
-    for (final Type t : c.getInterfaces()) {
-      ts = ts.snoc(typeParameterTree(t));
-    }
-    return ts;
-  }
-
-  /**
-   * Provides type parameter information as a Tree of the type expression.
-   * Only descends into Parameterized classes. Non-abstract classes, or classes that don't implement an interface,
-   * are treated as raw types. Arrays, Type Variables, and Wildcards are treated as opaque Types.
-   *
-   * @param t The type (class) for which to get the generic type information.
-   * @return Type parameter information as a rose tree of the type expression.
-   */
-  public static Tree<Type> typeParameterTree(final Type t) {
-    List<Tree<Type>> typeArgs = List.nil();
-    final Tree<Type> types;
-    if (t instanceof ParameterizedType) {
-      final ParameterizedType pt = (ParameterizedType) t;
-      for (final Type arg : pt.getActualTypeArguments()) {
-        typeArgs = typeArgs.snoc(typeParameterTree(arg));
-      }
-      types = Tree.node(pt.getRawType(), typeArgs);
-    } else {
-      types = Tree.node(t, List.<Tree<Type>>nil());
-    }
-    return types;
   }
 
   /**

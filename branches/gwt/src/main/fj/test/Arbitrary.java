@@ -43,22 +43,16 @@ import static fj.test.Gen.sized;
 import static fj.test.Gen.value;
 
 import static java.lang.Math.abs;
-import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.sql.Time;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import static java.util.Arrays.asList;
-import java.util.BitSet;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.EnumMap;
 import java.util.EnumSet;
 import static java.util.EnumSet.copyOf;
-import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Hashtable;
 import java.util.IdentityHashMap;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
@@ -66,22 +60,10 @@ import java.util.LinkedList;
 import java.util.Locale;
 import static java.util.Locale.getAvailableLocales;
 import java.util.PriorityQueue;
-import java.util.Properties;
 import java.util.Stack;
 import java.util.TreeMap;
 import java.util.TreeSet;
 import java.util.Vector;
-import java.util.WeakHashMap;
-import java.util.concurrent.ArrayBlockingQueue;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentLinkedQueue;
-import java.util.concurrent.CopyOnWriteArrayList;
-import java.util.concurrent.CopyOnWriteArraySet;
-import java.util.concurrent.DelayQueue;
-import java.util.concurrent.Delayed;
-import java.util.concurrent.LinkedBlockingQueue;
-import java.util.concurrent.PriorityBlockingQueue;
-import java.util.concurrent.SynchronousQueue;
 
 /**
  * The type used to generate arbitrary values of the given type parameter (<code>A</code>). Common
@@ -775,33 +757,6 @@ public final class Arbitrary<A> {
   }
 
   /**
-   * An arbitrary implementation for bit sets.
-   */
-  public static final Arbitrary<BitSet> arbBitSet =
-      arbitrary(arbList(arbBoolean).gen.map(new F<List<Boolean>, BitSet>() {
-        public BitSet f(final List<Boolean> bs) {
-          final BitSet s = new BitSet(bs.length());
-          bs.zipIndex().foreach(new Effect<P2<Boolean, Integer>>() {
-            public void e(final P2<Boolean, Integer> bi) {
-              s.set(bi._2(), bi._1());
-            }
-          });
-          return s;
-        }
-      }));
-
-  /**
-   * An arbitrary implementation for calendars.
-   */
-  public static final Arbitrary<Calendar> arbCalendar = arbitrary(arbLong.gen.map(new F<Long, Calendar>() {
-    public Calendar f(final Long i) {
-      final Calendar c = Calendar.getInstance();
-      c.setTimeInMillis(i);
-      return c;
-    }
-  }));
-
-  /**
    * An arbitrary implementation for dates.
    */
   public static final Arbitrary<Date> arbDate = arbitrary(arbLong.gen.map(new F<Long, Date>() {
@@ -821,24 +776,6 @@ public final class Arbitrary<A> {
   }
 
   /**
-   * Returns an arbitrary implementation for enum maps.
-   *
-   * @param ak An arbitrary implementation for the type over which the enum map's keys are defined.
-   * @param av An arbitrary implementation for the type over which the enum map's values are
-   *           defined.
-   * @return An arbitrary implementation for enum maps.
-   */
-  public static <K extends Enum<K>, V> Arbitrary<EnumMap<K, V>> arbEnumMap(final Arbitrary<K> ak,
-                                                                           final Arbitrary<V> av) {
-    return arbitrary(arbHashtable(ak, av).gen.map(new F<Hashtable<K, V>, EnumMap<K, V>>() {
-      @SuppressWarnings({"UseOfObsoleteCollectionType"})
-      public EnumMap<K, V> f(final Hashtable<K, V> ht) {
-        return new EnumMap<K, V>(ht);
-      }
-    }));
-  }
-
-  /**
    * Returns an arbitrary implementation for enum sets.
    *
    * @param aa An arbitrary implementation for the type over which the enum set is defined.
@@ -853,18 +790,6 @@ public final class Arbitrary<A> {
   }
 
   /**
-   * An arbitrary implementation for gregorian calendars.
-   */
-  public static final Arbitrary<GregorianCalendar> arbGregorianCalendar =
-      arbitrary(arbLong.gen.map(new F<Long, GregorianCalendar>() {
-        public GregorianCalendar f(final Long i) {
-          final GregorianCalendar c = new GregorianCalendar();
-          c.setTimeInMillis(i);
-          return c;
-        }
-      }));
-
-  /**
    * Returns an arbitrary implementation for hash maps.
    *
    * @param ak An arbitrary implementation for the type over which the hash map's keys are defined.
@@ -872,11 +797,22 @@ public final class Arbitrary<A> {
    *           defined.
    * @return An arbitrary implementation for hash maps.
    */
-  public static <K, V> Arbitrary<HashMap<K, V>> arbHashMap(final Arbitrary<K> ak, final Arbitrary<V> av) {
-    return arbitrary(arbHashtable(ak, av).gen.map(new F<Hashtable<K, V>, HashMap<K, V>>() {
-      @SuppressWarnings({"UseOfObsoleteCollectionType"})
-      public HashMap<K, V> f(final Hashtable<K, V> ht) {
-        return new HashMap<K, V>(ht);
+  public static <K, V> Arbitrary<HashMap<K, V>> arbHashtable(final Arbitrary<K> ak, final Arbitrary<V> av) {
+    return arbitrary(arbList(ak).gen.bind(arbList(av).gen, new F<List<K>, F<List<V>, HashMap<K, V>>>() {
+      public F<List<V>, HashMap<K, V>> f(final List<K> ks) {
+        return new F<List<V>, HashMap<K, V>>() {
+          public HashMap<K, V> f(final List<V> vs) {
+            final HashMap<K, V> t = new HashMap<K, V>();
+
+            ks.zip(vs).foreach(new Effect<P2<K, V>>() {
+              public void e(final P2<K, V> kv) {
+                t.put(kv._1(), kv._2());
+              }
+            });
+
+            return t;
+          }
+        };
       }
     }));
   }
@@ -896,36 +832,6 @@ public final class Arbitrary<A> {
   }
 
   /**
-   * Returns an arbitrary implementation for hash tables.
-   *
-   * @param ak An arbitrary implementation for the type over which the hash table's keys are
-   *           defined.
-   * @param av An arbitrary implementation for the type over which the hash table's values are
-   *           defined.
-   * @return An arbitrary implementation for hash tables.
-   */
-  public static <K, V> Arbitrary<Hashtable<K, V>> arbHashtable(final Arbitrary<K> ak, final Arbitrary<V> av) {
-    return arbitrary(arbList(ak).gen.bind(arbList(av).gen, new F<List<K>, F<List<V>, Hashtable<K, V>>>() {
-      public F<List<V>, Hashtable<K, V>> f(final List<K> ks) {
-        return new F<List<V>, Hashtable<K, V>>() {
-          @SuppressWarnings({"UseOfObsoleteCollectionType"})
-          public Hashtable<K, V> f(final List<V> vs) {
-            final Hashtable<K, V> t = new Hashtable<K, V>();
-
-            ks.zip(vs).foreach(new Effect<P2<K, V>>() {
-              public void e(final P2<K, V> kv) {
-                t.put(kv._1(), kv._2());
-              }
-            });
-
-            return t;
-          }
-        };
-      }
-    }));
-  }
-
-  /**
    * Returns an arbitrary implementation for identity hash maps.
    *
    * @param ak An arbitrary implementation for the type over which the identity hash map's keys are
@@ -936,9 +842,8 @@ public final class Arbitrary<A> {
    */
   public static <K, V> Arbitrary<IdentityHashMap<K, V>> arbIdentityHashMap(final Arbitrary<K> ak,
                                                                            final Arbitrary<V> av) {
-    return arbitrary(arbHashtable(ak, av).gen.map(new F<Hashtable<K, V>, IdentityHashMap<K, V>>() {
-      @SuppressWarnings({"UseOfObsoleteCollectionType"})
-      public IdentityHashMap<K, V> f(final Hashtable<K, V> ht) {
+    return arbitrary(arbHashtable(ak, av).gen.map(new F<HashMap<K, V>, IdentityHashMap<K, V>>() {
+      public IdentityHashMap<K, V> f(final HashMap<K, V> ht) {
         return new IdentityHashMap<K, V>(ht);
       }
     }));
@@ -954,9 +859,8 @@ public final class Arbitrary<A> {
    * @return An arbitrary implementation for linked hash maps.
    */
   public static <K, V> Arbitrary<LinkedHashMap<K, V>> arbLinkedHashMap(final Arbitrary<K> ak, final Arbitrary<V> av) {
-    return arbitrary(arbHashtable(ak, av).gen.map(new F<Hashtable<K, V>, LinkedHashMap<K, V>>() {
-      @SuppressWarnings({"UseOfObsoleteCollectionType"})
-      public LinkedHashMap<K, V> f(final Hashtable<K, V> ht) {
+    return arbitrary(arbHashtable(ak, av).gen.map(new F<HashMap<K, V>, LinkedHashMap<K, V>>() {
+      public LinkedHashMap<K, V> f(final HashMap<K, V> ht) {
         return new LinkedHashMap<K, V>(ht);
       }
     }));
@@ -1005,23 +909,6 @@ public final class Arbitrary<A> {
   }
 
   /**
-   * An arbitrary implementation for properties.
-   */
-  public static final Arbitrary<Properties> arbProperties =
-      arbitrary(arbHashtable(arbString, arbString).gen.map(new F<Hashtable<String, String>, Properties>() {
-        @SuppressWarnings({"UseOfObsoleteCollectionType"})
-        public Properties f(final Hashtable<String, String> ht) {
-          final Properties p = new Properties();
-
-          for (final String k : ht.keySet()) {
-            p.setProperty(k, ht.get(k));
-          }
-
-          return p;
-        }
-      }));
-
-  /**
    * Returns an arbitrary implementation for stacks.
    *
    * @param aa An arbitrary implementation for the type over which the stack is defined.
@@ -1048,9 +935,8 @@ public final class Arbitrary<A> {
    * @return An arbitrary implementation for tree maps.
    */
   public static <K, V> Arbitrary<TreeMap<K, V>> arbTreeMap(final Arbitrary<K> ak, final Arbitrary<V> av) {
-    return arbitrary(arbHashtable(ak, av).gen.map(new F<Hashtable<K, V>, TreeMap<K, V>>() {
-      @SuppressWarnings({"UseOfObsoleteCollectionType"})
-      public TreeMap<K, V> f(final Hashtable<K, V> ht) {
+    return arbitrary(arbHashtable(ak, av).gen.map(new F<HashMap<K, V>, TreeMap<K, V>>() {
+      public TreeMap<K, V> f(final HashMap<K, V> ht) {
         return new TreeMap<K, V>(ht);
       }
     }));
@@ -1086,180 +972,9 @@ public final class Arbitrary<A> {
     }));
   }
 
-  /**
-   * Returns an arbitrary implementation for weak hash maps.
-   *
-   * @param ak An arbitrary implementation for the type over which the weak hash map's keys are
-   *           defined.
-   * @param av An arbitrary implementation for the type over which the weak hash map's values are
-   *           defined.
-   * @return An arbitrary implementation for weak hash maps.
-   */
-  public static <K, V> Arbitrary<WeakHashMap<K, V>> arbWeakHashMap(final Arbitrary<K> ak, final Arbitrary<V> av) {
-    return arbitrary(arbHashtable(ak, av).gen.map(new F<Hashtable<K, V>, WeakHashMap<K, V>>() {
-      @SuppressWarnings({"UseOfObsoleteCollectionType"})
-      public WeakHashMap<K, V> f(final Hashtable<K, V> ht) {
-        return new WeakHashMap<K, V>(ht);
-      }
-    }));
-  }
-
   // END java.util
 
   // BEGIN java.util.concurrent
-
-  /**
-   * Returns an arbitrary implementation for array blocking queues.
-   *
-   * @param aa An arbitrary implementation for the type over which the array blocking queue is
-   *           defined.
-   * @return An arbitrary implementation for array blocking queues.
-   */
-  public static <A> Arbitrary<ArrayBlockingQueue<A>> arbArrayBlockingQueue(final Arbitrary<A> aa) {
-    return arbitrary(arbArray(aa).gen.bind(arbInteger.gen, arbBoolean.gen,
-        new F<Array<A>, F<Integer, F<Boolean, ArrayBlockingQueue<A>>>>() {
-          public F<Integer, F<Boolean, ArrayBlockingQueue<A>>> f(final Array<A> a) {
-            return new F<Integer, F<Boolean, ArrayBlockingQueue<A>>>() {
-              public F<Boolean, ArrayBlockingQueue<A>> f(final Integer capacity) {
-                return new F<Boolean, ArrayBlockingQueue<A>>() {
-                  public ArrayBlockingQueue<A> f(final Boolean fair) {
-                    return new ArrayBlockingQueue<A>(a.length() + abs(capacity), fair, asList(a.array()));
-                  }
-                };
-              }
-            };
-          }
-        }));
-  }
-
-  /**
-   * Returns an arbitrary implementation for concurrent hash maps.
-   *
-   * @param ak An arbitrary implementation for the type over which the concurrent hash map's keys
-   *           are defined.
-   * @param av An arbitrary implementation for the type over which the concurrent hash map's values
-   *           are defined.
-   * @return An arbitrary implementation for concurrent hash maps.
-   */
-  public static <K, V> Arbitrary<ConcurrentHashMap<K, V>> arbConcurrentHashMap(final Arbitrary<K> ak,
-                                                                               final Arbitrary<V> av) {
-    return arbitrary(arbHashtable(ak, av).gen.map(new F<Hashtable<K, V>, ConcurrentHashMap<K, V>>() {
-      @SuppressWarnings({"UseOfObsoleteCollectionType"})
-      public ConcurrentHashMap<K, V> f(final Hashtable<K, V> ht) {
-        return new ConcurrentHashMap<K, V>(ht);
-      }
-    }));
-  }
-
-  /**
-   * Returns an arbitrary implementation for concurrent linked queues.
-   *
-   * @param aa An arbitrary implementation for the type over which the concurrent linked queue is
-   *           defined.
-   * @return An arbitrary implementation for concurrent linked queues.
-   */
-  public static <A> Arbitrary<ConcurrentLinkedQueue<A>> arbConcurrentLinkedQueue(final Arbitrary<A> aa) {
-    return arbitrary(arbArray(aa).gen.map(new F<Array<A>, ConcurrentLinkedQueue<A>>() {
-      public ConcurrentLinkedQueue<A> f(final Array<A> a) {
-        return new ConcurrentLinkedQueue<A>(asList(a.array()));
-      }
-    }));
-  }
-
-  /**
-   * Returns an arbitrary implementation for copy-on-write array lists.
-   *
-   * @param aa An arbitrary implementation for the type over which the copy-on-write array list is
-   *           defined.
-   * @return An arbitrary implementation for copy-on-write array lists.
-   */
-  public static <A> Arbitrary<CopyOnWriteArrayList<A>> arbCopyOnWriteArrayList(final Arbitrary<A> aa) {
-    return arbitrary(arbArray(aa).gen.map(new F<Array<A>, CopyOnWriteArrayList<A>>() {
-      public CopyOnWriteArrayList<A> f(final Array<A> a) {
-        return new CopyOnWriteArrayList<A>(asList(a.array()));
-      }
-    }));
-  }
-
-  /**
-   * Returns an arbitrary implementation for copy-on-write array sets.
-   *
-   * @param aa An arbitrary implementation for the type over which the copy-on-write array set is
-   *           defined.
-   * @return An arbitrary implementation for copy-on-write array sets.
-   */
-  public static <A> Arbitrary<CopyOnWriteArraySet<A>> arbCopyOnWriteArraySet(final Arbitrary<A> aa) {
-    return arbitrary(arbArray(aa).gen.map(new F<Array<A>, CopyOnWriteArraySet<A>>() {
-      public CopyOnWriteArraySet<A> f(final Array<A> a) {
-        return new CopyOnWriteArraySet<A>(asList(a.array()));
-      }
-    }));
-  }
-
-  /**
-   * Returns an arbitrary implementation for delay queues.
-   *
-   * @param aa An arbitrary implementation for the type over which the delay queue is defined.
-   * @return An arbitrary implementation for delay queues.
-   */
-  public static <A extends Delayed> Arbitrary<DelayQueue<A>> arbDelayQueue(final Arbitrary<A> aa) {
-    return arbitrary(arbArray(aa).gen.map(new F<Array<A>, DelayQueue<A>>() {
-      public DelayQueue<A> f(final Array<A> a) {
-        return new DelayQueue<A>(asList(a.array()));
-      }
-    }));
-  }
-
-  /**
-   * Returns an arbitrary implementation for linked blocking queues.
-   *
-   * @param aa An arbitrary implementation for the type over which the linked blocking queue is
-   *           defined.
-   * @return An arbitrary implementation for linked blocking queues.
-   */
-  public static <A> Arbitrary<LinkedBlockingQueue<A>> arbLinkedBlockingQueue(final Arbitrary<A> aa) {
-    return arbitrary(arbArray(aa).gen.map(new F<Array<A>, LinkedBlockingQueue<A>>() {
-      public LinkedBlockingQueue<A> f(final Array<A> a) {
-        return new LinkedBlockingQueue<A>(asList(a.array()));
-      }
-    }));
-  }
-
-  /**
-   * Returns an arbitrary implementation for priority blocking queues.
-   *
-   * @param aa An arbitrary implementation for the type over which the priority blocking queue is
-   *           defined.
-   * @return An arbitrary implementation for priority blocking queues.
-   */
-  public static <A> Arbitrary<PriorityBlockingQueue<A>> arbPriorityBlockingQueue(final Arbitrary<A> aa) {
-    return arbitrary(arbArray(aa).gen.map(new F<Array<A>, PriorityBlockingQueue<A>>() {
-      public PriorityBlockingQueue<A> f(final Array<A> a) {
-        return new PriorityBlockingQueue<A>(asList(a.array()));
-      }
-    }));
-  }
-
-  /**
-   * Returns an arbitrary implementation for priority blocking queues.
-   *
-   * @param aa An arbitrary implementation for the type over which the priority blocking queue is
-   *           defined.
-   * @return An arbitrary implementation for priority blocking queues.
-   */
-  public static <A> Arbitrary<SynchronousQueue<A>> arbSynchronousQueue(final Arbitrary<A> aa) {
-    return arbitrary(arbArray(aa).gen.bind(arbBoolean.gen, new F<Array<A>, F<Boolean, SynchronousQueue<A>>>() {
-      public F<Boolean, SynchronousQueue<A>> f(final Array<A> a) {
-        return new F<Boolean, SynchronousQueue<A>>() {
-          public SynchronousQueue<A> f(final Boolean fair) {
-            final SynchronousQueue<A> q = new SynchronousQueue<A>(fair);
-            q.addAll(asList(a.array()));
-            return q;
-          }
-        };
-      }
-    }));
-  }
 
   // END java.util.concurrent
 
@@ -1293,47 +1008,6 @@ public final class Arbitrary<A> {
   }));
 
   // END java.sql
-
-  // BEGIN java.math
-
-  /**
-   * An arbitrary implementation for big integers.
-   */
-  public static final Arbitrary<BigInteger> arbBigInteger =
-      arbitrary(arbArray(arbByte).gen.bind(arbByte.gen, new F<Array<Byte>, F<Byte, BigInteger>>() {
-        public F<Byte, BigInteger> f(final Array<Byte> a) {
-          return new F<Byte, BigInteger>() {
-            public BigInteger f(final Byte b) {
-              final byte[] x = new byte[a.length() + 1];
-
-              for (int i = 0; i < a.array().length; i++) {
-                x[i] = a.array()[i];
-              }
-
-              x[a.length()] = b;
-
-              return new BigInteger(x);
-            }
-          };
-        }
-      }));
-
-  /**
-   * An arbitrary implementation for big decimals.
-   */
-  public static final Arbitrary<BigDecimal> arbBigDecimal =
-      arbitrary(arbBigInteger.gen.map(new F<BigInteger, BigDecimal>() {
-        public BigDecimal f(final BigInteger i) {
-          return new BigDecimal(i);
-        }
-      }));
-
-  // END java.math
-
-  /**
-   * An arbitrary implementation for locales.
-   */
-  public static final Arbitrary<Locale> arbLocale = arbitrary(elements(getAvailableLocales()));
 
   /**
    * Returns an arbitrary implementation for product-1 values.
