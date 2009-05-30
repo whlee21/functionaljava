@@ -199,6 +199,17 @@ public abstract class List<A> implements Iterable<A> {
   }
 
   /**
+   * Prepends (cons) the given element to this list to product a new list. This method is added to prevent conflict with
+   * overloads.
+   *
+   * @param a The element to prepend.
+   * @return A new list with the given element at the head.
+   */
+  public List<A> conss(final A a) {
+    return new Cons<A>(a, this);
+  }
+
+  /**
    * Maps the given function across this list.
    *
    * @param f The function to map across this list.
@@ -339,6 +350,22 @@ public abstract class List<A> implements Iterable<A> {
         return P.p(b.toList(), xs);
     }
     return P.p(b.toList(), List.<A>nil());
+  }
+
+  /**
+   * Returns a tuple where the first element is the longest prefix of this list that does not satisfy
+   * the given predicate and the second element is the remainder of the list.
+   *
+   * @param p A predicate for an element to not satisfy by a prefix of this list.
+   * @return A tuple where the first element is the longest prefix of this list that does not satisfy
+   *         the given predicate and the second element is the remainder of the list.
+   */
+  public P2<List<A>, List<A>> breakk(final F<A, Boolean> p) {
+    return span(new F<A, Boolean>() {
+      public Boolean f(final A a) {
+        return !p.f(a);
+      }
+    });
   }
 
   /**
@@ -905,6 +932,17 @@ public abstract class List<A> implements Iterable<A> {
   }
 
   /**
+   * Intersperses this list through the given list then joins the results.
+   *
+   * @param as The list to intersperse through.
+   * @return This list through the given list then joins the results.
+   */
+  @SuppressWarnings({"unchecked"})
+  public List<A> intercalate(final List<List<A>> as) {
+    return join(as.intersperse(this));
+  }
+
+  /**
    * Removes duplicates according to object equality.
    *
    * @return A list without duplicates according to object equality.
@@ -1187,7 +1225,7 @@ public abstract class List<A> implements Iterable<A> {
   /**
    * Transforms a list of pairs into a list of first components and a list of second components.
    *
-   * @param xs The list of pairs to transform.
+   * @param xs The list of pairs to transform.sp
    * @return A list of first components and a list of second components.
    */
   public static <A, B> P2<List<A>, List<B>> unzip(final List<P2<A, B>> xs) {
@@ -1401,6 +1439,19 @@ public abstract class List<A> implements Iterable<A> {
   }
 
   /**
+   * Provides a first-class version of take.
+   *
+   * @return First-class version of take.
+   */
+  public static <A> F<Integer, F<List<A>, List<A>>> take() {
+    return curry(new F2<Integer, List<A>, List<A>>() {
+      public List<A> f(Integer n, List<A> as) {
+        return as.take(n);
+      }
+    });
+  }
+
+  /**
    * Takes the given iterable to a list.
    *
    * @param i The iterable to take to a list.
@@ -1414,6 +1465,7 @@ public abstract class List<A> implements Iterable<A> {
 
     return bs.toList();
   }
+
 
   /**
    * A mutable, singly linked list. This structure should be used <em>very</em> sparingly, in favour
