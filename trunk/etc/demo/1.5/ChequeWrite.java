@@ -15,14 +15,6 @@ import static fj.pre.Show.*;
 public final class ChequeWrite {
   private ChequeWrite() {}
 
-  static F<Character, Boolean> charEqual(final char c) {
-    return new F<Character, Boolean>() {
-      public Boolean f(final Character x) {
-        return x == c;
-      }
-    };
-  }
-
   static List<Integer> toZero(final int from) {
     return unfold(new F<Integer, Option<P2<Integer, Integer>>>() {
       public Option<P2<Integer, Integer>> f(final Integer i) {
@@ -151,7 +143,7 @@ public final class ChequeWrite {
         return cs.filter(Characters.isDigit);
       }
     };
-    final P2<List<Character>, List<Character>> x = cs.dropWhile(charEqual('0')).breakk(charEqual('.')).map1(dropNonDigit).map1(dollars).map2(dropNonDigit).map2(List.<Character>take().f(2)).map2(cents);
+    final P2<List<Character>, List<Character>> x = cs.dropWhile(charEqual.eq('0')).breakk(charEqual.eq('.')).map1(dropNonDigit).map1(dollars).map2(dropNonDigit).map2(List.<Character>take().f(2)).map2(cents);
     return x._1().append(fromString(" and ")).append(x._2());
   }
 
