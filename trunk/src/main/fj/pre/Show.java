@@ -17,8 +17,6 @@ import static fj.P.p;
 import static fj.Unit.unit;
 import fj.data.hlist.HList;
 import fj.data.*;
-import static fj.data.LazyString.str;
-import static fj.data.LazyString.fromStream;
 import static fj.data.Stream.*;
 import fj.data.vector.V2;
 import fj.data.vector.V3;
