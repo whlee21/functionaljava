@@ -282,36 +282,6 @@ public final class Ord<A> {
       });
 
   /**
-   * An order instance for the <code>BigInteger</code> type.
-   */
-  public static final Ord<BigInteger> bigintOrd = new Ord<BigInteger>(
-      new F<BigInteger, F<BigInteger, Ordering>>() {
-        public F<BigInteger, Ordering> f(final BigInteger a1) {
-          return new F<BigInteger, Ordering>() {
-            public Ordering f(final BigInteger a2) {
-              final int x = a1.compareTo(a2);
-              return x < 0 ? LT : x == 0 ? EQ : GT;
-            }
-          };
-        }
-      });
-
-  /**
-   * An order instance for the <code>BigDecimal</code> type.
-   */
-  public static final Ord<BigDecimal> bigdecimalOrd = new Ord<BigDecimal>(
-      new F<BigDecimal, F<BigDecimal, Ordering>>() {
-        public F<BigDecimal, Ordering> f(final BigDecimal a1) {
-          return new F<BigDecimal, Ordering>() {
-            public Ordering f(final BigDecimal a2) {
-              final int x = a1.compareTo(a2);
-              return x < 0 ? LT : x == 0 ? EQ : GT;
-            }
-          };
-        }
-      });
-
-  /**
    * An order instance for the <code>long</code> type.
    */
   public static final Ord<Long> longOrd = new Ord<Long>(
@@ -618,12 +588,6 @@ public final class Ord<A> {
       }
     }));
   }
-
-  /**
-   * An order instance for the <code>long</code> type.
-   */
-  public static final Ord<Natural> naturalOrd = bigintOrd.comap(Natural.bigIntegerValue);
-
 
   /**
    * An order instance for the <code>Comparable</code> interface.

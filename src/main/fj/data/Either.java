@@ -351,22 +351,6 @@ public abstract class Either<A, B> {
     }
 
     /**
-     * Returns a single element array if this projection has a value, otherwise an empty array.
-     *
-     * @param c The class type of the array to return.
-     * @return A single element array if this projection has a value, otherwise an empty array.
-     */
-    @SuppressWarnings({"unchecked"})
-    public Array<A> toArray(final Class<A[]> c) {
-      if (isLeft()) {
-        final A[] a = (A[]) java.lang.reflect.Array.newInstance(c.getComponentType(), 1);
-        a[0] = value();
-        return array(a);
-      } else
-        return array((A[]) java.lang.reflect.Array.newInstance(c.getComponentType(), 0));
-    }
-
-    /**
      * Returns a single element stream if this projection has a value, otherwise an empty stream.
      *
      * @return A single element stream if this projection has a value, otherwise an empty stream.
@@ -594,22 +578,6 @@ public abstract class Either<A, B> {
     @SuppressWarnings({"unchecked"})
     public Array<B> toArray() {
       return isRight() ? array(value()) : Array.<B>empty();
-    }
-
-    /**
-     * Returns a single element array if this projection has a value, otherwise an empty array.
-     *
-     * @param c The class type of the array to return.
-     * @return A single element array if this projection has a value, otherwise an empty array.
-     */
-    @SuppressWarnings({"unchecked"})
-    public Array<B> toArray(final Class<B[]> c) {
-      if (isRight()) {
-        final B[] a = (B[]) java.lang.reflect.Array.newInstance(c.getComponentType(), 1);
-        a[0] = value();
-        return array(a);
-      } else
-        return array((B[]) java.lang.reflect.Array.newInstance(c.getComponentType(), 0));
     }
 
     /**

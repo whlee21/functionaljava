@@ -8,9 +8,6 @@ import fj.P2;
 import fj.Unit;
 import fj.data.*;
 
-import java.math.BigInteger;
-import java.math.BigDecimal;
-
 /**
  * Implementations must satisfy the law of associativity:
  * <ul>
@@ -98,67 +95,7 @@ public final class Semigroup<A> {
     }
   });
 
-  /**
-   * A semigroup that adds big integers.
-   */
-  public static final Semigroup<BigInteger> bigintAdditionSemigroup =
-      semigroup(new F2<BigInteger, BigInteger, BigInteger>() {
-        public BigInteger f(final BigInteger i1, final BigInteger i2) {
-          return i1.add(i2);
-        }
-      });
-
-  /**
-   * A semigroup that multiplies big integers.
-   */
-  public static final Semigroup<BigInteger> bigintMultiplicationSemigroup =
-      semigroup(new F2<BigInteger, BigInteger, BigInteger>() {
-        public BigInteger f(final BigInteger i1, final BigInteger i2) {
-          return i1.multiply(i2);
-        }
-      });
-
-  /**
-   * A semigroup that adds big decimals.
-   */
-  public static final Semigroup<BigDecimal> bigdecimalAdditionSemigroup =
-      semigroup(new F2<BigDecimal, BigDecimal, BigDecimal>() {
-        public BigDecimal f(final BigDecimal i1, final BigDecimal i2) {
-          return i1.add(i2);
-        }
-      });
-
-  /**
-   * A semigroup that multiplies big decimals.
-   */
-  public static final Semigroup<BigDecimal> bigdecimalMultiplicationSemigroup =
-      semigroup(new F2<BigDecimal, BigDecimal, BigDecimal>() {
-        public BigDecimal f(final BigDecimal i1, final BigDecimal i2) {
-          return i1.multiply(i2);
-        }
-      });
-
-  /**
-   * A semigroup that multiplies natural numbers.
-   */
-  public static final Semigroup<Natural> naturalMultiplicationSemigroup =
-      semigroup(new F2<Natural, Natural, Natural>() {
-        public Natural f(final Natural n1, final Natural n2) {
-          return n1.multiply(n2);
-        }
-      });
-
-  /**
-   * A semigroup that multiplies natural numbers.
-   */
-  public static final Semigroup<Natural> naturalAdditionSemigroup =
-      semigroup(new F2<Natural, Natural, Natural>() {
-        public Natural f(final Natural n1, final Natural n2) {
-          return n1.add(n2);
-        }
-      });
-
-  /**
+   /**
    * A semigroup that adds longs.
    */
   public static final Semigroup<Long> longAdditionSemigroup = semigroup(new F2<Long, Long, Long>() {

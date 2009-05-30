@@ -1,5 +1,32 @@
 package fj.test;
 
+import static fj.Function.curry;
+import static fj.P.p;
+import static fj.data.Array.array;
+import static fj.data.List.fromString;
+import static fj.data.List.nil;
+import static fj.test.Variant.variant;
+
+import java.math.BigDecimal;
+import java.math.BigInteger;
+import java.sql.Time;
+import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.EnumMap;
+import java.util.EnumSet;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.IdentityHashMap;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
+import java.util.LinkedList;
+import java.util.PriorityQueue;
+import java.util.Stack;
+import java.util.TreeMap;
+import java.util.TreeSet;
+import java.util.Vector;
+
 import fj.F;
 import fj.F2;
 import fj.F3;
@@ -8,8 +35,6 @@ import fj.F5;
 import fj.F6;
 import fj.F7;
 import fj.F8;
-import static fj.Function.curry;
-import static fj.P.p;
 import fj.P1;
 import fj.P2;
 import fj.P3;
@@ -19,53 +44,10 @@ import fj.P6;
 import fj.P7;
 import fj.P8;
 import fj.data.Array;
-import static fj.data.Array.array;
 import fj.data.Either;
 import fj.data.List;
-import static fj.data.List.fromString;
-import static fj.data.List.nil;
 import fj.data.Option;
 import fj.data.Stream;
-
-import static fj.test.Variant.variant;
-
-import static java.lang.Double.doubleToRawLongBits;
-import static java.lang.Float.floatToRawIntBits;
-import java.math.BigDecimal;
-import java.math.BigInteger;
-import java.sql.Time;
-import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.BitSet;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.EnumMap;
-import java.util.EnumSet;
-import java.util.GregorianCalendar;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Hashtable;
-import java.util.IdentityHashMap;
-import java.util.LinkedHashMap;
-import java.util.LinkedHashSet;
-import java.util.LinkedList;
-import java.util.PriorityQueue;
-import java.util.Properties;
-import java.util.Stack;
-import java.util.TreeMap;
-import java.util.TreeSet;
-import java.util.Vector;
-import java.util.WeakHashMap;
-import java.util.concurrent.ArrayBlockingQueue;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentLinkedQueue;
-import java.util.concurrent.CopyOnWriteArrayList;
-import java.util.concurrent.CopyOnWriteArraySet;
-import java.util.concurrent.DelayQueue;
-import java.util.concurrent.Delayed;
-import java.util.concurrent.LinkedBlockingQueue;
-import java.util.concurrent.PriorityBlockingQueue;
-import java.util.concurrent.SynchronousQueue;
 
 /**
  * Transforms a type and a generator to produce a new generator. This function is used to generate
@@ -370,24 +352,6 @@ public abstract class Coarbitrary<A> {
   };
 
   /**
-   * A coarbitrary for floats.
-   */
-  public static final Coarbitrary<Float> coarbFloat = new Coarbitrary<Float>() {
-    public <B> Gen<B> coarbitrary(final Float f, final Gen<B> g) {
-      return coarbInteger.coarbitrary(floatToRawIntBits(f), g);
-    }
-  };
-
-  /**
-   * A coarbitrary for doubles.
-   */
-  public static final Coarbitrary<Double> coarbDouble = new Coarbitrary<Double>() {
-    public <B> Gen<B> coarbitrary(final Double d, final Gen<B> g) {
-      return coarbLong.coarbitrary(doubleToRawLongBits(d), g);
-    }
-  };
-
-  /**
    * A coarbitrary for the optional value.
    *
    * @param ca A coarbitrary for the type of the optional value.
@@ -529,30 +493,6 @@ public abstract class Coarbitrary<A> {
   }
 
   /**
-   * A coarbitrary for bit sets.
-   */
-  public static final Coarbitrary<BitSet> coarbBitSet = new Coarbitrary<BitSet>() {
-    public <B> Gen<B> coarbitrary(final BitSet s, final Gen<B> g) {
-      List<Boolean> x = nil();
-
-      for (int i = 0; i < s.size(); i++) {
-        x = x.snoc(s.get(i));
-      }
-
-      return coarbList(coarbBoolean).coarbitrary(x, g);
-    }
-  };
-
-  /**
-   * A coarbitrary for calendars.
-   */
-  public static final Coarbitrary<Calendar> coarbCalendar = new Coarbitrary<Calendar>() {
-    public <B> Gen<B> coarbitrary(final Calendar c, final Gen<B> g) {
-      return coarbLong.coarbitrary(c.getTime().getTime(), g);
-    }
-  };
-
-  /**
    * A coarbitrary for dates.
    */
   public static final Coarbitrary<Date> coarbDate = new Coarbitrary<Date>() {
@@ -573,7 +513,7 @@ public abstract class Coarbitrary<A> {
     return new Coarbitrary<EnumMap<K, V>>() {
       @SuppressWarnings({"UseOfObsoleteCollectionType"})
       public <B> Gen<B> coarbitrary(final EnumMap<K, V> m, final Gen<B> g) {
-        return coarbHashtable(ck, cv).coarbitrary(new Hashtable<K, V>(m), g);
+        return coarbHashMap(ck, cv).coarbitrary(new HashMap<K, V>(m), g);
       }
     };
   }
@@ -594,15 +534,6 @@ public abstract class Coarbitrary<A> {
   }
 
   /**
-   * A coarbitrary for gregorian calendars.
-   */
-  public static final Coarbitrary<GregorianCalendar> coarbGregorianCalendar = new Coarbitrary<GregorianCalendar>() {
-    public <B> Gen<B> coarbitrary(final GregorianCalendar c, final Gen<B> g) {
-      return coarbLong.coarbitrary(c.getTime().getTime(), g);
-    }
-  };
-
-  /**
    * A coarbitrary for hash maps.
    *
    * @param ck A coarbitrary for the map keys.
@@ -611,9 +542,14 @@ public abstract class Coarbitrary<A> {
    */
   public static <K, V> Coarbitrary<HashMap<K, V>> coarbHashMap(final Coarbitrary<K> ck, final Coarbitrary<V> cv) {
     return new Coarbitrary<HashMap<K, V>>() {
-      @SuppressWarnings({"UseOfObsoleteCollectionType"})
-      public <B> Gen<B> coarbitrary(final HashMap<K, V> m, final Gen<B> g) {
-        return coarbHashtable(ck, cv).coarbitrary(new Hashtable<K, V>(m), g);
+      public <B> Gen<B> coarbitrary(final HashMap<K, V> h, final Gen<B> g) {
+        List<P2<K, V>> x = nil();
+
+        for (final K k : h.keySet()) {
+          x = x.snoc(p(k, h.get(k)));
+        }
+
+        return coarbList(coarbP2(ck, cv)).coarbitrary(x, g);
       }
     };
   }
@@ -634,28 +570,6 @@ public abstract class Coarbitrary<A> {
   }
 
   /**
-   * A coarbitrary for hash tables.
-   *
-   * @param ck A coarbitrary for the map keys.
-   * @param cv A coarbitrary for the map values.
-   * @return A coarbitrary for hash tables.
-   */
-  public static <K, V> Coarbitrary<Hashtable<K, V>> coarbHashtable(final Coarbitrary<K> ck, final Coarbitrary<V> cv) {
-    return new Coarbitrary<Hashtable<K, V>>() {
-      @SuppressWarnings({"UseOfObsoleteCollectionType"})
-      public <B> Gen<B> coarbitrary(final Hashtable<K, V> h, final Gen<B> g) {
-        List<P2<K, V>> x = nil();
-
-        for (final K k : h.keySet()) {
-          x = x.snoc(p(k, h.get(k)));
-        }
-
-        return coarbList(coarbP2(ck, cv)).coarbitrary(x, g);
-      }
-    };
-  }
-
-  /**
    * A coarbitrary for identity hash maps.
    *
    * @param ck A coarbitrary for the map keys.
@@ -667,7 +581,7 @@ public abstract class Coarbitrary<A> {
     return new Coarbitrary<IdentityHashMap<K, V>>() {
       @SuppressWarnings({"UseOfObsoleteCollectionType"})
       public <B> Gen<B> coarbitrary(final IdentityHashMap<K, V> m, final Gen<B> g) {
-        return coarbHashtable(ck, cv).coarbitrary(new Hashtable<K, V>(m), g);
+        return coarbHashMap(ck, cv).coarbitrary(new HashMap<K, V>(m), g);
       }
     };
   }
@@ -684,7 +598,7 @@ public abstract class Coarbitrary<A> {
     return new Coarbitrary<LinkedHashMap<K, V>>() {
       @SuppressWarnings({"UseOfObsoleteCollectionType"})
       public <B> Gen<B> coarbitrary(final LinkedHashMap<K, V> m, final Gen<B> g) {
-        return coarbHashtable(ck, cv).coarbitrary(new Hashtable<K, V>(m), g);
+        return coarbHashMap(ck, cv).coarbitrary(new HashMap<K, V>(m), g);
       }
     };
   }
@@ -735,22 +649,6 @@ public abstract class Coarbitrary<A> {
   }
 
   /**
-   * A coarbitrary for properties.
-   */
-  public static final Coarbitrary<Properties> coarbProperties = new Coarbitrary<Properties>() {
-    @SuppressWarnings({"UseOfObsoleteCollectionType"})
-    public <B> Gen<B> coarbitrary(final Properties p, final Gen<B> g) {
-      final Hashtable<String, String> t = new Hashtable<String, String>();
-
-      for (final Object s : p.keySet()) {
-        t.put((String) s, p.getProperty((String) s));
-      }
-
-      return coarbHashtable(coarbString, coarbString).coarbitrary(t, g);
-    }
-  };
-
-  /**
    * A coarbitrary for stacks.
    *
    * @param c A coarbitrary for the elements of the stack.
@@ -776,7 +674,7 @@ public abstract class Coarbitrary<A> {
     return new Coarbitrary<TreeMap<K, V>>() {
       @SuppressWarnings({"UseOfObsoleteCollectionType"})
       public <B> Gen<B> coarbitrary(final TreeMap<K, V> m, final Gen<B> g) {
-        return coarbHashtable(ck, cv).coarbitrary(new Hashtable<K, V>(m), g);
+        return coarbHashMap(ck, cv).coarbitrary(new HashMap<K, V>(m), g);
       }
     };
   }
@@ -811,165 +709,7 @@ public abstract class Coarbitrary<A> {
     };
   }
 
-  /**
-   * A coarbitrary for weak hash maps.
-   *
-   * @param ck A coarbitrary for the map keys.
-   * @param cv A coarbitrary for the map values.
-   * @return A coarbitrary for weak hash maps.
-   */
-  public static <K, V> Coarbitrary<WeakHashMap<K, V>> coarbWeakHashMap(final Coarbitrary<K> ck,
-                                                                       final Coarbitrary<V> cv) {
-    return new Coarbitrary<WeakHashMap<K, V>>() {
-      @SuppressWarnings({"UseOfObsoleteCollectionType"})
-      public <B> Gen<B> coarbitrary(final WeakHashMap<K, V> m, final Gen<B> g) {
-        return coarbHashtable(ck, cv).coarbitrary(new Hashtable<K, V>(m), g);
-      }
-    };
-  }
-
   // END java.util
-
-  // BEGIN java.util.concurrent
-
-  /**
-   * A coarbitrary for array blocking queues.
-   *
-   * @param c A coarbitrary for the elements of the array blocking queue.
-   * @return A coarbitrary for array blocking queues.
-   */
-  public static <A> Coarbitrary<ArrayBlockingQueue<A>> coarbArrayBlockingQueue(final Coarbitrary<A> c) {
-    return new Coarbitrary<ArrayBlockingQueue<A>>() {
-      @SuppressWarnings({"unchecked"})
-      public <B> Gen<B> coarbitrary(final ArrayBlockingQueue<A> as, final Gen<B> g) {
-        return coarbArray(c).coarbitrary(array(as.toArray((A[]) new Object[as.size()])), g);
-      }
-    };
-  }
-
-  /**
-   * A coarbitrary for concurrent hash maps.
-   *
-   * @param ck A coarbitrary for the map keys.
-   * @param cv A coarbitrary for the map values.
-   * @return A coarbitrary for concurrent hash maps.
-   */
-  public static <K, V> Coarbitrary<ConcurrentHashMap<K, V>> coarbConcurrentHashMap(final Coarbitrary<K> ck,
-                                                                                   final Coarbitrary<V> cv) {
-    return new Coarbitrary<ConcurrentHashMap<K, V>>() {
-      @SuppressWarnings({"UseOfObsoleteCollectionType"})
-      public <B> Gen<B> coarbitrary(final ConcurrentHashMap<K, V> m, final Gen<B> g) {
-        return coarbHashtable(ck, cv).coarbitrary(new Hashtable<K, V>(m), g);
-      }
-    };
-  }
-
-  /**
-   * A coarbitrary for concurrent linked queues.
-   *
-   * @param c A coarbitrary for the elements of the concurrent linked queue.
-   * @return A coarbitrary for concurrent linked queues.
-   */
-  public static <A> Coarbitrary<ConcurrentLinkedQueue<A>> coarbConcurrentLinkedQueue(final Coarbitrary<A> c) {
-    return new Coarbitrary<ConcurrentLinkedQueue<A>>() {
-      @SuppressWarnings({"unchecked"})
-      public <B> Gen<B> coarbitrary(final ConcurrentLinkedQueue<A> as, final Gen<B> g) {
-        return coarbArray(c).coarbitrary(array(as.toArray((A[]) new Object[as.size()])), g);
-      }
-    };
-  }
-
-  /**
-   * A coarbitrary for copy-on-write array lists.
-   *
-   * @param c A coarbitrary for the elements of the copy-on-write array list.
-   * @return A coarbitrary for copy-on-write array lists.
-   */
-  public static <A> Coarbitrary<CopyOnWriteArrayList<A>> coarbCopyOnWriteArrayList(final Coarbitrary<A> c) {
-    return new Coarbitrary<CopyOnWriteArrayList<A>>() {
-      @SuppressWarnings({"unchecked"})
-      public <B> Gen<B> coarbitrary(final CopyOnWriteArrayList<A> as, final Gen<B> g) {
-        return coarbArray(c).coarbitrary(array(as.toArray((A[]) new Object[as.size()])), g);
-      }
-    };
-  }
-
-  /**
-   * A coarbitrary for copy-on-write array sets.
-   *
-   * @param c A coarbitrary for the elements of the copy-on-write array set.
-   * @return A coarbitrary for copy-on-write array sets.
-   */
-  public static <A> Coarbitrary<CopyOnWriteArraySet<A>> coarbCopyOnWriteArraySet(final Coarbitrary<A> c) {
-    return new Coarbitrary<CopyOnWriteArraySet<A>>() {
-      @SuppressWarnings({"unchecked"})
-      public <B> Gen<B> coarbitrary(final CopyOnWriteArraySet<A> as, final Gen<B> g) {
-        return coarbArray(c).coarbitrary(array(as.toArray((A[]) new Object[as.size()])), g);
-      }
-    };
-  }
-
-  /**
-   * A coarbitrary for delay queues.
-   *
-   * @param c A coarbitrary for the elements of the delay queue.
-   * @return A coarbitrary for delay queues.
-   */
-  public static <A extends Delayed> Coarbitrary<DelayQueue<A>> coarbDelayQueue(final Coarbitrary<A> c) {
-    return new Coarbitrary<DelayQueue<A>>() {
-      @SuppressWarnings({"unchecked"})
-      public <B> Gen<B> coarbitrary(final DelayQueue<A> as, final Gen<B> g) {
-        return coarbArray(c).coarbitrary(array(as.toArray((A[]) new Object[as.size()])), g);
-      }
-    };
-  }
-
-  /**
-   * A coarbitrary for linked blocking queues.
-   *
-   * @param c A coarbitrary for the elements of the linked blocking queue.
-   * @return A coarbitrary for linked blocking queues.
-   */
-  public static <A> Coarbitrary<LinkedBlockingQueue<A>> coarbLinkedBlockingQueue(final Coarbitrary<A> c) {
-    return new Coarbitrary<LinkedBlockingQueue<A>>() {
-      @SuppressWarnings({"unchecked"})
-      public <B> Gen<B> coarbitrary(final LinkedBlockingQueue<A> as, final Gen<B> g) {
-        return coarbArray(c).coarbitrary(array(as.toArray((A[]) new Object[as.size()])), g);
-      }
-    };
-  }
-
-  /**
-   * A coarbitrary for priority blocking queues.
-   *
-   * @param c A coarbitrary for the elements of the priority blocking queue.
-   * @return A coarbitrary for priority blocking queues.
-   */
-  public static <A> Coarbitrary<PriorityBlockingQueue<A>> coarbPriorityBlockingQueue(final Coarbitrary<A> c) {
-    return new Coarbitrary<PriorityBlockingQueue<A>>() {
-      @SuppressWarnings({"unchecked"})
-      public <B> Gen<B> coarbitrary(final PriorityBlockingQueue<A> as, final Gen<B> g) {
-        return coarbArray(c).coarbitrary(array(as.toArray((A[]) new Object[as.size()])), g);
-      }
-    };
-  }
-
-  /**
-   * A coarbitrary for synchronous queues.
-   *
-   * @param c A coarbitrary for the elements of the synchronous queue.
-   * @return A coarbitrary for synchronous queues.
-   */
-  public static <A> Coarbitrary<SynchronousQueue<A>> coarbSynchronousQueue(final Coarbitrary<A> c) {
-    return new Coarbitrary<SynchronousQueue<A>>() {
-      @SuppressWarnings({"unchecked"})
-      public <B> Gen<B> coarbitrary(final SynchronousQueue<A> as, final Gen<B> g) {
-        return coarbArray(c).coarbitrary(array(as.toArray((A[]) new Object[as.size()])), g);
-      }
-    };
-  }
-
-  // END java.util.concurrent
 
   // BEGIN java.sql
 
@@ -992,26 +732,6 @@ public abstract class Coarbitrary<A> {
   };
 
   // END java.sql
-
-  // BEGIN java.math
-
-  public static final Coarbitrary<BigInteger> coarbBigInteger = new Coarbitrary<BigInteger>() {
-    public <B> Gen<B> coarbitrary(final BigInteger i, final Gen<B> g) {
-      return variant((i.compareTo(BigInteger.ZERO) >= 0 ?
-          i.multiply(BigInteger.valueOf(2L)) :
-          i.multiply(BigInteger.valueOf(-2L).add(BigInteger.ONE))).longValue(), g);
-    }
-  };
-
-  public static final Coarbitrary<BigDecimal> coarbBigDecimal = new Coarbitrary<BigDecimal>() {
-    public <B> Gen<B> coarbitrary(final BigDecimal d, final Gen<B> g) {
-      return variant((d.compareTo(BigDecimal.ZERO) >= 0 ?
-          d.multiply(BigDecimal.valueOf(2L)) :
-          d.multiply(BigDecimal.valueOf(-2L).add(BigDecimal.ONE))).longValue(), g);
-    }
-  };
-
-  // END java.math
 
   /**
    * A coarbitrary for product-1 values.

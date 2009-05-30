@@ -189,24 +189,6 @@ public abstract class List<A> implements Iterable<A> {
   }
 
   /**
-   * Returns a array projection of this list.
-   *
-   * @param c The class type of the array to return.
-   * @return A array projection of this list.
-   */
-  @SuppressWarnings({"unchecked"})
-  public Array<A> toArray(final Class<A[]> c) {
-    final A[] a = (A[]) java.lang.reflect.Array.newInstance(c.getComponentType(), length());
-    List<A> x = this;
-    for (int i = 0; i < length(); i++) {
-      a[i] = x.head();
-      x = x.tail();
-    }
-
-    return array(a);
-  }
-
-  /**
    * Prepends (cons) the given element to this list to product a new list.
    *
    * @param a The element to prepend.

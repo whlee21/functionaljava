@@ -7,8 +7,6 @@ import fj.data.Option;
 import static fj.data.Option.none;
 import static fj.data.Option.some;
 
-import java.util.concurrent.CountDownLatch;
-
 /**
  * A product-1. Also, the identity monad.
  *

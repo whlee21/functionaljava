@@ -12,13 +12,9 @@ import fj.P5;
 import fj.P6;
 import fj.P7;
 import fj.P8;
-import fj.Unit;
 import static fj.P.p;
-import static fj.Unit.unit;
 import fj.data.hlist.HList;
 import fj.data.*;
-import static fj.data.LazyString.str;
-import static fj.data.LazyString.fromStream;
 import static fj.data.Stream.*;
 import fj.data.vector.V2;
 import fj.data.vector.V3;
@@ -27,10 +23,6 @@ import fj.data.vector.V5;
 import fj.data.vector.V6;
 import fj.data.vector.V7;
 import fj.data.vector.V8;
-
-import java.math.BigInteger;
-import java.math.BigDecimal;
-import java.util.Arrays;
 
 /**
  * Renders an object for display.
@@ -98,39 +90,6 @@ public final class Show<A> {
    */
   public F<A, Stream<Character>> show_() {
     return f;
-  }
-
-  /**
-   * Prints the given argument to the standard output stream with a new line.
-   *
-   * @param a The argument to print.
-   * @return The unit value.
-   */
-  public Unit println(final A a) {
-    print(a);
-    System.out.println();
-    return unit();
-  }
-
-  /**
-   * Prints the given argument to the standard output stream.
-   *
-   * @param a The argument to print.
-   * @return The unit value.
-   */
-  public Unit print(final A a) {
-    final char[] buffer = new char[8192];
-    int c = 0;
-    for (Stream<Character> cs = show(a); cs.isNotEmpty(); cs = cs.tail()._1()) {
-      buffer[c] = cs.head();
-      c++;
-      if (c == 8192) {
-        System.out.print(buffer);
-        c = 0;
-      }
-    }
-    System.out.print(Arrays.copyOfRange(buffer, 0, c));
-    return unit();
   }
 
   /**
@@ -208,17 +167,7 @@ public final class Show<A> {
    * A show instance for the <code>int</code> type.
    */
   public static final Show<Integer> intShow = anyShow();
-
-  /**
-   * A show instance for the <code>BigInteger</code> type.
-   */
-  public static final Show<BigInteger> bigintShow = anyShow();
-
-  /**
-   * A show instance for the <code>BigDecimal</code> type.
-   */
-  public static final Show<BigDecimal> bigdecimalShow = anyShow();
-
+  
   /**
    * A show instance for the <code>long</code> type.
    */
@@ -616,15 +565,6 @@ public final class Show<A> {
   public static <A> Show<V8<A>> v8Show(final Show<A> ea) {
     return streamShow(ea).comap(V8.<A>toStream_());
   }
-
-  /**
-   * A show instance for natural numbers.
-   */
-  public static final Show<Natural> naturalShow = bigintShow.comap(new F<Natural, BigInteger>() {
-    public BigInteger f(final Natural natural) {
-      return natural.bigIntegerValue();
-    }
-  });
 
   /**
    * A show instance for streams that splits into lines.

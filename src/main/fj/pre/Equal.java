@@ -31,9 +31,6 @@ import fj.data.vector.V6;
 import fj.data.vector.V7;
 import fj.data.vector.V8;
 
-import java.math.BigInteger;
-import java.math.BigDecimal;
-
 /**
  * Tests for equality between two objects.
  *
@@ -156,16 +153,6 @@ public final class Equal<A> {
    * An equal instance for the <code>int</code> type.
    */
   public static final Equal<Integer> intEqual = anyEqual();
-
-  /**
-   * An equal instance for the <code>BigInteger</code> type.
-   */
-  public static final Equal<BigInteger> bigintEqual = anyEqual();
-
-  /**
-   * An equal instance for the <code>BigDecimal</code> type.
-   */
-  public static final Equal<BigDecimal> bigdecimalEqual = anyEqual();
 
   /**
    * An equal instance for the <code>long</code> type.

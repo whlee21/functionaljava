@@ -9,15 +9,12 @@ import static fj.Function.compose;
 import static fj.Function.curry;
 import static fj.function.Booleans.not;
 import static fj.function.Booleans.or;
-import static fj.function.Characters.isSpaceChar;
 import static fj.data.Option.none;
 import static fj.data.Option.some;
 import static fj.data.Stream.join;
 import fj.pre.Equal;
 import static fj.pre.Equal.streamEqual;
 import static fj.pre.Equal.charEqual;
-
-import java.util.regex.Pattern;
 
 /**
  * A lazy (non-evaluated) immutable character string.
@@ -233,16 +230,6 @@ public final class LazyString implements CharSequence {
   }
 
   /**
-   * Regular expression pattern matching.
-   *
-   * @param regex A regular expression to match this lazy string.
-   * @return True if this string mathches the given regular expression, otherwise False.
-   */
-  public boolean matches(final String regex) {
-    return Pattern.matches(regex, this);
-  }
-
-  /**
    * Splits this lazy string by characters matching the given predicate.
    *
    * @param p A predicate that matches characters to be considered delimiters.
@@ -265,15 +252,6 @@ public final class LazyString implements CharSequence {
    */
   public Stream<LazyString> split(final char c) {
     return split(charEqual.eq(c));
-  }
-
-  /**
-   * Splits this lazy string into words by spaces.
-   *
-   * @return A stream of the words in this lazy string, when split by spaces.
-   */
-  public Stream<LazyString> words() {
-    return split(isSpaceChar);
   }
 
   /**

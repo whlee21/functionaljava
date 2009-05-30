@@ -10,14 +10,10 @@ import static fj.Function.compose;
 import static fj.Function.flip;
 import fj.data.Array;
 import fj.data.List;
-import fj.data.Natural;
 import fj.data.Option;
 import fj.data.Set;
 import fj.data.Stream;
 import static fj.data.Stream.iterableStream;
-
-import java.math.BigInteger;
-import java.math.BigDecimal;
 
 /**
  * A monoid abstraction to be defined across types of the given type argument. Implementations must
@@ -232,41 +228,6 @@ public final class Monoid<A> {
    * A monoid that multiplies integers.
    */
   public static final Monoid<Integer> intMultiplicationMonoid = monoid(intMultiplicationSemigroup, 1);
-
-  /**
-   * A monoid that adds big integers.
-   */
-  public static final Monoid<BigInteger> bigintAdditionMonoid = monoid(bigintAdditionSemigroup, BigInteger.ZERO);
-
-  /**
-   * A monoid that multiplies big integers.
-   */
-  public static final Monoid<BigInteger> bigintMultiplicationMonoid =
-      monoid(bigintMultiplicationSemigroup, BigInteger.ONE);
-
-  /**
-   * A monoid that adds big decimals.
-   */
-  public static final Monoid<BigDecimal> bigdecimalAdditionMonoid =
-      monoid(bigdecimalAdditionSemigroup, BigDecimal.ZERO);
-
-  /**
-   * A monoid that multiplies big decimals.
-   */
-  public static final Monoid<BigDecimal> bigdecimalMultiplicationMonoid =
-      monoid(bigdecimalMultiplicationSemigroup, BigDecimal.ONE);
-
-  /**
-   * A monoid that adds natural numbers.
-   */
-  public static final Monoid<Natural> naturalAdditionMonoid =
-      monoid(naturalMultiplicationSemigroup, Natural.ZERO);
-
-  /**
-   * A monoid that multiplies natural numbers.
-   */
-  public static final Monoid<Natural> naturalMultiplicationMonoid =
-      monoid(naturalMultiplicationSemigroup, Natural.ONE);
 
   /**
    * A monoid that adds longs.

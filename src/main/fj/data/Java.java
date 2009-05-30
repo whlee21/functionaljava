@@ -1,38 +1,22 @@
 package fj.data;
 
-import fj.Effect;
-import fj.F;
-import static fj.P.p;
-import fj.P1;
-import fj.P2;
 import static fj.data.List.list;
-import static fj.data.Option.some;
+import static java.util.Arrays.asList;
+import static java.util.EnumSet.copyOf;
 
 import java.util.ArrayList;
-import java.util.BitSet;
 import java.util.EnumSet;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.LinkedList;
+import java.util.NoSuchElementException;
 import java.util.PriorityQueue;
 import java.util.Stack;
 import java.util.TreeSet;
 import java.util.Vector;
-import java.util.Iterator;
-import java.util.NoSuchElementException;
-import static java.util.Arrays.asList;
-import static java.util.EnumSet.copyOf;
-import java.util.concurrent.ArrayBlockingQueue;
-import java.util.concurrent.Callable;
-import java.util.concurrent.ConcurrentLinkedQueue;
-import java.util.concurrent.CopyOnWriteArrayList;
-import java.util.concurrent.CopyOnWriteArraySet;
-import java.util.concurrent.DelayQueue;
-import java.util.concurrent.Delayed;
-import java.util.concurrent.Future;
-import java.util.concurrent.LinkedBlockingQueue;
-import java.util.concurrent.PriorityBlockingQueue;
-import java.util.concurrent.SynchronousQueue;
+
+import fj.F;
 
 /**
  * Functions that convert between types from the core Java API.
@@ -62,21 +46,6 @@ public final class Java {
       }
     };
   }
-
-  /**
-   * A function that converts lists to bit sets.
-   */
-  public static final F<List<Boolean>, BitSet> List_BitSet = new F<List<Boolean>, BitSet>() {
-    public BitSet f(final List<Boolean> bs) {
-      final BitSet s = new BitSet(bs.length());
-      bs.zipIndex().foreach(new Effect<P2<Boolean, Integer>>() {
-        public void e(final P2<Boolean, Integer> bi) {
-          s.set(bi._2(), bi._1());
-        }
-      });
-      return s;
-    }
-  };
 
   /**
    * A function that converts lists to array enum sets.
@@ -185,122 +154,6 @@ public final class Java {
     };
   }
 
-  /**
-   * A function that converts lists to array blocking queue.
-   *
-   * @param fair The argument to pass to the constructor of the array blocking queue.
-   * @return A function that converts lists to array blocking queue.
-   */
-  public static <A> F<List<A>, ArrayBlockingQueue<A>> List_ArrayBlockingQueue(final boolean fair) {
-    return new F<List<A>, ArrayBlockingQueue<A>>() {
-      @SuppressWarnings({"UseOfObsoleteCollectionType"})
-      public ArrayBlockingQueue<A> f(final List<A> as) {
-        return new ArrayBlockingQueue<A>(as.length(), fair, asList(as.toArray().array()));
-      }
-    };
-  }
-
-  /**
-   * A function that converts lists to concurrent linked queues.
-   *
-   * @return A function that converts lists to concurrent linked queues.
-   */
-  public static <A> F<List<A>, ConcurrentLinkedQueue<A>> List_ConcurrentLinkedQueue() {
-    return new F<List<A>, ConcurrentLinkedQueue<A>>() {
-      @SuppressWarnings({"UseOfObsoleteCollectionType"})
-      public ConcurrentLinkedQueue<A> f(final List<A> as) {
-        return new ConcurrentLinkedQueue<A>(asList(as.toArray().array()));
-      }
-    };
-  }
-
-  /**
-   * A function that converts lists to copy on write array lists.
-   *
-   * @return A function that converts lists to copy on write array lists.
-   */
-  public static <A> F<List<A>, CopyOnWriteArrayList<A>> List_CopyOnWriteArrayList() {
-    return new F<List<A>, CopyOnWriteArrayList<A>>() {
-      @SuppressWarnings({"UseOfObsoleteCollectionType"})
-      public CopyOnWriteArrayList<A> f(final List<A> as) {
-        return new CopyOnWriteArrayList<A>(asList(as.toArray().array()));
-      }
-    };
-  }
-
-  /**
-   * A function that converts lists to copy on write array sets.
-   *
-   * @return A function that converts lists to copy on write array sets.
-   */
-  public static <A> F<List<A>, CopyOnWriteArraySet<A>> List_CopyOnWriteArraySet() {
-    return new F<List<A>, CopyOnWriteArraySet<A>>() {
-      @SuppressWarnings({"UseOfObsoleteCollectionType"})
-      public CopyOnWriteArraySet<A> f(final List<A> as) {
-        return new CopyOnWriteArraySet<A>(asList(as.toArray().array()));
-      }
-    };
-  }
-
-  /**
-   * A function that converts lists to delay queues.
-   *
-   * @return A function that converts lists to delay queues.
-   */
-  public static <A extends Delayed> F<List<A>, DelayQueue<A>> List_DelayQueue() {
-    return new F<List<A>, DelayQueue<A>>() {
-      @SuppressWarnings({"UseOfObsoleteCollectionType"})
-      public DelayQueue<A> f(final List<A> as) {
-        return new DelayQueue<A>(asList(as.toArray().array()));
-      }
-    };
-  }
-
-  /**
-   * A function that converts lists to linked blocking queues.
-   *
-   * @return A function that converts lists to linked blocking queues.
-   */
-  public static <A> F<List<A>, LinkedBlockingQueue<A>> List_LinkedBlockingQueue() {
-    return new F<List<A>, LinkedBlockingQueue<A>>() {
-      @SuppressWarnings({"UseOfObsoleteCollectionType"})
-      public LinkedBlockingQueue<A> f(final List<A> as) {
-        return new LinkedBlockingQueue<A>(asList(as.toArray().array()));
-      }
-    };
-  }
-
-  /**
-   * A function that converts lists to priority blocking queues.
-   *
-   * @return A function that converts lists to priority blocking queues.
-   */
-  public static <A> F<List<A>, PriorityBlockingQueue<A>> List_PriorityBlockingQueue() {
-    return new F<List<A>, PriorityBlockingQueue<A>>() {
-      @SuppressWarnings({"UseOfObsoleteCollectionType"})
-      public PriorityBlockingQueue<A> f(final List<A> as) {
-        return new PriorityBlockingQueue<A>(asList(as.toArray().array()));
-      }
-    };
-  }
-
-  /**
-   * A function that converts lists to synchronous queues.
-   *
-   * @param fair The argument to pass to the constructor of the synchronous queue.
-   * @return A function that converts lists to synchronous queues.
-   */
-  public static <A> F<List<A>, SynchronousQueue<A>> List_SynchronousQueue(final boolean fair) {
-    return new F<List<A>, SynchronousQueue<A>>() {
-      @SuppressWarnings({"UseOfObsoleteCollectionType"})
-      public SynchronousQueue<A> f(final List<A> as) {
-        final SynchronousQueue<A> q = new SynchronousQueue<A>(fair);
-        q.addAll(asList(as.toArray().array()));
-        return q;
-      }
-    };
-  }
-
   // END List ->
 
   // BEGIN Array ->
@@ -317,22 +170,6 @@ public final class Java {
       }
     };
   }
-
-  /**
-   * A function that converts arrays to bit sets.
-   */
-  public static final F<Array<Boolean>, BitSet> Array_BitSet = new F<Array<Boolean>, BitSet>() {
-    public BitSet f(final Array<Boolean> bs) {
-      final BitSet s = new BitSet(bs.length());
-
-      bs.zipIndex().foreach(new Effect<P2<Boolean, Integer>>() {
-        public void e(final P2<Boolean, Integer> bi) {
-          s.set(bi._2(), bi._1());
-        }
-      });
-      return s;
-    }
-  };
 
   /**
    * A function that converts arrays to enum sets.
@@ -441,122 +278,6 @@ public final class Java {
     };
   }
 
-  /**
-   * A function that converts arrays to array blocking queues.
-   *
-   * @param fair The argument to pass to the constructor of the array blocking queue.
-   * @return A function that converts arrays to array blocking queues.
-   */
-  public static <A> F<Array<A>, ArrayBlockingQueue<A>> Array_ArrayBlockingQueue(final boolean fair) {
-    return new F<Array<A>, ArrayBlockingQueue<A>>() {
-      @SuppressWarnings({"UseOfObsoleteCollectionType"})
-      public ArrayBlockingQueue<A> f(final Array<A> as) {
-        return new ArrayBlockingQueue<A>(as.length(), fair, asList(as.array()));
-      }
-    };
-  }
-
-  /**
-   * A function that converts arrays to concurrent linked queues.
-   *
-   * @return A function that converts arrays to concurrent linked queues.
-   */
-  public static <A> F<Array<A>, ConcurrentLinkedQueue<A>> Array_ConcurrentLinkedQueue() {
-    return new F<Array<A>, ConcurrentLinkedQueue<A>>() {
-      @SuppressWarnings({"UseOfObsoleteCollectionType"})
-      public ConcurrentLinkedQueue<A> f(final Array<A> as) {
-        return new ConcurrentLinkedQueue<A>(asList(as.array()));
-      }
-    };
-  }
-
-  /**
-   * A function that converts arrays to copy on write array lists.
-   *
-   * @return A function that converts arrays to copy on write array lists.
-   */
-  public static <A> F<Array<A>, CopyOnWriteArrayList<A>> Array_CopyOnWriteArrayList() {
-    return new F<Array<A>, CopyOnWriteArrayList<A>>() {
-      @SuppressWarnings({"UseOfObsoleteCollectionType"})
-      public CopyOnWriteArrayList<A> f(final Array<A> as) {
-        return new CopyOnWriteArrayList<A>(asList(as.array()));
-      }
-    };
-  }
-
-  /**
-   * A function that converts arrays to copy on write array sets.
-   *
-   * @return A function that converts arrays to copy on write array sets.
-   */
-  public static <A> F<Array<A>, CopyOnWriteArraySet<A>> Array_CopyOnWriteArraySet() {
-    return new F<Array<A>, CopyOnWriteArraySet<A>>() {
-      @SuppressWarnings({"UseOfObsoleteCollectionType"})
-      public CopyOnWriteArraySet<A> f(final Array<A> as) {
-        return new CopyOnWriteArraySet<A>(asList(as.array()));
-      }
-    };
-  }
-
-  /**
-   * A function that converts arrays to delay queues.
-   *
-   * @return A function that converts arrays to delay queues.
-   */
-  public static <A extends Delayed> F<Array<A>, DelayQueue<A>> Array_DelayQueue() {
-    return new F<Array<A>, DelayQueue<A>>() {
-      @SuppressWarnings({"UseOfObsoleteCollectionType"})
-      public DelayQueue<A> f(final Array<A> as) {
-        return new DelayQueue<A>(asList(as.array()));
-      }
-    };
-  }
-
-  /**
-   * A function that converts arrays to linked blocking queues.
-   *
-   * @return A function that converts arrays to linked blocking queues.
-   */
-  public static <A> F<Array<A>, LinkedBlockingQueue<A>> Array_LinkedBlockingQueue() {
-    return new F<Array<A>, LinkedBlockingQueue<A>>() {
-      @SuppressWarnings({"UseOfObsoleteCollectionType"})
-      public LinkedBlockingQueue<A> f(final Array<A> as) {
-        return new LinkedBlockingQueue<A>(asList(as.array()));
-      }
-    };
-  }
-
-  /**
-   * A function that converts arrays to priority blocking queues.
-   *
-   * @return A function that converts arrays to priority blocking queues.
-   */
-  public static <A> F<Array<A>, PriorityBlockingQueue<A>> Array_PriorityBlockingQueue() {
-    return new F<Array<A>, PriorityBlockingQueue<A>>() {
-      @SuppressWarnings({"UseOfObsoleteCollectionType"})
-      public PriorityBlockingQueue<A> f(final Array<A> as) {
-        return new PriorityBlockingQueue<A>(asList(as.array()));
-      }
-    };
-  }
-
-  /**
-   * A function that converts arrays to synchronous queues.
-   *
-   * @param fair The argument to pass to the constructor of the synchronous queue.
-   * @return A function that converts arrays to synchronous queues.
-   */
-  public static <A> F<Array<A>, SynchronousQueue<A>> Array_SynchronousQueue(final boolean fair) {
-    return new F<Array<A>, SynchronousQueue<A>>() {
-      @SuppressWarnings({"UseOfObsoleteCollectionType"})
-      public SynchronousQueue<A> f(final Array<A> as) {
-        final SynchronousQueue<A> q = new SynchronousQueue<A>(fair);
-        q.addAll(asList(as.array()));
-        return q;
-      }
-    };
-  }
-
   // END Array ->
 
   // BEGIN Stream ->
@@ -610,21 +331,6 @@ public final class Java {
       }
     };
   }
-
-  /**
-   * A function that converts streams to bit sets.
-   */
-  public static final F<Stream<Boolean>, BitSet> Stream_BitSet = new F<Stream<Boolean>, BitSet>() {
-    public BitSet f(final Stream<Boolean> bs) {
-      final BitSet s = new BitSet(bs.length());
-      bs.zipIndex().foreach(new Effect<P2<Boolean, Integer>>() {
-        public void e(final P2<Boolean, Integer> bi) {
-          s.set(bi._2(), bi._1());
-        }
-      });
-      return s;
-    }
-  };
 
   /**
    * A function that converts streams to enum sets.
@@ -733,122 +439,6 @@ public final class Java {
     };
   }
 
-  /**
-   * A function that converts streams to array blocking queues.
-   *
-   * @param fair The argument to pass to the constructor of the array blocking queue.
-   * @return A function that converts streams to array blocking queues.
-   */
-  public static <A> F<Stream<A>, ArrayBlockingQueue<A>> Stream_ArrayBlockingQueue(final boolean fair) {
-    return new F<Stream<A>, ArrayBlockingQueue<A>>() {
-      @SuppressWarnings({"UseOfObsoleteCollectionType"})
-      public ArrayBlockingQueue<A> f(final Stream<A> as) {
-        return new ArrayBlockingQueue<A>(as.length(), fair, asList(as.toArray().array()));
-      }
-    };
-  }
-
-  /**
-   * A function that converts streams to concurrent linked queues.
-   *
-   * @return A function that converts streams to concurrent linked queues.
-   */
-  public static <A> F<Stream<A>, ConcurrentLinkedQueue<A>> Stream_ConcurrentLinkedQueue() {
-    return new F<Stream<A>, ConcurrentLinkedQueue<A>>() {
-      @SuppressWarnings({"UseOfObsoleteCollectionType"})
-      public ConcurrentLinkedQueue<A> f(final Stream<A> as) {
-        return new ConcurrentLinkedQueue<A>(asList(as.toArray().array()));
-      }
-    };
-  }
-
-  /**
-   * A function that converts streams to copy on write array lists.
-   *
-   * @return A function that converts streams to copy on write array lists.
-   */
-  public static <A> F<Stream<A>, CopyOnWriteArrayList<A>> Stream_CopyOnWriteArrayList() {
-    return new F<Stream<A>, CopyOnWriteArrayList<A>>() {
-      @SuppressWarnings({"UseOfObsoleteCollectionType"})
-      public CopyOnWriteArrayList<A> f(final Stream<A> as) {
-        return new CopyOnWriteArrayList<A>(asList(as.toArray().array()));
-      }
-    };
-  }
-
-  /**
-   * A function that converts streams to copy on write array sets.
-   *
-   * @return A function that converts streams to copy on write array sets.
-   */
-  public static <A> F<Stream<A>, CopyOnWriteArraySet<A>> Stream_CopyOnWriteArraySet() {
-    return new F<Stream<A>, CopyOnWriteArraySet<A>>() {
-      @SuppressWarnings({"UseOfObsoleteCollectionType"})
-      public CopyOnWriteArraySet<A> f(final Stream<A> as) {
-        return new CopyOnWriteArraySet<A>(asList(as.toArray().array()));
-      }
-    };
-  }
-
-  /**
-   * A function that converts streams to delay queues.
-   *
-   * @return A function that converts streams to delay queues.
-   */
-  public static <A extends Delayed> F<Stream<A>, DelayQueue<A>> Stream_DelayQueue() {
-    return new F<Stream<A>, DelayQueue<A>>() {
-      @SuppressWarnings({"UseOfObsoleteCollectionType"})
-      public DelayQueue<A> f(final Stream<A> as) {
-        return new DelayQueue<A>(asList(as.toArray().array()));
-      }
-    };
-  }
-
-  /**
-   * A function that converts streams to linked blocking queues.
-   *
-   * @return A function that converts streams to linked blocking queues.
-   */
-  public static <A> F<Stream<A>, LinkedBlockingQueue<A>> Stream_LinkedBlockingQueue() {
-    return new F<Stream<A>, LinkedBlockingQueue<A>>() {
-      @SuppressWarnings({"UseOfObsoleteCollectionType"})
-      public LinkedBlockingQueue<A> f(final Stream<A> as) {
-        return new LinkedBlockingQueue<A>(asList(as.toArray().array()));
-      }
-    };
-  }
-
-  /**
-   * A function that converts streams to priority blocking queues.
-   *
-   * @return A function that converts streams to priority blocking queues.
-   */
-  public static <A> F<Stream<A>, PriorityBlockingQueue<A>> Stream_PriorityBlockingQueue() {
-    return new F<Stream<A>, PriorityBlockingQueue<A>>() {
-      @SuppressWarnings({"UseOfObsoleteCollectionType"})
-      public PriorityBlockingQueue<A> f(final Stream<A> as) {
-        return new PriorityBlockingQueue<A>(asList(as.toArray().array()));
-      }
-    };
-  }
-
-  /**
-   * A function that converts streams to synchronous queues.
-   *
-   * @param fair The argument to pass to the constructor of the synchronous queue.
-   * @return A function that converts streams to synchronous queues.
-   */
-  public static <A> F<Stream<A>, SynchronousQueue<A>> Stream_SynchronousQueue(final boolean fair) {
-    return new F<Stream<A>, SynchronousQueue<A>>() {
-      @SuppressWarnings({"UseOfObsoleteCollectionType"})
-      public SynchronousQueue<A> f(final Stream<A> as) {
-        final SynchronousQueue<A> q = new SynchronousQueue<A>(fair);
-        q.addAll(asList(as.toArray().array()));
-        return q;
-      }
-    };
-  }
-
   // END Stream ->
 
   // BEGIN Option ->
@@ -865,23 +455,6 @@ public final class Java {
       }
     };
   }
-
-  /**
-   * A function that converts options to bit sets.
-   */
-  public static final F<Option<Boolean>, BitSet> Option_BitSet = new F<Option<Boolean>, BitSet>() {
-    public BitSet f(final Option<Boolean> bs) {
-      final BitSet s = new BitSet(bs.length());
-
-      bs.foreach(new Effect<Boolean>() {
-        public void e(final Boolean b) {
-          if (b)
-            s.set(0);
-        }
-      });
-      return s;
-    }
-  };
 
   /**
    * A function that converts options to enum sets.
@@ -990,122 +563,6 @@ public final class Java {
     };
   }
 
-  /**
-   * A function that converts options to array blocking queues.
-   *
-   * @param fair The argument to pass to the constructor of the array blocking queue.
-   * @return A function that converts options to array blocking queues.
-   */
-  public static <A> F<Option<A>, ArrayBlockingQueue<A>> Option_ArrayBlockingQueue(final boolean fair) {
-    return new F<Option<A>, ArrayBlockingQueue<A>>() {
-      @SuppressWarnings({"UseOfObsoleteCollectionType"})
-      public ArrayBlockingQueue<A> f(final Option<A> as) {
-        return new ArrayBlockingQueue<A>(as.length(), fair, asList(as.toArray().array()));
-      }
-    };
-  }
-
-  /**
-   * A function that converts options to concurrent linked queues.
-   *
-   * @return A function that converts options to concurrent linked queues.
-   */
-  public static <A> F<Option<A>, ConcurrentLinkedQueue<A>> Option_ConcurrentLinkedQueue() {
-    return new F<Option<A>, ConcurrentLinkedQueue<A>>() {
-      @SuppressWarnings({"UseOfObsoleteCollectionType"})
-      public ConcurrentLinkedQueue<A> f(final Option<A> as) {
-        return new ConcurrentLinkedQueue<A>(asList(as.toArray().array()));
-      }
-    };
-  }
-
-  /**
-   * A function that converts options to copy on write array lists.
-   *
-   * @return A function that converts options to copy on write array lists.
-   */
-  public static <A> F<Option<A>, CopyOnWriteArrayList<A>> Option_CopyOnWriteArrayList() {
-    return new F<Option<A>, CopyOnWriteArrayList<A>>() {
-      @SuppressWarnings({"UseOfObsoleteCollectionType"})
-      public CopyOnWriteArrayList<A> f(final Option<A> as) {
-        return new CopyOnWriteArrayList<A>(asList(as.toArray().array()));
-      }
-    };
-  }
-
-  /**
-   * A function that converts options to copy on write array sets.
-   *
-   * @return A function that converts options to copy on write array sets.
-   */
-  public static <A> F<Option<A>, CopyOnWriteArraySet<A>> Option_CopyOnWriteArraySet() {
-    return new F<Option<A>, CopyOnWriteArraySet<A>>() {
-      @SuppressWarnings({"UseOfObsoleteCollectionType"})
-      public CopyOnWriteArraySet<A> f(final Option<A> as) {
-        return new CopyOnWriteArraySet<A>(asList(as.toArray().array()));
-      }
-    };
-  }
-
-  /**
-   * A function that converts options to delay queues.
-   *
-   * @return A function that converts options to delay queues.
-   */
-  public static <A extends Delayed> F<Option<A>, DelayQueue<A>> Option_DelayQueue() {
-    return new F<Option<A>, DelayQueue<A>>() {
-      @SuppressWarnings({"UseOfObsoleteCollectionType"})
-      public DelayQueue<A> f(final Option<A> as) {
-        return new DelayQueue<A>(asList(as.toArray().array()));
-      }
-    };
-  }
-
-  /**
-   * A function that converts options to linked blocking queues.
-   *
-   * @return A function that converts options to linked blocking queues.
-   */
-  public static <A> F<Option<A>, LinkedBlockingQueue<A>> Option_LinkedBlockingQueue() {
-    return new F<Option<A>, LinkedBlockingQueue<A>>() {
-      @SuppressWarnings({"UseOfObsoleteCollectionType"})
-      public LinkedBlockingQueue<A> f(final Option<A> as) {
-        return new LinkedBlockingQueue<A>(asList(as.toArray().array()));
-      }
-    };
-  }
-
-  /**
-   * A function that converts options to priority blocking queues.
-   *
-   * @return A function that converts options to priority blocking queues.
-   */
-  public static <A> F<Option<A>, PriorityBlockingQueue<A>> Option_PriorityBlockingQueue() {
-    return new F<Option<A>, PriorityBlockingQueue<A>>() {
-      @SuppressWarnings({"UseOfObsoleteCollectionType"})
-      public PriorityBlockingQueue<A> f(final Option<A> as) {
-        return new PriorityBlockingQueue<A>(asList(as.toArray().array()));
-      }
-    };
-  }
-
-  /**
-   * A function that converts options to synchronous queues.
-   *
-   * @param fair The argument to pass to the constructor of the synchronous queue.
-   * @return A function that converts options to synchronous queues.
-   */
-  public static <A> F<Option<A>, SynchronousQueue<A>> Option_SynchronousQueue(final boolean fair) {
-    return new F<Option<A>, SynchronousQueue<A>>() {
-      @SuppressWarnings({"UseOfObsoleteCollectionType"})
-      public SynchronousQueue<A> f(final Option<A> as) {
-        final SynchronousQueue<A> q = new SynchronousQueue<A>(fair);
-        q.addAll(asList(as.toArray().array()));
-        return q;
-      }
-    };
-  }
-
   // END Option ->
 
   // BEGIN Either ->
@@ -1126,24 +583,6 @@ public final class Java {
    */
   public static <A, B> F<Either<A, B>, ArrayList<B>> Either_ArrayListB() {
     return fj.Function.compose(Java.<B>Option_ArrayList(), Conversions.<A, B>Either_OptionB());
-  }
-
-  /**
-   * A function that converts eithers to bit sets.
-   *
-   * @return A function that converts eithers to bit sets.
-   */
-  public static <B> F<Either<Boolean, B>, BitSet> Either_BitSetA() {
-    return fj.Function.compose(Java.Option_BitSet, Conversions.<Boolean, B>Either_OptionA());
-  }
-
-  /**
-   * A function that converts eithers to bit sets.
-   *
-   * @return A function that converts eithers to bit sets.
-   */
-  public static <A> F<Either<A, Boolean>, BitSet> Either_BitSetB() {
-    return fj.Function.compose(Java.Option_BitSet, Conversions.<A, Boolean>Either_OptionB());
   }
 
   /**
@@ -1290,154 +729,6 @@ public final class Java {
     return fj.Function.compose(Java.<B>Option_Vector(), Conversions.<A, B>Either_OptionB());
   }
 
-  /**
-   * A function that converts eithers to array blocking queues.
-   *
-   * @param fair The argument to pass to the constructor of the array blocking queue.
-   * @return A function that converts eithers to array blocking queues.
-   */
-  public static <A, B> F<Either<A, B>, ArrayBlockingQueue<A>> Either_ArrayBlockingQueueA(final boolean fair) {
-    return fj.Function.compose(Java.<A>Option_ArrayBlockingQueue(fair), Conversions.<A, B>Either_OptionA());
-  }
-
-  /**
-   * A function that converts eithers to array blocking queues.
-   *
-   * @param fair The argument to pass to the constructor of the array blocking queue.
-   * @return A function that converts eithers to array blocking queues.
-   */
-  public static <A, B> F<Either<A, B>, ArrayBlockingQueue<B>> Either_ArrayBlockingQueueB(final boolean fair) {
-    return fj.Function.compose(Java.<B>Option_ArrayBlockingQueue(fair), Conversions.<A, B>Either_OptionB());
-  }
-
-  /**
-   * A function that converts eithers to concurrent linked queues.
-   *
-   * @return A function that converts eithers to concurrent linked queues.
-   */
-  public static <A, B> F<Either<A, B>, ConcurrentLinkedQueue<A>> Either_ConcurrentLinkedQueueA() {
-    return fj.Function.compose(Java.<A>Option_ConcurrentLinkedQueue(), Conversions.<A, B>Either_OptionA());
-  }
-
-  /**
-   * A function that converts eithers to concurrent linked queues.
-   *
-   * @return A function that converts eithers to concurrent linked queues.
-   */
-  public static <A, B> F<Either<A, B>, ConcurrentLinkedQueue<B>> Either_ConcurrentLinkedQueueB() {
-    return fj.Function.compose(Java.<B>Option_ConcurrentLinkedQueue(), Conversions.<A, B>Either_OptionB());
-  }
-
-  /**
-   * A function that converts eithers to copy on write array lists.
-   *
-   * @return A function that converts eithers to copy on write array lists.
-   */
-  public static <A, B> F<Either<A, B>, CopyOnWriteArrayList<A>> Either_CopyOnWriteArrayListA() {
-    return fj.Function.compose(Java.<A>Option_CopyOnWriteArrayList(), Conversions.<A, B>Either_OptionA());
-  }
-
-  /**
-   * A function that converts eithers to copy on write array lists.
-   *
-   * @return A function that converts eithers to copy on write array lists.
-   */
-  public static <A, B> F<Either<A, B>, CopyOnWriteArrayList<B>> Either_CopyOnWriteArrayListB() {
-    return fj.Function.compose(Java.<B>Option_CopyOnWriteArrayList(), Conversions.<A, B>Either_OptionB());
-  }
-
-  /**
-   * A function that converts eithers to copy on write array sets.
-   *
-   * @return A function that converts eithers to copy on write array sets.
-   */
-  public static <A, B> F<Either<A, B>, CopyOnWriteArraySet<A>> Either_CopyOnWriteArraySetA() {
-    return fj.Function.compose(Java.<A>Option_CopyOnWriteArraySet(), Conversions.<A, B>Either_OptionA());
-  }
-
-  /**
-   * A function that converts eithers to copy on write array sets.
-   *
-   * @return A function that converts eithers to copy on write array sets.
-   */
-  public static <A, B> F<Either<A, B>, CopyOnWriteArraySet<B>> Either_CopyOnWriteArraySetB() {
-    return fj.Function.compose(Java.<B>Option_CopyOnWriteArraySet(), Conversions.<A, B>Either_OptionB());
-  }
-
-  /**
-   * A function that converts eithers to delay queues.
-   *
-   * @return A function that converts eithers to delay queues.
-   */
-  public static <A extends Delayed, B> F<Either<A, B>, DelayQueue<A>> Either_DelayQueueA() {
-    return fj.Function.compose(Java.<A>Option_DelayQueue(), Conversions.<A, B>Either_OptionA());
-  }
-
-  /**
-   * A function that converts eithers to delay queues.
-   *
-   * @return A function that converts eithers to delay queues.
-   */
-  public static <A, B extends Delayed> F<Either<A, B>, DelayQueue<B>> Either_DelayQueueB() {
-    return fj.Function.compose(Java.<B>Option_DelayQueue(), Conversions.<A, B>Either_OptionB());
-  }
-
-  /**
-   * A function that converts eithers to linked blocking queues.
-   *
-   * @return A function that converts eithers to linked blocking queues.
-   */
-  public static <A, B> F<Either<A, B>, LinkedBlockingQueue<A>> Either_LinkedBlockingQueueA() {
-    return fj.Function.compose(Java.<A>Option_LinkedBlockingQueue(), Conversions.<A, B>Either_OptionA());
-  }
-
-  /**
-   * A function that converts eithers to linked blocking queues.
-   *
-   * @return A function that converts eithers to linked blocking queues.
-   */
-  public static <A, B> F<Either<A, B>, LinkedBlockingQueue<B>> Either_LinkedBlockingQueueB() {
-    return fj.Function.compose(Java.<B>Option_LinkedBlockingQueue(), Conversions.<A, B>Either_OptionB());
-  }
-
-  /**
-   * A function that converts eithers to priority blocking queues.
-   *
-   * @return A function that converts eithers to priority blocking queues.
-   */
-  public static <A, B> F<Either<A, B>, PriorityBlockingQueue<A>> Either_PriorityBlockingQueueA() {
-    return fj.Function.compose(Java.<A>Option_PriorityBlockingQueue(), Conversions.<A, B>Either_OptionA());
-  }
-
-  /**
-   * A function that converts eithers to priority blocking queues.
-   *
-   * @return A function that converts eithers to priority blocking queues.
-   */
-  public static <A, B> F<Either<A, B>, PriorityBlockingQueue<B>> Either_PriorityBlockingQueueB() {
-    return fj.Function.compose(Java.<B>Option_PriorityBlockingQueue(), Conversions.<A, B>Either_OptionB());
-  }
-
-  /**
-   * A function that converts eithers to synchronous queues.
-   *
-   * @param fair The argument to pass to the constructor of the synchronous queue.
-   * @return A function that converts eithers to synchronous queues.
-   */
-  public static <A, B> F<Either<A, B>, SynchronousQueue<A>> Either_SynchronousQueueA(final boolean fair) {
-    return fj.Function.compose(Java.<A>Option_SynchronousQueue(fair), Conversions.<A, B>Either_OptionA());
-  }
-
-  /**
-   * A function that converts eithers to synchronous queues.
-   *
-   * @param fair The argument to pass to the constructor of the synchronous queue.
-   * @return A function that converts eithers to synchronous queues.
-   */
-  public static <A, B> F<Either<A, B>, SynchronousQueue<B>> Either_SynchronousQueueB(final boolean fair) {
-    return fj.Function.compose(Java.<B>Option_SynchronousQueue(fair), Conversions.<A, B>Either_OptionB());
-  }
-
   // END Either ->
 
   // BEGIN String ->
@@ -1489,56 +780,6 @@ public final class Java {
    */
   public static final F<String, Vector<Character>> String_Vector =
       fj.Function.compose(Java.<Character>List_Vector(), Conversions.String_List);
-
-  /**
-   * A function that converts strings to array blocking queues.
-   *
-   * @param fair The argument to pass to the constructor of the array blocking queue.
-   * @return A function that converts strings to array blocking queues.
-   */
-  public static F<String, ArrayBlockingQueue<Character>> String_ArrayBlockingQueue(final boolean fair) {
-    return fj.Function.compose(Java.<Character>List_ArrayBlockingQueue(fair), Conversions.String_List);
-  }
-
-  /**
-   * A function that converts strings to concurrent linked queues.
-   */
-  public static final F<String, ConcurrentLinkedQueue<Character>> String_ConcurrentLinkedQueue =
-      fj.Function.compose(Java.<Character>List_ConcurrentLinkedQueue(), Conversions.String_List);
-
-  /**
-   * A function that converts strings to copy on write array lists.
-   */
-  public static final F<String, CopyOnWriteArrayList<Character>> String_CopyOnWriteArrayList =
-      fj.Function.compose(Java.<Character>List_CopyOnWriteArrayList(), Conversions.String_List);
-
-  /**
-   * A function that converts strings to copy on write array sets.
-   */
-  public static final F<String, CopyOnWriteArraySet<Character>> String_CopyOnWriteArraySet =
-      fj.Function.compose(Java.<Character>List_CopyOnWriteArraySet(), Conversions.String_List);
-
-  /**
-   * A function that converts strings to linked blocking queues.
-   */
-  public static final F<String, LinkedBlockingQueue<Character>> String_LinkedBlockingQueue =
-      fj.Function.compose(Java.<Character>List_LinkedBlockingQueue(), Conversions.String_List);
-
-  /**
-   * A function that converts strings to priority blocking queues.
-   */
-  public static final F<String, PriorityBlockingQueue<Character>> String_PriorityBlockingQueue =
-      fj.Function.compose(Java.<Character>List_PriorityBlockingQueue(), Conversions.String_List);
-
-  /**
-   * A function that converts strings to synchronous queues.
-   *
-   * @param fair The argument to pass to the constructor of the synchronous queue.
-   * @return A function that converts strings to synchronous queues.
-   */
-  public static F<String, SynchronousQueue<Character>> String_SynchronousQueue(final boolean fair) {
-    return fj.Function.compose(Java.<Character>List_SynchronousQueue(fair), Conversions.String_List);
-  }
 
   // END String ->
 
@@ -1592,56 +833,6 @@ public final class Java {
   public static final F<StringBuffer, Vector<Character>> StringBuffer_Vector =
       fj.Function.compose(Java.<Character>List_Vector(), Conversions.StringBuffer_List);
 
-  /**
-   * A function that converts string buffers to array blocking queues.
-   *
-   * @param fair The argument to pass to the constructor of the array blocking queue.
-   * @return A function that converts string buffers to array blocking queues.
-   */
-  public static F<StringBuffer, ArrayBlockingQueue<Character>> StringBuffer_ArrayBlockingQueue(final boolean fair) {
-    return fj.Function.compose(Java.<Character>List_ArrayBlockingQueue(fair), Conversions.StringBuffer_List);
-  }
-
-  /**
-   * A function that converts string buffers to concurrent linked queues.
-   */
-  public static final F<StringBuffer, ConcurrentLinkedQueue<Character>> StringBuffer_ConcurrentLinkedQueue =
-      fj.Function.compose(Java.<Character>List_ConcurrentLinkedQueue(), Conversions.StringBuffer_List);
-
-  /**
-   * A function that converts string buffers to copy on write array lists.
-   */
-  public static final F<StringBuffer, CopyOnWriteArrayList<Character>> StringBuffer_CopyOnWriteArrayList =
-      fj.Function.compose(Java.<Character>List_CopyOnWriteArrayList(), Conversions.StringBuffer_List);
-
-  /**
-   * A function that converts string buffers to copy on write array sets.
-   */
-  public static final F<StringBuffer, CopyOnWriteArraySet<Character>> StringBuffer_CopyOnWriteArraySet =
-      fj.Function.compose(Java.<Character>List_CopyOnWriteArraySet(), Conversions.StringBuffer_List);
-
-  /**
-   * A function that converts string buffers to linked blocking queues.
-   */
-  public static final F<StringBuffer, LinkedBlockingQueue<Character>> StringBuffer_LinkedBlockingQueue =
-      fj.Function.compose(Java.<Character>List_LinkedBlockingQueue(), Conversions.StringBuffer_List);
-
-  /**
-   * A function that converts string buffers to priority blocking queues.
-   */
-  public static final F<StringBuffer, PriorityBlockingQueue<Character>> StringBuffer_PriorityBlockingQueue =
-      fj.Function.compose(Java.<Character>List_PriorityBlockingQueue(), Conversions.StringBuffer_List);
-
-  /**
-   * A function that converts string buffers to synchronous queues.
-   *
-   * @param fair The argument to pass to the constructor of the synchronous queue.
-   * @return A function that converts string buffers to synchronous queues.
-   */
-  public static F<StringBuffer, SynchronousQueue<Character>> StringBuffer_SynchronousQueue(final boolean fair) {
-    return fj.Function.compose(Java.<Character>List_SynchronousQueue(fair), Conversions.StringBuffer_List);
-  }
-
   // END StringBuffer ->
 
   // BEGIN StringBuilder ->
@@ -1694,56 +885,6 @@ public final class Java {
   public static final F<StringBuilder, Vector<Character>> StringBuilder_Vector =
       fj.Function.compose(Java.<Character>List_Vector(), Conversions.StringBuilder_List);
 
-  /**
-   * A function that converts string builders to array blocking queues.
-   *
-   * @param fair The argument to pass to the constructor of the array blocking queue.
-   * @return A function that converts string builders to array blocking queues.
-   */
-  public static F<StringBuilder, ArrayBlockingQueue<Character>> StringBuilder_ArrayBlockingQueue(final boolean fair) {
-    return fj.Function.compose(Java.<Character>List_ArrayBlockingQueue(fair), Conversions.StringBuilder_List);
-  }
-
-  /**
-   * A function that converts string builders to concurrent linked queues.
-   */
-  public static final F<StringBuilder, ConcurrentLinkedQueue<Character>> StringBuilder_ConcurrentLinkedQueue =
-      fj.Function.compose(Java.<Character>List_ConcurrentLinkedQueue(), Conversions.StringBuilder_List);
-
-  /**
-   * A function that converts string builders to copy on write array lists.
-   */
-  public static final F<StringBuilder, CopyOnWriteArrayList<Character>> StringBuilder_CopyOnWriteArrayList =
-      fj.Function.compose(Java.<Character>List_CopyOnWriteArrayList(), Conversions.StringBuilder_List);
-
-  /**
-   * A function that converts string builders to copy on write array sets.
-   */
-  public static final F<StringBuilder, CopyOnWriteArraySet<Character>> StringBuilder_CopyOnWriteArraySet =
-      fj.Function.compose(Java.<Character>List_CopyOnWriteArraySet(), Conversions.StringBuilder_List);
-
-  /**
-   * A function that converts string builders to linked blocking queues.
-   */
-  public static final F<StringBuilder, LinkedBlockingQueue<Character>> StringBuilder_LinkedBlockingQueue =
-      fj.Function.compose(Java.<Character>List_LinkedBlockingQueue(), Conversions.StringBuilder_List);
-
-  /**
-   * A function that converts string builders to priority blocking queues.
-   */
-  public static final F<StringBuilder, PriorityBlockingQueue<Character>> StringBuilder_PriorityBlockingQueue =
-      fj.Function.compose(Java.<Character>List_PriorityBlockingQueue(), Conversions.StringBuilder_List);
-
-  /**
-   * A function that converts string builders to synchronous queues.
-   *
-   * @param fair The argument to pass to the constructor of the synchronous queue.
-   * @return A function that converts string builders to synchronous queues.
-   */
-  public static F<StringBuilder, SynchronousQueue<Character>> StringBuilder_SynchronousQueue(final boolean fair) {
-    return fj.Function.compose(Java.<Character>List_SynchronousQueue(fair), Conversions.StringBuilder_List);
-  }
-
   // END StringBuffer ->
 
   // BEGIN ArrayList ->
@@ -1765,27 +906,6 @@ public final class Java {
   // todo
 
   // END ArrayList ->
-
-  // BEGIN BitSet ->
-
-  /**
-   * A function that converts bit sets to lists.
-   */
-  public static final F<BitSet, List<Boolean>> BitSet_List = new F<BitSet, List<Boolean>>() {
-    public List<Boolean> f(final BitSet s) {
-      return List.unfold(new F<Integer, Option<P2<Boolean, Integer>>>() {
-        public Option<P2<Boolean, Integer>> f(final Integer i) {
-          return i == s.length() ?
-              Option.<P2<Boolean, Integer>>none() :
-              some(p(s.get(i), i + 1));
-        }
-      }, 0);
-    }
-  };
-
-  // todo
-
-  // END BitSet ->
 
   // BEGIN EnumSet ->
 
@@ -1947,202 +1067,4 @@ public final class Java {
 
   // END Vector ->
 
-  // BEGIN ArrayBlockingQueue ->
-
-  /**
-   * A function that converts array blocking queues to lists.
-   *
-   * @return A function that converts array blocking queues to lists.
-   */
-  public static <A> F<ArrayBlockingQueue<A>, List<A>> ArrayBlockingQueue_List() {
-    return new F<ArrayBlockingQueue<A>, List<A>>() {
-      @SuppressWarnings({"unchecked"})
-      public List<A> f(final ArrayBlockingQueue<A> as) {
-        return list(as.toArray((A[]) new Object[as.size()]));
-      }
-    };
-  }
-
-  // todo
-
-  // END ArrayBlockingQueue ->
-
-  // BEGIN ConcurrentLinkedQueue ->
-
-  /**
-   * A function that converts concurrent linked queues to lists.
-   *
-   * @return A function that converts concurrent linked queues to lists.
-   */
-  public static <A> F<ConcurrentLinkedQueue<A>, List<A>> ConcurrentLinkedQueue_List() {
-    return new F<ConcurrentLinkedQueue<A>, List<A>>() {
-      @SuppressWarnings({"unchecked"})
-      public List<A> f(final ConcurrentLinkedQueue<A> as) {
-        return list(as.toArray((A[]) new Object[as.size()]));
-      }
-    };
-  }
-
-  // todo
-
-  // END ConcurrentLinkedQueue ->
-
-  // BEGIN CopyOnWriteArrayList ->
-
-  /**
-   * A function that converts copy on write array lists to lists.
-   *
-   * @return A function that converts copy on write array lists to lists.
-   */
-  public static <A> F<CopyOnWriteArrayList<A>, List<A>> CopyOnWriteArrayList_List() {
-    return new F<CopyOnWriteArrayList<A>, List<A>>() {
-      @SuppressWarnings({"unchecked"})
-      public List<A> f(final CopyOnWriteArrayList<A> as) {
-        return list(as.toArray((A[]) new Object[as.size()]));
-      }
-    };
-  }
-
-  // todo
-
-  // END CopyOnWriteArrayList ->
-
-  // BEGIN CopyOnWriteArraySet ->
-
-  /**
-   * A function that converts copy on write array sets to lists.
-   *
-   * @return A function that converts copy on write array sets to lists.
-   */
-  public static <A> F<CopyOnWriteArraySet<A>, List<A>> CopyOnWriteArraySet_List() {
-    return new F<CopyOnWriteArraySet<A>, List<A>>() {
-      @SuppressWarnings({"unchecked"})
-      public List<A> f(final CopyOnWriteArraySet<A> as) {
-        return list(as.toArray((A[]) new Object[as.size()]));
-      }
-    };
-  }
-
-  // todo
-
-  // END CopyOnWriteArraySet ->
-
-  // BEGIN DelayQueue ->
-
-  /**
-   * A function that converts delay queues to lists.
-   *
-   * @return A function that converts delay queues to lists.
-   */
-  public static <A extends Delayed> F<DelayQueue<A>, List<A>> DelayQueue_List() {
-    return new F<DelayQueue<A>, List<A>>() {
-      @SuppressWarnings({"unchecked"})
-      public List<A> f(final DelayQueue<A> as) {
-        return list(as.toArray((A[]) new Object[as.size()]));
-      }
-    };
-  }
-
-  // todo
-
-  // END DelayQueue ->
-
-  // BEGIN LinkedBlockingQueue ->
-
-  /**
-   * A function that converts linked blocking queues to lists.
-   *
-   * @return A function that converts linked blocking queues to lists.
-   */
-  public static <A> F<LinkedBlockingQueue<A>, List<A>> LinkedBlockingQueue_List() {
-    return new F<LinkedBlockingQueue<A>, List<A>>() {
-      @SuppressWarnings({"unchecked"})
-      public List<A> f(final LinkedBlockingQueue<A> as) {
-        return list(as.toArray((A[]) new Object[as.size()]));
-      }
-    };
-  }
-
-  // todo
-
-  // END LinkedBlockingQueue ->
-
-  // BEGIN PriorityBlockingQueue ->
-
-  /**
-   * A function that converts priority blocking queues to lists.
-   *
-   * @return A function that converts priority blocking queues to lists.
-   */
-  public static <A> F<PriorityBlockingQueue<A>, List<A>> PriorityBlockingQueue_List() {
-    return new F<PriorityBlockingQueue<A>, List<A>>() {
-      @SuppressWarnings({"unchecked"})
-      public List<A> f(final PriorityBlockingQueue<A> as) {
-        return list(as.toArray((A[]) new Object[as.size()]));
-      }
-    };
-  }
-
-  // todo
-
-  // END PriorityBlockingQueue ->
-
-  // BEGIN SynchronousQueue ->
-
-  /**
-   * A function that converts synchronous queues to lists.
-   *
-   * @return A function that converts synchronous queues to lists.
-   */
-  public static <A> F<SynchronousQueue<A>, List<A>> SynchronousQueue_List() {
-    return new F<SynchronousQueue<A>, List<A>>() {
-      @SuppressWarnings({"unchecked"})
-      public List<A> f(final SynchronousQueue<A> as) {
-        return list(as.toArray((A[]) new Object[as.size()]));
-      }
-    };
-  }
-
-  // todo
-
-  // END SynchronousQueue ->
-
-  // BEGIN Callable ->
-
-  public static <A> F<P1<A>, Callable<A>> P1_Callable() {
-    return new F<P1<A>, Callable<A>>() {
-      public Callable<A> f(final P1<A> a) {
-        return new Callable<A>() {
-          public A call() {
-            return a._1();
-          }
-        };
-      }
-    };
-  }
-
-// END Callable ->
-
-// BEGIN Future ->
-
-  public static <A> F<Future<A>, P1<Either<Exception, A>>> Future_P1() {
-    return new F<Future<A>, P1<Either<Exception, A>>>() {
-      public P1<Either<Exception, A>> f(final Future<A> a) {
-        return new P1<Either<Exception, A>>() {
-          public Either<Exception, A> _1() {
-            Either<Exception, A> r;
-            try {
-              r = Either.right(a.get());
-            }
-            catch (Exception e) {
-              r = Either.left(e);
-            }
-            return r;
-          }
-        };
-      }
-    };
-  }
-
-  // END Future ->
 }
