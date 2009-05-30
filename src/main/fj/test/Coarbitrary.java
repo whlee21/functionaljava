@@ -7,8 +7,6 @@ import static fj.data.List.fromString;
 import static fj.data.List.nil;
 import static fj.test.Variant.variant;
 
-import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.sql.Time;
 import java.sql.Timestamp;
 import java.util.ArrayList;
