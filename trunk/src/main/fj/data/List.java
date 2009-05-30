@@ -950,6 +950,17 @@ public abstract class List<A> implements Iterable<A> {
   }
 
   /**
+   * Intersperses this list through the given list then joins the results.
+   *
+   * @param as The list to intersperse through.
+   * @return This list through the given list then joins the results.
+   */
+  @SuppressWarnings({"unchecked"})
+  public List<A> intercalate(final List<List<A>> as) {
+    return join(as.intersperse(this));
+  }
+
+  /**
    * Removes duplicates according to object equality.
    *
    * @return A list without duplicates according to object equality.
