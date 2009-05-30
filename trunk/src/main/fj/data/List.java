@@ -217,6 +217,17 @@ public abstract class List<A> implements Iterable<A> {
   }
 
   /**
+   * Prepends (cons) the given element to this list to product a new list. This method is added to prevent conflict with
+   * overloads.
+   *
+   * @param a The element to prepend.
+   * @return A new list with the given element at the head.
+   */
+  public List<A> conss(final A a) {
+    return new Cons<A>(a, this);
+  }
+
+  /**
    * Maps the given function across this list.
    *
    * @param f The function to map across this list.
