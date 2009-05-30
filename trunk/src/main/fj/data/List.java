@@ -1446,6 +1446,19 @@ public abstract class List<A> implements Iterable<A> {
   }
 
   /**
+   * Provides a first-class version of take.
+   *
+   * @return First-class version of take.
+   */
+  public static <A> F<Integer, F<List<A>, List<A>>> take() {
+    return curry(new F2<Integer, List<A>, List<A>>() {
+      public List<A> f(Integer n, List<A> as) {
+        return as.take(n);
+      }
+    });
+  }
+
+  /**
    * Takes the given iterable to a list.
    *
    * @param i The iterable to take to a list.
@@ -1459,6 +1472,7 @@ public abstract class List<A> implements Iterable<A> {
 
     return bs.toList();
   }
+
 
   /**
    * A mutable, singly linked list. This structure should be used <em>very</em> sparingly, in favour
