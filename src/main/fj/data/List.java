@@ -360,6 +360,22 @@ public abstract class List<A> implements Iterable<A> {
   }
 
   /**
+   * Returns a tuple where the first element is the longest prefix of this list that does not satisfy
+   * the given predicate and the second element is the remainder of the list.
+   *
+   * @param p A predicate for an element to not satisfy by a prefix of this list.
+   * @return A tuple where the first element is the longest prefix of this list that does not satisfy
+   *         the given predicate and the second element is the remainder of the list.
+   */
+  public P2<List<A>, List<A>> breakk(final F<A, Boolean> p) {
+    return span(new F<A, Boolean>() {
+      public Boolean f(final A a) {
+        return !p.f(a);
+      }
+    });
+  }
+
+  /**
    * Groups elements according to the given equality implementation.
    *
    * @param e The equality implementation for the elements.
@@ -1205,7 +1221,7 @@ public abstract class List<A> implements Iterable<A> {
   /**
    * Transforms a list of pairs into a list of first components and a list of second components.
    *
-   * @param xs The list of pairs to transform.
+   * @param xs The list of pairs to transform.sp
    * @return A list of first components and a list of second components.
    */
   public static <A, B> P2<List<A>, List<B>> unzip(final List<P2<A, B>> xs) {
