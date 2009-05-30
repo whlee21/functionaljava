@@ -1,18 +1,27 @@
 package fj.data;
 
-import fj.F;
-import fj.F2;
-import static fj.Function.*;
+import static fj.Function.compose;
+import static fj.Function.curry;
+import static fj.Function.flip;
+import static fj.Function.identity;
 import static fj.data.Option.none;
 import static fj.data.Option.some;
+import static fj.pre.Ord.booleanOrd;
+import static fj.pre.Ord.byteOrd;
+import static fj.pre.Ord.charOrd;
+import static fj.pre.Ord.doubleOrd;
+import static fj.pre.Ord.floatOrd;
+import static fj.pre.Ord.intOrd;
+import static fj.pre.Ord.longOrd;
+import static fj.pre.Ord.orderingOrd;
+import static fj.pre.Ord.shortOrd;
+import static fj.pre.Ordering.EQ;
+import static fj.pre.Ordering.GT;
+import static fj.pre.Ordering.LT;
+import fj.F;
+import fj.F2;
 import fj.pre.Ord;
-import static fj.pre.Ord.*;
 import fj.pre.Ordering;
-import fj.pre.Semigroup;
-import static fj.pre.Ordering.*;
-
-import java.math.BigDecimal;
-import java.math.BigInteger;
 
 /**
  * Abstracts over a type that may have a successor and/or predecessor value. This implies ordering for that type. A user
