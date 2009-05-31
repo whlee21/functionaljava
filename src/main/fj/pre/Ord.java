@@ -42,6 +42,15 @@ public final class Ord<A> {
   }
 
   /**
+   * First-class ordering.
+   *
+   * @return A function that returns an ordering for its arguments.
+   */
+  public F<A, F<A, Ordering>> compare() {
+    return f;
+  }
+
+  /**
    * Returns an ordering for the given arguments.
    *
    * @param a1 An instance to compare for ordering to another.

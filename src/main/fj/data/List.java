@@ -23,6 +23,9 @@ import static fj.function.Booleans.not;
 import fj.pre.Ord;
 import fj.pre.Equal;
 import fj.pre.Monoid;
+import fj.pre.Ordering;
+
+import static fj.pre.Ordering.GT;
 
 import java.util.AbstractCollection;
 import java.util.Collection;
@@ -804,12 +807,12 @@ public abstract class List<A> implements Iterable<A> {
       final class Merge<A> {
         List<A> merge(final List<A> xs, final List<A> ys, final Ord<A> o) {
           return xs.isEmpty() ?
-              ys :
-              ys.isEmpty() ?
-                  xs :
-                  o.isGreaterThan(ys.head(), xs.head()) ?
-                      cons(xs.head(), merge(xs.tail(), ys, o)) :
-                      cons(ys.head(), merge(xs, ys.tail(), o));
+                 ys :
+                 ys.isEmpty() ?
+                 xs :
+                 o.isGreaterThan(ys.head(), xs.head()) ?
+                 cons(xs.head(), merge(xs.tail(), ys, o)) :
+                 cons(ys.head(), merge(xs, ys.tail(), o));
         }
       }
 
@@ -945,8 +948,8 @@ public abstract class List<A> implements Iterable<A> {
    */
   public List<A> intersperse(final A a) {
     return isEmpty() || tail().isEmpty() ?
-        this :
-        cons(head(), cons(a, tail().intersperse(a)));
+           this :
+           cons(head(), cons(a, tail().intersperse(a)));
   }
 
   /**
@@ -1029,6 +1032,68 @@ public abstract class List<A> implements Iterable<A> {
     for (List<A> xs = tail(); xs.isNotEmpty(); xs = xs.tail())
       a = xs.head();
     return a;
+  }
+
+  /**
+   * Inserts the given element before the first element that is greater than or equal to it according
+   * to the given ordering.
+   *
+   * @param f An ordering function to compare elements.
+   * @param x The element to insert.
+   * @return A new list with the given element inserted before the first element that is greater than or equal to
+   *         it according to the given ordering.
+   */
+  public List<A> insertBy(final F<A, F<A, Ordering>> f, final A x) {
+    List<A> ys = this;
+    Buffer<A> xs = Buffer.empty();
+    while (ys.isNotEmpty() && f.f(x).f(ys.head()) == GT) {
+      xs = xs.snoc(ys.head());
+      ys = ys.tail();
+    }
+    return xs.append(ys.cons(x)).toList();
+  }
+
+  /**
+   * Returns the most common element in this list.
+   *
+   * @param o An ordering for the elements of the list.
+   * @return The most common element in this list.
+   */
+  public A mode(final Ord<A> o) {
+    return sort(o).group(o.equal()).maximum(Ord.intOrd.comap(List.<A>length_())).head();
+  }
+
+  /**
+   * First-class length.
+   *
+   * @return A function that gets the length of a given list.
+   */
+  public static <A> F<List<A>, Integer> length_() {
+    return new F<List<A>, Integer>() {
+      public Integer f(final List<A> a) {
+        return a.length();
+      }
+    };
+  }
+
+  /**
+   * Returns the maximum element in this list according to the given ordering.
+   *
+   * @param o An ordering for the elements of the list.
+   * @return The maximum element in this list according to the given ordering.
+   */
+  public A maximum(final Ord<A> o) {
+    return foldLeft1(o.max);
+  }
+
+  /**
+   * Returns the minimum element in this list according to the given ordering.
+   *
+   * @param o An ordering for the elements of the list.
+   * @return The minimum element in this list according to the given ordering.
+   */
+  public A minimum(final Ord<A> o) {
+    return foldLeft1(o.min);
   }
 
   /**

@@ -99,6 +99,16 @@ public final class Semigroup<A> {
   });
 
   /**
+   * A semigroup that yields the maximum of integers.
+   */
+  public static final Semigroup<Integer> intMaximumSemigroup = semigroup(Ord.intOrd.max);
+
+  /**
+   * A semigroup that yields the minimum of integers.
+   */
+  public static final Semigroup<Integer> intMinimumSemigroup = semigroup(Ord.intOrd.min);
+
+  /**
    * A semigroup that adds big integers.
    */
   public static final Semigroup<BigInteger> bigintAdditionSemigroup =
@@ -117,6 +127,16 @@ public final class Semigroup<A> {
           return i1.multiply(i2);
         }
       });
+
+  /**
+   * A semigroup that yields the maximum of big integers.
+   */
+  public static final Semigroup<BigInteger> bigintMaximumSemigroup = semigroup(Ord.bigintOrd.max);
+
+  /**
+   * A semigroup that yields the minimum of big integers.
+   */
+  public static final Semigroup<BigInteger> bigintMinimumSemigroup = semigroup(Ord.bigintOrd.min);
 
   /**
    * A semigroup that adds big decimals.
@@ -139,6 +159,16 @@ public final class Semigroup<A> {
       });
 
   /**
+   * A semigroup that yields the maximum of big decimals.
+   */
+  public static final Semigroup<BigDecimal> bigDecimalMaximumSemigroup = semigroup(Ord.bigdecimalOrd.max);
+
+  /**
+   * A semigroup that yields the minimum of big decimals.
+   */
+  public static final Semigroup<BigDecimal> bigDecimalMinimumSemigroup = semigroup(Ord.bigdecimalOrd.min);
+
+  /**
    * A semigroup that multiplies natural numbers.
    */
   public static final Semigroup<Natural> naturalMultiplicationSemigroup =
@@ -159,6 +189,16 @@ public final class Semigroup<A> {
       });
 
   /**
+   * A semigroup that yields the maximum of natural numbers.
+   */
+  public static final Semigroup<Natural> naturalMaximumSemigroup = semigroup(Ord.naturalOrd.max);
+
+  /**
+   * A semigroup that yields the minimum of natural numbers.
+   */
+  public static final Semigroup<Natural> naturalMinimumSemigroup = semigroup(Ord.naturalOrd.min);
+
+  /**
    * A semigroup that adds longs.
    */
   public static final Semigroup<Long> longAdditionSemigroup = semigroup(new F2<Long, Long, Long>() {
@@ -175,6 +215,16 @@ public final class Semigroup<A> {
       return x * y;
     }
   });
+
+  /**
+   * A semigroup that yields the maximum of longs.
+   */
+  public static final Semigroup<Long> longMaximumSemigroup = semigroup(Ord.longOrd.max);
+
+  /**
+   * A semigroup that yields the minimum of longs.
+   */
+  public static final Semigroup<Long> longMinimumSemigroup = semigroup(Ord.longOrd.min);
 
   /**
    * A semigroup that ORs booleans.
