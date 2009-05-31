@@ -20,12 +20,12 @@ import static fj.data.Array.array;
 import static fj.data.Option.none;
 import static fj.data.Option.some;
 import static fj.function.Booleans.not;
+import static fj.pre.Ordering.GT;
+import static fj.pre.Ord.intOrd;
 import fj.pre.Ord;
 import fj.pre.Equal;
 import fj.pre.Monoid;
 import fj.pre.Ordering;
-
-import static fj.pre.Ordering.GT;
 
 import java.util.AbstractCollection;
 import java.util.Collection;
@@ -1060,7 +1060,7 @@ public abstract class List<A> implements Iterable<A> {
    * @return The most common element in this list.
    */
   public A mode(final Ord<A> o) {
-    return sort(o).group(o.equal()).maximum(Ord.intOrd.comap(List.<A>length_())).head();
+    return sort(o).group(o.equal()).maximum(intOrd.comap(List.<A>length_())).head();
   }
 
   /**
