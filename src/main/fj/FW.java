@@ -1,7 +1,13 @@
 package fj;
 
-import static fj.Function.compose;
-import fj.data.Option;
+import fj.data.*;
+import static fj.data.Validation.either;
+import static fj.F2W.$$;
+import static fj.Function.*;
+import static fj.P.p;
+import fj.control.parallel.Actor;
+import fj.control.parallel.Promise;
+import fj.control.parallel.Strategy;
 
 /**
  * A wrapper for functions of arity 1, that decorates them with higher-order functions.
@@ -165,7 +171,16 @@ public final class FW<A, B> implements F<A, B> {
    * @return This function promoted to return its result in a product-1.
    */
   public FW<A, P1<B>> lazy() {
-    return $(P1.curry(this));
+    return $(P1.curry(f));
+  }
+
+  /**
+   * Promotes this function to map over a product-1.
+   *
+   * @return This function promoted to map over a product-1.
+   */
+  public FW<P1<A>, P1<B>> mapP1() {
+    return $(P1.<A, B>fmap(f));
   }
 
   /**
@@ -173,8 +188,132 @@ public final class FW<A, B> implements F<A, B> {
    *
    * @return This function promoted to return its result in an Option.
    */
-  @SuppressWarnings("unchecked")
   public FW<A, Option<B>> option() {
     return $(Option.<B>some_()).o(f);
   }
+
+  /**
+   * Promotes this function to map over an optional value.
+   *
+   * @return This function promoted to map over an optional value.
+   */
+  public FW<Option<A>, Option<B>> mapOption() {
+    return $(Option.<A, B>map().f(f));
+  }
+
+  /**
+   * Promotes this function so that it returns its result in a List. Kleisli arrow for List.
+   *
+   * @return This function promoted to return its result in a List.
+   */
+  public FW<A, List<B>> list() {
+    return $$(List.<B>cons()).flip().f(List.<B>nil()).o(f);
+  }
+
+  /**
+   * Promotes this function to map over a List.
+   *
+   * @return This function promoted to map over a List.
+   */
+  public FW<List<A>, List<B>> mapList() {
+    return $(List.<A, B>map_().f(f));
+  }
+
+  /**
+   * Promotes this function so that it returns its result in a Stream. Kleisli arrow for Stream.
+   *
+   * @return This function promoted to return its result in a Stream.
+   */
+  public FW<A, Stream<B>> stream() {
+    return $$(Stream.<B>cons()).flip().f(p(Stream.<B>nil())).o(f);
+  }
+
+  /**
+   * Promotes this function to map over a Stream.
+   *
+   * @return This function promoted to map over a Stream.
+   */
+  public FW<Stream<A>, Stream<B>> mapStream() {
+    return $(Stream.<A, B>map_().f(f));
+  }
+
+  /**
+   * Promotes this function so that it returns its result in an Array. Kleisli arrow for Array.
+   *
+   * @return This function promoted to return its result in an Array.
+   */
+  public FW<A, Array<B>> array() {
+    return $(new F<A, Array<B>>() {
+      public Array<B> f(final A a) {
+        return Array.single(f.f(a));
+      }
+    });
+  }
+
+  /**
+   * Promotes this function to map over a Stream.
+   *
+   * @return This function promoted to map over a Stream.
+   */
+  public FW<Array<A>, Array<B>> mapArray() {
+    return $(Array.<A, B>map().f(f));
+  }
+
+  /**
+   * Returns a function that comaps over a given actor.
+   *
+   * @return A function that comaps over a given actor.
+   */
+  public FW<Actor<B>, Actor<A>> comapActor() {
+    return $(new F<Actor<B>, Actor<A>>() {
+      public Actor<A> f(final Actor<B> actor) {
+        return actor.comap(f);
+      }
+    });
+  }
+
+  /**
+   * Promotes this function to a concurrent function that returns a Promise of a value.
+   *
+   * @param s A parallel strategy for concurrent execution.
+   * @return A concurrent function that returns a Promise of a value.
+   */
+  public FW<A, Promise<B>> promise(final Strategy<Unit> s) {
+    return $(Promise.promise(s, f));
+  }
+
+  /**
+   * Promotes this function to map over a Promise.
+   *
+   * @return This function promoted to map over Promises.
+   */
+  public FW<Promise<A>, Promise<B>> mapPromise() {
+    return $(new F<Promise<A>, Promise<B>>() {
+      public Promise<B> f(final Promise<A> promise) {
+        return promise.fmap(f);
+      }
+    });
+  }
+
+  /**
+   * Promotes this function so that it returns its result on the left side of an Either.
+   * Kleisli arrow for the Either left projection.
+   *
+   * @return This function promoted to return its result on the left side of an Either.
+   */
+  public <C> FW<A, Either<B, C>> eitherLeft() {
+    return $(Either.<B, C>left_()).o(f);
+  }
+
+  /**
+   * Promotes this function so that it returns its result on the right side of an Either.
+   * Kleisli arrow for the Either right projection.
+   *
+   * @return This function promoted to return its result on the right side of an Either.
+   */
+  public <C> FW<A, Either<C, B>> eitherRight() {
+    return $(Either.<C, B>right_()).o(f);
+  }
+
+
 }

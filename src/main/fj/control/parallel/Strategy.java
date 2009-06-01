@@ -1,6 +1,11 @@
 package fj.control.parallel;
 
-import fj.*;
+import fj.Effect;
+import fj.F;
+import fj.F2;
+import fj.Function;
+import fj.P;
+import fj.P1;
 import static fj.Function.compose;
 import static fj.Function.curry;
 import static fj.P1.fmap;
@@ -550,7 +555,5 @@ public final class Strategy<A> {
       }
     });
   }
-
-  public static final Strategy<Unit> unit = simpleThreadStrategy();
 
 }

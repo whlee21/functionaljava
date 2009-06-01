@@ -1,11 +1,13 @@
 package fj;
 
 import static fj.FW.$;
+import static fj.Function.uncurryF2;
+import static fj.Function.curry;
 
 /**
  * A wrapper for functions of arity 2, that decorates them with higher-order functions.
  */
-public final class F2W<A, B, C> implements F2<A, B, C> {
+public final class F2W<A, B, C> implements F2<A, B, C>, F<A, F<B, C>> {
   private final F2<A, B, C> f;
 
   private F2W(final F2<A, B, C> f) {
@@ -24,6 +26,16 @@ public final class F2W<A, B, C> implements F2<A, B, C> {
   }
 
   /**
+   * Partial application.
+   *
+   * @param a The <code>A</code> to which to apply this function.
+   * @return The function partially applied to the given argument.
+   */
+  public FW<B, C> f(final A a) {
+    return $(curry(f).f(a));
+  }
+
+  /**
    * Wraps a given function, decorating it with higher-order functions.
    *
    * @param f The function to wrap.
@@ -34,12 +46,22 @@ public final class F2W<A, B, C> implements F2<A, B, C> {
   }
 
   /**
+   * Wraps a given function, decorating it with higher-order functions.
+   *
+   * @param f The function to wrap.
+   * @return The wrapped function.
+   */  
+  public static <A, B, C> F2W<A, B, C> $$(final F<A, F<B, C>> f) {
+    return $$(uncurryF2(f));
+  }
+
+  /**
    * Flips the arguments of this function.
    *
    * @return A new function with the arguments of this function flipped.
    */
   public F2W<B, A, C> flip() {
-    return $$(Function.flip(this));
+    return $$(Function.flip(f));
   }
 
   /**
