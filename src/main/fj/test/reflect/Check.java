@@ -72,7 +72,7 @@ public final class Check {
    * {@link Rand#standard standard random generator}.
    */
   public static <T> List<P2<String, CheckResult>> check(final List<java.lang.Class<T>> c, final List<String> categories) {
-    return check(c, Rand.standard, categories.toArray().array());
+    return check(c, Rand.standard, categories.toArray().array(String[].class));
   }
 
   /**
@@ -104,7 +104,7 @@ public final class Check {
    * @return The results and names of checking the properties on the given classes.
    */
   public static <T> List<P2<String, CheckResult>> check(final List<java.lang.Class<T>> c, final Rand r, final List<String> categories) {
-    return check(c, r, categories.toArray().array());
+    return check(c, r, categories.toArray().array(String[].class));
   }
 
   /**
@@ -134,7 +134,7 @@ public final class Check {
    * {@link Rand#standard standard random generator}.
    */
   public static <T> List<P2<String, CheckResult>> check(final java.lang.Class<T> c, final List<String> categories) {
-    return check(c, Rand.standard, categories.toArray().array());
+    return check(c, Rand.standard, categories.toArray().array(String[].class));
   }
 
   /**
@@ -174,7 +174,7 @@ public final class Check {
    * @return The results of checking the properties on the given class.
    */
   public static <T> List<P2<String, CheckResult>> check(final java.lang.Class<T> c, final Rand r, final List<String> categories) {
-    return check(c, r, categories.toArray().array());
+    return check(c, r, categories.toArray().array(String[].class));
   }
 
   /**
@@ -260,7 +260,7 @@ public final class Check {
     return propFields.append(propMethods).toList();
   }
 
-  private static interface PropertyMember {
+  private interface PropertyMember {
     java.lang.Class<?> type();
     AnnotatedElement element();
     String name();

@@ -118,7 +118,6 @@ public final class Array<A> implements Iterable<A> {
    *
    * @return A copy of the underlying primitive array;
    */
-  @SuppressWarnings({"ReturnOfCollectionOrArrayField"})
   public Object[] array() {
     return Arrays.copyOf(a, a.length);
   }

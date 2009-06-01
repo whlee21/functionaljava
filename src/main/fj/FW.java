@@ -315,5 +315,47 @@ public final class FW<A, B> implements F<A, B> {
     return $(Either.<C, B>right_()).o(f);
   }
 
+  /**
+   * Promotes this function to map over the left side of an Either.
+   *
+   * @return This function promoted to map over the left side of an Either.
+   */
+  public <X> F<Either<A, X>, Either<B, X>> mapLeft() {
+    return $(Either.<A, X, B>leftMap_().f(f));
+  }
 
+  /**
+   * Promotes this function to map over the right side of an Either.
+   *
+   * @return This function promoted to map over the right side of an Either.
+   */
+  public <X> F<Either<X, A>, Either<X, B>> mapRight() {
+    return $(Either.<X, A, B>rightMap_().f(f));
+  }
+
+  /**
+   * Returns a function that returns the left side of a given Either, or this function applied to the right side.
+   *
+   * @return a function that returns the left side of a given Either, or this function applied to the right side.
+   */
+  public F<Either<B, A>, B> onLeft() {
+    return new F<Either<B, A>, B>() {
+      public B f(final Either<B, A> either) {
+        return either.left().on(f);
+      }
+    };
+  }
+
+  /**
+   * Returns a function that returns the right side of a given Either, or this function applied to the left side.
+   *
+   * @return a function that returns the right side of a given Either, or this function applied to the left side.
+   */
+  public F<Either<A, B>, B> onRight() {
+    return new F<Either<A, B>, B>() {
+      public B f(final Either<A, B> either) {
+        return either.right().on(f);
+      }
+    };
+  }
 }
