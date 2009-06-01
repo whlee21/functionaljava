@@ -14,6 +14,7 @@ import static fj.Function.identity;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.ListIterator;
+import java.util.NoSuchElementException;
 
 /**
  * A wrapper for Iterable that equips it with some useful functions.
@@ -364,7 +365,7 @@ public final class IterableW<A> implements Iterable<A> {
       }
 
       @SuppressWarnings({"unchecked"})
-      public boolean contains(Object o) {
+      public boolean contains(final Object o) {
         return iterableStream(IterableW.this).exists(Equal.<A>anyEqual().eq((A) o));
       }
 
@@ -377,35 +378,35 @@ public final class IterableW<A> implements Iterable<A> {
       }
 
       @SuppressWarnings({"SuspiciousToArrayCall"})
-      public <T> T[] toArray(T[] a) {
+      public <T> T[] toArray(final T[] a) {
         return iterableStream(IterableW.this).toCollection().toArray(a);
       }
 
-      public boolean add(A a) {
+      public boolean add(final A a) {
         return false;
       }
 
-      public boolean remove(Object o) {
+      public boolean remove(final Object o) {
         return false;
       }
 
-      public boolean containsAll(Collection<?> c) {
+      public boolean containsAll(final Collection<?> c) {
         return iterableStream(IterableW.this).toCollection().containsAll(c);
       }
 
-      public boolean addAll(Collection<? extends A> c) {
+      public boolean addAll(final Collection<? extends A> c) {
         return false;
       }
 
-      public boolean addAll(int index, Collection<? extends A> c) {
+      public boolean addAll(final int index, final Collection<? extends A> c) {
         return false;
       }
 
-      public boolean removeAll(Collection<?> c) {
+      public boolean removeAll(final Collection<?> c) {
         return false;
       }
 
-      public boolean retainAll(Collection<?> c) {
+      public boolean retainAll(final Collection<?> c) {
         return false;
       }
 
@@ -413,23 +414,23 @@ public final class IterableW<A> implements Iterable<A> {
         throw new UnsupportedOperationException("Modifying an immutable List.");
       }
 
-      public A get(int index) {
+      public A get(final int index) {
         return iterableStream(IterableW.this).index(index);
       }
 
-      public A set(int index, A element) {
+      public A set(final int index, final A element) {
         throw new UnsupportedOperationException("Modifying an immutable List.");
       }
 
-      public void add(int index, A element) {
+      public void add(final int index, final A element) {
         throw new UnsupportedOperationException("Modifying an immutable List.");
       }
 
-      public A remove(int index) {
+      public A remove(final int index) {
         throw new UnsupportedOperationException("Modifying an immutable List.");
       }
 
-      public int indexOf(Object o) {
+      public int indexOf(final Object o) {
         int i = -1;
         for (final A a : IterableW.this) {
           i++;
@@ -439,7 +440,7 @@ public final class IterableW<A> implements Iterable<A> {
         return i;
       }
 
-      public int lastIndexOf(Object o) {
+      public int lastIndexOf(final Object o) {
         int i = -1;
         int last = -1;
         for (final A a : IterableW.this) {
@@ -451,61 +452,66 @@ public final class IterableW<A> implements Iterable<A> {
       }
 
       public ListIterator<A> listIterator() {
-        return toListIterator(IterableW.this.toZipper());
+        return toListIterator(toZipper());
       }
 
-      public ListIterator<A> listIterator(int index) {
-        return toListIterator(IterableW.this.toZipper().bind(Zipper.<A>move().f(index)));
+      public ListIterator<A> listIterator(final int index) {
+        return toListIterator(toZipper().bind(Zipper.<A>move().f(index)));
       }
 
-      public java.util.List<A> subList(int fromIndex, int toIndex) {
+      public java.util.List<A> subList(final int fromIndex, final int toIndex) {
         return wrap(Stream.iterableStream(IterableW.this).drop(fromIndex).take(toIndex - fromIndex)).toStandardList();
       }
-    };
-  }
 
-  private static <A> ListIterator<A> toListIterator(final Option<Zipper<A>> z) {
-    return new ListIterator<A>() {
+      private ListIterator<A> toListIterator(final Option<Zipper<A>> z) {
+        return new ListIterator<A>() {
 
-      private Option<Zipper<A>> pz = z;
+          private Option<Zipper<A>> pz = z;
 
-      public boolean hasNext() {
-        return pz.isSome() && !pz.some().atEnd();
+          public boolean hasNext() {
+            return pz.isSome() && !pz.some().atEnd();
+          }
+
+          public A next() {
+            if (pz.isSome())
+              pz = pz.some().next();
+            else throw new NoSuchElementException();
+            if (pz.isSome())
+              return pz.some().focus();
+            else throw new NoSuchElementException();
+          }
+
+          public boolean hasPrevious() {
+            return pz.isSome() && !pz.some().atStart();
+          }
+
+          public A previous() {
+            pz = pz.some().previous();
+            return pz.some().focus();
+          }
+
+          public int nextIndex() {
+            return pz.some().index() + (pz.some().atEnd() ? 0 : 1);
+          }
+
+          public int previousIndex() {
+            return pz.some().index() - (pz.some().atStart() ? 0 : 1);
+          }
+
+          public void remove() {
+            throw new UnsupportedOperationException("Remove on immutable ListIterator");
+          }
+
+          public void set(final A a) {
+            throw new UnsupportedOperationException("Set on immutable ListIterator");
+          }
+
+          public void add(final A a) {
+            throw new UnsupportedOperationException("Add on immutable ListIterator");
+          }
+        };
       }
 
-      public A next() {
-        pz = pz.some().next();
-        return pz.some().focus();
-      }
-
-      public boolean hasPrevious() {
-        return pz.isSome() && !pz.some().atStart();
-      }
-
-      public A previous() {
-        pz = pz.some().previous();
-        return pz.some().focus();
-      }
-
-      public int nextIndex() {
-        return pz.some().index() + (pz.some().atEnd() ? 0 : 1);
-      }
-
-      public int previousIndex() {
-        return pz.some().index() - (pz.some().atStart() ? 0 : 1);
-      }
-
-      public void remove() {
-        throw new UnsupportedOperationException("Remove on immutable ListIterator");
-      }
-
-      public void set(A a) {
-        throw new UnsupportedOperationException("Set on immutable ListIterator");
-      }
-
-      public void add(A a) {
-        throw new UnsupportedOperationException("Add on immutable ListIterator");
-      }
     };
   }
 

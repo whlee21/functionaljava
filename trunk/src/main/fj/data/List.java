@@ -17,6 +17,7 @@ import static fj.P.p;
 import static fj.P.p2;
 import static fj.Unit.unit;
 import static fj.data.Array.array;
+import static fj.data.Array.mkArray;
 import static fj.data.Option.none;
 import static fj.data.Option.some;
 import static fj.function.Booleans.not;
@@ -181,14 +182,14 @@ public abstract class List<A> implements Iterable<A> {
    */
   @SuppressWarnings({"unchecked"})
   public Array<A> toArray() {
-    final A[] a = (A[]) new Object[length()];
+    final Object[] a = new Object[length()];
     List<A> x = this;
     for (int i = 0; i < length(); i++) {
       a[i] = x.head();
       x = x.tail();
     }
 
-    return array(a);
+    return mkArray(a);
   }
 
   /**
@@ -1528,7 +1529,7 @@ public abstract class List<A> implements Iterable<A> {
    */
   public static <A> F<Integer, F<List<A>, List<A>>> take() {
     return curry(new F2<Integer, List<A>, List<A>>() {
-      public List<A> f(Integer n, List<A> as) {
+      public List<A> f(final Integer n, final List<A> as) {
         return as.take(n);
       }
     });

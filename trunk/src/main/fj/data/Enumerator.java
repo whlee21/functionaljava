@@ -8,7 +8,6 @@ import static fj.data.Option.some;
 import fj.pre.Ord;
 import static fj.pre.Ord.*;
 import fj.pre.Ordering;
-import fj.pre.Semigroup;
 import static fj.pre.Ordering.*;
 
 import java.math.BigDecimal;

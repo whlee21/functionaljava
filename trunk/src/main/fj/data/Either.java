@@ -8,7 +8,7 @@ import static fj.P.p;
 import fj.P1;
 import fj.Unit;
 import static fj.Unit.unit;
-import static fj.data.Array.array;
+import static fj.data.Array.mkArray;
 import static fj.data.List.single;
 import static fj.data.List.cons_;
 import static fj.data.Option.some;
@@ -75,8 +75,8 @@ public abstract class Either<A, B> {
    */
   public <X> X either(final F<A, X> left, final F<B, X> right) {
     return isLeft() ?
-        left.f(left().value()) :
-        right.f(right().value());
+           left.f(left().value()) :
+           right.f(right().value());
   }
 
   /**
@@ -276,10 +276,10 @@ public abstract class Either<A, B> {
      */
     public <X> Option<Either<A, X>> filter(final F<A, Boolean> f) {
       return isLeft() ?
-          f.f(value()) ?
-              Option.<Either<A, X>>some(new Left<A, X>(value())) :
-              Option.<Either<A, X>>none() :
-          Option.<Either<A, X>>none();
+             f.f(value()) ?
+             Option.<Either<A, X>>some(new Left<A, X>(value())) :
+             Option.<Either<A, X>>none() :
+             Option.<Either<A, X>>none();
     }
 
     /**
@@ -345,25 +345,13 @@ public abstract class Either<A, B> {
      *
      * @return A single element array if this projection has a value, otherwise an empty array.
      */
-    @SuppressWarnings({"unchecked"})
     public Array<A> toArray() {
-      return isLeft() ? array(value()) : Array.<A>empty();
-    }
-
-    /**
-     * Returns a single element array if this projection has a value, otherwise an empty array.
-     *
-     * @param c The class type of the array to return.
-     * @return A single element array if this projection has a value, otherwise an empty array.
-     */
-    @SuppressWarnings({"unchecked"})
-    public Array<A> toArray(final Class<A[]> c) {
       if (isLeft()) {
-        final A[] a = (A[]) java.lang.reflect.Array.newInstance(c.getComponentType(), 1);
+        final Object[] a = new Object[1];
         a[0] = value();
-        return array(a);
+        return mkArray(a);
       } else
-        return array((A[]) java.lang.reflect.Array.newInstance(c.getComponentType(), 0));
+        return mkArray(new Object[0]);
     }
 
     /**
@@ -522,10 +510,10 @@ public abstract class Either<A, B> {
      */
     public <X> Option<Either<X, B>> filter(final F<B, Boolean> f) {
       return isRight() ?
-          f.f(value()) ?
-              Option.<Either<X, B>>some(new Right<X, B>(value())) :
-              Option.<Either<X, B>>none() :
-          Option.<Either<X, B>>none();
+             f.f(value()) ?
+             Option.<Either<X, B>>some(new Right<X, B>(value())) :
+             Option.<Either<X, B>>none() :
+             Option.<Either<X, B>>none();
     }
 
     /**
@@ -591,25 +579,13 @@ public abstract class Either<A, B> {
      *
      * @return A single element array if this projection has a value, otherwise an empty array.
      */
-    @SuppressWarnings({"unchecked"})
     public Array<B> toArray() {
-      return isRight() ? array(value()) : Array.<B>empty();
-    }
-
-    /**
-     * Returns a single element array if this projection has a value, otherwise an empty array.
-     *
-     * @param c The class type of the array to return.
-     * @return A single element array if this projection has a value, otherwise an empty array.
-     */
-    @SuppressWarnings({"unchecked"})
-    public Array<B> toArray(final Class<B[]> c) {
       if (isRight()) {
-        final B[] a = (B[]) java.lang.reflect.Array.newInstance(c.getComponentType(), 1);
+        final Object[] a = new Object[1];
         a[0] = value();
-        return array(a);
+        return mkArray(a);
       } else
-        return array((B[]) java.lang.reflect.Array.newInstance(c.getComponentType(), 0));
+        return Array.empty();
     }
 
     /**
@@ -737,12 +713,12 @@ public abstract class Either<A, B> {
    */
   public static <A, X> Either<List<A>, X> sequenceLeft(final List<Either<A, X>> a) {
     return a.isEmpty() ?
-        Either.<List<A>, X>left(List.<A>nil()) :
-        a.head().left().bind(new F<A, Either<List<A>, X>>() {
-          public Either<List<A>, X> f(final A aa) {
-            return sequenceLeft(a.tail()).left().map(cons_(aa));
-          }
-        });
+           Either.<List<A>, X>left(List.<A>nil()) :
+           a.head().left().bind(new F<A, Either<List<A>, X>>() {
+             public Either<List<A>, X> f(final A aa) {
+               return sequenceLeft(a.tail()).left().map(cons_(aa));
+             }
+           });
   }
 
   /**
@@ -753,12 +729,12 @@ public abstract class Either<A, B> {
    */
   public static <B, X> Either<X, List<B>> sequenceRight(final List<Either<X, B>> a) {
     return a.isEmpty() ?
-        Either.<X, List<B>>right(List.<B>nil()) :
-        a.head().right().bind(new F<B, Either<X, List<B>>>() {
-          public Either<X, List<B>> f(final B bb) {
-            return sequenceRight(a.tail()).right().map(cons_(bb));
-          }
-        });
+           Either.<X, List<B>>right(List.<B>nil()) :
+           a.head().right().bind(new F<B, Either<X, List<B>>>() {
+             public Either<X, List<B>> f(final B bb) {
+               return sequenceRight(a.tail()).right().map(cons_(bb));
+             }
+           });
   }
 
   /**
