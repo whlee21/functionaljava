@@ -104,23 +104,23 @@ public final class Array<A> implements Iterable<A> {
   }
 
   /**
-   * Returns the underlying primitive array.
+   * Returns a copy of the underlying primitive array.
    *
    * @param c A class for the returned array.
-   * @return The underlying primitive array.
+   * @return A copy of the underlying primitive array.
    */
   public A[] array(final Class<A[]> c) {
     return Arrays.copyOf(a, a.length, c);
   }
 
   /**
-   * Returns the underlying primitive array.
+   * Returns a copy of the underlying primitive array.
    *
-   * @return The underlying primitive array;
+   * @return A copy of the underlying primitive array;
    */
   @SuppressWarnings({"ReturnOfCollectionOrArrayField"})
   public Object[] array() {
-    return a;
+    return Arrays.copyOf(a, a.length);
   }
 
   /**
