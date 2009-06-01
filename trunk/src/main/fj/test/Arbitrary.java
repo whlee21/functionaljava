@@ -48,13 +48,11 @@ import java.math.BigInteger;
 import java.sql.Time;
 import java.sql.Timestamp;
 import java.util.ArrayList;
-import static java.util.Arrays.asList;
 import java.util.BitSet;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.EnumMap;
 import java.util.EnumSet;
-import static java.util.EnumSet.copyOf;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -72,6 +70,7 @@ import java.util.TreeMap;
 import java.util.TreeSet;
 import java.util.Vector;
 import java.util.WeakHashMap;
+import static java.util.EnumSet.copyOf;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
@@ -186,7 +185,9 @@ public final class Arbitrary<A> {
    */
   public static <A, B, C, D> Arbitrary<F3<A, B, C, D>> arbF3Invariant(final Arbitrary<D> a) {
     return arbitrary(a.gen.map(compose(Function.<A, B, C, D>uncurryF3(), compose(Function.<A, F<B, F<C, D>>>constant(),
-        compose(Function.<B, F<C, D>>constant(), Function.<C, D>constant())))));
+                                                                                 compose(
+                                                                                     Function.<B, F<C, D>>constant(),
+                                                                                     Function.<C, D>constant())))));
   }
 
   /**
@@ -213,8 +214,10 @@ public final class Arbitrary<A> {
    */
   public static <A, B, C, D, E> Arbitrary<F4<A, B, C, D, E>> arbF4Invariant(final Arbitrary<E> a) {
     return arbitrary(a.gen.map(compose(Function.<A, B, C, D, E>uncurryF4(),
-        compose(Function.<A, F<B, F<C, F<D, E>>>>constant(), compose(Function.<B, F<C, F<D, E>>>constant(),
-            compose(Function.<C, F<D, E>>constant(), Function.<D, E>constant()))))));
+                                       compose(Function.<A, F<B, F<C, F<D, E>>>>constant(),
+                                               compose(Function.<B, F<C, F<D, E>>>constant(),
+                                                       compose(Function.<C, F<D, E>>constant(),
+                                                               Function.<D, E>constant()))))));
   }
 
   /**
@@ -246,9 +249,11 @@ public final class Arbitrary<A> {
    */
   public static <A, B, C, D, E, F$> Arbitrary<F5<A, B, C, D, E, F$>> arbF5Invariant(final Arbitrary<F$> a) {
     return arbitrary(a.gen.map(compose(Function.<A, B, C, D, E, F$>uncurryF5(),
-        compose(Function.<A, F<B, F<C, F<D, F<E, F$>>>>>constant(),
-            compose(Function.<B, F<C, F<D, F<E, F$>>>>constant(), compose(Function.<C, F<D, F<E, F$>>>constant(),
-                compose(Function.<D, F<E, F$>>constant(), Function.<E, F$>constant())))))));
+                                       compose(Function.<A, F<B, F<C, F<D, F<E, F$>>>>>constant(),
+                                               compose(Function.<B, F<C, F<D, F<E, F$>>>>constant(),
+                                                       compose(Function.<C, F<D, F<E, F$>>>constant(),
+                                                               compose(Function.<D, F<E, F$>>constant(),
+                                                                       Function.<E, F$>constant())))))));
   }
 
   /**
@@ -282,10 +287,12 @@ public final class Arbitrary<A> {
    */
   public static <A, B, C, D, E, F$, G> Arbitrary<F6<A, B, C, D, E, F$, G>> arbF6Invariant(final Arbitrary<G> a) {
     return arbitrary(a.gen.map(compose(Function.<A, B, C, D, E, F$, G>uncurryF6(),
-        compose(Function.<A, F<B, F<C, F<D, F<E, F<F$, G>>>>>>constant(),
-            compose(Function.<B, F<C, F<D, F<E, F<F$, G>>>>>constant(),
-                compose(Function.<C, F<D, F<E, F<F$, G>>>>constant(), compose(Function.<D, F<E, F<F$, G>>>constant(),
-                    compose(Function.<E, F<F$, G>>constant(), Function.<F$, G>constant()))))))));
+                                       compose(Function.<A, F<B, F<C, F<D, F<E, F<F$, G>>>>>>constant(),
+                                               compose(Function.<B, F<C, F<D, F<E, F<F$, G>>>>>constant(),
+                                                       compose(Function.<C, F<D, F<E, F<F$, G>>>>constant(),
+                                                               compose(Function.<D, F<E, F<F$, G>>>constant(),
+                                                                       compose(Function.<E, F<F$, G>>constant(),
+                                                                               Function.<F$, G>constant()))))))));
   }
 
   /**
@@ -321,12 +328,13 @@ public final class Arbitrary<A> {
    */
   public static <A, B, C, D, E, F$, G, H> Arbitrary<F7<A, B, C, D, E, F$, G, H>> arbF7Invariant(final Arbitrary<H> a) {
     return arbitrary(a.gen.map(compose(Function.<A, B, C, D, E, F$, G, H>uncurryF7(),
-        compose(Function.<A, F<B, F<C, F<D, F<E, F<F$, F<G, H>>>>>>>constant(),
-            compose(Function.<B, F<C, F<D, F<E, F<F$, F<G, H>>>>>>constant(),
-                compose(Function.<C, F<D, F<E, F<F$, F<G, H>>>>>constant(),
-                    compose(Function.<D, F<E, F<F$, F<G, H>>>>constant(),
-                        compose(Function.<E, F<F$, F<G, H>>>constant(),
-                            compose(Function.<F$, F<G, H>>constant(), Function.<G, H>constant())))))))));
+                                       compose(Function.<A, F<B, F<C, F<D, F<E, F<F$, F<G, H>>>>>>>constant(),
+                                               compose(Function.<B, F<C, F<D, F<E, F<F$, F<G, H>>>>>>constant(),
+                                                       compose(Function.<C, F<D, F<E, F<F$, F<G, H>>>>>constant(),
+                                                               compose(Function.<D, F<E, F<F$, F<G, H>>>>constant(),
+                                                                       compose(Function.<E, F<F$, F<G, H>>>constant(),
+                                                                               compose(Function.<F$, F<G, H>>constant(),
+                                                                                       Function.<G, H>constant())))))))));
   }
 
   /**
@@ -365,13 +373,16 @@ public final class Arbitrary<A> {
   public static <A, B, C, D, E, F$, G, H, I> Arbitrary<F8<A, B, C, D, E, F$, G, H, I>> arbF8Invariant(
       final Arbitrary<I> a) {
     return arbitrary(a.gen.map(compose(Function.<A, B, C, D, E, F$, G, H, I>uncurryF8(),
-        compose(Function.<A, F<B, F<C, F<D, F<E, F<F$, F<G, F<H, I>>>>>>>>constant(),
-            compose(Function.<B, F<C, F<D, F<E, F<F$, F<G, F<H, I>>>>>>>constant(),
-                compose(Function.<C, F<D, F<E, F<F$, F<G, F<H, I>>>>>>constant(),
-                    compose(Function.<D, F<E, F<F$, F<G, F<H, I>>>>>constant(),
-                        compose(Function.<E, F<F$, F<G, F<H, I>>>>constant(),
-                            compose(Function.<F$, F<G, F<H, I>>>constant(),
-                                compose(Function.<G, F<H, I>>constant(), Function.<H, I>constant()))))))))));
+                                       compose(Function.<A, F<B, F<C, F<D, F<E, F<F$, F<G, F<H, I>>>>>>>>constant(),
+                                               compose(Function.<B, F<C, F<D, F<E, F<F$, F<G, F<H, I>>>>>>>constant(),
+                                                       compose(Function.<C, F<D, F<E, F<F$, F<G, F<H, I>>>>>>constant(),
+                                                               compose(
+                                                                   Function.<D, F<E, F<F$, F<G, F<H, I>>>>>constant(),
+                                                                   compose(Function.<E, F<F$, F<G, F<H, I>>>>constant(),
+                                                                           compose(
+                                                                               Function.<F$, F<G, F<H, I>>>constant(),
+                                                                               compose(Function.<G, F<H, I>>constant(),
+                                                                                       Function.<H, I>constant()))))))))));
   }
 
   /**
@@ -397,13 +408,13 @@ public final class Arbitrary<A> {
     @SuppressWarnings("unchecked")
     public Gen<Integer> f(final Integer i) {
       return frequency(list(p(1, value(0)),
-          p(1, value(1)),
-          p(1, value(-1)),
-          p(1, value(Integer.MAX_VALUE)),
-          p(1, value(Integer.MIN_VALUE)),
-          p(1, value(Integer.MAX_VALUE - 1)),
-          p(1, value(Integer.MIN_VALUE + 1)),
-          p(93, arbInteger.gen)));
+                            p(1, value(1)),
+                            p(1, value(-1)),
+                            p(1, value(Integer.MAX_VALUE)),
+                            p(1, value(Integer.MIN_VALUE)),
+                            p(1, value(Integer.MAX_VALUE - 1)),
+                            p(1, value(Integer.MIN_VALUE + 1)),
+                            p(93, arbInteger.gen)));
     }
   }));
 
@@ -432,13 +443,13 @@ public final class Arbitrary<A> {
     @SuppressWarnings("unchecked")
     public Gen<Long> f(final Integer i) {
       return frequency(list(p(1, value(0L)),
-          p(1, value(1L)),
-          p(1, value(-1L)),
-          p(1, value(Long.MAX_VALUE)),
-          p(1, value(Long.MIN_VALUE)),
-          p(1, value(Long.MAX_VALUE - 1L)),
-          p(1, value(Long.MIN_VALUE + 1L)),
-          p(93, arbLong.gen)));
+                            p(1, value(1L)),
+                            p(1, value(-1L)),
+                            p(1, value(Long.MAX_VALUE)),
+                            p(1, value(Long.MIN_VALUE)),
+                            p(1, value(Long.MAX_VALUE - 1L)),
+                            p(1, value(Long.MIN_VALUE + 1L)),
+                            p(93, arbLong.gen)));
     }
   }));
 
@@ -460,13 +471,13 @@ public final class Arbitrary<A> {
     @SuppressWarnings("unchecked")
     public Gen<Byte> f(final Integer i) {
       return frequency(list(p(1, value((byte) 0)),
-          p(1, value((byte) 1)),
-          p(1, value((byte) -1)),
-          p(1, value(Byte.MAX_VALUE)),
-          p(1, value(Byte.MIN_VALUE)),
-          p(1, value((byte) (Byte.MAX_VALUE - 1))),
-          p(1, value((byte) (Byte.MIN_VALUE + 1))),
-          p(93, arbByte.gen)));
+                            p(1, value((byte) 1)),
+                            p(1, value((byte) -1)),
+                            p(1, value(Byte.MAX_VALUE)),
+                            p(1, value(Byte.MIN_VALUE)),
+                            p(1, value((byte) (Byte.MAX_VALUE - 1))),
+                            p(1, value((byte) (Byte.MIN_VALUE + 1))),
+                            p(93, arbByte.gen)));
     }
   }));
 
@@ -488,13 +499,13 @@ public final class Arbitrary<A> {
     @SuppressWarnings("unchecked")
     public Gen<Short> f(final Integer i) {
       return frequency(list(p(1, value((short) 0)),
-          p(1, value((short) 1)),
-          p(1, value((short) -1)),
-          p(1, value(Short.MAX_VALUE)),
-          p(1, value(Short.MIN_VALUE)),
-          p(1, value((short) (Short.MAX_VALUE - 1))),
-          p(1, value((short) (Short.MIN_VALUE + 1))),
-          p(93, arbShort.gen)));
+                            p(1, value((short) 1)),
+                            p(1, value((short) -1)),
+                            p(1, value(Short.MAX_VALUE)),
+                            p(1, value(Short.MIN_VALUE)),
+                            p(1, value((short) (Short.MAX_VALUE - 1))),
+                            p(1, value((short) (Short.MIN_VALUE + 1))),
+                            p(93, arbShort.gen)));
     }
   }));
 
@@ -516,10 +527,10 @@ public final class Arbitrary<A> {
     @SuppressWarnings("unchecked")
     public Gen<Character> f(final Integer i) {
       return frequency(list(p(1, value(Character.MIN_VALUE)),
-          p(1, value((char) (Character.MIN_VALUE + 1))),
-          p(1, value(Character.MAX_VALUE)),
-          p(1, value((char) (Character.MAX_VALUE - 1))),
-          p(95, arbCharacter.gen)));
+                            p(1, value((char) (Character.MIN_VALUE + 1))),
+                            p(1, value(Character.MAX_VALUE)),
+                            p(1, value((char) (Character.MAX_VALUE - 1))),
+                            p(95, arbCharacter.gen)));
     }
   }));
 
@@ -541,15 +552,15 @@ public final class Arbitrary<A> {
     @SuppressWarnings("unchecked")
     public Gen<Double> f(final Integer i) {
       return frequency(list(p(1, value(0D)),
-          p(1, value(1D)),
-          p(1, value(-1D)),
-          p(1, value(Double.MAX_VALUE)),
-          p(1, value(Double.MIN_VALUE)),
-          p(1, value(Double.NaN)),
-          p(1, value(Double.NEGATIVE_INFINITY)),
-          p(1, value(Double.POSITIVE_INFINITY)),
-          p(1, value(Double.MAX_VALUE - 1D)),
-          p(91, arbDouble.gen)));
+                            p(1, value(1D)),
+                            p(1, value(-1D)),
+                            p(1, value(Double.MAX_VALUE)),
+                            p(1, value(Double.MIN_VALUE)),
+                            p(1, value(Double.NaN)),
+                            p(1, value(Double.NEGATIVE_INFINITY)),
+                            p(1, value(Double.POSITIVE_INFINITY)),
+                            p(1, value(Double.MAX_VALUE - 1D)),
+                            p(91, arbDouble.gen)));
     }
   }));
 
@@ -571,15 +582,15 @@ public final class Arbitrary<A> {
     @SuppressWarnings("unchecked")
     public Gen<Float> f(final Integer i) {
       return frequency(list(p(1, value(0F)),
-          p(1, value(1F)),
-          p(1, value(-1F)),
-          p(1, value(Float.MAX_VALUE)),
-          p(1, value(Float.MIN_VALUE)),
-          p(1, value(Float.NaN)),
-          p(1, value(Float.NEGATIVE_INFINITY)),
-          p(1, value(Float.POSITIVE_INFINITY)),
-          p(1, value(Float.MAX_VALUE - 1F)),
-          p(91, arbFloat.gen)));
+                            p(1, value(1F)),
+                            p(1, value(-1F)),
+                            p(1, value(Float.MAX_VALUE)),
+                            p(1, value(Float.MIN_VALUE)),
+                            p(1, value(Float.NaN)),
+                            p(1, value(Float.NEGATIVE_INFINITY)),
+                            p(1, value(Float.POSITIVE_INFINITY)),
+                            p(1, value(Float.MAX_VALUE - 1F)),
+                            p(91, arbFloat.gen)));
     }
   }));
 
@@ -613,7 +624,7 @@ public final class Arbitrary<A> {
   public static final Arbitrary<String> arbAlphaNumString =
       arbitrary(arbList(arbitrary(elements(range(charEnumerator, 'a', 'z').append(
           range(charEnumerator, 'A', 'Z')).append(
-          range(charEnumerator, '0', '9')).toArray().array()))).gen.map(asString()));
+          range(charEnumerator, '0', '9')).toArray().array(Character[].class)))).gen.map(asString()));
 
   /**
    * An arbitrary implementation for string buffer values.
@@ -666,12 +677,12 @@ public final class Arbitrary<A> {
     return arbitrary(sized(new F<Integer, Gen<Option<A>>>() {
       public Gen<Option<A>> f(final Integer i) {
         return i == 0 ?
-            value(Option.<A>none()) :
-            aa.gen.map(new F<A, Option<A>>() {
-              public Option<A> f(final A a) {
-                return some(a);
-              }
-            }).resize(i - 1);
+               value(Option.<A>none()) :
+               aa.gen.map(new F<A, Option<A>>() {
+                 public Option<A> f(final A a) {
+                   return some(a);
+                 }
+               }).resize(i - 1);
       }
     }));
   }
@@ -769,7 +780,7 @@ public final class Arbitrary<A> {
   public static <A> Arbitrary<ArrayList<A>> arbArrayList(final Arbitrary<A> aa) {
     return arbitrary(arbArray(aa).gen.map(new F<Array<A>, ArrayList<A>>() {
       public ArrayList<A> f(final Array<A> a) {
-        return new ArrayList<A>(asList(a.array()));
+        return new ArrayList<A>(a.toCollection());
       }
     }));
   }
@@ -809,10 +820,10 @@ public final class Arbitrary<A> {
       return new Date(i);
     }
   }));
-  
+
   /**
    * Returns an arbitrary implementation for a Java enumeration.
-   * 
+   *
    * @param clazz The type of enum to return an arbtrary of.
    * @return An arbitrary for instances of the supplied enum type.
    */
@@ -847,7 +858,7 @@ public final class Arbitrary<A> {
   public static <A extends Enum<A>> Arbitrary<EnumSet<A>> arbEnumSet(final Arbitrary<A> aa) {
     return arbitrary(arbArray(aa).gen.map(new F<Array<A>, EnumSet<A>>() {
       public EnumSet<A> f(final Array<A> a) {
-        return copyOf(asList(a.array()));
+        return copyOf(a.toCollection());
       }
     }));
   }
@@ -890,7 +901,7 @@ public final class Arbitrary<A> {
   public static <A> Arbitrary<HashSet<A>> arbHashSet(final Arbitrary<A> aa) {
     return arbitrary(arbArray(aa).gen.map(new F<Array<A>, HashSet<A>>() {
       public HashSet<A> f(final Array<A> a) {
-        return new HashSet<A>(asList(a.array()));
+        return new HashSet<A>(a.toCollection());
       }
     }));
   }
@@ -971,7 +982,7 @@ public final class Arbitrary<A> {
   public static <A> Arbitrary<LinkedHashSet<A>> arbLinkedHashSet(final Arbitrary<A> aa) {
     return arbitrary(arbArray(aa).gen.map(new F<Array<A>, LinkedHashSet<A>>() {
       public LinkedHashSet<A> f(final Array<A> a) {
-        return new LinkedHashSet<A>(asList(a.array()));
+        return new LinkedHashSet<A>(a.toCollection());
       }
     }));
   }
@@ -985,7 +996,7 @@ public final class Arbitrary<A> {
   public static <A> Arbitrary<LinkedList<A>> arbLinkedList(final Arbitrary<A> aa) {
     return arbitrary(arbArray(aa).gen.map(new F<Array<A>, LinkedList<A>>() {
       public LinkedList<A> f(final Array<A> a) {
-        return new LinkedList<A>(asList(a.array()));
+        return new LinkedList<A>(a.toCollection());
       }
     }));
   }
@@ -999,7 +1010,7 @@ public final class Arbitrary<A> {
   public static <A> Arbitrary<PriorityQueue<A>> arbPriorityQueue(final Arbitrary<A> aa) {
     return arbitrary(arbArray(aa).gen.map(new F<Array<A>, PriorityQueue<A>>() {
       public PriorityQueue<A> f(final Array<A> a) {
-        return new PriorityQueue<A>(asList(a.array()));
+        return new PriorityQueue<A>(a.toCollection());
       }
     }));
   }
@@ -1033,7 +1044,7 @@ public final class Arbitrary<A> {
       @SuppressWarnings({"UseOfObsoleteCollectionType"})
       public Stack<A> f(final Array<A> a) {
         final Stack<A> s = new Stack<A>();
-        s.addAll(asList(a.array()));
+        s.addAll(a.toCollection());
         return s;
       }
     }));
@@ -1065,7 +1076,7 @@ public final class Arbitrary<A> {
   public static <A> Arbitrary<TreeSet<A>> arbTreeSet(final Arbitrary<A> aa) {
     return arbitrary(arbArray(aa).gen.map(new F<Array<A>, TreeSet<A>>() {
       public TreeSet<A> f(final Array<A> a) {
-        return new TreeSet<A>(asList(a.array()));
+        return new TreeSet<A>(a.toCollection());
       }
     }));
   }
@@ -1081,7 +1092,7 @@ public final class Arbitrary<A> {
     return arbitrary(arbArray(aa).gen.map(new F<Array<A>, Vector<A>>() {
       @SuppressWarnings({"UseOfObsoleteCollectionType"})
       public Vector<A> f(final Array<A> a) {
-        return new Vector<A>(asList(a.array()));
+        return new Vector<A>(a.toCollection());
       }
     }));
   }
@@ -1117,19 +1128,20 @@ public final class Arbitrary<A> {
    */
   public static <A> Arbitrary<ArrayBlockingQueue<A>> arbArrayBlockingQueue(final Arbitrary<A> aa) {
     return arbitrary(arbArray(aa).gen.bind(arbInteger.gen, arbBoolean.gen,
-        new F<Array<A>, F<Integer, F<Boolean, ArrayBlockingQueue<A>>>>() {
-          public F<Integer, F<Boolean, ArrayBlockingQueue<A>>> f(final Array<A> a) {
-            return new F<Integer, F<Boolean, ArrayBlockingQueue<A>>>() {
-              public F<Boolean, ArrayBlockingQueue<A>> f(final Integer capacity) {
-                return new F<Boolean, ArrayBlockingQueue<A>>() {
-                  public ArrayBlockingQueue<A> f(final Boolean fair) {
-                    return new ArrayBlockingQueue<A>(a.length() + abs(capacity), fair, asList(a.array()));
-                  }
-                };
-              }
-            };
-          }
-        }));
+                                           new F<Array<A>, F<Integer, F<Boolean, ArrayBlockingQueue<A>>>>() {
+                                             public F<Integer, F<Boolean, ArrayBlockingQueue<A>>> f(final Array<A> a) {
+                                               return new F<Integer, F<Boolean, ArrayBlockingQueue<A>>>() {
+                                                 public F<Boolean, ArrayBlockingQueue<A>> f(final Integer capacity) {
+                                                   return new F<Boolean, ArrayBlockingQueue<A>>() {
+                                                     public ArrayBlockingQueue<A> f(final Boolean fair) {
+                                                       return new ArrayBlockingQueue<A>(a.length() + abs(capacity),
+                                                                                        fair, a.toCollection());
+                                                     }
+                                                   };
+                                                 }
+                                               };
+                                             }
+                                           }));
   }
 
   /**
@@ -1161,7 +1173,7 @@ public final class Arbitrary<A> {
   public static <A> Arbitrary<ConcurrentLinkedQueue<A>> arbConcurrentLinkedQueue(final Arbitrary<A> aa) {
     return arbitrary(arbArray(aa).gen.map(new F<Array<A>, ConcurrentLinkedQueue<A>>() {
       public ConcurrentLinkedQueue<A> f(final Array<A> a) {
-        return new ConcurrentLinkedQueue<A>(asList(a.array()));
+        return new ConcurrentLinkedQueue<A>(a.toCollection());
       }
     }));
   }
@@ -1176,7 +1188,7 @@ public final class Arbitrary<A> {
   public static <A> Arbitrary<CopyOnWriteArrayList<A>> arbCopyOnWriteArrayList(final Arbitrary<A> aa) {
     return arbitrary(arbArray(aa).gen.map(new F<Array<A>, CopyOnWriteArrayList<A>>() {
       public CopyOnWriteArrayList<A> f(final Array<A> a) {
-        return new CopyOnWriteArrayList<A>(asList(a.array()));
+        return new CopyOnWriteArrayList<A>(a.toCollection());
       }
     }));
   }
@@ -1191,7 +1203,7 @@ public final class Arbitrary<A> {
   public static <A> Arbitrary<CopyOnWriteArraySet<A>> arbCopyOnWriteArraySet(final Arbitrary<A> aa) {
     return arbitrary(arbArray(aa).gen.map(new F<Array<A>, CopyOnWriteArraySet<A>>() {
       public CopyOnWriteArraySet<A> f(final Array<A> a) {
-        return new CopyOnWriteArraySet<A>(asList(a.array()));
+        return new CopyOnWriteArraySet<A>(a.toCollection());
       }
     }));
   }
@@ -1205,7 +1217,7 @@ public final class Arbitrary<A> {
   public static <A extends Delayed> Arbitrary<DelayQueue<A>> arbDelayQueue(final Arbitrary<A> aa) {
     return arbitrary(arbArray(aa).gen.map(new F<Array<A>, DelayQueue<A>>() {
       public DelayQueue<A> f(final Array<A> a) {
-        return new DelayQueue<A>(asList(a.array()));
+        return new DelayQueue<A>(a.toCollection());
       }
     }));
   }
@@ -1220,7 +1232,7 @@ public final class Arbitrary<A> {
   public static <A> Arbitrary<LinkedBlockingQueue<A>> arbLinkedBlockingQueue(final Arbitrary<A> aa) {
     return arbitrary(arbArray(aa).gen.map(new F<Array<A>, LinkedBlockingQueue<A>>() {
       public LinkedBlockingQueue<A> f(final Array<A> a) {
-        return new LinkedBlockingQueue<A>(asList(a.array()));
+        return new LinkedBlockingQueue<A>(a.toCollection());
       }
     }));
   }
@@ -1235,7 +1247,7 @@ public final class Arbitrary<A> {
   public static <A> Arbitrary<PriorityBlockingQueue<A>> arbPriorityBlockingQueue(final Arbitrary<A> aa) {
     return arbitrary(arbArray(aa).gen.map(new F<Array<A>, PriorityBlockingQueue<A>>() {
       public PriorityBlockingQueue<A> f(final Array<A> a) {
-        return new PriorityBlockingQueue<A>(asList(a.array()));
+        return new PriorityBlockingQueue<A>(a.toCollection());
       }
     }));
   }
@@ -1253,7 +1265,7 @@ public final class Arbitrary<A> {
         return new F<Boolean, SynchronousQueue<A>>() {
           public SynchronousQueue<A> f(final Boolean fair) {
             final SynchronousQueue<A> q = new SynchronousQueue<A>(fair);
-            q.addAll(asList(a.array()));
+            q.addAll(a.toCollection());
             return q;
           }
         };
@@ -1307,7 +1319,7 @@ public final class Arbitrary<A> {
               final byte[] x = new byte[a.length() + 1];
 
               for (int i = 0; i < a.array().length; i++) {
-                x[i] = a.array()[i];
+                x[i] = a.get(i);
               }
 
               x[a.length()] = b;
@@ -1495,31 +1507,31 @@ public final class Arbitrary<A> {
                                                                            final Arbitrary<E> ae,
                                                                            final Arbitrary<F$> af) {
     return arbitrary(aa.gen.bind(ab.gen, ac.gen, ad.gen, ae.gen, af.gen,
-        new F<A, F<B, F<C, F<D, F<E, F<F$, P6<A, B, C, D, E, F$>>>>>>>() {
-          public F<B, F<C, F<D, F<E, F<F$, P6<A, B, C, D, E, F$>>>>>> f(final A a) {
-            return new F<B, F<C, F<D, F<E, F<F$, P6<A, B, C, D, E, F$>>>>>>() {
-              public F<C, F<D, F<E, F<F$, P6<A, B, C, D, E, F$>>>>> f(final B b) {
-                return new F<C, F<D, F<E, F<F$, P6<A, B, C, D, E, F$>>>>>() {
-                  public F<D, F<E, F<F$, P6<A, B, C, D, E, F$>>>> f(final C c) {
-                    return new F<D, F<E, F<F$, P6<A, B, C, D, E, F$>>>>() {
-                      public F<E, F<F$, P6<A, B, C, D, E, F$>>> f(final D d) {
-                        return new F<E, F<F$, P6<A, B, C, D, E, F$>>>() {
-                          public F<F$, P6<A, B, C, D, E, F$>> f(final E e) {
-                            return new F<F$, P6<A, B, C, D, E, F$>>() {
-                              public P6<A, B, C, D, E, F$> f(final F$ f) {
-                                return p(a, b, c, d, e, f);
-                              }
-                            };
-                          }
-                        };
-                      }
-                    };
-                  }
-                };
-              }
-            };
-          }
-        }));
+                                 new F<A, F<B, F<C, F<D, F<E, F<F$, P6<A, B, C, D, E, F$>>>>>>>() {
+                                   public F<B, F<C, F<D, F<E, F<F$, P6<A, B, C, D, E, F$>>>>>> f(final A a) {
+                                     return new F<B, F<C, F<D, F<E, F<F$, P6<A, B, C, D, E, F$>>>>>>() {
+                                       public F<C, F<D, F<E, F<F$, P6<A, B, C, D, E, F$>>>>> f(final B b) {
+                                         return new F<C, F<D, F<E, F<F$, P6<A, B, C, D, E, F$>>>>>() {
+                                           public F<D, F<E, F<F$, P6<A, B, C, D, E, F$>>>> f(final C c) {
+                                             return new F<D, F<E, F<F$, P6<A, B, C, D, E, F$>>>>() {
+                                               public F<E, F<F$, P6<A, B, C, D, E, F$>>> f(final D d) {
+                                                 return new F<E, F<F$, P6<A, B, C, D, E, F$>>>() {
+                                                   public F<F$, P6<A, B, C, D, E, F$>> f(final E e) {
+                                                     return new F<F$, P6<A, B, C, D, E, F$>>() {
+                                                       public P6<A, B, C, D, E, F$> f(final F$ f) {
+                                                         return p(a, b, c, d, e, f);
+                                                       }
+                                                     };
+                                                   }
+                                                 };
+                                               }
+                                             };
+                                           }
+                                         };
+                                       }
+                                     };
+                                   }
+                                 }));
   }
 
   /**
@@ -1549,35 +1561,35 @@ public final class Arbitrary<A> {
                                                                                  final Arbitrary<F$> af,
                                                                                  final Arbitrary<G> ag) {
     return arbitrary(aa.gen.bind(ab.gen, ac.gen, ad.gen, ae.gen, af.gen, ag.gen,
-        new F<A, F<B, F<C, F<D, F<E, F<F$, F<G, P7<A, B, C, D, E, F$, G>>>>>>>>() {
-          public F<B, F<C, F<D, F<E, F<F$, F<G, P7<A, B, C, D, E, F$, G>>>>>>> f(final A a) {
-            return new F<B, F<C, F<D, F<E, F<F$, F<G, P7<A, B, C, D, E, F$, G>>>>>>>() {
-              public F<C, F<D, F<E, F<F$, F<G, P7<A, B, C, D, E, F$, G>>>>>> f(final B b) {
-                return new F<C, F<D, F<E, F<F$, F<G, P7<A, B, C, D, E, F$, G>>>>>>() {
-                  public F<D, F<E, F<F$, F<G, P7<A, B, C, D, E, F$, G>>>>> f(final C c) {
-                    return new F<D, F<E, F<F$, F<G, P7<A, B, C, D, E, F$, G>>>>>() {
-                      public F<E, F<F$, F<G, P7<A, B, C, D, E, F$, G>>>> f(final D d) {
-                        return new F<E, F<F$, F<G, P7<A, B, C, D, E, F$, G>>>>() {
-                          public F<F$, F<G, P7<A, B, C, D, E, F$, G>>> f(final E e) {
-                            return new F<F$, F<G, P7<A, B, C, D, E, F$, G>>>() {
-                              public F<G, P7<A, B, C, D, E, F$, G>> f(final F$ f) {
-                                return new F<G, P7<A, B, C, D, E, F$, G>>() {
-                                  public P7<A, B, C, D, E, F$, G> f(final G g) {
-                                    return p(a, b, c, d, e, f, g);
-                                  }
-                                };
-                              }
-                            };
-                          }
-                        };
-                      }
-                    };
-                  }
-                };
-              }
-            };
-          }
-        }));
+                                 new F<A, F<B, F<C, F<D, F<E, F<F$, F<G, P7<A, B, C, D, E, F$, G>>>>>>>>() {
+                                   public F<B, F<C, F<D, F<E, F<F$, F<G, P7<A, B, C, D, E, F$, G>>>>>>> f(final A a) {
+                                     return new F<B, F<C, F<D, F<E, F<F$, F<G, P7<A, B, C, D, E, F$, G>>>>>>>() {
+                                       public F<C, F<D, F<E, F<F$, F<G, P7<A, B, C, D, E, F$, G>>>>>> f(final B b) {
+                                         return new F<C, F<D, F<E, F<F$, F<G, P7<A, B, C, D, E, F$, G>>>>>>() {
+                                           public F<D, F<E, F<F$, F<G, P7<A, B, C, D, E, F$, G>>>>> f(final C c) {
+                                             return new F<D, F<E, F<F$, F<G, P7<A, B, C, D, E, F$, G>>>>>() {
+                                               public F<E, F<F$, F<G, P7<A, B, C, D, E, F$, G>>>> f(final D d) {
+                                                 return new F<E, F<F$, F<G, P7<A, B, C, D, E, F$, G>>>>() {
+                                                   public F<F$, F<G, P7<A, B, C, D, E, F$, G>>> f(final E e) {
+                                                     return new F<F$, F<G, P7<A, B, C, D, E, F$, G>>>() {
+                                                       public F<G, P7<A, B, C, D, E, F$, G>> f(final F$ f) {
+                                                         return new F<G, P7<A, B, C, D, E, F$, G>>() {
+                                                           public P7<A, B, C, D, E, F$, G> f(final G g) {
+                                                             return p(a, b, c, d, e, f, g);
+                                                           }
+                                                         };
+                                                       }
+                                                     };
+                                                   }
+                                                 };
+                                               }
+                                             };
+                                           }
+                                         };
+                                       }
+                                     };
+                                   }
+                                 }));
   }
 
   /**
@@ -1610,38 +1622,42 @@ public final class Arbitrary<A> {
                                                                                        final Arbitrary<G> ag,
                                                                                        final Arbitrary<H> ah) {
     return arbitrary(aa.gen.bind(ab.gen, ac.gen, ad.gen, ae.gen, af.gen, ag.gen, ah.gen,
-        new F<A, F<B, F<C, F<D, F<E, F<F$, F<G, F<H, P8<A, B, C, D, E, F$, G, H>>>>>>>>>() {
-          public F<B, F<C, F<D, F<E, F<F$, F<G, F<H, P8<A, B, C, D, E, F$, G, H>>>>>>>> f(final A a) {
-            return new F<B, F<C, F<D, F<E, F<F$, F<G, F<H, P8<A, B, C, D, E, F$, G, H>>>>>>>>() {
-              public F<C, F<D, F<E, F<F$, F<G, F<H, P8<A, B, C, D, E, F$, G, H>>>>>>> f(final B b) {
-                return new F<C, F<D, F<E, F<F$, F<G, F<H, P8<A, B, C, D, E, F$, G, H>>>>>>>() {
-                  public F<D, F<E, F<F$, F<G, F<H, P8<A, B, C, D, E, F$, G, H>>>>>> f(final C c) {
-                    return new F<D, F<E, F<F$, F<G, F<H, P8<A, B, C, D, E, F$, G, H>>>>>>() {
-                      public F<E, F<F$, F<G, F<H, P8<A, B, C, D, E, F$, G, H>>>>> f(final D d) {
-                        return new F<E, F<F$, F<G, F<H, P8<A, B, C, D, E, F$, G, H>>>>>() {
-                          public F<F$, F<G, F<H, P8<A, B, C, D, E, F$, G, H>>>> f(final E e) {
-                            return new F<F$, F<G, F<H, P8<A, B, C, D, E, F$, G, H>>>>() {
-                              public F<G, F<H, P8<A, B, C, D, E, F$, G, H>>> f(final F$ f) {
-                                return new F<G, F<H, P8<A, B, C, D, E, F$, G, H>>>() {
-                                  public F<H, P8<A, B, C, D, E, F$, G, H>> f(final G g) {
-                                    return new F<H, P8<A, B, C, D, E, F$, G, H>>() {
-                                      public P8<A, B, C, D, E, F$, G, H> f(final H h) {
-                                        return p(a, b, c, d, e, f, g, h);
-                                      }
-                                    };
-                                  }
-                                };
-                              }
-                            };
-                          }
-                        };
-                      }
-                    };
-                  }
-                };
-              }
-            };
-          }
-        }));
+                                 new F<A, F<B, F<C, F<D, F<E, F<F$, F<G, F<H, P8<A, B, C, D, E, F$, G, H>>>>>>>>>() {
+                                   public F<B, F<C, F<D, F<E, F<F$, F<G, F<H, P8<A, B, C, D, E, F$, G, H>>>>>>>> f(
+                                       final A a) {
+                                     return new F<B, F<C, F<D, F<E, F<F$, F<G, F<H, P8<A, B, C, D, E, F$, G, H>>>>>>>>() {
+                                       public F<C, F<D, F<E, F<F$, F<G, F<H, P8<A, B, C, D, E, F$, G, H>>>>>>> f(
+                                           final B b) {
+                                         return new F<C, F<D, F<E, F<F$, F<G, F<H, P8<A, B, C, D, E, F$, G, H>>>>>>>() {
+                                           public F<D, F<E, F<F$, F<G, F<H, P8<A, B, C, D, E, F$, G, H>>>>>> f(
+                                               final C c) {
+                                             return new F<D, F<E, F<F$, F<G, F<H, P8<A, B, C, D, E, F$, G, H>>>>>>() {
+                                               public F<E, F<F$, F<G, F<H, P8<A, B, C, D, E, F$, G, H>>>>> f(
+                                                   final D d) {
+                                                 return new F<E, F<F$, F<G, F<H, P8<A, B, C, D, E, F$, G, H>>>>>() {
+                                                   public F<F$, F<G, F<H, P8<A, B, C, D, E, F$, G, H>>>> f(final E e) {
+                                                     return new F<F$, F<G, F<H, P8<A, B, C, D, E, F$, G, H>>>>() {
+                                                       public F<G, F<H, P8<A, B, C, D, E, F$, G, H>>> f(final F$ f) {
+                                                         return new F<G, F<H, P8<A, B, C, D, E, F$, G, H>>>() {
+                                                           public F<H, P8<A, B, C, D, E, F$, G, H>> f(final G g) {
+                                                             return new F<H, P8<A, B, C, D, E, F$, G, H>>() {
+                                                               public P8<A, B, C, D, E, F$, G, H> f(final H h) {
+                                                                 return p(a, b, c, d, e, f, g, h);
+                                                               }
+                                                             };
+                                                           }
+                                                         };
+                                                       }
+                                                     };
+                                                   }
+                                                 };
+                                               }
+                                             };
+                                           }
+                                         };
+                                       }
+                                     };
+                                   }
+                                 }));
   }
 }
