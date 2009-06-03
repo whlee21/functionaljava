@@ -132,7 +132,7 @@ public class TreeZipper<A> {
    * @param s A Show instance for tree elements.
    * @return A Show instance for tree zippers.
    */
-  public static <A> Show<TreeZipper<A>> eq(final Show<A> s) {
+  public static <A> Show<TreeZipper<A>> show(final Show<A> s) {
     return p4Show(
         treeShow(s),
         streamShow(treeShow(s)),
