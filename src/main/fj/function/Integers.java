@@ -4,6 +4,9 @@ import fj.F;
 import fj.F2;
 import static fj.Function.curry;
 import fj.data.List;
+import fj.data.Option;
+import static fj.data.Option.some;
+import static fj.data.Option.none;
 import fj.pre.Monoid;
 import static fj.pre.Semigroup.intAdditionSemigroup;
 import static fj.pre.Semigroup.intMultiplicationSemigroup;
@@ -107,5 +110,21 @@ public final class Integers {
   public static int product(final List<Integer> ints) {
     return Monoid.intMultiplicationMonoid.sumLeft(ints);
   }
-  
+
+  /**
+   * A function that converts strings to integers.
+   *
+   * @return A function that converts strings to integers.
+   */
+  public static F<String, Option<Integer>> fromString() {
+    return new F<String, Option<Integer>>() {
+      public Option<Integer> f(final String s) {
+        try { return some(Integer.valueOf(s)); }
+        catch (final NumberFormatException ignored) {
+          return none();
+        }
+      }
+    };
+  }
+
 }

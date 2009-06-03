@@ -1,13 +1,26 @@
 package fj;
 
-import fj.data.*;
-import static fj.data.Validation.either;
 import static fj.F2W.$$;
-import static fj.Function.*;
+import static fj.Function.compose;
 import static fj.P.p;
 import fj.control.parallel.Actor;
 import fj.control.parallel.Promise;
 import fj.control.parallel.Strategy;
+import fj.data.Array;
+import fj.data.Either;
+import fj.data.IterableW;
+import fj.data.List;
+import fj.data.NonEmptyList;
+import fj.data.Option;
+import fj.data.Set;
+import fj.data.Stream;
+import fj.data.Tree;
+import fj.data.TreeZipper;
+import fj.data.Validation;
+import fj.data.Zipper;
+import static fj.data.Zipper.fromStream;
+import fj.pre.*;
+import static fj.pre.Monoid.monoid;
 
 /**
  * A wrapper for functions of arity 1, that decorates them with higher-order functions.
@@ -320,7 +333,7 @@ public final class FW<A, B> implements F<A, B> {
    *
    * @return This function promoted to map over the left side of an Either.
    */
-  public <X> F<Either<A, X>, Either<B, X>> mapLeft() {
+  public <X> FW<Either<A, X>, Either<B, X>> mapLeft() {
     return $(Either.<A, X, B>leftMap_().f(f));
   }
 
@@ -329,7 +342,7 @@ public final class FW<A, B> implements F<A, B> {
    *
    * @return This function promoted to map over the right side of an Either.
    */
-  public <X> F<Either<X, A>, Either<X, B>> mapRight() {
+  public <X> FW<Either<X, A>, Either<X, B>> mapRight() {
     return $(Either.<X, A, B>rightMap_().f(f));
   }
 
@@ -338,12 +351,12 @@ public final class FW<A, B> implements F<A, B> {
    *
    * @return a function that returns the left side of a given Either, or this function applied to the right side.
    */
-  public F<Either<B, A>, B> onLeft() {
-    return new F<Either<B, A>, B>() {
+  public FW<Either<B, A>, B> onLeft() {
+    return $(new F<Either<B, A>, B>() {
       public B f(final Either<B, A> either) {
         return either.left().on(f);
       }
-    };
+    });
   }
 
   /**
@@ -351,11 +364,301 @@ public final class FW<A, B> implements F<A, B> {
    *
    * @return a function that returns the right side of a given Either, or this function applied to the left side.
    */
-  public F<Either<A, B>, B> onRight() {
-    return new F<Either<A, B>, B>() {
+  public FW<Either<A, B>, B> onRight() {
+    return $(new F<Either<A, B>, B>() {
       public B f(final Either<A, B> either) {
         return either.right().on(f);
       }
-    };
+    });
   }
+
+  /**
+   * Promotes this function to return its value in an Iterable.
+   *
+   * @return This function promoted to return its value in an Iterable.
+   */
+  public FW<A, IterableW<B>> iterable() {
+    return $(IterableW.<A, B>arrow().f(f));
+  }
+
+  /**
+   * Promotes this function to map over Iterables.
+   *
+   * @return This function promoted to map over Iterables.
+   */
+  public FW<Iterable<A>, IterableW<B>> mapIterable() {
+    return $(IterableW.<A, B>map().f(f)).o(IterableW.<A, Iterable<A>>wrap());
+  }
+
+  /**
+   * Promotes this function to return its value in a NonEmptyList.
+   *
+   * @return This function promoted to return its value in a NonEmptyList.
+   */
+  public FW<A, NonEmptyList<B>> nel() {
+    return $(NonEmptyList.<B>nel()).o(f);
+  }
+
+  /**
+   * Promotes this function to map over a NonEmptyList.
+   *
+   * @return This function promoted to map over a NonEmptyList.
+   */
+  public FW<NonEmptyList<A>, NonEmptyList<B>> mapNel() {
+    return $(new F<NonEmptyList<A>, NonEmptyList<B>>() {
+      public NonEmptyList<B> f(final NonEmptyList<A> list) {
+        return list.map(f);
+      }
+    });
+  }
+
+  /**
+   * Promotes this function to return its value in a Set.
+   *
+   * @param o An order for the set.
+   * @return This function promoted to return its value in a Set.
+   */
+  public FW<A, Set<B>> set(final Ord<B> o) {
+    return $(new F<A, Set<B>>() {
+      public Set<B> f(final A a) {
+        return Set.single(o, f.f(a));
+      }
+    });
+  }
+
+  /**
+   * Promotes this function to map over a Set.
+   *
+   * @param o An order for the resulting set.
+   * @return This function promoted to map over a Set.
+   */
+  public FW<Set<A>, Set<B>> mapSet(final Ord<B> o) {
+    return $(new F<Set<A>, Set<B>>() {
+      public Set<B> f(final Set<A> set) {
+        return set.map(o, f);
+      }
+    });
+  }
+
+  /**
+   * Promotes this function to return its value in a Tree.
+   *
+   * @return This function promoted to return its value in a Tree.
+   */
+  public FW<A, Tree<B>> tree() {
+    return $(new F<A, Tree<B>>() {
+      public Tree<B> f(final A a) {
+        return Tree.leaf(f.f(a));
+      }
+    });
+  }
+
+  /**
+   * Promotes this function to map over a Tree.
+   *
+   * @return This function promoted to map over a Tree.
+   */
+  public FW<Tree<A>, Tree<B>> mapTree() {
+    return $(Tree.<A, B>fmap_().f(f));
+  }
+
+  /**
+   * Returns a function that maps this function over a tree and folds it with the given monoid.
+   *
+   * @param m The monoid with which to fold the mapped tree.
+   * @return a function that maps this function over a tree and folds it with the given monoid.
+   */
+  public FW<Tree<A>, B> foldMapTree(final Monoid<B> m) {
+    return $(Tree.foldMap_(f, m));
+  }
+
+  /**
+   * Promotes this function to return its value in a TreeZipper.
+   *
+   * @return This function promoted to return its value in a TreeZipper.
+   */
+  public FW<A, TreeZipper<B>> treeZipper() {
+    return tree().andThen(TreeZipper.<B>fromTree());
+  }
+
+  /**
+   * Promotes this function to map over a TreeZipper.
+   *
+   * @return This function promoted to map over a TreeZipper.
+   */
+  public FW<TreeZipper<A>, TreeZipper<B>> mapTreeZipper() {
+    return $(new F<TreeZipper<A>, TreeZipper<B>>() {
+      public TreeZipper<B> f(final TreeZipper<A> zipper) {
+        return zipper.map(f);
+      }
+    });
+  }
+
+  /**
+   * Promotes this function so that it returns its result on the failure side of a Validation.
+   * Kleisli arrow for the Validation failure projection.
+   *
+   * @return This function promoted to return its result on the failure side of a Validation.
+   */
+  public <C> FW<A, Validation<B, C>> fail() {
+    return $(new F<A, Validation<B, C>>() {
+      public Validation<B, C> f(final A a) {
+        return Validation.fail(f.f(a));
+      }
+    });
+  }
+
+  /**
+   * Promotes this function so that it returns its result on the success side of an Validation.
+   * Kleisli arrow for the Validation success projection.
+   *
+   * @return This function promoted to return its result on the success side of an Validation.
+   */
+  public <C> FW<A, Validation<C, B>> success() {
+    return $(new F<A, Validation<C, B>>() {
+      public Validation<C, B> f(final A a) {
+        return Validation.success(f.f(a));
+      }
+    });
+  }
+
+  /**
+   * Promotes this function to map over the failure side of a Validation.
+   *
+   * @return This function promoted to map over the failure side of a Validation.
+   */
+  public <X> FW<Validation<A, X>, Validation<B, X>> mapFail() {
+    return $(new F<Validation<A, X>, Validation<B, X>>() {
+      public Validation<B, X> f(final Validation<A, X> validation) {
+        return validation.f().map(f);
+      }
+    });
+  }
+
+  /**
+   * Promotes this function to map over the success side of a Validation.
+   *
+   * @return This function promoted to map over the success side of a Validation.
+   */
+  public <X> FW<Validation<X, A>, Validation<X, B>> mapSuccess() {
+    return $(new F<Validation<X, A>, Validation<X, B>>() {
+      public Validation<X, B> f(final Validation<X, A> validation) {
+        return validation.map(f);
+      }
+    });
+  }
+
+  /**
+   * Returns a function that returns the failure side of a given Validation,
+   * or this function applied to the success side.
+   *
+   * @return a function that returns the failure side of a given Validation,
+   *         or this function applied to the success side.
+   */
+  public FW<Validation<B, A>, B> onFail() {
+    return $(new F<Validation<B, A>, B>() {
+      public B f(final Validation<B, A> v) {
+        return v.f().on(f);
+      }
+    });
+  }
+
+  /**
+   * Returns a function that returns the success side of a given Validation,
+   * or this function applied to the failure side.
+   *
+   * @return a function that returns the success side of a given Validation,
+   *         or this function applied to the failure side.
+   */
+  public FW<Validation<A, B>, B> onSuccess() {
+    return $(new F<Validation<A, B>, B>() {
+      public B f(final Validation<A, B> v) {
+        return v.on(f);
+      }
+    });
+  }
+
+  /**
+   * Promotes this function to return its value in a Zipper.
+   *
+   * @return This function promoted to return its value in a Zipper.
+   */
+  public FW<A, Zipper<B>> zipper() {
+    return stream().andThen(new F<Stream<B>, Zipper<B>>() {
+      public Zipper<B> f(final Stream<B> stream) {
+        return fromStream(stream).some();
+      }
+    });
+  }
+
+  /**
+   * Promotes this function to map over a Zipper.
+   *
+   * @return This function promoted to map over a Zipper.
+   */
+  public FW<Zipper<A>, Zipper<B>> mapZipper() {
+    return $(new F<Zipper<A>, Zipper<B>>() {
+      public Zipper<B> f(final Zipper<A> zipper) {
+        return zipper.map(f);
+      }
+    });
+  }
+
+  /**
+   * Promotes this function to map over an Equal as a contravariant functor.
+   *
+   * @return This function promoted to map over an Equal as a contravariant functor.
+   */
+  public FW<Equal<B>, Equal<A>> comapEqual() {
+    return $(new F<Equal<B>, Equal<A>>() {
+      public Equal<A> f(final Equal<B> equal) {
+        return equal.comap(f);
+      }
+    });
+  }
+
+  /**
+   * Promotes this function to map over a Hash as a contravariant functor.
+   *
+   * @return This function promoted to map over a Hash as a contravariant functor.
+   */
+  public FW<Hash<B>, Hash<A>> comapHash() {
+    return $(new F<Hash<B>, Hash<A>>() {
+      public Hash<A> f(final Hash<B> hash) {
+        return hash.comap(f);
+      }
+    });
+  }
+
+  /**
+   * Promotes this function to map over a Show as a contravariant functor.
+   *
+   * @return This function promoted to map over a Show as a contravariant functor.
+   */
+  public FW<Show<B>, Show<A>> comapShow() {
+    return $(new F<Show<B>, Show<A>>() {
+      public Show<A> f(final Show<B> s) {
+        return s.comap(f);
+      }
+    });
+  }
+
+  /**
+   * Promotes this function to map over the first element of a pair.
+   *
+   * @return This function promoted to map over the first element of a pair.
+   */
+  public <C> FW<P2<A, C>, P2<B, C>> mapFst() {
+    return $(P2.<A, C, B>map1_(f));
+  }
+
+  /**
+   * Promotes this function to map over the second element of a pair.
+   *
+   * @return This function promoted to map over the second element of a pair.
+   */
+  public <C> FW<P2<C, A>, P2<C, B>> mapSnd() {
+    return $(P2.<C, A, B>map2_(f));
+  }
+
 }
