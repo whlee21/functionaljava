@@ -688,4 +688,17 @@ public abstract class Option<A> implements Iterable<A> {
     });
   }
 
+  /**
+   * First-class join function.
+   *
+   * @return A function that joins an Option of an Option to make a single Option.
+   */
+  public static <A> F<Option<Option<A>>, Option<A>> join() {
+    return new F<Option<Option<A>>, Option<A>>() {
+      public Option<A> f(final Option<Option<A>> option) {
+        return join(option);
+      }
+    };
+  }
+
 }

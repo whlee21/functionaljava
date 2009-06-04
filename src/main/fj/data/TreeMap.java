@@ -1,13 +1,13 @@
 package fj.data;
 
 import static fj.Function.compose;
-import fj.P;
-import fj.P2;
-import fj.P3;
-import fj.F;
+import fj.*;
+import static fj.F2W.$$;
+import static fj.FW.$;
 import static fj.P.p;
 import static fj.data.IterableW.join;
 import static fj.data.List.iterableList;
+import static fj.data.Option.none;
 import fj.pre.Ord;
 
 import java.util.Iterator;
@@ -196,6 +196,26 @@ public final class TreeMap<K, V> implements Iterable<P2<K, V>> {
   public TreeMap<K, V> update(final K k, final F<V, V> f, final V v) {
     final P2<Boolean, TreeMap<K, V>> up = update(k, f);
     return up._1() ? up._2() : set(k, v);
+  }
+
+  /**
+   * Splits this TreeMap at the given key. Returns a triple of:
+   * <ul>
+   * <li>A set containing all the values of this map associated with keys less than the given key.</li>
+   * <li>An option of a value mapped to the given key, if it exists in this map, otherwise None.
+   * <li>A set containing all the values of this map associated with keys greater than the given key.</li>
+   * </ul>
+   *
+   * @param k A key at which to split this map.
+   * @return Two sets and an optional value, where all elements in the first set are mapped to keys less than the given
+   *         key in this map, all the elements in the second set are mapped to keys greater than the given key,
+   *         and the optional value is the value associated with the given key if present, otherwise None.
+   */
+  public P3<Set<V>, Option<V>, Set<V>> split(final K k) {
+    final FW<Set<P2<K, Option<V>>>, Set<V>> getSome = $(Option.<V>fromSome()).o(P2.<K, Option<V>>__2())
+        .mapSet(tree.ord().comap($$(P.<K, Option<V>>p2()).f(k).<V>o(Option.<V>some_())));
+    return tree.split(p(k, Option.<V>none())).map1(getSome).map3(getSome)
+        .map2($(Option.<V>join()).o($(P2.<K, Option<V>>__2()).mapOption()));
   }
 
 }
