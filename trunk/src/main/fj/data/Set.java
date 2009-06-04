@@ -392,7 +392,7 @@ public abstract class Set<A> implements Iterable<A> {
   }
 
   /**
-   * Returns a product-3 of:
+   * Splits this set at the given element. Returns a product-3 of:
    * <ul>
    * <li>A set containing all the elements of this set which are less than the given value.</li>
    * <li>An option of a value equal to the given value, if one was found in this set, otherwise None.
@@ -400,8 +400,9 @@ public abstract class Set<A> implements Iterable<A> {
    * </ul>
    *
    * @param a A value at which to split this set.
-   * @return A pair of sets where all elements in the first set are are less than the given value
-   *         and all the elements in the second set are greater than the given value.
+   * @return Two sets and an optional value, where all elements in the first set are less than the given value
+   *         and all the elements in the second set are greater than the given value, and the optional value is the
+   *         given value if found, otherwise None.
    */
   public P3<Set<A>, Option<A>, Set<A>> split(final A a) {
     if (isEmpty())

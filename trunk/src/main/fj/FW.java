@@ -43,6 +43,19 @@ public final class FW<A, B> implements F<A, B> {
   }
 
   /**
+   * First-class constructor for FW.
+   *
+   * @return A function that wraps a given function.
+   */
+  public static <A, B> FW<F<A, B>, FW<A, B>> $() {
+    return $(new F<F<A, B>, FW<A, B>>() {
+      public FW<A, B> f(final F<A, B> f) {
+        return $(f);
+      }
+    });
+  }
+
+  /**
    * Function application
    *
    * @param a The <code>A</code> to transform.
@@ -659,6 +672,19 @@ public final class FW<A, B> implements F<A, B> {
    */
   public <C> FW<P2<C, A>, P2<C, B>> mapSnd() {
     return $(P2.<C, A, B>map2_(f));
+  }
+
+  /**
+   * Promotes this function to map over both elements of a pair.
+   *
+   * @return This function promoted to map over both elements of a pair.
+   */
+  public FW<P2<A, A>, P2<B, B>> mapBoth() {
+    return $(new F<P2<A, A>, P2<B, B>>() {
+      public P2<B, B> f(final P2<A, A> aap2) {
+        return P2.map(FW.this, aap2);
+      }
+    });
   }
 
 }
