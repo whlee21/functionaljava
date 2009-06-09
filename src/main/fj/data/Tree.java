@@ -5,6 +5,7 @@ import fj.F2;
 import fj.P;
 import fj.P1;
 import fj.P2;
+import static fj.F2W.$$;
 import static fj.Function.*;
 import static fj.data.Stream.*;
 import fj.pre.Monoid;
@@ -277,8 +278,9 @@ public final class Tree<A> implements Iterable<A> {
 
   private static <A> Stream<String> drawSubTrees(final Show<A> s, final Stream<Tree<A>> ts) {
     return ts.isEmpty() ? Stream.<String>nil()
-        : ts.tail()._1().isEmpty() ? shift("`- ", "   ", ts.head().drawTree(s)).cons("|")
-            : shift("+- ", "|  ", ts.head().drawTree(s)).append(drawSubTrees(s, ts.tail()._1()));
+                        : ts.tail()._1().isEmpty() ? shift("`- ", "   ", ts.head().drawTree(s)).cons("|")
+                                                   : shift("+- ", "|  ", ts.head().drawTree(s))
+                                                       .append(drawSubTrees(s, ts.tail()._1()));
   }
 
   private static Stream<String> shift(final String f, final String o, final Stream<String> s) {
@@ -311,5 +313,29 @@ public final class Tree<A> implements Iterable<A> {
         return tree.draw(s);
       }
     });
+  }
+
+  /**
+   * Zips this tree with antother, using the given function. The resulting tree is the structural intersection
+   * of the two trees.
+   *
+   * @param bs A tree to zip this tree with.
+   * @param f  A function with which to zip together the two trees.
+   * @return A new tree of the results of applying the given function over this tree and the given tree, position-wise.
+   */
+  public <B, C> Tree<C> zipWith(final Tree<B> bs, final F2<A, B, C> f) {
+    return $$(f).zipTree().f(this, bs);
+  }
+
+  /**
+   * Zips this tree with antother, using the given function. The resulting tree is the structural intersection
+   * of the two trees.
+   *
+   * @param bs A tree to zip this tree with.
+   * @param f  A function with which to zip together the two trees.
+   * @return A new tree of the results of applying the given function over this tree and the given tree, position-wise.
+   */
+  public <B, C> Tree<C> zipWith(final Tree<B> bs, final F<A, F<B, C>> f) {
+    return zipWith(bs, uncurryF2(f));
   }
 }

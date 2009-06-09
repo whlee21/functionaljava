@@ -14,6 +14,7 @@ import fj.P;
 import fj.P1;
 import fj.P2;
 import fj.P3;
+import static fj.F2W.$$;
 import static fj.Function.*;
 import fj.function.Integers;
 
@@ -37,41 +38,41 @@ public class Zipper<A> {
 
 
   /**
-   * Creates a new StreamZipper with the given streams before and after the focus, and the given focused item.
+   * Creates a new Zipper with the given streams before and after the focus, and the given focused item.
    *
    * @param left  The stream of elements before the focus.
    * @param focus The element under focus.
    * @param right The stream of elements after the focus.
-   * @return a new StreamZipper with the given streams before and after the focus, and the given focused item.
+   * @return a new Zipper with the given streams before and after the focus, and the given focused item.
    */
   public static <A> Zipper<A> zipper(final Stream<A> left, final A focus, final Stream<A> right) {
     return new Zipper<A>(left, focus, right);
   }
 
   /**
-   * Creates a new StreamZipper from the given triple.
+   * Creates a new Zipper from the given triple.
    *
    * @param p A triple of the elements before the focus, the focus element, and the elements after the focus,
    *          respectively.
-   * @return a new StreamZipper created from the given triple.
+   * @return a new Zipper created from the given triple.
    */
   public static <A> Zipper<A> zipper(final P3<Stream<A>, A, Stream<A>> p) {
     return new Zipper<A>(p._1(), p._2(), p._3());
   }
 
   /**
-   * Returns the product-3 representation of this StreamZipper.
+   * Returns the product-3 representation of this Zipper.
    *
-   * @return the product-3 representation of this StreamZipper.
+   * @return the product-3 representation of this Zipper.
    */
   public P3<Stream<A>, A, Stream<A>> p() {
     return P.p(left, focus, right);
   }
 
   /**
-   * A first-class function that yields the product-3 representation of a given StreamZipper.
+   * A first-class function that yields the product-3 representation of a given Zipper.
    *
-   * @return A first-class function that yields the product-3 representation of a given StreamZipper.
+   * @return A first-class function that yields the product-3 representation of a given Zipper.
    */
   public static <A> F<Zipper<A>, P3<Stream<A>, A, Stream<A>>> p_() {
     return new F<Zipper<A>, P3<Stream<A>, A, Stream<A>>>() {
@@ -561,4 +562,28 @@ public class Zipper<A> {
     return right;
   }
 
+  /**
+   * Zips this Zipper with another, applying the given function lock-step over both zippers in both directions.
+   * The structure of the resulting Zipper is the structural intersection of the two Zippers.
+   *
+   * @param bs A Zipper to zip this one with.
+   * @param f  A function with which to zip together the two Zippers.
+   * @return The result of applying the given function over this Zipper and the given Zipper, location-wise.
+   */
+  public <B, C> Zipper<C> zipWith(final Zipper<B> bs, final F2<A, B, C> f) {
+    return $$(f).zipZipper().f(this, bs);
+  }
+
+
+  /**
+   * Zips this Zipper with another, applying the given function lock-step over both zippers in both directions.
+   * The structure of the resulting Zipper is the structural intersection of the two Zippers.
+   *
+   * @param bs A Zipper to zip this one with.
+   * @param f  A function with which to zip together the two Zippers.
+   * @return The result of applying the given function over this Zipper and the given Zipper, location-wise.
+   */
+  public <B, C> Zipper<C> zipWith(final Zipper<B> bs, final F<A, F<B, C>> f) {
+    return zipWith(bs, uncurryF2(f));
+  }
 }

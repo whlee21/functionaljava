@@ -8,6 +8,8 @@ import fj.P1;
 import fj.P2;
 import fj.P3;
 import fj.P4;
+import static fj.Function.*;
+import static fj.F2W.$$;
 import fj.function.Booleans;
 import static fj.data.Option.some;
 import static fj.data.Option.none;
@@ -15,9 +17,6 @@ import static fj.data.Tree.node;
 import static fj.data.Tree.unfoldTree;
 import static fj.data.Stream.nil;
 import static fj.data.Stream.unfold;
-import static fj.Function.curry;
-import static fj.Function.flip;
-import static fj.Function.compose;
 import fj.pre.Equal;
 import fj.pre.Show;
 import static fj.pre.Show.*;
@@ -191,7 +190,7 @@ public class TreeZipper<A> {
    */
   public Option<TreeZipper<A>> left() {
     return lefts.isEmpty() ? Option.<TreeZipper<A>>none()
-        : some(treeZipper(lefts.head(), lefts.tail()._1(), rights.cons(tree), parents));
+                           : some(treeZipper(lefts.head(), lefts.tail()._1(), rights.cons(tree), parents));
   }
 
   /**
@@ -202,7 +201,7 @@ public class TreeZipper<A> {
    */
   public Option<TreeZipper<A>> right() {
     return rights.isEmpty() ? Option.<TreeZipper<A>>none()
-        : some(treeZipper(rights.head(), lefts.cons(tree), rights.tail()._1(), parents));
+                            : some(treeZipper(rights.head(), lefts.cons(tree), rights.tail()._1(), parents));
   }
 
   /**
@@ -213,7 +212,7 @@ public class TreeZipper<A> {
   public Option<TreeZipper<A>> firstChild() {
     final Stream<Tree<A>> ts = tree.subForest()._1();
     return ts.isEmpty() ? Option.<TreeZipper<A>>none()
-        : some(treeZipper(ts.head(), Stream.<Tree<A>>nil(), ts.tail()._1(), downParents()));
+                        : some(treeZipper(ts.head(), Stream.<Tree<A>>nil(), ts.tail()._1(), downParents()));
   }
 
   /**
@@ -224,7 +223,7 @@ public class TreeZipper<A> {
   public Option<TreeZipper<A>> lastChild() {
     final Stream<Tree<A>> ts = tree.subForest()._1().reverse();
     return ts.isEmpty() ? Option.<TreeZipper<A>>none()
-        : some(treeZipper(ts.head(), ts.tail()._1(), Stream.<Tree<A>>nil(), downParents()));
+                        : some(treeZipper(ts.head(), ts.tail()._1(), Stream.<Tree<A>>nil(), downParents()));
   }
 
   /**
@@ -257,8 +256,8 @@ public class TreeZipper<A> {
           public Option<P3<Stream<Tree<A>>, Tree<A>, Stream<Tree<A>>>> f(final Stream<Tree<A>> acc,
                                                                          final Stream<Tree<A>> xs) {
             return p.f(xs.head()) ? some(P.p(acc, xs.head(), xs.tail()._1()))
-                : xs.isNotEmpty() ? f(acc.cons(xs.head()), xs.tail()._1())
-                    : Option.<P3<Stream<Tree<A>>, Tree<A>, Stream<Tree<A>>>>none();
+                                  : xs.isNotEmpty() ? f(acc.cons(xs.head()), xs.tail()._1())
+                                                    : Option.<P3<Stream<Tree<A>>, Tree<A>, Stream<Tree<A>>>>none();
           }
         };
     for (final P3<Stream<Tree<A>>, Tree<A>, Stream<Tree<A>>> ltr
@@ -276,8 +275,8 @@ public class TreeZipper<A> {
                                                                     final Stream<A> xs,
                                                                     final int n) {
     return n == 0 ? some(P.p(acc, xs))
-        : xs.isNotEmpty() ? splitChildren(acc.cons(xs.head()), xs.tail()._1(), n - 1)
-            : Option.<P2<Stream<A>, Stream<A>>>none();
+                  : xs.isNotEmpty() ? splitChildren(acc.cons(xs.head()), xs.tail()._1(), n - 1)
+                                    : Option.<P2<Stream<A>, Stream<A>>>none();
   }
 
   private static <A> Stream<P3<Stream<Tree<A>>, A, Stream<Tree<A>>>> lp3nil() {
@@ -302,8 +301,8 @@ public class TreeZipper<A> {
    */
   public static <A> Option<TreeZipper<A>> fromForest(final Stream<Tree<A>> ts) {
     return ts.isNotEmpty()
-        ? some(treeZipper(ts.head(), Stream.<Tree<A>>nil(), ts.tail()._1(), TreeZipper.<A>lp3nil()))
-        : Option.<TreeZipper<A>>none();
+           ? some(treeZipper(ts.head(), Stream.<Tree<A>>nil(), ts.tail()._1(), TreeZipper.<A>lp3nil()))
+           : Option.<TreeZipper<A>>none();
   }
 
   /**
@@ -695,5 +694,29 @@ public class TreeZipper<A> {
         return az.findChild(f);
       }
     };
+  }
+
+  /**
+   * Zips this TreeZipper with another, applying the given function lock-step over both zippers in all directions.
+   * The structure of the resulting TreeZipper is the structural intersection of the two TreeZippers.
+   *
+   * @param bs A TreeZipper to zip this one with.
+   * @param f  A function with which to zip together the two TreeZippers.
+   * @return The result of applying the given function over this TreeZipper and the given TreeZipper, location-wise.
+   */
+  public <B, C> TreeZipper<C> zipWith(final TreeZipper<B> bs, final F2<A, B, C> f) {
+    return $$(f).zipTreeZipper().f(this, bs);
+  }
+
+  /**
+   * Zips this TreeZipper with another, applying the given function lock-step over both zippers in all directions.
+   * The structure of the resulting TreeZipper is the structural intersection of the two TreeZippers.
+   *
+   * @param bs A TreeZipper to zip this one with.
+   * @param f  A function with which to zip together the two TreeZippers.
+   * @return The result of applying the given function over this TreeZipper and the given TreeZipper, location-wise.
+   */
+  public <B, C> TreeZipper<C> zipWith(final TreeZipper<B> bs, final F<A, F<B, C>> f) {
+    return zipWith(bs, uncurryF2(f));
   }
 }

@@ -965,7 +965,7 @@ public abstract class Stream<A> implements Iterable<A> {
   }
 
   /**
-   * Returns a string from the given stream of characters. The invers of this function is {@link
+   * Returns a string from the given stream of characters. The inverse of this function is {@link
    * #fromString(String)}.
    *
    * @param cs The stream of characters to produce the string from.
