@@ -18,9 +18,25 @@ import fj.data.Tree;
 import fj.data.TreeZipper;
 import fj.data.Validation;
 import fj.data.Zipper;
+import static fj.data.Stream.iterableStream;
 import static fj.data.Zipper.fromStream;
-import fj.pre.*;
-import static fj.pre.Monoid.monoid;
+import fj.pre.Equal;
+import fj.pre.Hash;
+import fj.pre.Monoid;
+import fj.pre.Ord;
+import fj.pre.Show;
+
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.PriorityQueue;
+import java.util.TreeSet;
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.CopyOnWriteArraySet;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.PriorityBlockingQueue;
+import java.util.concurrent.SynchronousQueue;
 
 /**
  * A wrapper for functions of arity 1, that decorates them with higher-order functions.
@@ -685,6 +701,122 @@ public final class FW<A, B> implements F<A, B> {
         return P2.map(FW.this, aap2);
       }
     });
+  }
+
+  /**
+   * Maps this function over a SynchronousQueue.
+   *
+   * @param as A SynchronousQueue to map this function over.
+   * @return A new SynchronousQueue with this function applied to each element.
+   */
+  public SynchronousQueue<B> map(final SynchronousQueue<A> as) {
+    final SynchronousQueue<B> bs = new SynchronousQueue<B>();
+    bs.addAll(iterableStream(as).map(this).toCollection());
+    return bs;
+  }
+
+
+  /**
+   * Maps this function over a PriorityBlockingQueue.
+   *
+   * @param as A PriorityBlockingQueue to map this function over.
+   * @return A new PriorityBlockingQueue with this function applied to each element.
+   */
+  public PriorityBlockingQueue<B> map(final PriorityBlockingQueue<A> as) {
+    return new PriorityBlockingQueue<B>(iterableStream(as).map(this).toCollection());
+  }
+
+  /**
+   * Maps this function over a LinkedBlockingQueue.
+   *
+   * @param as A LinkedBlockingQueue to map this function over.
+   * @return A new LinkedBlockingQueue with this function applied to each element.
+   */
+  public LinkedBlockingQueue<B> map(final LinkedBlockingQueue<A> as) {
+    return new LinkedBlockingQueue<B>(iterableStream(as).map(this).toCollection());
+  }
+
+  /**
+   * Maps this function over a CopyOnWriteArraySet.
+   *
+   * @param as A CopyOnWriteArraySet to map this function over.
+   * @return A new CopyOnWriteArraySet with this function applied to each element.
+   */
+  public CopyOnWriteArraySet<B> map(final CopyOnWriteArraySet<A> as) {
+    return new CopyOnWriteArraySet<B>(iterableStream(as).map(this).toCollection());
+  }
+
+  /**
+   * Maps this function over a CopyOnWriteArrayList.
+   *
+   * @param as A CopyOnWriteArrayList to map this function over.
+   * @return A new CopyOnWriteArrayList with this function applied to each element.
+   */
+  public CopyOnWriteArrayList<B> map(final CopyOnWriteArrayList<A> as) {
+    return new CopyOnWriteArrayList<B>(iterableStream(as).map(this).toCollection());
+  }
+
+  /**
+   * Maps this function over a ConcurrentLinkedQueue.
+   *
+   * @param as A ConcurrentLinkedQueue to map this function over.
+   * @return A new ConcurrentLinkedQueue with this function applied to each element.
+   */
+  public ConcurrentLinkedQueue<B> map(final ConcurrentLinkedQueue<A> as) {
+    return new ConcurrentLinkedQueue<B>(iterableStream(as).map(this).toCollection());
+  }
+
+  /**
+   * Maps this function over an ArrayBlockingQueue.
+   *
+   * @param as An ArrayBlockingQueue to map this function over.
+   * @return A new ArrayBlockingQueue with this function applied to each element.
+   */
+  public ArrayBlockingQueue<B> map(final ArrayBlockingQueue<A> as) {
+    final ArrayBlockingQueue<B> bs = new ArrayBlockingQueue<B>(as.size());
+    bs.addAll(iterableStream(as).map(this).toCollection());
+    return bs;
+  }
+
+
+  /**
+   * Maps this function over a TreeSet.
+   *
+   * @param as A TreeSet to map this function over.
+   * @return A new TreeSet with this function applied to each element.
+   */
+  public TreeSet<B> map(final TreeSet<A> as) {
+    return new TreeSet<B>(iterableStream(as).map(this).toCollection());
+  }
+
+  /**
+   * Maps this function over a PriorityQueue.
+   *
+   * @param as A PriorityQueue to map this function over.
+   * @return A new PriorityQueue with this function applied to each element.
+   */
+  public PriorityQueue<B> map(final PriorityQueue<A> as) {
+    return new PriorityQueue<B>(iterableStream(as).map(this).toCollection());
+  }
+
+  /**
+   * Maps this function over a LinkedList.
+   *
+   * @param as A LinkedList to map this function over.
+   * @return A new LinkedList with this function applied to each element.
+   */
+  public LinkedList<B> map(final LinkedList<A> as) {
+    return new LinkedList<B>(iterableStream(as).map(this).toCollection());
+  }
+
+  /**
+   * Maps this function over an ArrayList.
+   *
+   * @param as An ArrayList to map this function over.
+   * @return A new ArrayList with this function applied to each element.
+   */
+  public ArrayList<B> map(final ArrayList<A> as) {
+    return new ArrayList<B>(iterableStream(as).map(this).toCollection());
   }
 
 }
