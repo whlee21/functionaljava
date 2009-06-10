@@ -1,12 +1,8 @@
 package fj.control.parallel;
 
-import fj.Effect;
-import fj.F;
-import fj.F2;
-import fj.P;
-import fj.P1;
-import fj.P2;
-import fj.Unit;
+import fj.*;
+import static fj.FW.$;
+import static fj.P.p;
 import static fj.Function.curry;
 import static fj.Function.identity;
 import static fj.control.parallel.Actor.actor;
@@ -15,9 +11,9 @@ import static fj.control.parallel.QueueActor.queueActor;
 import fj.data.Either;
 import fj.data.List;
 import fj.data.Option;
-import fj.data.Stream;
 import static fj.data.Option.none;
 import static fj.data.Option.some;
+import fj.data.Stream;
 
 import java.util.LinkedList;
 import java.util.Queue;
@@ -264,12 +260,45 @@ public final class Promise<A> {
   }
 
   /**
-   * First-class version of the sequence function.
+   * First-class version of the sequence function through a List.
    *
    * @param s The strategy with which to sequence a given list of promises.
    * @return A function that turns a list of promises into a single promise of a list.
    */
   public static <A> F<List<Promise<A>>, Promise<List<A>>> sequence(final Strategy<Unit> s) {
+    return new F<List<Promise<A>>, Promise<List<A>>>() {
+      public Promise<List<A>> f(final List<Promise<A>> as) {
+        return sequence(s, as);
+      }
+    };
+  }
+
+  /**
+   * Turns a Stream of promises into a single promise of a Stream.
+   *
+   * @param s  The strategy with which to sequence the promises.
+   * @param as The Stream of promises to transform.
+   * @return A single promise for the given Stream.
+   */
+  public static <A> Promise<Stream<A>> sequence(final Strategy<Unit> s, final Stream<Promise<A>> as) {
+    return join(foldRightS(s, curry(new F2<Promise<A>, P1<Promise<Stream<A>>>, Promise<Stream<A>>>() {
+      public Promise<Stream<A>> f(final Promise<A> o, final P1<Promise<Stream<A>>> p) {
+        return o.bind(new F<A, Promise<Stream<A>>>() {
+          public Promise<Stream<A>> f(final A a) {
+            return p._1().fmap(Stream.<A>cons_().f(a));
+          }
+        });
+      }
+    }), promise(s, P.p(Stream.<A>nil()))).f(as));
+  }
+
+  /**
+   * First-class version of the sequence function through a Stream.
+   *
+   * @param s The strategy with which to sequence a given Stream of promises.
+   * @return A function that turns a list of promises into a single promise of a Stream..
+   */
+  public static <A> F<List<Promise<A>>, Promise<List<A>>> sequenceS(final Strategy<Unit> s) {
     return new F<List<Promise<A>>, Promise<List<A>>>() {
       public Promise<List<A>> f(final List<Promise<A>> as) {
         return sequence(s, as);
@@ -288,8 +317,30 @@ public final class Promise<A> {
   public static <A, B> F<List<A>, Promise<B>> foldRight(final Strategy<Unit> s, final F<A, F<B, B>> f, final B b) {
     return new F<List<A>, Promise<B>>() {
       public Promise<B> f(final List<A> as) {
-        return as.isEmpty() ? promise(s, P.p(b)) : liftM2(f).f(promise(s, P.p(as.head()))).f(
+        return as.isEmpty() ? promise(s, p(b)) : liftM2(f).f(promise(s, P.p(as.head()))).f(
             join(s, P1.curry(this).f(as.tail())));
+      }
+    };
+  }
+
+  /**
+   * Performs a right-fold reduction across a Stream in constant stack space.
+   *
+   * @param s The strategy with which to fold the Stream.
+   * @param f The function to apply on each element of the Stream.
+   * @param b The beginning value to start the application from.
+   * @return The final result after the right-fold reduction.
+   */
+  public static <A, B> F<Stream<A>, Promise<B>> foldRightS(final Strategy<Unit> s, final F<A, F<P1<B>, B>> f,
+                                                           final B b) {
+    return new F<Stream<A>, Promise<B>>() {
+      public Promise<B> f(final Stream<A> as) {
+        return as.isEmpty() ? promise(s, P.p(b)) : liftM2(f).f(promise(s, P.p(as.head()))).f(
+            Promise.<P1<B>>join(s, new P1<Promise<P1<B>>>() {
+              public Promise<P1<B>> _1() {
+                return f(as.tail()._1()).fmap(P.<B>p1());
+              }
+            }));
       }
     };
   }
@@ -366,12 +417,12 @@ public final class Promise<A> {
    */
   public <B> Stream<B> sequenceW(final Stream<F<Promise<A>, B>> fs) {
     return fs.isEmpty()
-        ? Stream.<B>nil()
-        : Stream.cons(fs.head().f(this), new P1<Stream<B>>() {
-          public Stream<B> _1() {
-            return sequenceW(fs.tail()._1());
-          }
-        });
+           ? Stream.<B>nil()
+           : Stream.cons(fs.head().f(this), new P1<Stream<B>>() {
+             public Stream<B> _1() {
+               return sequenceW(fs.tail()._1());
+             }
+           });
   }
 
 }
