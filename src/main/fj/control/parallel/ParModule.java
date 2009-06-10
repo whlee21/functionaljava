@@ -5,9 +5,6 @@ import fj.P1;
 import fj.F;
 import fj.Effect;
 import fj.data.List;
-import fj.data.IterableW;
-import fj.data.Conversions;
-import static fj.data.IterableW.wrap;
 import static fj.data.List.iterableList;
 import static fj.FW.$;
 
@@ -39,7 +36,7 @@ public final class ParModule {
    * @param p A product to evaluate concurrently.
    * @return A Promise of the value of the given product, that can be claimed in the future.
    */
-  public <A> Promise<A> promise(P1<A> p) {
+  public <A> Promise<A> promise(final P1<A> p) {
     return Promise.promise(strategy, p);
   }
 
