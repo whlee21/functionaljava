@@ -12,6 +12,9 @@ import fj.P1;
  * Given some effect, the Actor performs the effect on its messages using its Strategy, transforming them
  * into unit-products. The unit-product represents a possibly running computation which is executing the effect.
  * <p/>
+ * <b>NOTE:</b> An value of this type may process more than one message at a time, depending on its Strategy,
+ * and so is generally not thread safe unless its Effect is. For an actor that processes only one message at a time,
+ * see {@link QueueActor}.
  * Author: Runar
  */
 public final class Actor<A> {

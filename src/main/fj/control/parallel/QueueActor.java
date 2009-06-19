@@ -45,7 +45,7 @@ public final class QueueActor<A> {
 
   private P1<Unit> work() {
     return suspended.compareAndSet(!mbox.isEmpty(), false) ?
-        act.act(Unit.unit()) : P.p(Unit.unit());
+           act.act(Unit.unit()) : P.p(Unit.unit());
   }
 
   /**
