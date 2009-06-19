@@ -11,6 +11,7 @@ import static fj.F2W.$$;
 import static fj.FW.$;
 import static fj.Function.curry;
 import static fj.Function.uncurryF2;
+import static fj.Function.vary;
 import static fj.control.parallel.Promise.liftM2;
 import fj.data.Array;
 import fj.data.IterableW;
@@ -418,8 +419,8 @@ public final class ParModule {
   /**
    * Zips two arrays together with a given function, in parallel.
    *
-   * @param as A array to zip with another in parallel.
-   * @param bs A array to zip with another in parallel.
+   * @param as An array to zip with another in parallel.
+   * @param bs An array to zip with another in parallel.
    * @param f  A function with which to zip two arrays in parallel.
    * @return A Promise of a new array with the results of applying the given function across the two arrays, stepwise.
    */
@@ -429,6 +430,19 @@ public final class ParModule {
         return stream.toArray();
       }
     });
+  }
+
+  /**
+   * Zips two iterables together with a given function, in parallel.
+   *
+   * @param as An iterable to zip with another in parallel.
+   * @param bs An iterable to zip with another in parallel.
+   * @param f  A function with which to zip two iterables in parallel.
+   * @return A Promise of a new iterable with the results of applying the given function across the two iterables, stepwise.
+   */
+  public <A, B, C> Promise<Iterable<C>> parZipWith(final Iterable<A> as, final Iterable<B> bs, final F<A, F<B, C>> f) {
+    return parZipWith(iterableStream(as), iterableStream(bs), f).fmap(
+        Function.<Stream<C>, Iterable<C>>vary(Function.<Iterable<C>>identity()));
   }
 
   /**
