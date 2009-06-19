@@ -1,14 +1,7 @@
 package fj.data;
 
 import static fj.Bottom.error;
-import fj.Effect;
-import fj.F;
-import fj.F2;
-import fj.F3;
-import fj.P;
-import fj.P1;
-import fj.P2;
-import fj.Unit;
+import fj.*;
 import static fj.Function.curry;
 import static fj.Function.constant;
 import static fj.Function.identity;
@@ -833,6 +826,19 @@ public abstract class List<A> implements Iterable<A> {
    */
   public <B, C> List<C> zipWith(final List<B> bs, final F<A, F<B, C>> f) {
     return isEmpty() || bs.isEmpty() ? List.<C>nil() : cons(f.f(head()).f(bs.head()), tail().zipWith(bs.tail(), f));
+  }
+
+  /**
+   * Zips this list with the given list using the given function to produce a new list. If this list
+   * and the given list have different lengths, then the longer list is normalised so this function
+   * never fails.
+   *
+   * @param bs The list to zip this list with.
+   * @param f  The function to zip this list and the given list with.
+   * @return A new list with a length the same as the shortest of this list and the given list.
+   */
+  public <B, C> List<C> zipWith(final List<B> bs, final F2<A, B, C> f) {
+    return zipWith(bs, curry(f));
   }
 
   /**

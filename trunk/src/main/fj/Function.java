@@ -1027,28 +1027,28 @@ public final class Function {
   public static <A, B> F<B, A> join(final F<B, F<B, A>> f) {
     return bind(f, Function.<F<B, A>>identity());
   }
-  
-  
+
+
   /**
    * Partial application of the second argument to the supplied function to get a function of type
    * <tt>A -> C</tt>. Same as <tt>flip(f).f(b)</tt>.
-   * 
+   *
    * @param f The function to partially apply.
    * @param b The value to apply to the function.
    * @return A new function based on <tt>f</tt> with its second argument applied.
    */
-  public static <A, B, C> F<A,C> partialApply2(final F<A, F<B, C>> f, final B b) {
+  public static <A, B, C> F<A, C> partialApply2(final F<A, F<B, C>> f, final B b) {
     return new F<A, C>() {
       public C f(final A a) {
         return uncurryF2(f).f(a, b);
       }
     };
   }
-  
+
   /**
    * Partial application of the third argument to the supplied function to get a function of type
    * <tt>A -> B -> D</tt>.
-   * 
+   *
    * @param f The function to partially apply.
    * @param c The value to apply to the function.
    * @return A new function based on <tt>f</tt> with its third argument applied.
@@ -1064,11 +1064,11 @@ public final class Function {
       }
     };
   }
-  
+
   /**
    * Partial application of the fourth argument to the supplied function to get a function of type
    * <tt>A -> B -> C -> E</tt>.
-   * 
+   *
    * @param f The function to partially apply.
    * @param d The value to apply to the function.
    * @return A new function based on <tt>f</tt> with its fourth argument applied.
@@ -1088,16 +1088,17 @@ public final class Function {
       }
     };
   }
-  
+
   /**
    * Partial application of the fifth argument to the supplied function to get a function of type
    * <tt>A -> B -> C -> D -> F$</tt>.
-   * 
+   *
    * @param f The function to partially apply.
    * @param e The value to apply to the function.
    * @return A new function based on <tt>f</tt> with its fifth argument applied.
    */
-  public static <A, B, C, D, E, F$> F<A, F<B, F<C, F<D, F$>>>> partialApply5(final F<A, F<B, F<C, F<D, F<E, F$>>>>>f, final E e) {
+  public static <A, B, C, D, E, F$> F<A, F<B, F<C, F<D, F$>>>> partialApply5(final F<A, F<B, F<C, F<D, F<E, F$>>>>> f,
+                                                                             final E e) {
     return new F<A, F<B, F<C, F<D, F$>>>>() {
       public F<B, F<C, F<D, F$>>> f(final A a) {
         return new F<B, F<C, F<D, F$>>>() {
@@ -1116,17 +1117,17 @@ public final class Function {
       }
     };
   }
-  
+
   /**
    * Partial application of the sixth argument to the supplied function to get a function of type
    * <tt>A -> B -> C -> D -> E -> G</tt>.
-   * 
-   * @param f The function to partially apply.
+   *
+   * @param f  The function to partially apply.
    * @param f$ The value to apply to the function.
    * @return A new function based on <tt>f</tt> with its sixth argument applied.
    */
   public static <A, B, C, D, E, F$, G> F<A, F<B, F<C, F<D, F<E, G>>>>> partialApply6(
-      final F<A, F<B, F<C, F<D, F<E, F<F$, G>>>>>>f, final F$ f$) {
+      final F<A, F<B, F<C, F<D, F<E, F<F$, G>>>>>> f, final F$ f$) {
     return new F<A, F<B, F<C, F<D, F<E, G>>>>>() {
       public F<B, F<C, F<D, F<E, G>>>> f(final A a) {
         return new F<B, F<C, F<D, F<E, G>>>>() {
@@ -1149,17 +1150,17 @@ public final class Function {
       }
     };
   }
-  
+
   /**
    * Partial application of the seventh argument to the supplied function to get a function of type
    * <tt>A -> B -> C -> D -> E -> F$ -> H</tt>.
-   * 
+   *
    * @param f The function to partially apply.
    * @param g The value to apply to the function.
    * @return A new function based on <tt>f</tt> with its seventh argument applied.
    */
   public static <A, B, C, D, E, F$, G, H> F<A, F<B, F<C, F<D, F<E, F<F$, H>>>>>> partialApply7(
-      final F<A, F<B, F<C, F<D, F<E, F<F$, F<G, H>>>>>>>f, final G g) {
+      final F<A, F<B, F<C, F<D, F<E, F<F$, F<G, H>>>>>>> f, final G g) {
     return new F<A, F<B, F<C, F<D, F<E, F<F$, H>>>>>>() {
       public F<B, F<C, F<D, F<E, F<F$, H>>>>> f(final A a) {
         return new F<B, F<C, F<D, F<E, F<F$, H>>>>>() {
@@ -1186,17 +1187,17 @@ public final class Function {
       }
     };
   }
-  
+
   /**
    * Partial application of the eigth argument to the supplied function to get a function of type
    * <tt>A -> B -> C -> D -> E -> F$ -> G -> I</tt>.
-   * 
+   *
    * @param f The function to partially apply.
    * @param h The value to apply to the function.
    * @return A new function based on <tt>f</tt> with its eigth argument applied.
    */
   public static <A, B, C, D, E, F$, G, H, I> F<A, F<B, F<C, F<D, F<E, F<F$, F<G, I>>>>>>> partialApply8(
-      final F<A, F<B, F<C, F<D, F<E, F<F$, F<G, F<H, I>>>>>>>>f, final H h) {
+      final F<A, F<B, F<C, F<D, F<E, F<F$, F<G, F<H, I>>>>>>>> f, final H h) {
     return new F<A, F<B, F<C, F<D, F<E, F<F$, F<G, I>>>>>>>() {
       public F<B, F<C, F<D, F<E, F<F$, F<G, I>>>>>> f(final A a) {
         return new F<B, F<C, F<D, F<E, F<F$, F<G, I>>>>>>() {

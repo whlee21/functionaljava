@@ -17,6 +17,7 @@ import fj.control.parallel.Promise;
 import static fj.control.parallel.Promise.promise;
 import fj.control.parallel.Strategy;
 import static fj.data.Array.array;
+import static fj.data.Array.mkArray;
 import static fj.data.Option.none;
 import static fj.data.Option.some;
 import fj.function.Booleans;
@@ -28,7 +29,6 @@ import fj.pre.Equal;
 import static fj.pre.Ordering.*;
 
 import java.util.AbstractCollection;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
@@ -832,6 +832,19 @@ public abstract class Stream<A> implements Iterable<A> {
     return bs.zapp(zapp(repeat(f)));
   }
 
+  /**
+   * Zips this stream with the given stream using the given function to produce a new stream. If
+   * this stream and the given stream have different lengths, then the longer stream is normalised
+   * so this function never fails.
+   *
+   * @param bs The stream to zip this stream with.
+   * @param f  The function to zip this stream and the given stream with.
+   * @return A new stream with a length the same as the shortest of this stream and the given
+   *         stream.
+   */
+  public <B, C> Stream<C> zipWith(final Stream<B> bs, final F2<A, B, C> f) {
+    return zipWith(bs, curry(f));
+  }
 
   /**
    * Partially-applied version of zipWith.
@@ -915,6 +928,7 @@ public abstract class Stream<A> implements Iterable<A> {
     return as;
   }
 
+
   /**
    * Returns a array projection of this stream.
    *
@@ -922,13 +936,14 @@ public abstract class Stream<A> implements Iterable<A> {
    */
   @SuppressWarnings({"unchecked"})
   public Array<A> toArray() {
-    final ArrayList<A> a = new ArrayList<A>();
-
-    for (Stream<A> x = this; x.isNotEmpty(); x = x.tail()._1()) {
-      a.add(x.head());
+    final Object[] a = new Object[length()];
+    Stream<A> x = this;
+    for (int i = 0; i < length(); i++) {
+      a[i] = x.head();
+      x = x.tail()._1();
     }
 
-    return array(a.toArray((A[]) new Object[a.size()]));
+    return mkArray(a);
   }
 
   /**

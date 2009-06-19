@@ -818,5 +818,4 @@ public final class FW<A, B> implements F<A, B> {
   public ArrayList<B> map(final ArrayList<A> as) {
     return new ArrayList<B>(iterableStream(as).map(this).toCollection());
   }
-
 }
