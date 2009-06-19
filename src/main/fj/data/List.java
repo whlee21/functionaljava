@@ -1,7 +1,14 @@
 package fj.data;
 
 import static fj.Bottom.error;
-import fj.*;
+import fj.Effect;
+import fj.F;
+import fj.F2;
+import fj.F3;
+import fj.P;
+import fj.P1;
+import fj.P2;
+import fj.Unit;
 import static fj.Function.curry;
 import static fj.Function.constant;
 import static fj.Function.identity;
@@ -991,6 +998,42 @@ public abstract class List<A> implements Iterable<A> {
         return !eq.eq(a, head());
       }
     }).nub(eq));
+  }
+
+  /**
+   * Removes duplicates according to the given equality. This function is O(n).
+   *
+   * @param o An ordering for the elements.
+   * @return A list without duplicates.
+   */
+  public List<A> nub(final Ord<A> o) {
+    return sort(o).group(o.equal()).map(List.<A>head_());
+  }
+
+  /**
+   * First-class head function.
+   *
+   * @return A function that gets the head of a given list.
+   */
+  public static <A> F<List<A>, A> head_() {
+    return new F<List<A>, A>() {
+      public A f(final List<A> list) {
+        return list.head();
+      }
+    };
+  }
+
+  /**
+   * First-class tail function.
+   *
+   * @return A function that gets the tail of a given list.
+   */
+  public static <A> F<List<A>, List<A>> tail_() {
+    return new F<List<A>, List<A>>() {
+      public List<A> f(final List<A> list) {
+        return list.tail();
+      }
+    };
   }
 
   /**
