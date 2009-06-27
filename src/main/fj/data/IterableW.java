@@ -326,6 +326,20 @@ public final class IterableW<A> implements Iterable<A> {
   }
 
   /**
+   * Zips this iterable with the given iterable using the given function to produce a new iterable. If
+   * this iterable and the given iterable have different lengths, then the longer iterable is normalised
+   * so this function never fails.
+   *
+   * @param bs The iterable to zip this iterable with.
+   * @param f  The function to zip this iterable and the given iterable with.
+   * @return A new iterable with a length the same as the shortest of this iterable and the given
+   *         iterable.
+   */
+  public <B, C> Iterable<C> zipWith(final Iterable<B> bs, final F2<A, B, C> f) {
+    return zipWith(bs, curry(f));
+  }
+
+  /**
    * Zips this iterable with the given iterable to produce a iterable of pairs. If this iterable and the
    * given iterable have different lengths, then the longer iterable is normalised so this function
    * never fails.

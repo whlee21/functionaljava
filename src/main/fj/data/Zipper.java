@@ -7,13 +7,7 @@ import static fj.data.Option.none;
 import fj.pre.Ord;
 import fj.pre.Equal;
 import fj.pre.Show;
-import fj.Function;
-import fj.F;
-import fj.F2;
-import fj.P;
-import fj.P1;
-import fj.P2;
-import fj.P3;
+import fj.*;
 import static fj.F2W.$$;
 import static fj.Function.*;
 import fj.function.Integers;
@@ -58,6 +52,19 @@ public class Zipper<A> {
    */
   public static <A> Zipper<A> zipper(final P3<Stream<A>, A, Stream<A>> p) {
     return new Zipper<A>(p._1(), p._2(), p._3());
+  }
+
+  /**
+   * First-class constructor of zippers.
+   *
+   * @return A function that yields a new zipper given streams on the left and right and a focus element.
+   */
+  public static <A> F3<Stream<A>, A, Stream<A>, Zipper<A>> zipper() {
+    return new F3<Stream<A>, A, Stream<A>, Zipper<A>>() {
+      public Zipper<A> f(final Stream<A> l, final A a, final Stream<A> r) {
+        return zipper(l, a, r);
+      }
+    };
   }
 
   /**

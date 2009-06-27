@@ -435,6 +435,18 @@ public abstract class List<A> implements Iterable<A> {
   }
 
   /**
+   * Binds the given function across each element of this list and the given list with a final
+   * join.
+   *
+   * @param lb A given list to bind the given function with.
+   * @param f  The function to apply to each element of this list and the given list.
+   * @return A new list after performing the map, then final join.
+   */
+  public <B, C> List<C> bind(final List<B> lb, final F2<A, B, C> f) {
+    return bind(lb, curry(f));
+  }
+
+  /**
    * Promotes the given function of arity-2 to a function on lists.
    *
    * @param f The functio to promote to a function on lists.
@@ -1001,7 +1013,7 @@ public abstract class List<A> implements Iterable<A> {
   }
 
   /**
-   * Removes duplicates according to the given equality. This function is O(n).
+   * Removes duplicates according to the given ordering. This function is O(n).
    *
    * @param o An ordering for the elements.
    * @return A list without duplicates.

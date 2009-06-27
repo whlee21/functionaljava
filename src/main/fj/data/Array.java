@@ -336,6 +336,30 @@ public final class Array<A> implements Iterable<A> {
   }
 
   /**
+   * Binds the given function across each element of this array and the given array with a final
+   * join.
+   *
+   * @param ab A given array to bind the given function with.
+   * @param f  The function to apply to each element of this array and the given array.
+   * @return A new array after performing the map, then final join.
+   */
+  public <B, C> Array<C> bind(final Array<B> sb, final F<A, F<B, C>> f) {
+    return sb.apply(map(f));
+  }
+
+  /**
+   * Binds the given function across each element of this array and the given array with a final
+   * join.
+   *
+   * @param ab A given array to bind the given function with.
+   * @param f  The function to apply to each element of this array and the given array.
+   * @return A new array after performing the map, then final join.
+   */
+  public <B, C> Array<C> bind(final Array<B> sb, final F2<A, B, C> f) {
+    return bind(sb, curry(f));
+  }
+
+  /**
    * Performs function application within an array (applicative functor pattern).
    *
    * @param lf The array of functions to apply.
@@ -563,6 +587,19 @@ public final class Array<A> implements Iterable<A> {
     }
 
     return x;
+  }
+
+  /**
+   * Zips this array with the given array using the given function to produce a new array. If this
+   * array and the given array have different lengths, then the longer array is normalised so this
+   * function never fails.
+   *
+   * @param bs The array to zip this array with.
+   * @param f  The function to zip this array and the given array with.
+   * @return A new array with a length the same as the shortest of this array and the given array.
+   */
+  public <B, C> Array<C> zipWith(final Array<B> bs, final F2<A, B, C> f) {
+    return zipWith(bs, curry(f));
   }
 
   /**

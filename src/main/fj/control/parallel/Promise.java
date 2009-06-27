@@ -1,7 +1,12 @@
 package fj.control.parallel;
 
-import fj.*;
-import static fj.FW.$;
+import fj.Effect;
+import fj.F;
+import fj.F2;
+import fj.P;
+import fj.P1;
+import fj.P2;
+import fj.Unit;
 import static fj.P.p;
 import static fj.Function.curry;
 import static fj.Function.identity;
@@ -304,6 +309,17 @@ public final class Promise<A> {
         return sequence(s, as);
       }
     };
+  }
+
+  /**
+   * Transforms a product of a promise to a promise of a product.
+   *
+   * @param s The strategy with which to traverse the promise.
+   * @param p A product of a promise to traverse.
+   * @return A promised product.
+   */
+  public static <A> Promise<P1<A>> sequence(final Strategy<Unit> s, final P1<Promise<A>> p) {
+    return join(promise(s, p)).fmap(P.<A>p1());
   }
 
   /**
