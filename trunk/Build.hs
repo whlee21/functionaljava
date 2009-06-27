@@ -15,7 +15,8 @@ javaco = "build/classes/javac"
 scalaco = "build/classes/scalac"
 depso = "build/classes/deps"
 testo = "build/classes/test"
-cp = "classpath" ~?? [javaco, scalaco, depso, testo]
+resources = "resources"
+cp = "classpath" ~?? [javaco, scalaco, depso, testo, resources]
 
 javac'' d = J.javac {
   J.directory = Just d
