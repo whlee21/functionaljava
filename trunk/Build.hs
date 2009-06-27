@@ -49,4 +49,4 @@ repl = scala cp
 
 testit = ts >>>> scala (cp ++ " fj.Tests")
 
--- todo get dependencies, scaladoc, javadoc, run tests, jar, release
+-- todo get dependencies, scaladoc, javadoc, jar, release
