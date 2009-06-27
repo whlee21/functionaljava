@@ -2,7 +2,9 @@ package fj.data;
 
 import fj.Effect;
 import fj.F;
+import fj.FW;
 import static fj.data.Option.some;
+import static fj.data.Option.somes;
 
 import java.util.Collection;
 import java.util.Iterator;
@@ -102,6 +104,45 @@ public final class NonEmptyList<A> implements Iterable<A> {
   }
 
   /**
+   * Returns a NonEmptyList of the sublists of this list.
+   *
+   * @return a NonEmptyList of the sublists of this list.
+   */
+  public NonEmptyList<NonEmptyList<A>> sublists() {
+    return fromList(
+        somes(toList().toStream().substreams()
+            .map(FW.<List<A>, Option<NonEmptyList<A>>>$(new F<List<A>, Option<NonEmptyList<A>>>() {
+              public Option<NonEmptyList<A>> f(final List<A> list) {
+                return fromList(list);
+              }
+            }).o(Conversions.<A>Stream_List())).toList())).some();
+  }
+
+  /**
+   * Returns a NonEmptyList of the tails of this list. A list is considered a tail of itself for the purpose of this
+   * function (Comonad pattern).
+   *
+   * @return A NonEmptyList of the tails of this list.
+   */
+  public NonEmptyList<NonEmptyList<A>> tails() {
+    return fromList(somes(toList().tails().map(new F<List<A>, Option<NonEmptyList<A>>>() {
+      public Option<NonEmptyList<A>> f(final List<A> list) {
+        return fromList(list);
+      }
+    }))).some();
+  }
+
+  /**
+   * Maps the given function across the tails of this list (comonad pattern).
+   *
+   * @param f The function to map across the tails of this list.
+   * @return The results of applying the given function to the tails of this list, as a NonEmptyList.
+   */
+  public <B> NonEmptyList<B> mapTails(final F<NonEmptyList<A>, B> f) {
+    return tails().map(f);
+  }
+
+  /**
    * Returns a <code>List</code> projection of this list.
    *
    * @return A <code>List</code> projection of this list.
@@ -174,7 +215,7 @@ public final class NonEmptyList<A> implements Iterable<A> {
    */
   public static <A> Option<NonEmptyList<A>> fromList(final List<A> as) {
     return as.isEmpty() ?
-        Option.<NonEmptyList<A>>none() :
-        some(nel(as.head(), as.tail()));
+           Option.<NonEmptyList<A>>none() :
+           some(nel(as.head(), as.tail()));
   }
 }
