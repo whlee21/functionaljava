@@ -420,6 +420,18 @@ public abstract class Stream<A> implements Iterable<A> {
   }
 
   /**
+   * Binds the given function across each element of this stream and the given stream with a final
+   * join.
+   *
+   * @param sb A given stream to bind the given function with.
+   * @param f  The function to apply to each element of this stream and the given stream.
+   * @return A new stream after performing the map, then final join.
+   */
+  public <B, C> Stream<C> bind(final Stream<B> sb, final F2<A, B, C> f) {
+    return bind(sb, curry(f));
+  }
+
+  /**
    * Binds the given function across each element of this stream and the given streams with a final
    * join.
    *

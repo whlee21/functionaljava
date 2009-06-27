@@ -86,6 +86,19 @@ public final class Tree<A> implements Iterable<A> {
   }
 
   /**
+   * First-class constructor of trees.
+   *
+   * @return A function that constructs an n-ary tree given a root and a subforest or length n.
+   */
+  public static <A> F<A, F<P1<Stream<Tree<A>>>, Tree<A>>> node() {
+    return curry(new F2<A, P1<Stream<Tree<A>>>, Tree<A>>() {
+      public Tree<A> f(final A a, final P1<Stream<Tree<A>>> p1) {
+        return node(a, p1);
+      }
+    });
+  }
+
+  /**
    * Returns the root element of the tree.
    *
    * @return The root element of the tree.

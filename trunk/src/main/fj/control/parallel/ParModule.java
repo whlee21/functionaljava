@@ -4,20 +4,25 @@ import fj.Effect;
 import fj.F;
 import fj.F2;
 import fj.Function;
+import fj.P;
 import fj.P1;
 import fj.P2;
+import fj.P3;
+import fj.P4;
 import fj.Unit;
 import static fj.F2W.$$;
 import static fj.FW.$;
 import static fj.Function.curry;
 import static fj.Function.uncurryF2;
-import static fj.Function.vary;
 import static fj.control.parallel.Promise.liftM2;
 import fj.data.Array;
 import fj.data.IterableW;
 import fj.data.List;
 import fj.data.Option;
 import fj.data.Stream;
+import fj.data.Tree;
+import fj.data.TreeZipper;
+import fj.data.Zipper;
 import static fj.data.Option.some;
 import static fj.data.Stream.iterableStream;
 import fj.pre.Monoid;
@@ -197,6 +202,16 @@ public final class ParModule {
   }
 
   /**
+   * Traverses a product-1 inside a promise.
+   *
+   * @param p A product-1 of a promised value.
+   * @return A promise of a product of the value promised by the argument.
+   */
+  public <A> Promise<P1<A>> sequence(final P1<Promise<A>> p) {
+    return Promise.sequence(strategy, p);
+  }
+
+  /**
    * Takes a Promise-valued function and applies it to each element
    * in the given List, yielding a promise of a List of results.
    *
@@ -244,6 +259,17 @@ public final class ParModule {
         return mapM(stream, f);
       }
     });
+  }
+
+  /**
+   * Maps a concurrent function over a Product-1 inside a Promise.
+   *
+   * @param a A product-1 across which to map.
+   * @param f A concurrent function to map over the product inside a promise.
+   * @return A promised product of the result of mapping the given function over the given product.
+   */
+  public <A, B> Promise<P1<B>> mapM(final P1<A> a, final F<A, Promise<B>> f) {
+    return sequence(a.map(f));
   }
 
   /**
@@ -348,6 +374,64 @@ public final class ParModule {
   }
 
   /**
+   * Maps a function across a Zipper in parallel.
+   *
+   * @param za A Zipper to map across in parallel.
+   * @param f  A function to map across the given Zipper.
+   * @return A promise of a new Zipper with the given function applied to each element.
+   */
+  public <A, B> Promise<Zipper<B>> parMap(final Zipper<A> za, final F<A, B> f) {
+    return parMap(za.rights(), f)
+        .apply(promise(f).f(za.focus()).apply(parMap(za.lefts(), f).fmap(curry(Zipper.<B>zipper()))));
+  }
+
+  /**
+   * Maps a function across a Tree in parallel.
+   *
+   * @param ta A Tree to map across in parallel.
+   * @param f  A function to map across the given Tree.
+   * @return A promise of a new Tree with the given function applied to each element.
+   */
+  public <A, B> Promise<Tree<B>> parMap(final Tree<A> ta, final F<A, B> f) {
+    return mapM(ta.subForest(), this.<Tree<A>, Tree<B>>mapStream().f(this.<A, B>parMapTree().f(f)))
+        .apply(promise(f).f(ta.root()).fmap(Tree.<B>node()));
+  }
+
+  /**
+   * A first-class function that maps across a Tree in parallel.
+   *
+   * @return A function that maps a given function across a Tree in parallel.
+   */
+  public <A, B> F<F<A, B>, F<Tree<A>, Promise<Tree<B>>>> parMapTree() {
+    return curry(new F2<F<A, B>, Tree<A>, Promise<Tree<B>>>() {
+      public Promise<Tree<B>> f(final F<A, B> abf, final Tree<A> tree) {
+        return parMap(tree, abf);
+      }
+    });
+  }
+
+  /**
+   * Maps a function across a TreeZipper in parallel.
+   *
+   * @param za A TreeZipper to map across in parallel.
+   * @param f  A function to map across the given TreeZipper.
+   * @return A promise of a new TreeZipper with the given function applied to each element of the tree.
+   */
+  public <A, B> Promise<TreeZipper<B>> parMap(final TreeZipper<A> za, final F<A, B> f) {
+    final F<Tree<A>, Tree<B>> tf = Tree.<A, B>fmap_().f(f);
+    final P4<Tree<A>, Stream<Tree<A>>, Stream<Tree<A>>, Stream<P3<Stream<Tree<A>>, A, Stream<Tree<A>>>>> p = za.p();
+    return mapM(p._4(),
+                new F<P3<Stream<Tree<A>>, A, Stream<Tree<A>>>, Promise<P3<Stream<Tree<B>>, B, Stream<Tree<B>>>>>() {
+                  public Promise<P3<Stream<Tree<B>>, B, Stream<Tree<B>>>> f(
+                      final P3<Stream<Tree<A>>, A, Stream<Tree<A>>> p3) {
+                    return parMap(p3._3(), tf).apply(promise(f).f(p3._2()).apply(
+                        parMap(p3._1(), tf).fmap(P.<Stream<Tree<B>>, B, Stream<Tree<B>>>p3())));
+                  }
+                }).apply(parMap(za.rights(), tf).apply(
+        parMap(za.lefts(), tf).apply(parMap(p._1(), f).fmap(TreeZipper.<B>treeZipper()))));
+  }
+
+  /**
    * Binds a list-valued function across a list in parallel, concatenating the results into a new list.
    *
    * @param as A list to bind across in parallel.
@@ -355,7 +439,7 @@ public final class ParModule {
    * @return A promise of a new List with the given function bound across its elements.
    */
   public <A, B> Promise<List<B>> parFlatMap(final List<A> as, final F<A, List<B>> f) {
-    return parMap(as, f).fmap(List.<B>join());
+    return parFoldMap(as, f, Monoid.<B>listMonoid());
   }
 
   /**
@@ -366,7 +450,7 @@ public final class ParModule {
    * @return A promise of a new Stream with the given function bound across its elements.
    */
   public <A, B> Promise<Stream<B>> parFlatMap(final Stream<A> as, final F<A, Stream<B>> f) {
-    return parMap(as, f).fmap(Stream.<B>join());
+    return parFoldMap(as, f, Monoid.<B>streamMonoid());
   }
 
   /**
@@ -483,4 +567,59 @@ public final class ParModule {
       }
     });
   }
+
+  /**
+   * Maps with the given function across chunks of the given Iterable in parallel, while folding with
+   * the given monoid. The Iterable is split into chunks according to the given chunking function,
+   * the given map function is mapped over all chunks simultaneously, but over each chunk sequentially.
+   * All chunks are summed concurrently and the sums are then summed sequentially.
+   *
+   * @param as       An Iterable to chunk, then map over and reduce.
+   * @param map      The function to map over the given Iterable.
+   * @param reduce   The monoid with which to sum the results.
+   * @param chunking A function describing how the Iterable should be split into chunks. Should return the first chunk
+   *                 and the rest of the Iterable.
+   * @return A promise of a result of mapping and folding in parallel.
+   */
+  public <A, B> Promise<B> parFoldMap(final Iterable<A> as, final F<A, B> map, final Monoid<B> reduce,
+                                      final F<Iterable<A>, P2<Iterable<A>, Iterable<A>>> chunking) {
+    return parFoldMap(iterableStream(as), map, reduce, new F<Stream<A>, P2<Stream<A>, Stream<A>>>() {
+      public P2<Stream<A>, Stream<A>> f(final Stream<A> stream) {
+        final F<Iterable<A>, Stream<A>> is = new F<Iterable<A>, Stream<A>>() {
+          public Stream<A> f(final Iterable<A> iterable) {
+            return iterableStream(iterable);
+          }
+        };
+        return chunking.f(stream).map1(is).map2(is);
+      }
+    });
+  }
+
+  /**
+   * Maps with the given function across the given iterable in parallel, while folding with
+   * the given monoid.
+   *
+   * @param as     An Iterable to map over and reduce.
+   * @param map    The function to map over the given Iterable.
+   * @param reduce The Monoid with which to sum the results.
+   * @return A promise of a result of mapping and folding in parallel.
+   */
+  public <A, B> Promise<B> parFoldMap(final Iterable<A> as, final F<A, B> map, final Monoid<B> reduce) {
+    return parFoldMap(iterableStream(as), map, reduce);
+  }
+
+
+  /**
+   * Maps the given function across all positions of the given zipper in parallel.
+   *
+   * @param za A zipper to extend the given function across.
+   * @param f  A function to extend across the given zipper.
+   * @return A promise of a new zipper of the results of applying the given function to all positions of the given
+   *         zipper.
+   */
+  public <A, B> Promise<Zipper<B>> parExtend(final Zipper<A> za, final F<Zipper<A>, B> f) {
+    final Zipper<Promise<B>> x = za.cobind(promise(f));
+    return sequence(x.rights()).apply(x.focus().apply(sequence(x.lefts()).fmap(curry(Zipper.<B>zipper()))));
+  }
+
 }
