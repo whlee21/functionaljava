@@ -218,4 +218,17 @@ public final class TreeMap<K, V> implements Iterable<P2<K, V>> {
         .map2($(Option.<V>join()).o($(P2.<K, Option<V>>__2()).mapOption()));
   }
 
+  /**
+   * Maps the given function across the values of this TreeMap.
+   *
+   * @param f A function to apply to the values of this TreeMap.
+   * @return A new TreeMap with the values transformed by the given function.
+   */
+  public <W> TreeMap<K, W> map(final F<V, W> f) {
+    final F<P2<K, Option<V>>, P2<K, Option<W>>> g = P2.map2_($(f).mapOption());
+    final FW<K, P2<K, Option<V>>> coord = $$(P.<K, Option<V>>p2()).flip().f(Option.<V>none());
+    final Ord<K> o = tree.ord().comap(coord);
+    return new TreeMap<K, W>(tree.map(TreeMap.<K, Option<W>>ord(o), g));
+  }
+
 }

@@ -4,7 +4,16 @@ import static fj.FW.$;
 import static fj.Function.curry;
 import static fj.Function.uncurryF2;
 import fj.control.parallel.Promise;
-import fj.data.*;
+import fj.data.Array;
+import fj.data.IterableW;
+import fj.data.List;
+import fj.data.NonEmptyList;
+import fj.data.Option;
+import fj.data.Set;
+import fj.data.Stream;
+import fj.data.Tree;
+import fj.data.TreeZipper;
+import fj.data.Zipper;
 import static fj.data.TreeZipper.treeZipper;
 import static fj.data.Zipper.zipper;
 import static fj.data.IterableW.wrap;
@@ -156,7 +165,7 @@ public final class F2W<A, B, C> implements F2<A, B, C>, F<A, F<B, C>> {
   public F2W<NonEmptyList<A>, NonEmptyList<B>, NonEmptyList<C>> nel() {
     return $$(new F2<NonEmptyList<A>, NonEmptyList<B>, NonEmptyList<C>>() {
       public NonEmptyList<C> f(final NonEmptyList<A> as, final NonEmptyList<B> bs) {
-        return NonEmptyList.fromList(as.toList().bind(bs.toList(), F2W.this)).some();
+        return NonEmptyList.fromList(as.toList().bind(bs.toList(), f)).some();
       }
     });
   }
@@ -196,7 +205,7 @@ public final class F2W<A, B, C> implements F2<A, B, C>, F<A, F<B, C>> {
   public F2W<Stream<A>, Stream<B>, Stream<C>> stream() {
     return $$(new F2<Stream<A>, Stream<B>, Stream<C>>() {
       public Stream<C> f(final Stream<A> as, final Stream<B> bs) {
-        return as.bind(bs, F2W.this);
+        return as.bind(bs, f);
       }
     });
   }
@@ -227,7 +236,7 @@ public final class F2W<A, B, C> implements F2<A, B, C>, F<A, F<B, C>> {
   public F2W<Array<A>, Array<B>, Array<C>> zipArray() {
     return $$(new F2<Array<A>, Array<B>, Array<C>>() {
       public Array<C> f(final Array<A> as, final Array<B> bs) {
-        return as.zipWith(bs, F2W.this);
+        return as.zipWith(bs, f);
       }
     });
   }
@@ -240,7 +249,7 @@ public final class F2W<A, B, C> implements F2<A, B, C>, F<A, F<B, C>> {
   public F2W<Iterable<A>, Iterable<B>, Iterable<C>> zipIterable() {
     return $$(new F2<Iterable<A>, Iterable<B>, Iterable<C>>() {
       public Iterable<C> f(final Iterable<A> as, final Iterable<B> bs) {
-        return wrap(as).zipWith(bs, F2W.this);
+        return wrap(as).zipWith(bs, f);
       }
     });
   }
@@ -253,7 +262,7 @@ public final class F2W<A, B, C> implements F2<A, B, C>, F<A, F<B, C>> {
   public F2W<List<A>, List<B>, List<C>> zipList() {
     return $$(new F2<List<A>, List<B>, List<C>>() {
       public List<C> f(final List<A> as, final List<B> bs) {
-        return as.zipWith(bs, F2W.this);
+        return as.zipWith(bs, f);
       }
     });
   }
@@ -267,7 +276,7 @@ public final class F2W<A, B, C> implements F2<A, B, C>, F<A, F<B, C>> {
   public F2W<Stream<A>, Stream<B>, Stream<C>> zipStream() {
     return $$(new F2<Stream<A>, Stream<B>, Stream<C>>() {
       public Stream<C> f(final Stream<A> as, final Stream<B> bs) {
-        return as.zipWith(bs, F2W.this);
+        return as.zipWith(bs, f);
       }
     });
   }
@@ -280,7 +289,7 @@ public final class F2W<A, B, C> implements F2<A, B, C>, F<A, F<B, C>> {
   public F2W<NonEmptyList<A>, NonEmptyList<B>, NonEmptyList<C>> zipNel() {
     return $$(new F2<NonEmptyList<A>, NonEmptyList<B>, NonEmptyList<C>>() {
       public NonEmptyList<C> f(final NonEmptyList<A> as, final NonEmptyList<B> bs) {
-        return NonEmptyList.fromList(as.toList().zipWith(bs.toList(), F2W.this)).some();
+        return NonEmptyList.fromList(as.toList().zipWith(bs.toList(), f)).some();
       }
     });
   }
@@ -294,7 +303,7 @@ public final class F2W<A, B, C> implements F2<A, B, C>, F<A, F<B, C>> {
   public F2W<Set<A>, Set<B>, Set<C>> zipSet(final Ord<C> o) {
     return $$(new F2<Set<A>, Set<B>, Set<C>>() {
       public Set<C> f(final Set<A> as, final Set<B> bs) {
-        return iterableSet(o, as.toStream().zipWith(bs.toStream(), F2W.this));
+        return iterableSet(o, as.toStream().zipWith(bs.toStream(), f));
       }
     });
   }

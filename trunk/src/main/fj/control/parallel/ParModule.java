@@ -18,6 +18,7 @@ import static fj.control.parallel.Promise.liftM2;
 import fj.data.Array;
 import fj.data.IterableW;
 import fj.data.List;
+import fj.data.NonEmptyList;
 import fj.data.Option;
 import fj.data.Stream;
 import fj.data.Tree;
@@ -292,6 +293,21 @@ public final class ParModule {
     return curry(new F2<F<A, B>, List<A>, Promise<List<B>>>() {
       public Promise<List<B>> f(final F<A, B> abf, final List<A> list) {
         return parMap(list, abf);
+      }
+    });
+  }
+
+  /**
+   * Maps across a nonempty list in parallel.
+   *
+   * @param as A NonEmptyList to map across in parallel.
+   * @param f  A function to map across the given NonEmptyList.
+   * @return A Promise of a new NonEmptyList with the given function applied to each element.
+   */
+  public <A, B> Promise<NonEmptyList<B>> parMap(final NonEmptyList<A> as, final F<A, B> f) {
+    return mapM(as.toList(), promise(f)).fmap(new F<List<B>, NonEmptyList<B>>() {
+      public NonEmptyList<B> f(final List<B> list) {
+        return NonEmptyList.fromList(list).some();
       }
     });
   }
@@ -618,8 +634,42 @@ public final class ParModule {
    *         zipper.
    */
   public <A, B> Promise<Zipper<B>> parExtend(final Zipper<A> za, final F<Zipper<A>, B> f) {
-    final Zipper<Promise<B>> x = za.cobind(promise(f));
-    return sequence(x.rights()).apply(x.focus().apply(sequence(x.lefts()).fmap(curry(Zipper.<B>zipper()))));
+    return parMap(za.positions(), f);
+  }
+
+  /**
+   * Maps the given function across all subtrees of the given Tree in parallel.
+   *
+   * @param ta A tree to extend the given function across.
+   * @param f  A function to extend across the given Tree.
+   * @return A promise of a new Tree of the results of applying the given function to all subtrees of the given Tree.
+   */
+  public <A, B> Promise<Tree<B>> parExtend(final Tree<A> ta, final F<Tree<A>, B> f) {
+    return parMap(ta.cojoin(), f);
+  }
+
+  /**
+   * Maps the given function across all positions of the given TreeZipper in parallel.
+   *
+   * @param za A TreeZipper to extend the given function across.
+   * @param f  A function to extend across the given TreeZipper.
+   * @return A promise of a new TreeZipper of the results of applying the given function to all positions of the
+   *         given TreeZipper.
+   */
+  public <A, B> Promise<TreeZipper<B>> parExtend(final TreeZipper<A> za, final F<TreeZipper<A>, B> f) {
+    return parMap(za.positions(), f);
+  }
+
+  /**
+   * Maps the given function across all sublists of the given NonEmptyList in parallel.
+   *
+   * @param as A NonEmptyList to extend the given function across.
+   * @param f  A function to extend across the given NonEmptyList
+   * @return A promise of a new NonEmptyList of the results of applying the given function to all sublists of the
+   *         given NonEmptyList.
+   */
+  public <A, B> Promise<NonEmptyList<B>> parExtend(final NonEmptyList<A> as, final F<NonEmptyList<A>, B> f) {
+    return parMap(as.tails(), f);
   }
 
 }
