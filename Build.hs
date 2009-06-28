@@ -96,4 +96,4 @@ sdc v = j >=>=> scaladoc'' scaladoco v
 
 sd v = copyFile (ds // "script.js") (scaladoco // "script.js") >> fj >>>> (sdc v ->- src)
 
--- todo get dependencies, jar, release
+-- todo get jar, release
