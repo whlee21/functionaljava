@@ -22,11 +22,23 @@ import fj.pre.Show;
 import static fj.pre.Show.*;
 import static fj.pre.Equal.*;
 
+import java.util.Iterator;
+
 /**
  * Provides a zipper structure for rose trees, which is a Tree supplied with a location within that tree.
  * Provides navigation, insertion, deletion, and memorization of visited locations within a tree.
  */
-public class TreeZipper<A> {
+public class TreeZipper<A> implements Iterable<TreeZipper<A>> {
+
+  /**
+   * Returns an iterator of all the positions of this TreeZipper. Exists for use with the foreach syntax.
+   *
+   * @return An iterator of all the positions of this TreeZipper.
+   */
+  public Iterator<TreeZipper<A>> iterator() {
+    return positions().toTree().iterator();
+  }
+
   private final Tree<A> tree;
   private final Stream<Tree<A>> lefts;
   private final Stream<Tree<A>> rights;
