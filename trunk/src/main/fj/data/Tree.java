@@ -31,7 +31,7 @@ public final class Tree<A> implements Iterable<A> {
    * @return A iterator for this tree.
    */
   public Iterator<A> iterator() {
-    return toCollection().iterator();
+    return flatten().iterator();
   }
 
   private final A root;

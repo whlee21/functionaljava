@@ -12,6 +12,8 @@ import static fj.F2W.$$;
 import static fj.Function.*;
 import fj.function.Integers;
 
+import java.util.Iterator;
+
 /**
  * Provides a pointed stream, which is a non-empty zipper-like stream structure that tracks an index (focus)
  * position in a stream. Focus can be moved forward and backwards through the stream, elements can be inserted
@@ -19,7 +21,7 @@ import fj.function.Integers;
  * <p/>
  * Based on the pointedlist library by Jeff Wheeler.
  */
-public class Zipper<A> {
+public class Zipper<A> implements Iterable<Zipper<A>> {
   private final Stream<A> left;
   private final A focus;
   private final Stream<A> right;
@@ -593,4 +595,11 @@ public class Zipper<A> {
   public <B, C> Zipper<C> zipWith(final Zipper<B> bs, final F<A, F<B, C>> f) {
     return zipWith(bs, uncurryF2(f));
   }
+
+  /**
+   * Returns an iterator of all the positions of this Zipper, starting from the leftmost position.
+   *
+   * @return An iterator of all the positions of this Zipper, starting from the leftmost position.
+   */
+  public Iterator<Zipper<A>> iterator() { return positions().toStream().iterator(); }
 }
