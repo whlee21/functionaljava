@@ -53,7 +53,7 @@ repl = scala cp
 testit = ts >>>> scala (cp ++ " fj.Tests")
 
 -- todo stylesheetfile
-scaladoc'' d v = Sd.scaladoc {
+scaladoc'' d v = scaladoc {
   Sd.directory = Just d,
   doctitle = Just ("Functional Java " ++ v ++ " API Specification"),
   header = Just "<div><p><em>Copyright 2008 - 2009 Tony Morris, Runar Bjarnason, Tom Adams, Brad Clow, Ricky Clarkson</em></p>This software is released under an open source BSD licence.</div>",
