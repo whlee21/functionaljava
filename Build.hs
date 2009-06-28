@@ -16,7 +16,7 @@ deps = ["src" // "deps-test"]
 test = ["src" // "test"]
 
 javaco = "build" // "classes" // "javac"
-javadoco = "build" // "classes" // "javadoc"
+javadoco = "build" // "javadoc"
 scalaco = "build" // "classes" // "scalac"
 scaladoco = "build" // "scaladoc"
 depso = "build" // "classes" // "deps"
@@ -66,6 +66,10 @@ javadoc'' d v = javadoc {
   Jd.header = hd
 }
 
+jdc v = javadoc'' javadoco v
+
+jd v = jdc v ->- src
+
 -- todo stylesheetfile
 scaladoc'' d v = scaladoc {
   Sd.directory = Just d,
@@ -78,4 +82,4 @@ sdc v = j >=>=> scaladoc'' scaladoco v
 
 sd v = fj >>>> (sdc v ->- src)
 
--- todo get dependencies, javadoc, jar, release
+-- todo get dependencies, jar, release
