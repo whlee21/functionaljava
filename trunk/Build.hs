@@ -115,4 +115,4 @@ archive = let o = "build" // "jar"
                         rs <- let p = fileName /~? ".*" in find p p resources >>= filterM doesFileExist
                         jar ("-cfM " ++ j ++ ' ' : s (map (\k -> "-C " ++ k ++ " .") d) ++ ' ' : s rs)
 
--- todo get jar, release
+-- todo get release
