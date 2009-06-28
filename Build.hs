@@ -25,6 +25,7 @@ scalaco = "build" // "classes" // "scalac"
 scaladoco = "build" // "scaladoc"
 depso = "build" // "classes" // "deps"
 testo = "build" // "classes" // "test"
+
 resources = "resources"
 cp = "classpath" ~?? [javaco, scalaco, depso, testo, resources]
 wt v = Just ("Functional Java " ++ v)
@@ -105,6 +106,7 @@ sd v = copyFile (ds // "script.js") (scaladoco // "script.js") >> fj >>>> (sdc v
 jar k = system ("jar " ++ k)
 
 -- resources directory needs special treatment
+-- use zip-archive package?
 archive = let o = "build" // "jar"
               j = o // "functionaljava.jar"
               d = [javaco, scalaco]
