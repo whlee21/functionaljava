@@ -9,8 +9,11 @@ import Lastik.Scala.Scaladoc
 import Lastik.Runner
 import Lastik.Output
 import Lastik.Util
+import Data.List hiding (find)
+import Control.Monad
 import System.Cmd
 import System.Directory
+import System.FilePath.Find
 
 src = ["src" // "main", "src" // "package-info"]
 deps = ["src" // "deps-test"]
@@ -29,7 +32,9 @@ dt v = Just ("Functional Java " ++ v ++ " API Specification")
 hd = Just "<div><p><em>Copyright 2008 - 2009 Tony Morris, Runar Bjarnason, Tom Adams, Brad Clow, Ricky Clarkson</em></p>This software is released under an open source BSD licence.</div>"
 ds = ".deps"
 
-dependencies = do createDirectoryIfMissing True ds
+mkdir = createDirectoryIfMissing True
+
+dependencies = do mkdir ds
                   mapM_ (\d -> system ("wget -c --directory " ++ ds ++ ' ' : d)) k
   where
   k = map ("http://projects.tmorris.net/public/standards/artifacts/1.30/" ++) ["javadoc-style/javadoc-style.css", "scaladoc-style/script.js", "scaladoc-style/style.css"] ++ ["http://software.tmorris.net/artifacts//package-list-j2se/1.5.0/package-list"]
@@ -62,7 +67,7 @@ tj = s >=>=> d >=>=> scalac'' testo
 
 ts = dep >>>> fjs >>>> (tj +->- test)
 
--- todo need a scala function in Lastik
+-- todo scala function in Lastik
 scala k = system ("scala " ++ k)
 
 repl = scala cp
@@ -95,5 +100,17 @@ scaladoc'' d v = scaladoc {
 sdc v = j >=>=> scaladoc'' scaladoco v
 
 sd v = copyFile (ds // "script.js") (scaladoco // "script.js") >> fj >>>> (sdc v ->- src)
+
+-- todo jar function for Lastik
+jar k = system ("jar " ++ k)
+
+-- resources directory needs special treatment
+archive = let o = "build" // "jar"
+              j = o // "functionaljava.jar"
+              d = [javaco, scalaco]
+              s = intercalate " "
+          in ts >>>> do mkdir o
+                        rs <- let p = fileName /~? ".*" in find p p resources >>= filterM doesFileExist
+                        jar ("-cfM " ++ j ++ ' ' : s (map (\k -> "-C " ++ k ++ " .") d) ++ ' ' : s rs)
 
 -- todo get jar, release
