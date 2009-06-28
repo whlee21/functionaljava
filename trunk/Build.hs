@@ -9,15 +9,15 @@ import Lastik.Output
 import Lastik.Util
 import System.Cmd
 
-src = ["src/main", "src/package-info"]
-deps = ["src/deps-test"]
-test = ["src/test"]
+src = ["src" // "main", "src" // "package-info"]
+deps = ["src" // "deps-test"]
+test = ["src" // "test"]
 
-javaco = "build/classes/javac"
-scalaco = "build/classes/scalac"
-scaladoco = "build/scaladoc"
-depso = "build/classes/deps"
-testo = "build/classes/test"
+javaco = "build" // "classes" // "javac"
+scalaco = "build" // "classes" // "scalac"
+scaladoco = "build" // "scaladoc"
+depso = "build" // "classes" // "deps"
+testo = "build" // "classes" // "test"
 resources = "resources"
 cp = "classpath" ~?? [javaco, scalaco, depso, testo, resources]
 
