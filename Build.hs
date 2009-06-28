@@ -40,9 +40,9 @@ dependencies = do mkdir ds
   where
   k = map ("http://projects.tmorris.net/public/standards/artifacts/1.30/" ++) ["javadoc-style/javadoc-style.css", "scaladoc-style/script.js", "scaladoc-style/style.css"] ++ ["http://software.tmorris.net/artifacts//package-list-j2se/1.5.0/package-list"]
 
-clean = removeDirectoryRecursive "build"
+clean = rmdir "build"
 
-fullClean = removeDirectoryRecursive ds >> clean
+fullClean = rmdir ds >> clean
 
 javac'' d = J.javac {
   J.directory = Just d
@@ -100,7 +100,7 @@ scaladoc'' d v = scaladoc {
 
 sdc v = j >=>=> scaladoc'' scaladoco v
 
-sd v = copyFile (ds // "script.js") (scaladoco // "script.js") >> fj >>>> (sdc v ->- src)
+sd v = mkdir scaladoco >> copyFile (ds // "script.js") (scaladoco // "script.js") >> fj >>>> (sdc v ->- src)
 
 -- todo jar function for Lastik
 jar k = system ("jar " ++ k)
@@ -111,8 +111,10 @@ archive = let o = "build" // "jar"
               j = o // "functionaljava.jar"
               d = [javaco, scalaco]
               s = intercalate " "
+              nodots = let p = fileName /~? ".*" in find p p
           in ts >>>> do mkdir o
-                        rs <- let p = fileName /~? ".*" in find p p resources >>= filterM doesFileExist
+                        rs <- nodots resources >>= filterM doesFileExist
                         jar ("-cfM " ++ j ++ ' ' : s (map (\k -> "-C " ++ k ++ " .") d) ++ ' ' : s rs)
 
+release v = fullClean >> dependencies >> archive >>>> jd v >>>> sd v
 -- todo get release
