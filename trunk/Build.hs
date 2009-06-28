@@ -32,9 +32,11 @@ ds = ".deps"
 dependencies = do createDirectoryIfMissing True ds
                   mapM_ (\d -> system ("wget -c --directory " ++ ds ++ ' ' : d)) k
   where
-  k = map ("http://projects.tmorris.net/public/standards/artifacts/1.17/" ++) ["javadoc-style/javadoc-style.css", "scaladoc-style/script.js", "scaladoc-style/style.css"] ++ ["http://software.tmorris.net/artifacts//package-list-j2se/1.5.0/package-list"]
+  k = map ("http://projects.tmorris.net/public/standards/artifacts/1.30/" ++) ["javadoc-style/javadoc-style.css", "scaladoc-style/script.js", "scaladoc-style/style.css"] ++ ["http://software.tmorris.net/artifacts//package-list-j2se/1.5.0/package-list"]
 
 clean = removeDirectoryRecursive "build"
+
+fullClean = removeDirectoryRecursive ds >> clean
 
 javac'' d = J.javac {
   J.directory = Just d
