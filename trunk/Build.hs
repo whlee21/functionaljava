@@ -73,7 +73,8 @@ javadoc'' d v = javadoc {
   Jd.doctitle = dt v,
   Jd.header = hd,
   Jd.stylesheetfile = Just (ds // "javadoc-style.css"),
-  Jd.linkoffline = [("http://java.sun.com/j2se/1.5.0/docs/api", ds)]
+  Jd.linkoffline = [("http://java.sun.com/j2se/1.5.0/docs/api", ds)],
+  Jd.linksource = True
 }
 
 jdc v = javadoc'' javadoco v
@@ -85,7 +86,8 @@ scaladoc'' d v = scaladoc {
   Sd.doctitle = dt v,
   Sd.header = hd,
   Sd.windowtitle = wt v,
-  Sd.stylesheetfile = Just (ds // "style.css")
+  Sd.stylesheetfile = Just (ds // "style.css"),
+  Sd.linksource = True
 }
 
 sdc v = j >=>=> scaladoc'' scaladoco v
