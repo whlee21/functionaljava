@@ -10,6 +10,7 @@ import Lastik.Runner
 import Lastik.Output
 import Lastik.Util
 import System.Cmd
+import System.Directory
 
 src = ["src" // "main", "src" // "package-info"]
 deps = ["src" // "deps-test"]
@@ -26,6 +27,8 @@ cp = "classpath" ~?? [javaco, scalaco, depso, testo, resources]
 wt v = Just ("Functional Java " ++ v)
 dt v = Just ("Functional Java " ++ v ++ " API Specification")
 hd = Just "<div><p><em>Copyright 2008 - 2009 Tony Morris, Runar Bjarnason, Tom Adams, Brad Clow, Ricky Clarkson</em></p>This software is released under an open source BSD licence.</div>"
+
+clean = removeDirectoryRecursive "build"
 
 javac'' d = J.javac {
   J.directory = Just d
