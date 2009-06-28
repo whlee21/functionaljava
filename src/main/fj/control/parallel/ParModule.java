@@ -10,6 +10,7 @@ import fj.P2;
 import fj.P3;
 import fj.P4;
 import fj.Unit;
+import static fj.P.p;
 import static fj.F2W.$$;
 import static fj.FW.$;
 import static fj.Function.curry;
@@ -555,7 +556,7 @@ public final class ParModule {
    * @return A promise of a result of mapping and folding in parallel.
    */
   public <A, B> Promise<B> parFoldMap(final Stream<A> as, final F<A, B> map, final Monoid<B> reduce) {
-    return as.map(promise(map)).foldLeft1(liftM2(reduce.sum()));
+    return as.isEmpty() ? promise(p(reduce.zero())) : as.map(promise(map)).foldLeft1(liftM2(reduce.sum()));
   }
 
   /**

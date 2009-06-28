@@ -13,7 +13,8 @@ object Tests {
     fj.data.CheckHashSet.tests,
     fj.data.CheckSet.tests,
     fj.data.CheckTreeMap.tests,
-    fj.control.parallel.CheckStrategy.tests
+    fj.control.parallel.CheckStrategy.tests,
+    fj.control.parallel.CheckParModule.tests
   ))
 
   def main(args: Array[String]) = run(tests)
