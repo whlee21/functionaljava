@@ -14,6 +14,8 @@ import Control.Monad
 import System.Cmd
 import System.Directory
 import System.FilePath.Find
+import Codec.Archive.Zip
+import qualified Data.ByteString.Lazy as B
 
 src = ["src" // "main", "src" // "package-info"]
 deps = ["src" // "deps-test"]
@@ -25,6 +27,7 @@ scalaco = "build" // "classes" // "scalac"
 scaladoco = "build" // "scaladoc"
 depso = "build" // "classes" // "deps"
 testo = "build" // "classes" // "test"
+jardir = "build" // "jar"
 
 resources = "resources"
 cp = "classpath" ~?? [javaco, scalaco, depso, testo, resources]
@@ -105,25 +108,11 @@ sd v = mkdir scaladoco >> copyFile (ds // "script.js") (scaladoco // "script.js"
 -- todo jar function for Lastik
 jar k = system ("jar " ++ k)
 
-nosvn = nosvn' []
-
-nosvn' c d = let k = if null c then id else chdir c
-                 p = fileName /~? ".svn" in k $ find p p d >>= filterM doesFileExist
-
-jardir d t rp fp = let k = if null d then id else chdir d
-                   in k $ find rp (fp &&? fileType ==? RegularFile) t
-
-tester = foldl' (const . const $ ()) ()
-
--- resources directory needs special treatment
--- use zip-archive package?
-archive = let o = "build" // "jar"
-              j = o // "functionaljava.jar"
-              d = [javaco, scalaco]
-          in ts >>>> do mkdir o
-                        rs <- nosvn' resources "."
-                        jar ("-cfM " ++ j ++ ' ' : space' (map (\k -> "-C " ++ k ++ " .") d) ++ ' ' : space rs)
-
+archive = do z <- let p = fileName /~? ".svn" in find p (p &&? fileType ==? RegularFile) "."
+             j <- chdir javaco $ getCurrentDirectory >>= Prelude.print >> addFilesToArchive [OptVerbose] emptyArchive z
+             mkdir jardir
+             B.writeFile (jardir // "functionaljava.jar") (fromArchive j)
+{-
 release v = let o ="build" // "release"
                 j = o // "functionaljava.zip"
                 d = join $ ["etc"] : [src, test]
@@ -131,5 +120,6 @@ release v = let o ="build" // "release"
                   mkdir o
                   -- jar ("-cfM " ++ j ++ ' '
                   return undefined
+-}
 
 -- todo get release
