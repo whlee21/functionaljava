@@ -105,16 +105,31 @@ sd v = mkdir scaladoco >> copyFile (ds // "script.js") (scaladoco // "script.js"
 -- todo jar function for Lastik
 jar k = system ("jar " ++ k)
 
+nosvn = nosvn' []
+
+nosvn' c d = let k = if null c then id else chdir c
+                 p = fileName /~? ".svn" in k $ find p p d >>= filterM doesFileExist
+
+jardir d t rp fp = let k = if null d then id else chdir d
+                   in k $ find rp (fp &&? fileType ==? RegularFile) t
+
+tester = foldl' (const . const $ ()) ()
+
 -- resources directory needs special treatment
 -- use zip-archive package?
 archive = let o = "build" // "jar"
               j = o // "functionaljava.jar"
               d = [javaco, scalaco]
-              s = intercalate " "
-              nodots = let p = fileName /~? ".*" in find p p
           in ts >>>> do mkdir o
-                        rs <- nodots resources >>= filterM doesFileExist
-                        jar ("-cfM " ++ j ++ ' ' : s (map (\k -> "-C " ++ k ++ " .") d) ++ ' ' : s rs)
+                        rs <- nosvn' resources "."
+                        jar ("-cfM " ++ j ++ ' ' : space' (map (\k -> "-C " ++ k ++ " .") d) ++ ' ' : space rs)
 
-release v = fullClean >> dependencies >> archive >>>> jd v >>>> sd v
+release v = let o ="build" // "release"
+                j = o // "functionaljava.zip"
+                d = join $ ["etc"] : [src, test]
+            in do fullClean >> dependencies >> archive >>>> jd v >>>> sd v
+                  mkdir o
+                  -- jar ("-cfM " ++ j ++ ' '
+                  return undefined
+
 -- todo get release
