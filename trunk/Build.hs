@@ -28,6 +28,7 @@ scaladoco = "build" // "scaladoc"
 depso = "build" // "classes" // "deps"
 testo = "build" // "classes" // "test"
 jardir = "build" // "jar"
+releasedir = "build" // "release"
 
 resources = "resources"
 cp = "classpath" ~?? [javaco, scalaco, depso, testo, resources]
@@ -108,10 +109,19 @@ sd v = mkdir scaladoco >> copyFile (ds // "script.js") (scaladoco // "script.js"
 -- todo jar function for Lastik
 jar k = system ("jar " ++ k)
 
-archive = ts >>>>> let p = fileName /~? ".svn" in do a <- archiveDirectories [javaco, scalaco, resources] p (p &&? fileType ==? RegularFile) [OptVerbose]
-                                                     mkdir jardir
-                                                     B.writeFile (jardir // "functionaljava.jar") (fromArchive a)
+archive' ds = let nosvn = fileName /~? ".svn" in archiveDirectories (ds `zip` repeat ".") nosvn (nosvn &&? fileType ==? RegularFile) [OptVerbose]
 
+archive = ts >>>>> do a <- archive' [javaco, scalaco, resources]
+                      mkdir jardir
+                      B.writeFile (jardir // "functionaljava.jar") (fromArchive a)
+
+release v = do -- fullClean >> dependencies >> archive >> jd v >> sd v
+               mkdir ("build" // "functionaljava")
+{-
+               mkdir releasedir
+               a <- archive' $ join $ ["etc", javadoco, scaladoco, jardir] : [src, test]
+               B.writeFile (releasedir // "functionaljava.zip") (fromArchive a)
+-}
 {-
 release v = let o ="build" // "release"
                 j = o // "functionaljava.zip"
