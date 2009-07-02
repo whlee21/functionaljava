@@ -15,7 +15,6 @@ import System.Cmd
 import System.Directory
 import System.FilePath.Find
 import Codec.Archive.Zip
-import qualified Data.ByteString.Lazy as B
 
 src = ["src" // "main", "src" // "package-info"]
 deps = ["src" // "deps-test"]
@@ -109,11 +108,14 @@ sd v = mkdir scaladoco >> copyFile (ds // "script.js") (scaladoco // "script.js"
 -- todo jar function for Lastik
 jar k = system ("jar " ++ k)
 
-archive' ds = let nosvn = fileName /~? ".svn" in archiveDirectories (ds `zip` repeat ".") nosvn (nosvn &&? fileType ==? RegularFile) [OptVerbose]
+nosvn = fileName /~? ".svn"
 
-archive = ts >>>>> do a <- archive' [javaco, scalaco, resources]
-                      mkdir jardir
-                      B.writeFile (jardir // "functionaljava.jar") (fromArchive a)
+archive = ts >>>>> do mkdir jardir
+                      writeArchive ([javaco, scalaco, resources] `zip` repeat ".")
+                                   nosvn
+                                   (nosvn &&? fileType ==? RegularFile)
+                                   [OptVerbose]
+                                   (jardir // "functionaljava.jar")
 
 release v = do -- fullClean >> dependencies >> archive >> jd v >> sd v
                mkdir ("build" // "functionaljava")
