@@ -108,14 +108,9 @@ sd v = mkdir scaladoco >> copyFile (ds // "script.js") (scaladoco // "script.js"
 -- todo jar function for Lastik
 jar k = system ("jar " ++ k)
 
-z = let p = fileName /~? ".svn" in do p <- find p (p &&? fileType ==? RegularFile) "."
-                                      return (spine p `seq` p)
-
-archive = do a <- foldM (\a d -> do j <- z
-                                    chdir d $ addFilesToArchive [OptVerbose] a j) emptyArchive [javaco, scalaco, resources]
-             mkdir jardir
-             B.writeFile (jardir // "functionaljava.jar") (fromArchive a)
-
+archive = let p = fileName /~? ".svn" in do a <- archiveDirectories [javaco, scalaco, resources] p (p &&? fileType ==? RegularFile) [OptVerbose]
+                                            mkdir jardir
+                                            B.writeFile (jardir // "functionaljava.jar") (fromArchive a)
 
 {-
 release v = let o ="build" // "release"
