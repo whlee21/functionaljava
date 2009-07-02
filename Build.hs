@@ -111,14 +111,11 @@ jar k = system ("jar " ++ k)
 z = let p = fileName /~? ".svn" in do p <- find p (p &&? fileType ==? RegularFile) "."
                                       return (spine p `seq` p)
 
-archive = do j <- z
-             a <- chdir javaco $ addFilesToArchive [OptVerbose] emptyArchive j
-             k <- z
-             b <- chdir scalaco $ addFilesToArchive [OptVerbose] a k
-             l <- z
-             c <- chdir resources $ addFilesToArchive [OptVerbose] b l
+archive = do a <- foldM (\a d -> do j <- z
+                                    chdir d $ addFilesToArchive [OptVerbose] a j) emptyArchive [javaco, scalaco, resources]
              mkdir jardir
-             B.writeFile (jardir // "functionaljava.jar") (fromArchive c)
+             B.writeFile (jardir // "functionaljava.jar") (fromArchive a)
+
 
 {-
 release v = let o ="build" // "release"
