@@ -3,6 +3,7 @@ package concurrent;
 import fj.F;
 import static fj.FW.$;
 import fj.Unit;
+import fj.P1;
 import fj.control.parallel.ParModule;
 import static fj.control.parallel.ParModule.parModule;
 import fj.control.parallel.Promise;
@@ -10,10 +11,17 @@ import fj.control.parallel.Strategy;
 import static fj.data.LazyString.fromStream;
 import fj.data.List;
 import static fj.data.List.list;
+import fj.data.Option;
+import static fj.data.Option.fromNull;
 import fj.data.Stream;
+import static fj.data.Stream.fromString;
 import static fj.pre.Monoid.longAdditionMonoid;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.concurrent.ExecutorService;
 import static java.util.concurrent.Executors.newFixedThreadPool;
 
@@ -42,22 +50,26 @@ public class MapReduce {
           }
         }).andThen(new F<BufferedReader, Stream<Character>>() {
           public Stream<Character> f(final BufferedReader reader) {
-            Stream<Character> cs = Stream.nil();
+            final Option<String> s;
             try {
-              for (String s = reader.readLine(); s != null; s = reader.readLine()) {
-                cs = cs.append(Stream.fromString(s));
-              }
+              s = fromNull(reader.readLine());
             } catch (IOException e) {
               throw new Error(e);
             }
-            finally {
+            if (s.isSome())
+              return fromString(s.some()).append(new P1<Stream<Character>>() {
+                public Stream<Character> _1() {
+                  return f(reader);
+                }
+              });
+            else {
               try {
                 reader.close();
               } catch (IOException e) {
                 throw new Error(e);
               }
+              return Stream.nil();
             }
-            return cs;
           }
         }));
 
