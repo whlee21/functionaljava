@@ -273,7 +273,14 @@ public final class LazyString implements CharSequence {
    * @return A stream of the words in this lazy string, when split by spaces.
    */
   public Stream<LazyString> words() {
-    return split(isSpaceChar);
+    final Stream<Character> findSpace = s.dropWhile(isSpaceChar);
+    final P2<Stream<Character>, Stream<Character>> ws = findSpace.split(isSpaceChar);
+    return findSpace.isEmpty() ? Stream.<LazyString>nil()
+                               : Stream.cons(fromStream(ws._1()), new P1<Stream<LazyString>>() {
+                                 public Stream<LazyString> _1() {
+                                   return fromStream(ws._2()).words();
+                                 }
+                               });
   }
 
   /**
