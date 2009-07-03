@@ -1,21 +1,20 @@
 package fj.data;
 
 import fj.F;
-import static fj.P.p;
-import fj.P2;
-import fj.P1;
 import fj.F2;
 import static fj.Function.compose;
 import static fj.Function.curry;
-import static fj.function.Booleans.not;
-import static fj.function.Booleans.or;
-import static fj.function.Characters.isSpaceChar;
+import static fj.P.p;
+import fj.P1;
+import fj.P2;
 import static fj.data.Option.none;
 import static fj.data.Option.some;
 import static fj.data.Stream.join;
+import static fj.function.Booleans.or;
+import static fj.function.Characters.isSpaceChar;
 import fj.pre.Equal;
-import static fj.pre.Equal.streamEqual;
 import static fj.pre.Equal.charEqual;
+import static fj.pre.Equal.streamEqual;
 
 import java.util.regex.Pattern;
 
@@ -249,12 +248,14 @@ public final class LazyString implements CharSequence {
    * @return A stream of the substrings in this lazy string, when separated by the given predicate.
    */
   public Stream<LazyString> split(final F<Character, Boolean> p) {
-    final P2<Stream<Character>, Stream<Character>> w = s.span(compose(not, p));
-    return Stream.cons(fromStream(w._1()), new P1<Stream<LazyString>>() {
-      @Override public Stream<LazyString> _1() {
-        return fromStream(w._2()).split(p);
-      }
-    });
+    final Stream<Character> findIt = s.dropWhile(p);
+    final P2<Stream<Character>, Stream<Character>> ws = findIt.split(p);
+    return findIt.isEmpty() ? Stream.<LazyString>nil()
+                            : Stream.cons(fromStream(ws._1()), new P1<Stream<LazyString>>() {
+                              public Stream<LazyString> _1() {
+                                return fromStream(ws._2()).split(p);
+                              }
+                            });
   }
 
   /**
@@ -273,14 +274,7 @@ public final class LazyString implements CharSequence {
    * @return A stream of the words in this lazy string, when split by spaces.
    */
   public Stream<LazyString> words() {
-    final Stream<Character> findSpace = s.dropWhile(isSpaceChar);
-    final P2<Stream<Character>, Stream<Character>> ws = findSpace.split(isSpaceChar);
-    return findSpace.isEmpty() ? Stream.<LazyString>nil()
-                               : Stream.cons(fromStream(ws._1()), new P1<Stream<LazyString>>() {
-                                 public Stream<LazyString> _1() {
-                                   return fromStream(ws._2()).words();
-                                 }
-                               });
+    return split(isSpaceChar);
   }
 
   /**
