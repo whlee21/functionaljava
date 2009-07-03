@@ -2,8 +2,8 @@ package concurrent;
 
 import fj.F;
 import static fj.FW.$;
-import fj.Unit;
 import fj.P1;
+import fj.Unit;
 import fj.control.parallel.ParModule;
 import static fj.control.parallel.ParModule.parModule;
 import fj.control.parallel.Promise;
@@ -25,6 +25,7 @@ import java.io.IOException;
 import java.util.concurrent.ExecutorService;
 import static java.util.concurrent.Executors.newFixedThreadPool;
 
+/* Performs a parallel word count over files given as program arguments. */
 public class MapReduce {
 
   // Count words of documents in parallel
