@@ -13,21 +13,22 @@ import Data.List hiding (find)
 import Control.Monad
 import System.Cmd
 import System.Directory
+import System.FilePath
 import System.FilePath.Find
 import Codec.Archive.Zip
 
-src = ["src" // "main", "src" // "package-info"]
-deps = ["src" // "deps-test"]
-test = ["src" // "test"]
+src = ["src" </> "main", "src" </> "package-info"]
+deps = ["src" </> "deps-test"]
+test = ["src" </> "test"]
 
-javaco = "build" // "classes" // "javac"
-javadoco = "build" // "javadoc"
-scalaco = "build" // "classes" // "scalac"
-scaladoco = "build" // "scaladoc"
-depso = "build" // "classes" // "deps"
-testo = "build" // "classes" // "test"
-jardir = "build" // "jar"
-releasedir = "build" // "release"
+javaco = "build" </> "classes" </> "javac"
+javadoco = "build" </> "javadoc"
+scalaco = "build" </> "classes" </> "scalac"
+scaladoco = "build" </> "scaladoc"
+depso = "build" </> "classes" </> "deps"
+testo = "build" </> "classes" </> "test"
+jardir = "build" </> "jar"
+releasedir = "build" </> "release"
 
 resources = "resources"
 cp = "classpath" ~?? [javaco, scalaco, depso, testo, resources]
@@ -83,7 +84,7 @@ javadoc'' d v = javadoc {
   Jd.windowtitle = wt v,
   Jd.doctitle = dt v,
   Jd.header = hd,
-  Jd.stylesheetfile = Just (ds // "javadoc-style.css"),
+  Jd.stylesheetfile = Just (ds </> "javadoc-style.css"),
   Jd.linkoffline = [("http://java.sun.com/j2se/1.5.0/docs/api", ds)],
   Jd.linksource = True
 }
@@ -97,13 +98,13 @@ scaladoc'' d v = scaladoc {
   Sd.doctitle = dt v,
   Sd.header = hd,
   Sd.windowtitle = wt v,
-  Sd.stylesheetfile = Just (ds // "style.css"),
+  Sd.stylesheetfile = Just (ds </> "style.css"),
   Sd.linksource = True
 }
 
 sdc v = j >=>=> scaladoc'' scaladoco v
 
-sd v = mkdir scaladoco >> copyFile (ds // "script.js") (scaladoco // "script.js") >> fj >>>> (sdc v ->- src)
+sd v = mkdir scaladoco >> copyFile (ds </> "script.js") (scaladoco </> "script.js") >> fj >>>> (sdc v ->- src)
 
 -- todo jar function for Lastik
 jar k = system ("jar " ++ k)
@@ -115,10 +116,10 @@ archive = ts >>>>> do mkdir jardir
                                    nosvn
                                    (nosvn &&? fileType ==? RegularFile)
                                    [OptVerbose]
-                                   (jardir // "functionaljava.jar")
+                                   (jardir </> "functionaljava.jar")
 
 release v = do -- fullClean >> dependencies >> archive >> jd v >> sd v
-               mkdir ("build" // "functionaljava")
+               mkdir ("build" </> "functionaljava")
 {-
                mkdir releasedir
                a <- archive' $ join $ ["etc", javadoco, scaladoco, jardir] : [src, test]
