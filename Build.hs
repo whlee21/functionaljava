@@ -19,14 +19,15 @@ src = ["src" </> "main", "src" </> "package-info"]
 deps = ["src" </> "deps-test"]
 test = ["src" </> "test"]
 
-javaco = "build" </> "classes" </> "javac"
-javadoco = "build" </> "javadoc"
-scalaco = "build" </> "classes" </> "scalac"
-scaladoco = "build" </> "scaladoc"
-depso = "build" </> "classes" </> "deps"
-testo = "build" </> "classes" </> "test"
-jardir = "build" </> "jar"
-releasedir = "build" </> "release"
+build = "build"
+javaco = build </> "classes" </> "javac"
+javadoco = build </> "javadoc"
+scalaco = build </> "classes" </> "scalac"
+scaladoco = build </> "scaladoc"
+depso = build </> "classes" </> "deps"
+testo = build </> "classes" </> "test"
+jardir = build </> "jar"
+releasedir = build </> "release"
 etcdir = "etc"
 
 resources = "resources"
@@ -41,7 +42,7 @@ resolve = do mkdir ds
   where
   k = map ("http://projects.tmorris.net/public/standards/artifacts/1.30/" ++) ["javadoc-style/javadoc-style.css", "scaladoc-style/script.js", "scaladoc-style/style.css"] ++ ["http://software.tmorris.net/artifacts//package-list-j2se/1.5.0/package-list"]
 
-clean = rmdir "build"
+clean = rmdir build
 
 fullClean = rmdir ds >> clean
 
@@ -113,9 +114,9 @@ archive = compile >>>>> do mkdir jardir
                                         [OptVerbose]
                                         (jardir </> "functionaljava.jar")
 
-release v = let k = "build" </> "functionaljava"
+release v = let k = build </> "functionaljava"
             in do fullClean >> resolve >> archive >> javadoc v >> scaladoc v
                   mkdir k
                   forM_ ([(javadoco, 1), (scaladoco, 1), (jardir, 2), (etcdir, 1)] ++ map (\k -> (k, 0)) (src ++ test)) (\(d, l) -> copyDir nosvn nosvnf l d k)
                   mkdir releasedir
-                  writeArchive [("build", "functionaljava")] always always [OptVerbose] (releasedir </> "functionaljava.zip")
+                  writeArchive [(build, "functionaljava")] always always [OptVerbose] (releasedir </> "functionaljava.zip")
