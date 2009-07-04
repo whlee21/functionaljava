@@ -1,3 +1,8 @@
+{-
+Depends
+* Lastik
+* PureMD5
+-}
 module Build where
 
 import qualified Lastik.Java.Javac as J
@@ -14,6 +19,8 @@ import System.Directory
 import System.FilePath
 import System.FilePath.Find
 import Codec.Archive.Zip
+import qualified Data.ByteString.Lazy as B
+import Data.Digest.Pure.MD5
 
 src = ["src" </> "main", "src" </> "package-info"]
 deps = ["src" </> "deps-test"]
@@ -119,4 +126,7 @@ release v = let k = build </> "functionaljava"
                   mkdir k
                   forM_ ([(javadoco, 1), (scaladoco, 1), (jardir, 2), (etcdir, 1)] ++ map (\k -> (k, 0)) (src ++ test)) (\(d, l) -> copyDir nosvn nosvnf l d k)
                   mkdir releasedir
-                  writeArchive [(build, "functionaljava")] always always [OptVerbose] (releasedir </> "functionaljava.zip")
+                  a <- archiveDirectories [(build, "functionaljava")] always always [OptVerbose]
+                  let s = fromArchive a
+                  B.writeFile (releasedir </> "functionaljava.zip") s
+                  writeFile (releasedir </> "functionaljava.zip.MD5") (show (md5 s))
