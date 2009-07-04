@@ -29,6 +29,7 @@ depso = "build" </> "classes" </> "deps"
 testo = "build" </> "classes" </> "test"
 jardir = "build" </> "jar"
 releasedir = "build" </> "release"
+etcdir = "etc"
 
 resources = "resources"
 cp = "classpath" ~?? [javaco, scalaco, depso, testo, resources]
@@ -37,7 +38,7 @@ dt v = Just ("Functional Java " ++ v ++ " API Specification")
 hd = Just "<div><p><em>Copyright 2008 - 2009 Tony Morris, Runar Bjarnason, Tom Adams, Brad Clow, Ricky Clarkson</em></p>This software is released under an open source BSD licence.</div>"
 ds = ".deps"
 
-mkdir = createDirectoryIfMissing True
+
 
 dependencies = do mkdir ds
                   mapM_ (\d -> system ("wget -c --directory " ++ ds ++ ' ' : d)) k
@@ -111,28 +112,16 @@ jar k = system ("jar " ++ k)
 
 nosvn = fileName /~? ".svn"
 
+nosvnf = nosvn &&? fileType ==? RegularFile
+
 archive = ts >>>>> do mkdir jardir
                       writeArchive ([javaco, scalaco, resources] `zip` repeat ".")
                                    nosvn
-                                   (nosvn &&? fileType ==? RegularFile)
+                                   nosvnf
                                    [OptVerbose]
                                    (jardir </> "functionaljava.jar")
 
-release v = do -- fullClean >> dependencies >> archive >> jd v >> sd v
-               mkdir ("build" </> "functionaljava")
-{-
-               mkdir releasedir
-               a <- archive' $ join $ ["etc", javadoco, scaladoco, jardir] : [src, test]
-               B.writeFile (releasedir // "functionaljava.zip") (fromArchive a)
--}
-{-
-release v = let o ="build" // "release"
-                j = o // "functionaljava.zip"
-                d = join $ ["etc"] : [src, test]
-            in do fullClean >> dependencies >> archive >>>> jd v >>>> sd v
-                  mkdir o
-                  -- jar ("-cfM " ++ j ++ ' '
-                  return undefined
--}
-
--- todo get release
+release v = let k = "build" </> "functionaljava"
+            in do fullClean >> dependencies >> archive >> jd v >> sd v
+                  mkdir k
+                  forM_ ([(javadoco, 1), (scaladoco, 1), (jardir, 2), (etcdir, 1)] ++ map (\k -> (k, 0)) (src ++ test)) (\(d, l) -> copyDir nosvn nosvnf l d k)
