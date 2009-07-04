@@ -17,7 +17,10 @@ object Tests {
     fj.control.parallel.CheckParModule.tests
   ))
 
-  def main(args: Array[String]) = run(tests)
+  def main(args: Array[String]) {
+    run(tests)
+    System.exit(0)
+  }
 
   import org.scalacheck.Prop
   import org.scalacheck.ConsoleReporter._
