@@ -155,7 +155,7 @@ release :: Version -> IO ()
 release v = let k = build </> "functionaljava"
             in do fullClean >> resolve >> archive >> javadoc v >> scaladoc v
                   mkdir k
-                  forM_ ([(javadoco, 1), (scaladoco, 1), (jardir, 2), (etcdir, 1)] ++ map (\k -> (k, 0)) (src ++ test)) (\(d, l) -> copyDir nosvn nosvnf l d k)
+                  forM_ ([(javadoco, 1), (scaladoco, 1), (jardir, 2), (etcdir, 1)] ++ map (flip (,) 0) (src ++ test)) (\(d, l) -> copyDir nosvn nosvnf l d k)
                   mkdir releasedir
                   a <- archiveDirectories [(build, "functionaljava")] always always [OptVerbose]
                   let s = fromArchive a
