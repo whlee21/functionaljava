@@ -56,6 +56,9 @@ resolve = do mkdir ds
 
 type Version = String
 
+readVersion :: IO Version
+readVersion = readFile "version"
+
 clean :: IO ()
 clean = rmdir build
 
@@ -151,14 +154,15 @@ archive = compile >>>>> do mkdir jardir
                                         [OptVerbose]
                                         (jardir </> "functionaljava.jar")
 
-release :: Version -> IO ()
-release v = let k = build </> "functionaljava"
-            in do fullClean >> resolve >> archive >> javadoc v >> scaladoc v
-                  mkdir k
-                  forM_ ([(1, javadoco), (1, scaladoco), (2, jardir), (1, etcdir)] ++ map ((,) 0) (src ++ test)) (\(l, d) -> copyDir nosvn nosvnf l d k)
-                  mkdir releasedir
-                  a <- archiveDirectories [(build, "functionaljava")] always always [OptVerbose]
-                  let s = fromArchive a
-                      z = "functionaljava.zip"
-                  B.writeFile (releasedir </> z) s
-                  forM_ [(".MD5", show . md5), (".SHA", show . sha1)] (\(e, f) -> writeFile (releasedir </> (z ++ e)) (f s))
+release :: IO ()
+release = let k = build </> "functionaljava"
+          in do v <- readVersion
+                fullClean >> resolve >> archive >> javadoc v >> scaladoc v
+                mkdir k
+                forM_ ([(1, javadoco), (1, scaladoco), (2, jardir), (1, etcdir)] ++ map ((,) 0) (src ++ test)) (\(l, d) -> copyDir nosvn nosvnf l d k)
+                mkdir releasedir
+                a <- archiveDirectories [(build, "functionaljava")] always always [OptVerbose]
+                let s = fromArchive a
+                    z = "functionaljava.zip"
+                B.writeFile (releasedir </> z) s
+                forM_ [(".MD5", show . md5), (".SHA", show . sha1)] (\(e, f) -> writeFile (releasedir </> (z ++ e)) (f s))
