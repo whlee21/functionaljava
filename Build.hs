@@ -156,11 +156,18 @@ buildAll :: IO ExitCode
 buildAll = do v <- readVersion
               resolve >> archive >> javadoc v >> scaladoc v
 
+md5sum :: FilePath -> B.ByteString -> IO ()
+md5sum p s = writeFile (p <.> "MD5") (show (md5 s))
+
+sha1sum :: FilePath -> B.ByteString -> IO ()
+sha1sum p s = writeFile (p <.> "SHA") (show (sha1 s))
+
 maven :: IO ()
 maven = do buildAll
            v <- readVersion
            mkdir mavendir
-           forM_ [("javadoc", [javadoco]), ("scaladoc", [scaladoco]), ("sources", src), ("tests", test)] (\(n, f) -> writeArchive (map (flip (,) ".") f) nosvn nosvnf [OptRecursive] (mavendir </> ("fj-" ++ v ++ '-' :  n ++ ".jar")))
+           forM_ [("javadoc", [javadoco]), ("scaladoc", [scaladoco]), ("sources", src), ("tests", test)] (\(n, f) ->
+             writeHashArchive (map (flip (,) ".") f) nosvn nosvnf [OptRecursive] (mavendir </> "fj-" ++ v ++ '-' :  n ++ ".jar"))
 
 release :: IO ()
 release = let k = build </> "functionaljava"
@@ -168,8 +175,4 @@ release = let k = build </> "functionaljava"
                 mkdir k
                 forM_ ([(1, javadoco), (1, scaladoco), (2, jardir), (1, etcdir)] ++ map ((,) 0) (src ++ test)) (\(l, d) -> copyDir nosvn nosvnf l d k)
                 mkdir releasedir
-                a <- archiveDirectories [(build, "functionaljava")] always always [OptVerbose]
-                let s = fromArchive a
-                    z = "functionaljava.zip"
-                B.writeFile (releasedir </> z) s
-                forM_ [(".MD5", show . md5), (".SHA", show . sha1)] (\(e, f) -> writeFile (releasedir </> (z ++ e)) (f s))
+                writeHashArchive [(build, "functionaljava")] always always [OptVerbose] (releasedir </> "functionaljava.zip")
