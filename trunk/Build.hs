@@ -154,16 +154,10 @@ buildAll :: IO ExitCode
 buildAll = do v <- readVersion
               resolve >> archive >> javadoc v >> scaladoc v
 
-md5sum :: FilePath -> B.ByteString -> IO ()
-md5sum p s = writeFile (p <.> "MD5") (show (md5 s))
-
-sha1sum :: FilePath -> B.ByteString -> IO ()
-sha1sum p s = writeFile (p <.> "SHA") (show (sha1 s))
-
 maven :: IO ()
 maven = do buildAll
-           v <- readVersion
            mkdir mavendir
+           v <- readVersion
            forM_ [("javadoc", [javadoco]), ("scaladoc", [scaladoco]), ("sources", src), ("tests", test)] (\(n, f) ->
              writeHashArchive (map (flip (,) ".") f) nosvn nosvnf [OptRecursive] (mavendir </> "fj-" ++ v ++ '-' :  n ++ ".jar"))
 
