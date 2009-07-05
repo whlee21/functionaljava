@@ -49,8 +49,9 @@ dt v = Just ("Functional Java " ++ v ++ " API Specification")
 hd = Just "<div><p><em>Copyright 2008 - 2009 Tony Morris, Runar Bjarnason, Tom Adams, Brad Clow, Ricky Clarkson</em></p>This software is released under an open source BSD licence.</div>"
 ds = ".deps"
 
-resolve = do mkdir ds
-             mapM_ (\d -> system ("wget -c --directory " ++ ds ++ ' ' : d)) k
+resolve = do e <- doesDirectoryExist ds
+             unless e $ do mkdir ds
+                           mapM_ (\d -> system ("wget -c --directory " ++ ds ++ ' ' : d)) k
   where
   k = map ("http://projects.tmorris.net/public/standards/artifacts/1.30/" ++) ["javadoc-style/javadoc-style.css", "scaladoc-style/script.js", "scaladoc-style/style.css"] ++ ["http://software.tmorris.net/artifacts//package-list-j2se/1.5.0/package-list"]
 
@@ -121,7 +122,7 @@ javadoc'' d v = Jd.javadoc {
 }
 
 javadoc :: Version -> IO ExitCode
-javadoc v = javadoc'' javadoco v ->- src
+javadoc v = resolve >> javadoc'' javadoco v ->- src
 
 scaladoc'' :: FilePath -> Version -> Sd.Scaladoc
 scaladoc'' d v = Sd.scaladoc {
@@ -134,7 +135,7 @@ scaladoc'' d v = Sd.scaladoc {
 }
 
 scaladoc :: Version -> IO ExitCode
-scaladoc v = mkdir scaladoco >> copyFile (ds </> "script.js") (scaladoco </> "script.js") >> javac >>>> (j >=>=> scaladoc'' scaladoco v ->- src)
+scaladoc v = resolve >> mkdir scaladoco >> copyFile (ds </> "script.js") (scaladoco </> "script.js") >> javac >>>> (j >=>=> scaladoc'' scaladoco v ->- src)
 
 nosvn :: FindClause Bool
 nosvn = fileName /~? ".svn"
@@ -150,10 +151,15 @@ archive = compile >>>>> do mkdir jardir
                                         [OptVerbose]
                                         (jardir </> "functionaljava.jar")
 
+cleanBuildAll :: IO Version
+cleanBuildAll = do v <- readVersion
+                   fullClean >> resolve >> archive >> javadoc v >> scaladoc v
+                   return v
+
+
 release :: IO ()
 release = let k = build </> "functionaljava"
-          in do v <- readVersion
-                fullClean >> resolve >> archive >> javadoc v >> scaladoc v
+          in do cleanBuildAll
                 mkdir k
                 forM_ ([(1, javadoco), (1, scaladoco), (2, jardir), (1, etcdir)] ++ map ((,) 0) (src ++ test)) (\(l, d) -> copyDir nosvn nosvnf l d k)
                 mkdir releasedir
