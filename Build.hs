@@ -1,7 +1,10 @@
 {-
+
 Depends
-* Lastik
-* PureMD5
+* http://hackage.haskell.org/package/Lastik
+* http://hackage.haskell.org/package/pureMD5
+* http://hackage.haskell.org/package/SHA
+
 -}
 module Build where
 
@@ -21,6 +24,7 @@ import System.FilePath.Find
 import Codec.Archive.Zip
 import qualified Data.ByteString.Lazy as B
 import Data.Digest.Pure.MD5
+import Data.Digest.Pure.SHA
 
 src = ["src" </> "main", "src" </> "package-info"]
 deps = ["src" </> "deps-test"]
@@ -130,3 +134,4 @@ release v = let k = build </> "functionaljava"
                   let s = fromArchive a
                   B.writeFile (releasedir </> "functionaljava.zip") s
                   writeFile (releasedir </> "functionaljava.zip.MD5") (show (md5 s))
+                  writeFile (releasedir </> "functionaljava.zip.SHA") (show (sha1 s))
