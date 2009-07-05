@@ -33,7 +33,7 @@ They are the Functional Java source directories. Functions that have the type "I
 
 For example, suppose you want to compile and build a JAR file, then you would execute the "archive" function. At the *Build> prompt type "ar<TAB>". This will fill out the word "archive". Hit enter and the build of the JAR archive will commence.
 
-Want to know where the JAR file built to? There is a function called 'jardir' which is of the type FilePath. Just type jardir and hit ENTER.
+Want to know where the JAR file built to? There is a function called 'jardir' which is of the type FilePath. You'll have seen in your :browse. Just type jardir and hit ENTER.
 
 *Build> jardir
 "build/jar"
