@@ -136,10 +136,6 @@ scaladoc'' d v = Sd.scaladoc {
 scaladoc :: Version -> IO ExitCode
 scaladoc v = mkdir scaladoco >> copyFile (ds </> "script.js") (scaladoco </> "script.js") >> javac >>>> (j >=>=> scaladoc'' scaladoco v ->- src)
 
--- todo jar function for Lastik
-jar :: String -> IO ExitCode
-jar k = system ("jar " ++ k)
-
 nosvn :: FindClause Bool
 nosvn = fileName /~? ".svn"
 
