@@ -1,10 +1,8 @@
 {-
 
 Depends
-* http://hackage.haskell.org/package/Lastik
-* http://hackage.haskell.org/package/pureMD5
-* http://hackage.haskell.org/package/SHA
-
+* The Haskell Platform http://hackage.haskell.org/platform/
+* Lastik http://hackage.haskell.org/package/Lastik
 -}
 module Build where
 
