@@ -33,13 +33,14 @@ test = ["src" </> "test"]
 
 build = "build"
 javaco = build </> "classes" </> "javac"
-javadoco = build </> "javadoc"
 scalaco = build </> "classes" </> "scalac"
-scaladoco = build </> "scaladoc"
 depso = build </> "classes" </> "deps"
 testo = build </> "classes" </> "test"
+javadoco = build </> "javadoc"
+scaladoco = build </> "scaladoc"
 jardir = build </> "jar"
 releasedir = build </> "release"
+mavendir = build </> "maven"
 etcdir = "etc"
 
 resources = "resources"
@@ -110,9 +111,9 @@ repl = scala cp
 tests :: IO ExitCode
 tests = compile >>>> scala (cp ++ " fj.Tests")
 
-javadoc'' :: FilePath -> Version -> Jd.Javadoc
-javadoc'' d v = Jd.javadoc {
-  Jd.directory = Just d,
+javadoc'' :: Version -> Jd.Javadoc
+javadoc'' v = Jd.javadoc {
+  Jd.directory = Just javadoco,
   Jd.windowtitle = wt v,
   Jd.doctitle = dt v,
   Jd.header = hd,
@@ -122,11 +123,11 @@ javadoc'' d v = Jd.javadoc {
 }
 
 javadoc :: Version -> IO ExitCode
-javadoc v = resolve >> javadoc'' javadoco v ->- src
+javadoc v = resolve >> javadoc'' v ->- src
 
-scaladoc'' :: FilePath -> Version -> Sd.Scaladoc
-scaladoc'' d v = Sd.scaladoc {
-  Sd.directory = Just d,
+scaladoc'' :: Version -> Sd.Scaladoc
+scaladoc'' v = Sd.scaladoc {
+  Sd.directory = Just scaladoco,
   Sd.doctitle = dt v,
   Sd.header = hd,
   Sd.windowtitle = wt v,
@@ -135,7 +136,7 @@ scaladoc'' d v = Sd.scaladoc {
 }
 
 scaladoc :: Version -> IO ExitCode
-scaladoc v = resolve >> mkdir scaladoco >> copyFile (ds </> "script.js") (scaladoco </> "script.js") >> javac >>>> (j >=>=> scaladoc'' scaladoco v ->- src)
+scaladoc v = resolve >> mkdir scaladoco >> copyFile (ds </> "script.js") (scaladoco </> "script.js") >> javac >>>> (j >=>=> scaladoc'' v ->- src)
 
 nosvn :: FindClause Bool
 nosvn = fileName /~? ".svn"
@@ -151,11 +152,15 @@ archive = compile >>>>> do mkdir jardir
                                         [OptVerbose]
                                         (jardir </> "functionaljava.jar")
 
-cleanBuildAll :: IO Version
+cleanBuildAll :: IO ExitCode
 cleanBuildAll = do v <- readVersion
                    fullClean >> resolve >> archive >> javadoc v >> scaladoc v
-                   return v
 
+maven :: IO ()
+maven = do cleanBuildAll
+           v <- readVersion
+           mkdir mavendir
+           forM_ [("javadoc", [javadoco]), ("scaladoc", [scaladoco]), ("sources", src), ("tests", test)] (\(n, f) -> writeArchive (map (flip (,) ".") f) nosvn nosvnf [OptRecursive] (mavendir </> ("fj-" ++ v ++ '-' :  n ++ ".jar")))
 
 release :: IO ()
 release = let k = build </> "functionaljava"
