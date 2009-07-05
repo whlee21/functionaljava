@@ -1,0 +1,28 @@
+Build Instructions
+------------------
+
+AT THIS MOMENT WINDOWS IS NOT SUPPORTED.
+This was an accident and fixing it is high priority.
+
+1a) Install The Haskell Platform http://hackage.haskell.org/platform/
+1b) If The Haskell Platform is not available to you:
+  1b.1) Install GHC http://haskell.org/ghc
+  1b.2) Install cabal-install http://hackage.haskell.org/trac/hackage/wiki/CabalInstall
+  1b.3) Install The Haskell Platform with the command 'cabal install haskell-platform'
+2) Install Lastik with the command 'cabal install Lastik'
+
+You are now ready to start playing with the build functionality.
+
+To enter the GHC interpreter with the Build.hs source, type:
+> ghci Build.hs
+
+The special GHCi commands are prefixed with a semi-colon (:). GHCi also has tab-completion
+so you may type : then hit TAB and you will see all GHCi commands.
+
+You can view all of the available Functional Java build functions and their type in the build with the :browse command.
+The output will be a list of: function name followed by :: followed by the type.
+Functions that have the type "IO ()" or "IO ExitCode" will execute a command of some sort.
+Tab-completion is also available for function names.
+
+For example, suppose you want to compile and build a JAR file, then you would execute the "archive" function.
+At the *Build> prompt type "ar<TAB>". This will fill out the word "archive". Hit enter and the build of the JAR archive will commence.

@@ -4,16 +4,6 @@ Depends
 * The Haskell Platform http://hackage.haskell.org/platform/
 * Lastik http://hackage.haskell.org/package/Lastik
 
-Instructions
-------------
-1a) Install The Haskell Platform http://hackage.haskell.org/platform/
-1b) If The Haskell Platform is not available to you:
-  1b.1) Install GHC http://haskell.org/ghc
-  1b.2) Install cabal-install http://hackage.haskell.org/trac/hackage/wiki/CabalInstall
-  1b.3) Install The Haskell Platform with the command 'cabal install haskell-platform'
-2) Install Lastik with the command 'cabal install Lastik'
-3) Load this source file and execute functions accordingly
-
 -}
 module Build where
 
