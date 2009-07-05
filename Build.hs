@@ -18,6 +18,7 @@ import Lastik.Util
 import Lastik.Directory
 import Control.Monad
 import System.Cmd
+import System.Exit
 import System.Directory
 import System.FilePath
 import System.FilePath.Find
@@ -55,41 +56,57 @@ resolve = do mkdir ds
 
 type Version = String
 
+clean :: IO ()
 clean = rmdir build
 
+fullClean :: IO ()
 fullClean = rmdir ds >> clean
 
+javac'' :: FilePath -> J.Javac
 javac'' d = J.javac {
   J.directory = Just d
 }
 
+scalac'' :: FilePath -> S.Scalac
 scalac'' d = S.scalac {
   S.directory = Just d
 }
 
+j :: J.Javac
 j = javac'' javaco
 
+javac :: IO ExitCode
 javac = j +->- src
 
+s :: S.Scalac
 s = j >=>=> scalac'' scalaco
 
+scalac :: IO ExitCode
 scalac = javac >>>> (s +->- src)
 
+d :: S.Scalac
 d = scalac'' depso
 
+dep :: IO ExitCode
 dep = d +->- deps
 
+tj :: S.Scalac
 tj = s >=>=> d >=>=> scalac'' testo
 
+compile :: IO ExitCode
 compile = dep >>>> scalac >>>> (tj +->- test)
 
 -- todo scala function in Lastik
+scala :: String -> IO ExitCode
 scala k = system ("scala " ++ k)
 
+repl :: IO ExitCode
 repl = scala cp
 
+tests :: IO ExitCode
 tests = compile >>>> scala (cp ++ " fj.Tests")
 
+javadoc'' :: FilePath -> Version -> Jd.Javadoc
 javadoc'' d v = Jd.javadoc {
   Jd.directory = Just d,
   Jd.windowtitle = wt v,
@@ -100,8 +117,10 @@ javadoc'' d v = Jd.javadoc {
   Jd.linksource = True
 }
 
+javadoc :: Version -> IO ExitCode
 javadoc v = javadoc'' javadoco v ->- src
 
+scaladoc'' :: FilePath -> Version -> Sd.Scaladoc
 scaladoc'' d v = Sd.scaladoc {
   Sd.directory = Just d,
   Sd.doctitle = dt v,
@@ -111,15 +130,20 @@ scaladoc'' d v = Sd.scaladoc {
   Sd.linksource = True
 }
 
+scaladoc :: Version -> IO ExitCode
 scaladoc v = mkdir scaladoco >> copyFile (ds </> "script.js") (scaladoco </> "script.js") >> javac >>>> (j >=>=> scaladoc'' scaladoco v ->- src)
 
 -- todo jar function for Lastik
+jar :: String -> IO ExitCode
 jar k = system ("jar " ++ k)
 
+nosvn :: FindClause Bool
 nosvn = fileName /~? ".svn"
 
+nosvnf :: FindClause Bool
 nosvnf = nosvn &&? fileType ==? RegularFile
 
+archive :: IO ()
 archive = compile >>>>> do mkdir jardir
                            writeArchive ([javaco, scalaco, resources] `zip` repeat ".")
                                         nosvn
@@ -127,6 +151,7 @@ archive = compile >>>>> do mkdir jardir
                                         [OptVerbose]
                                         (jardir </> "functionaljava.jar")
 
+release :: Version -> IO ()
 release v = let k = build </> "functionaljava"
             in do fullClean >> resolve >> archive >> javadoc v >> scaladoc v
                   mkdir k
