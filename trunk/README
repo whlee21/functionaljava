@@ -16,16 +16,17 @@ You are now ready to start playing with the build functionality.
 To enter the GHC interpreter with the Build.hs source, type:
 > ghci Build.hs
 
-The special GHCi commands are prefixed with a semi-colon (:). GHCi also has tab-completion
-so you may type : then hit TAB and you will see all GHCi commands.
+The special GHCi commands are prefixed with a semi-colon (:).
+GHCi also has tab-completion so you may type : then hit TAB and you will see all GHCi commands.
 
-You can view all of the available Functional Java build functions and their type in the build with the :browse command.
-The output will be a list of: function name followed by :: followed by the type.
-Functions that have the type "IO ()" or "IO ExitCode" will execute a command of some sort.
-Tab-completion is also available for function names.
+You can view all of the available Functional Java build functions and their type with the :browse command. The output will be a list of: function name followed by :: followed by the type. You read the word :: out aloud as "is of type" so for example src :: [FilePath] would be read as "src is of type list of FilePath". You can get its value by typing src and hitting enter.
 
-For example, suppose you want to compile and build a JAR file, then you would execute the "archive" function.
-At the *Build> prompt type "ar<TAB>". This will fill out the word "archive". Hit enter and the build of the JAR archive will commence.
+*Build> src
+["src/main","src/package-info"]
+
+They are the Functional Java source directories. Functions that have the type "IO ()" or "IO ExitCode" will execute a command of some sort. You are probably most interested in these functions for doing compiling and so on. Tab-completion is also available for function names so don't forget to use it.
+
+For example, suppose you want to compile and build a JAR file, then you would execute the "archive" function. At the *Build> prompt type "ar<TAB>". This will fill out the word "archive". Hit enter and the build of the JAR archive will commence.
 
 Want to know where the JAR file built to? There is a function called 'jardir' which is of the type FilePath. Just type jardir and hit ENTER.
 
