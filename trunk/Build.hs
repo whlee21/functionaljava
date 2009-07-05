@@ -159,5 +159,6 @@ release v = let k = build </> "functionaljava"
                   mkdir releasedir
                   a <- archiveDirectories [(build, "functionaljava")] always always [OptVerbose]
                   let s = fromArchive a
-                  B.writeFile (releasedir </> "functionaljava.zip") s
-                  forM_ [(".MD5", show . md5), (".SHA", show . sha1)] (\(e, f) -> writeFile (releasedir </> ("functionaljava.zip" ++ e)) (f s))
+                      z = "functionaljava.zip"
+                  B.writeFile (releasedir </> z) s
+                  forM_ [(".MD5", show . md5), (".SHA", show . sha1)] (\(e, f) -> writeFile (releasedir </> (z ++ e)) (f s))
