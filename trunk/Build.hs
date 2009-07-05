@@ -152,19 +152,19 @@ archive = compile >>>>> do mkdir jardir
                                         [OptVerbose]
                                         (jardir </> "functionaljava.jar")
 
-cleanBuildAll :: IO ExitCode
-cleanBuildAll = do v <- readVersion
-                   fullClean >> resolve >> archive >> javadoc v >> scaladoc v
+buildAll :: IO ExitCode
+buildAll = do v <- readVersion
+              resolve >> archive >> javadoc v >> scaladoc v
 
 maven :: IO ()
-maven = do cleanBuildAll
+maven = do buildAll
            v <- readVersion
            mkdir mavendir
            forM_ [("javadoc", [javadoco]), ("scaladoc", [scaladoco]), ("sources", src), ("tests", test)] (\(n, f) -> writeArchive (map (flip (,) ".") f) nosvn nosvnf [OptRecursive] (mavendir </> ("fj-" ++ v ++ '-' :  n ++ ".jar")))
 
 release :: IO ()
 release = let k = build </> "functionaljava"
-          in do cleanBuildAll
+          in do buildAll
                 mkdir k
                 forM_ ([(1, javadoco), (1, scaladoco), (2, jardir), (1, etcdir)] ++ map ((,) 0) (src ++ test)) (\(l, d) -> copyDir nosvn nosvnf l d k)
                 mkdir releasedir
