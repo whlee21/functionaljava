@@ -31,7 +31,7 @@ You can view all of the available Functional Java build functions and their type
 
 They are the Functional Java source directories. Functions that have the type "IO ()" or "IO ExitCode" will execute a command of some sort. You are probably most interested in these functions for doing compiling and so on. Tab-completion is also available for function names so don't forget to use it.
 
-For example, suppose you want to compile and build a JAR file, then you would execute the "archive" function. At the *Build> prompt type "ar<TAB>". This will fill out the word "archive". Hit enter and the build of the JAR archive will commence.
+For example, suppose you want to compile and build a JAR file, then you would execute the "archive" function. At the *Build> prompt type "ar<TAB>". This will fill out the word "archive". Hit enter and the build of the JAR archive will commence. If the tab-completion is ambiguous, hit tab twice in quick succession to list your available options.
 
 Want to know where the JAR file built to? There is a function called 'jardir' which is of the type FilePath. You'll have seen in your :browse. Just type jardir and hit ENTER.
 
