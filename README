@@ -33,3 +33,5 @@ Want to know where the JAR file built to? There is a function called 'jardir' wh
 "build/jar"
 
 That's where your JAR file will be. You get the drift.
+
+There is the full power of the Haskell programming language and tools to supplement your experience. No more piss-farting about with Apache Ant or Maven or Buildr or any of that nonsense, yay!
