@@ -53,6 +53,8 @@ resolve = do mkdir ds
   where
   k = map ("http://projects.tmorris.net/public/standards/artifacts/1.30/" ++) ["javadoc-style/javadoc-style.css", "scaladoc-style/script.js", "scaladoc-style/style.css"] ++ ["http://software.tmorris.net/artifacts//package-list-j2se/1.5.0/package-list"]
 
+type Version = String
+
 clean = rmdir build
 
 fullClean = rmdir ds >> clean
@@ -133,5 +135,4 @@ release v = let k = build </> "functionaljava"
                   a <- archiveDirectories [(build, "functionaljava")] always always [OptVerbose]
                   let s = fromArchive a
                   B.writeFile (releasedir </> "functionaljava.zip") s
-                  writeFile (releasedir </> "functionaljava.zip.MD5") (show (md5 s))
-                  writeFile (releasedir </> "functionaljava.zip.SHA") (show (sha1 s))
+                  forM_ [(".MD5", show . md5), (".SHA", show . sha1)] (\(e, f) -> writeFile (releasedir </> ("functionaljava.zip" ++ e)) (f s))
