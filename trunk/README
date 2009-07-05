@@ -16,6 +16,11 @@ You are now ready to start playing with the build functionality.
 To enter the GHC interpreter with the Build.hs source, type:
 > ghci Build.hs
 
+You will find yourself at a prompt
+*Build>
+
+This is a GHCi prompt and you have loaded the Functional Java build module.
+
 The special GHCi commands are prefixed with a semi-colon (:).
 GHCi also has tab-completion so you may type : then hit TAB and you will see all GHCi commands.
 
