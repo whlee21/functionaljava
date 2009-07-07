@@ -160,7 +160,7 @@ maven = do buildAll
            mkdir mavendir
            v <- readVersion
            forM_ [("javadoc", [javadoco]), ("scaladoc", [scaladoco]), ("sources", src), ("tests", test)] (\(n, f) ->
-             writeHashArchive (map (flip (,) ".") f) nosvn nosvnf [OptRecursive] (mavendir </> "fj-" ++ v ++ '-' :  n ++ ".jar"))
+             writeHashArchive (map (flip (,) ".") f) nosvn nosvnf [OptVerbose] (mavendir </> "fj-" ++ v ++ '-' :  n ++ ".jar"))
 
 release :: IO ()
 release = let k = build </> "functionaljava"
