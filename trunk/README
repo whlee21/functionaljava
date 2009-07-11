@@ -16,6 +16,7 @@ This was an accident and fixing it is high priority.
   1b.3) Install The Haskell Platform with the command 'cabal install haskell-platform'
 2) Cabal update with the command 'cabal update'
 3) Install Lastik with the command 'cabal install Lastik'
+    http://hackage.haskell.org/package/Lastik
 
 You are now ready to start playing with the build functionality.
 
