@@ -3,6 +3,7 @@ package fj;
 import static fj.Function.*;
 import fj.data.List;
 import fj.data.Stream;
+import static fj.FW.$;
 
 /**
  * A product-2.
@@ -158,12 +159,50 @@ public abstract class P2<A, B> {
    */
   public <C> Stream<C> sequenceW(final Stream<F<P2<A, B>, C>> fs) {
     return fs.isEmpty()
-        ? Stream.<C>nil()
-        : Stream.cons(fs.head().f(this), new P1<Stream<C>>() {
-      public Stream<C> _1() {
-        return sequenceW(fs.tail()._1());
+           ? Stream.<C>nil()
+           : Stream.cons(fs.head().f(this), new P1<Stream<C>>() {
+             public Stream<C> _1() {
+               return sequenceW(fs.tail()._1());
+             }
+           });
+  }
+
+  /**
+   * Returns the 1-product projection over the first element.
+   *
+   * @return the 1-product projection over the first element.
+   */
+  public P1<A> _1_() {
+    return $(P2.<A, B>__1()).lazy().f(this);
+  }
+
+  /**
+   * Returns the 1-product projection over the second element.
+   *
+   * @return the 1-product projection over the second element.
+   */
+  public P1<B> _2_() {
+    return $(P2.<A, B>__2()).lazy().f(this);
+  }
+
+  /**
+   * Provides a memoising P2 that remembers its values.
+   *
+   * @return A P2 that calls this P2 once for any given element and remembers the value for subsequent calls.
+   */
+  public P2<A, B> memo() {
+    return new P2<A, B>() {
+      private final P1<A> a = _1_().memo();
+      private final P1<B> b = _2_().memo();
+
+      public A _1() {
+        return a._1();
       }
-    });
+
+      public B _2() {
+        return b._1();
+      }
+    };
   }
 
   /**

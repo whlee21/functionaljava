@@ -16,10 +16,10 @@ import static fj.Unit.unit;
 import fj.control.parallel.Promise;
 import static fj.control.parallel.Promise.promise;
 import fj.control.parallel.Strategy;
-import static fj.data.Array.array;
-import static fj.data.Array.mkArray;
-import static fj.data.Option.none;
 import static fj.data.Option.some;
+import static fj.data.Option.none;
+import static fj.data.Array.mkArray;
+import static fj.data.Array.array;
 import fj.function.Booleans;
 import static fj.function.Booleans.not;
 import fj.pre.Monoid;
@@ -577,7 +577,7 @@ public abstract class Stream<A> implements Iterable<A> {
   }
 
   /**
-   * Sort this stream according to the given ordering, using the Quick Sort algorithm.
+   * Sort this stream according to the given ordering, using the Quicksort algorithm.
    *
    * @param o An ordering for the elements of this stream.
    * @return A new stream with the elements of this stream sorted according to the given ordering.
@@ -589,7 +589,7 @@ public abstract class Stream<A> implements Iterable<A> {
       final Stream<A> xs = tail()._1();
       final A x = head();
       final F<A, Boolean> lt = o.isLessThan(x);
-      return xs.filter(lt).qsort(o).append(single(x)).append(xs.filter(compose(Booleans.not, lt)).qsort(o));
+      return xs.filter(lt).qsort(o).append(single(x)).append(xs.filter(compose(not, lt)).qsort(o));
     }
   }
 
@@ -893,13 +893,9 @@ public abstract class Stream<A> implements Iterable<A> {
    * @return A new stream with the same length as this stream.
    */
   public Stream<P2<A, Integer>> zipIndex() {
-    return zipWith(range(0, length()), new F<A, F<Integer, P2<A, Integer>>>() {
-      public F<Integer, P2<A, Integer>> f(final A a) {
-        return new F<Integer, P2<A, Integer>>() {
-          public P2<A, Integer> f(final Integer i) {
-            return p(a, i);
-          }
-        };
+    return zipWith(range(0), new F2<A, Integer, P2<A, Integer>>() {
+      public P2<A, Integer> f(final A a, final Integer i) {
+        return p(a, i);
       }
     });
   }
@@ -948,9 +944,10 @@ public abstract class Stream<A> implements Iterable<A> {
    */
   @SuppressWarnings({"unchecked"})
   public Array<A> toArray() {
-    final Object[] a = new Object[length()];
+    final int l = length();
+    final Object[] a = new Object[l];
     Stream<A> x = this;
-    for (int i = 0; i < length(); i++) {
+    for (int i = 0; i < l; i++) {
       a[i] = x.head();
       x = x.tail()._1();
     }
@@ -1441,7 +1438,7 @@ public abstract class Stream<A> implements Iterable<A> {
 
     Cons(final A head, final P1<Stream<A>> tail) {
       this.head = head;
-      this.tail = tail;
+      this.tail = tail.memo();
     }
 
     public A head() {

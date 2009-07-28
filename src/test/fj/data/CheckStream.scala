@@ -8,7 +8,7 @@ import ArbitraryP.arbitraryP1
 import fj.pre.Equal.{streamEqual, stringEqual}
 import Implicit._
 import fj.Unit.unit
-import Stream.{nil, single, join}
+import Stream.{nil, single, join, iterableStream}
 import fj.pre.Ord.stringOrd
 
 object CheckStream {
@@ -150,6 +150,11 @@ object CheckStream {
     e.eq(d, a.qsort(stringOrd))
   })
 
+  val prop_iterable = forAll((a: Stream[String]) => {
+    val e = streamEqual(stringEqual)
+    e.eq(a, iterableStream(a))
+  }
+
   val tests = scala.List(
       ("prop_isEmpty", prop_isEmpty),
       ("prop_isNotEmpty", prop_isNotEmpty),
@@ -178,7 +183,8 @@ object CheckStream {
       ("prop_find", prop_find),
       ("prop_join", prop_join),
       ("prop_qsort", prop_qsort),
-      ("prop_parallel_qsort", prop_parallel_qsort)
+      ("prop_parallel_qsort", prop_parallel_qsort),
+      ("prop_iterable", prop_iterable)
   ).map { case (n, p) => ("Stream." + n, p) }
 
   def main(args: scala.Array[String]) = Tests.run(tests)

@@ -1,5 +1,7 @@
 package fj;
 
+import static fj.FW.$;
+
 /**
  * A product-5.
  *
@@ -100,7 +102,7 @@ public abstract class P5<A, B, C, D, E> {
       }
 
       public E _5() {
-        return P5.this._5();        
+        return P5.this._5();
       }
     };
   }
@@ -191,6 +193,86 @@ public abstract class P5<A, B, C, D, E> {
 
       public X _5() {
         return f.f(P5.this._5());
+      }
+    };
+  }
+
+  /**
+   * Returns the 1-product projection over the first element.
+   *
+   * @return the 1-product projection over the first element.
+   */
+  public P1<A> _1_() {
+    return $(P5.<A, B, C, D, E>__1()).lazy().f(this);
+  }
+
+  /**
+   * Returns the 1-product projection over the second element.
+   *
+   * @return the 1-product projection over the second element.
+   */
+  public P1<B> _2_() {
+    return $(P5.<A, B, C, D, E>__2()).lazy().f(this);
+  }
+
+  /**
+   * Returns the 1-product projection over the third element.
+   *
+   * @return the 1-product projection over the third element.
+   */
+  public P1<C> _3_() {
+    return $(P5.<A, B, C, D, E>__3()).lazy().f(this);
+  }
+
+  /**
+   * Returns the 1-product projection over the fourth element.
+   *
+   * @return the 1-product projection over the fourth element.
+   */
+  public P1<D> _4_() {
+    return $(P5.<A, B, C, D, E>__4()).lazy().f(this);
+  }
+
+  /**
+   * Returns the 1-product projection over the fifth element.
+   *
+   * @return the 1-product projection over the fifth element.
+   */
+  public P1<E> _5_() {
+    return $(P5.<A, B, C, D, E>__5()).lazy().f(this);
+  }
+
+  /**
+   * Provides a memoising P5 that remembers its values.
+   *
+   * @return A P5 that calls this P5 once for any given element and remembers the value for subsequent calls.
+   */
+  public P5<A, B, C, D, E> memo() {
+    return new P5<A, B, C, D, E>() {
+      private final P1<A> a = _1_().memo();
+      private final P1<B> b = _2_().memo();
+      private final P1<C> c = _3_().memo();
+      private final P1<D> d = _4_().memo();
+      private final P1<E> e = _5_().memo();
+
+      public A _1() {
+        return a._1();
+      }
+
+      public B _2() {
+        return b._1();
+      }
+
+      public C _3() {
+        return c._1();
+      }
+
+      public D _4() {
+        return d._1();
+      }
+
+      public E _5() {
+        return e._1();
       }
     };
   }
