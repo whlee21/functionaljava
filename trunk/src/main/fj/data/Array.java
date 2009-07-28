@@ -168,9 +168,12 @@ public final class Array<A> implements Iterable<A> {
    */
   @SuppressWarnings("unchecked")
   public Stream<A> toStream() {
-    Stream<A> s = Stream.nil();
-    for (final Object anA : a) s = s.snoc((A) anA);
-    return s;
+    return Stream.unfold(new F<Integer, Option<P2<A, Integer>>>() {
+      public Option<P2<A, Integer>> f(final Integer o) {
+        return a.length > o ? some(p((A) a[o], o + 1))
+                            : Option.<P2<A, Integer>>none();
+      }
+    }, 0);
   }
 
   /**

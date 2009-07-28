@@ -6,8 +6,12 @@ import fj.data.Array;
 import fj.data.Option;
 import static fj.data.Option.none;
 import static fj.data.Option.some;
+import static fj.data.Option.fromNull;
 
 import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.atomic.AtomicReference;
+import java.lang.ref.WeakReference;
+import java.lang.ref.SoftReference;
 
 /**
  * A product-1. Also, the identity monad.
@@ -207,15 +211,17 @@ public abstract class P1<A> {
     final P1<A> self = this;
     return new P1<A>() {
       private Object latch = new Object();
-      private volatile Option<A> v = none();
+      private volatile SoftReference<A> v;
 
       public A _1() {
-        if (v.isNone())
+        A a = v.get();
+        if (a == null)
           synchronized (latch) {
-            if (v.isNone())
-              v = some(self._1());
+            if (v.get() == null)
+              a = self._1();
+            v = new SoftReference<A>(a);
           }
-        return v.some();
+        return a;
       }
     };
   }

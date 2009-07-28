@@ -1,5 +1,7 @@
 package fj;
 
+import static fj.FW.$;
+
 /**
  * A product-3.
  *
@@ -93,6 +95,58 @@ public abstract class P3<A, B, C> {
 
       public X _3() {
         return f.f(P3.this._3());
+      }
+    };
+  }
+
+  /**
+   * Returns the 1-product projection over the first element.
+   *
+   * @return the 1-product projection over the first element.
+   */
+  public P1<A> _1_() {
+    return $(P3.<A, B, C>__1()).lazy().f(this);
+  }
+
+  /**
+   * Returns the 1-product projection over the second element.
+   *
+   * @return the 1-product projection over the second element.
+   */
+  public P1<B> _2_() {
+    return $(P3.<A, B, C>__2()).lazy().f(this);
+  }
+
+  /**
+   * Returns the 1-product projection over the third element.
+   *
+   * @return the 1-product projection over the third element.
+   */
+  public P1<C> _3_() {
+    return $(P3.<A, B, C>__3()).lazy().f(this);
+  }
+
+  /**
+   * Provides a memoising P3 that remembers its values.
+   *
+   * @return A P3 that calls this P3 once for any given element and remembers the value for subsequent calls.
+   */
+  public P3<A, B, C> memo() {
+    return new P3<A, B, C>() {
+      private final P1<A> a = _1_().memo();
+      private final P1<B> b = _2_().memo();
+      private final P1<C> c = _3_().memo();
+
+      public A _1() {
+        return a._1();
+      }
+
+      public B _2() {
+        return b._1();
+      }
+
+      public C _3() {
+        return c._1();
       }
     };
   }

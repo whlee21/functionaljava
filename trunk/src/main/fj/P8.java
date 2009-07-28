@@ -1,5 +1,7 @@
 package fj;
 
+import static fj.FW.$;
+
 /**
  * A product-8.
  *
@@ -402,6 +404,130 @@ public abstract class P8<A, B, C, D, E, F, G, H> {
       }
     };
   }
+
+
+  /**
+   * Returns the 1-product projection over the first element.
+   *
+   * @return the 1-product projection over the first element.
+   */
+  public P1<A> _1_() {
+    return $(P8.<A, B, C, D, E, F, G, H>__1()).lazy().f(this);
+  }
+
+  /**
+   * Returns the 1-product projection over the second element.
+   *
+   * @return the 1-product projection over the second element.
+   */
+  public P1<B> _2_() {
+    return $(P8.<A, B, C, D, E, F, G, H>__2()).lazy().f(this);
+  }
+
+  /**
+   * Returns the 1-product projection over the third element.
+   *
+   * @return the 1-product projection over the third element.
+   */
+  public P1<C> _3_() {
+    return $(P8.<A, B, C, D, E, F, G, H>__3()).lazy().f(this);
+  }
+
+  /**
+   * Returns the 1-product projection over the fourth element.
+   *
+   * @return the 1-product projection over the fourth element.
+   */
+  public P1<D> _4_() {
+    return $(P8.<A, B, C, D, E, F, G, H>__4()).lazy().f(this);
+  }
+
+  /**
+   * Returns the 1-product projection over the fifth element.
+   *
+   * @return the 1-product projection over the fifth element.
+   */
+  public P1<E> _5_() {
+    return $(P8.<A, B, C, D, E, F, G, H>__5()).lazy().f(this);
+  }
+
+  /**
+   * Returns the 1-product projection over the sixth element.
+   *
+   * @return the 1-product projection over the sixth element.
+   */
+  public P1<F> _6_() {
+    return $(P8.<A, B, C, D, E, F, G, H>__6()).lazy().f(this);
+  }
+
+  /**
+   * Returns the 1-product projection over the seventh element.
+   *
+   * @return the 1-product projection over the seventh element.
+   */
+  public P1<G> _7_() {
+    return $(P8.<A, B, C, D, E, F, G, H>__7()).lazy().f(this);
+  }
+
+  /**
+   * Returns the 1-product projection over the eighth element.
+   *
+   * @return the 1-product projection over the eighth element.
+   */
+  public P1<H> _8_() {
+    return $(P8.<A, B, C, D, E, F, G, H>__8()).lazy().f(this);
+  }
+
+  /**
+   * Provides a memoising P8 that remembers its values.
+   *
+   * @return A P8 that calls this P8 once for any given element and remembers the value for subsequent calls.
+   */
+  public P8<A, B, C, D, E, F, G, H> memo() {
+    return new P8<A, B, C, D, E, F, G, H>() {
+      private final P1<A> a = _1_().memo();
+      private final P1<B> b = _2_().memo();
+      private final P1<C> c = _3_().memo();
+      private final P1<D> d = _4_().memo();
+      private final P1<E> e = _5_().memo();
+      private final P1<F> f = _6_().memo();
+      private final P1<G> g = _7_().memo();
+      private final P1<H> h = _8_().memo();
+
+      public A _1() {
+        return a._1();
+      }
+
+      public B _2() {
+        return b._1();
+      }
+
+      public C _3() {
+        return c._1();
+      }
+
+      public D _4() {
+        return d._1();
+      }
+
+      public E _5() {
+        return e._1();
+      }
+
+      public F _6() {
+        return f._1();
+      }
+
+      public G _7() {
+        return g._1();
+      }
+
+      public H _8() {
+        return h._1();
+      }
+    };
+  }
+
 
   /**
    * Returns a function that returns the first element of a product.

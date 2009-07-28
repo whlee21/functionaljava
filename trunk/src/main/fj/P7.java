@@ -1,5 +1,7 @@
 package fj;
 
+import static fj.FW.$;
+
 /**
  * A product-7.
  *
@@ -322,6 +324,114 @@ public abstract class P7<A, B, C, D, E, F, G> {
 
       public X _7() {
         return f.f(P7.this._7());
+      }
+    };
+  }
+
+  /**
+   * Returns the 1-product projection over the first element.
+   *
+   * @return the 1-product projection over the first element.
+   */
+  public P1<A> _1_() {
+    return $(P7.<A, B, C, D, E, F, G>__1()).lazy().f(this);
+  }
+
+  /**
+   * Returns the 1-product projection over the second element.
+   *
+   * @return the 1-product projection over the second element.
+   */
+  public P1<B> _2_() {
+    return $(P7.<A, B, C, D, E, F, G>__2()).lazy().f(this);
+  }
+
+  /**
+   * Returns the 1-product projection over the third element.
+   *
+   * @return the 1-product projection over the third element.
+   */
+  public P1<C> _3_() {
+    return $(P7.<A, B, C, D, E, F, G>__3()).lazy().f(this);
+  }
+
+  /**
+   * Returns the 1-product projection over the fourth element.
+   *
+   * @return the 1-product projection over the fourth element.
+   */
+  public P1<D> _4_() {
+    return $(P7.<A, B, C, D, E, F, G>__4()).lazy().f(this);
+  }
+
+  /**
+   * Returns the 1-product projection over the fifth element.
+   *
+   * @return the 1-product projection over the fifth element.
+   */
+  public P1<E> _5_() {
+    return $(P7.<A, B, C, D, E, F, G>__5()).lazy().f(this);
+  }
+
+  /**
+   * Returns the 1-product projection over the sixth element.
+   *
+   * @return the 1-product projection over the sixth element.
+   */
+  public P1<F> _6_() {
+    return $(P7.<A, B, C, D, E, F, G>__6()).lazy().f(this);
+  }
+
+  /**
+   * Returns the 1-product projection over the seventh element.
+   *
+   * @return the 1-product projection over the seventh element.
+   */
+  public P1<G> _7_() {
+    return $(P7.<A, B, C, D, E, F, G>__7()).lazy().f(this);
+  }
+
+  /**
+   * Provides a memoising P7 that remembers its values.
+   *
+   * @return A P7 that calls this P7 once for any given element and remembers the value for subsequent calls.
+   */
+  public P7<A, B, C, D, E, F, G> memo() {
+    return new P7<A, B, C, D, E, F, G>() {
+      private final P1<A> a = _1_().memo();
+      private final P1<B> b = _2_().memo();
+      private final P1<C> c = _3_().memo();
+      private final P1<D> d = _4_().memo();
+      private final P1<E> e = _5_().memo();
+      private final P1<F> f = _6_().memo();
+      private final P1<G> g = _7_().memo();
+
+      public A _1() {
+        return a._1();
+      }
+
+      public B _2() {
+        return b._1();
+      }
+
+      public C _3() {
+        return c._1();
+      }
+
+      public D _4() {
+        return d._1();
+      }
+
+      public E _5() {
+        return e._1();
+      }
+
+      public F _6() {
+        return f._1();
+      }
+
+      public G _7() {
+        return g._1();
       }
     };
   }
