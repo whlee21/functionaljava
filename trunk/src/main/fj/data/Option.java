@@ -1,11 +1,7 @@
 package fj.data;
 
 import static fj.Bottom.error;
-import fj.Effect;
-import fj.F;
-import fj.F2;
-import fj.P1;
-import fj.Unit;
+import fj.*;
 import static fj.Function.*;
 import static fj.Unit.unit;
 import static fj.data.Array.array;
@@ -313,6 +309,41 @@ public abstract class Option<A> implements Iterable<A> {
                                                   final Option<H> oh,
                                                   final F<A, F<B, F<C, F<D, F<E, F<F$, F<G, F<H, I>>>>>>>> f) {
     return oh.apply(bind(ob, oc, od, oe, of, og, f));
+  }
+
+  public <B> Option<P2<A,B>> bindProduct(final Option<B> ob) {
+    return bind(ob, P.<A,B>p2()); 
+  }
+
+  public <B,C> Option<P3<A,B,C>> bindProduct(final Option<B> ob, final Option<C> oc) {
+    return bind(ob, oc, P.<A,B,C>p3());
+  }
+  
+  public <B,C,D> Option<P4<A,B,C,D>> bindProduct(final Option<B> ob, final Option<C> oc, final Option<D> od) {
+    return bind(ob, oc, od, P.<A, B, C, D>p4());
+  }
+  
+  public <B,C,D,E> Option<P5<A,B,C,D,E>> bindProduct(final Option<B> ob, final Option<C> oc, final Option<D> od,
+                                                     final Option<E> oe) {
+    return bind(ob, oc, od, oe, P.<A, B, C, D, E>p5());
+  }
+
+  public <B,C,D,E,F$> Option<P6<A,B,C,D,E,F$>> bindProduct(final Option<B> ob, final Option<C> oc, final Option<D> od,
+                                                           final Option<E> oe, final Option<F$> of) {
+    return bind(ob, oc, od, oe, of, P.<A, B, C, D, E, F$>p6());
+  }
+
+  public <B,C,D,E,F$,G> Option<P7<A,B,C,D,E,F$,G>> bindProduct(final Option<B> ob, final Option<C> oc,
+                                                               final Option<D> od, final Option<E> oe,
+                                                               final Option<F$> of, final Option<G> og) {
+    return bind(ob, oc, od, oe, of, og, P.<A, B, C, D, E, F$, G>p7());
+  }
+
+  public <B,C,D,E,F$,G,H> Option<P8<A,B,C,D,E,F$,G,H>> bindProduct(final Option<B> ob, final Option<C> oc,
+                                                                   final Option<D> od, final Option<E> oe,
+                                                                   final Option<F$> of, final Option<G> og,
+                                                                   final Option<H> oh) {
+    return bind(ob, oc, od, oe, of, og, oh, P.<A,B,C,D,E,F$,G,H>p8());
   }
 
   /**
