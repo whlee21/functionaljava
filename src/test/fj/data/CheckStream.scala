@@ -29,9 +29,8 @@ object CheckStream {
   val prop_toOption = forAll((a: Stream[Int]) =>
     a.toOption.isNone || a.toOption.some == a.head)
 
-  // crashes the type checker for unknown reason
-  // val prop_toEither = property((a: Stream[Int], n: P1[Int]) =>
-  //   (a.toEither(n).isLeft && a.toEither(n).left.value == n._1) || (a.toEither(n).right.value == a.head))
+  val prop_toEither = forAll((a: Stream[Int], n: P1[Int]) =>
+    (a.toEither(n).isLeft && a.toEither(n).left.value == n._1) || (a.toEither(n).right.value == a.head))
 
   val prop_cons1 = forAll((a: Stream[Int], n: Int) =>
     a.cons(n).head == n)
@@ -47,23 +46,22 @@ object CheckStream {
     def g(s: String) = s.toUpperCase
     streamEqual(stringEqual).eq(a.map((x: String) => f(g(x))), a.map((x: String) => g(x)).map((x: String) => f(x)))})
 
-  // crashes the type checker for unknown reason
-  // val prop_foreach = property((a: Stream[Int]) => {
-  //   var i = 0
-  //   a.foreach({
-  //     (x: Int) => i = i + x
-  //     unit
-  //   })
-  //
-  //   var j = 0
-  //
-  //   val aa = a.toArray
-  //
-  //   for(x <- 0 until aa.length)
-  //     j = j + aa.get(x)
-  //
-  //   i == j
-  // })
+  val prop_foreach = forAll((a: Stream[Int]) => {
+    var i = 0
+    a.foreach({
+      (x: Int) => i = i + x
+      unit
+    })
+  
+    var j = 0
+  
+    val aa = a.toArray
+  
+    for(x <- 0 until aa.length)
+       j = j + aa.get(x)
+  
+    i == j
+  })
 
   val prop_filter1 = forAll((a: Stream[Int]) =>
     a.filter((x: Int) => ((x % 2 == 0): java.lang.Boolean)).forall((x: Int) => ((x % 2 == 0): java.lang.Boolean)))
@@ -153,19 +151,19 @@ object CheckStream {
   val prop_iterable = forAll((a: Stream[String]) => {
     val e = streamEqual(stringEqual)
     e.eq(a, iterableStream(a))
-  }
+  })
 
   val tests = scala.List(
       ("prop_isEmpty", prop_isEmpty),
       ("prop_isNotEmpty", prop_isNotEmpty),
       ("prop_orHead", prop_orHead),
       ("prop_toOption", prop_toOption),
-//      ("prop_toEither", prop_toEither),
+      ("prop_toEither", prop_toEither),
       ("prop_cons1", prop_cons1),
       ("prop_cons2", prop_cons2),
       ("prop_mapId", prop_mapId),
       ("prop_mapCompose", prop_mapCompose),
-//      ("prop_foreach", prop_foreach),
+      ("prop_foreach", prop_foreach),
       ("prop_filter1", prop_filter1),
       ("prop_filter2", prop_filter2),
       ("prop_bindLeftIdentity", prop_bindLeftIdentity),
@@ -189,3 +187,4 @@ object CheckStream {
 
   def main(args: scala.Array[String]) = Tests.run(tests)
 }
+
