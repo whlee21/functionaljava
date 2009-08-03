@@ -214,10 +214,10 @@ public abstract class P1<A> {
       private volatile SoftReference<A> v;
 
       public A _1() {
-        A a = v.get();
+        A a = v != null ? v.get() : null;
         if (a == null)
           synchronized (latch) {
-            if (v.get() == null)
+            if (v == null || v.get() == null)
               a = self._1();
             v = new SoftReference<A>(a);
           }
