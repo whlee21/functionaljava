@@ -20,7 +20,7 @@ import System.Cmd
 import System.Exit
 import System.Directory
 import System.FilePath
-import System.FilePath.Find
+import Lastik.Find
 import Codec.Archive.Zip
 import qualified Data.ByteString.Lazy as B
 import Data.Digest.Pure.MD5
@@ -137,11 +137,11 @@ scaladoc'' v = Sd.scaladoc {
 scaladoc :: Version -> IO ExitCode
 scaladoc v = resolve >> mkdir scaladoco >> copyFile (ds </> "script.js") (scaladoco </> "script.js") >> javac >>>> (j >=>=> scaladoc'' v ->- src)
 
-nosvn :: FindClause Bool
-nosvn = fileName /~? ".svn"
+nosvn :: FilePather Bool
+nosvn = fileName /=? ".svn"
 
-nosvnf :: FindClause Bool
-nosvnf = nosvn &&? fileType ==? RegularFile
+nosvnf :: FilterPredicate
+nosvnf = constant nosvn ?&&? isFile
 
 archive :: IO ()
 archive = compile >>>>> do mkdir jardir
@@ -168,4 +168,4 @@ release = let k = build </> "functionaljava"
                 mkdir k
                 forM_ ([(1, javadoco), (1, scaladoco), (2, jardir), (1, etcdir)] ++ map ((,) 0) (src ++ test)) (\(l, d) -> copyDir nosvn nosvnf l d k)
                 mkdir releasedir
-                writeHashArchive [(build, "functionaljava")] always always [OptVerbose] (releasedir </> "functionaljava.zip")
+                writeHashArchive [(build, "functionaljava")] always always' [OptVerbose] (releasedir </> "functionaljava.zip")
