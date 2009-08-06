@@ -6,9 +6,6 @@ $URL$
 Build Instructions
 ------------------
 
-AT THIS MOMENT WINDOWS IS NOT SUPPORTED.
-This was an accident and fixing it is high priority.
-
 1a) Install The Haskell Platform http://hackage.haskell.org/platform/
 1b) If The Haskell Platform is not available to you:
   1b.1) Install GHC http://haskell.org/ghc
