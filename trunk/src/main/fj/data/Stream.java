@@ -577,20 +577,55 @@ public abstract class Stream<A> implements Iterable<A> {
   }
 
   /**
-   * Sort this stream according to the given ordering, using the Quicksort algorithm.
+   * Sort this stream according to the given ordering.
    *
    * @param o An ordering for the elements of this stream.
    * @return A new stream with the elements of this stream sorted according to the given ordering.
    */
-  public Stream<A> qsort(final Ord<A> o) {
-    if (isEmpty())
-      return this;
-    else {
-      final Stream<A> xs = tail()._1();
-      final A x = head();
-      final F<A, Boolean> lt = o.isLessThan(x);
-      return xs.filter(lt).qsort(o).append(single(x)).append(xs.filter(compose(not, lt)).qsort(o));
+  public Stream<A> sort(final Ord<A> o) {
+    return mergesort(o, map(flip(Stream.<A>cons()).f(p(Stream.<A>nil()))));
+  }
+
+  // Merges a stream of individually sorted streams into a single sorted stream.
+  private static <A> Stream<A> mergesort(final Ord<A> o, final Stream<Stream<A>> s) {
+    if (s.isEmpty())
+      return nil();
+    Stream<Stream<A>> xss = s;
+    while (xss.tail()._1().isNotEmpty())
+      xss = mergePairs(o, xss);
+    return xss.head();
+  }
+
+  // Merges individually sorted streams two at a time.
+  private static <A> Stream<Stream<A>> mergePairs(final Ord<A> o, final Stream<Stream<A>> s) {
+    if (s.isEmpty() || s.tail()._1().isEmpty())
+      return s;
+    final Stream<Stream<A>> t = s.tail()._1();
+    return cons(merge(o, s.head(), t.head()), new P1<Stream<Stream<A>>>() {
+      public Stream<Stream<A>> _1() {
+        return mergePairs(o, t.tail()._1());
+      }
+    });
+  }
+
+  // Merges two individually sorted streams.
+  private static <A> Stream<A> merge(final Ord<A> o, final Stream<A> xs, final Stream<A> ys) {
+    if (xs.isEmpty())
+      return ys;
+    if (ys.isEmpty())
+      return xs;
+    A x = xs.head();
+    A y = ys.head();
+    if (o.isGreaterThan(x, y)) {
+      final A tmp = x;
+      x = y;
+      y = tmp;
     }
+    return cons(x, p(cons(y, new P1<Stream<A>>() {
+      public Stream<A> _1() {
+        return merge(o, xs.tail()._1(), ys.tail()._1());
+      }
+    })));
   }
 
   /**
@@ -601,7 +636,7 @@ public abstract class Stream<A> implements Iterable<A> {
    * @param s A strategy for parallelising the algorithm.
    * @return A new stream with the elements of this stream sorted according to the given ordering.
    */
-  public Stream<A> qsort(final Ord<A> o, final Strategy<Unit> s) {
+  public Stream<A> sort(final Ord<A> o, final Strategy<Unit> s) {
     return qs(o, s).claim();
   }
 
