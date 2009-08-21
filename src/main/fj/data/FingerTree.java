@@ -19,15 +19,59 @@ import fj.pre.Monoid;
  * A general purpose data structure that can serve as a sequence, priority queue, search tree, priority search queue
  * and more.
  * <p/>
- * An instance of this class is a factory of finger trees annotated with a particular monoid. Different monoids
- * provide different functionality for the tree.
- * <p/>
  * Based on "Finger trees: a simple general-purpose data structure", by Ralf Hinze and Ross Paterson.
  *
  * @param <V> The monoidal type with which to annotate nodes.
+ * @param <A> The type of the tree's elements.
  */
 public abstract class FingerTree<V, A> {
+  private final Measured<V, A> m;
 
+  /**
+   * Folds the tree to the right with the given function and the given initial element.
+   *
+   * @param f A function with which to fold the tree.
+   * @param z An initial element to apply to the fold.
+   * @return A reduction of this tree by applying the given function, associating to the right.
+   */
+  public abstract <B> B foldRight(F<A, F<B, B>> f, B z);
+
+  /**
+   * Returns the sum of this tree's annotations.
+   *
+   * @return the sum of this tree's annotations.
+   */
+  public abstract V measure();
+
+  /**
+   * Indicates whether this tree is empty.
+   *
+   * @return true if this tree is the empty tree, otherwise false.
+   */
+  public boolean isEmpty() {
+    return this instanceof Empty;
+  }
+
+  protected Measured<V, A> measured() {
+    return m;
+  }
+
+  /**
+   * Provides pattern matching on trees. This is the Church encoding of the FingerTree datatype.
+   *
+   * @param p A triplet of functions to match the different possible tree constructors.
+   * @return The result of the function that matches this tree structurally, applied to this tree.
+   */
+  public abstract <B> B match(P3<F<Empty<V, A>, B>, F<Single<V, A>, B>, F<Deep<V, A>, B>> p);
+
+  private FingerTree(final Measured<V, A> m) {
+    this.m = m;
+  }
+
+  /**
+   * Determines how the elements of a tree are measured and how measures are summed. Consists of a monoid and a
+   * measuring function. Different instances of this class will result in different behaviours for the tree.
+   */
   public static final class Measured<V, A> {
     private final Monoid<V> m;
     private final F<A, V> measure;
@@ -58,34 +102,30 @@ public abstract class FingerTree<V, A> {
     }
   }
 
+  /**
+   * Constructs a Measured instance for the element type, given a monoid and a measuring function.
+   *
+   * @param monoid  A monoid for the measures.
+   * @param measure A function with which to measure element values.
+   * @return A Measured instance for the given element type, that uses the given monoid and measuring function.
+   */
   public static <V, A> Measured<V, A> measured(final Monoid<V> monoid, final F<A, V> measure) {
     return new Measured<V, A>(monoid, measure);
   }
 
-  private final Measured<V, A> m;
-
-  public abstract <B> B foldRight(F<A, F<B, B>> f, B z);
-
-  public abstract V measure();
-
-  public boolean isEmpty() {
-    return this instanceof Empty;
-  }
-
-  protected Measured<V, A> measured() {
-    return m;
-  }
-
-  public abstract <B> B match(P3<F<Empty<V, A>, B>, F<Single<V, A>, B>, F<Deep<V, A>, B>> p);
-
-  private FingerTree(final Measured<V, A> m) {
-    this.m = m;
-  }
-
+  /**
+   * Returns a builder of trees and tree components that annotates them using the given Measured instance.
+   *
+   * @param m A Measured instance with which to annotate trees, digits, and nodes.
+   * @return A builder of trees and tree components that annotates them using the given Measured instance.
+   */
   public static <V, A> MakeTree<V, A> mkTree(final Measured<V, A> m) {
     return new MakeTree<V, A>(m);
   }
 
+  /**
+   * A builder of trees and tree components, supplied with a particular monoid and measuring function.
+   */
   public static final class MakeTree<V, A> {
     private final Measured<V, A> m;
 
@@ -95,19 +135,48 @@ public abstract class FingerTree<V, A> {
 
     // Tree constructors
 
+    /**
+     * Constructs an empty tree.
+     *
+     * @return The empty tree.
+     */
     public FingerTree<V, A> empty() {
       return new Empty<V, A>(m);
     }
 
+    /**
+     * Constructs a singleton tree.
+     *
+     * @param a A single element for the tree.
+     * @return A tree with the given value as the single element.
+     */
     public FingerTree<V, A> single(final A a) {
       return new Single<V, A>(m, a);
     }
 
+    /**
+     * Constructs a deep tree. This structure consists of two digits, of 1 to 4 elements each, on the left and right,
+     * with the rest of the tree in the middle.
+     *
+     * @param prefix The leftmost elements of the tree.
+     * @param middle The subtree, which is a Finger Tree of 2-3 nodes.
+     * @param suffix The rightmost elements of the tree.
+     * @return A new finger tree with the given prefix, suffix, and middle.
+     */
     public FingerTree<V, A> deep(final Digit<V, A> prefix, final FingerTree<V, Node<V, A>> middle,
                                  final Digit<V, A> suffix) {
       return deep(m.sum(prefix.measure(), m.sum(middle.measure(), suffix.measure())), prefix, middle, suffix);
     }
 
+    /**
+     * Constructs a deep tree with the given annotation value.
+     *
+     * @param v      The value with which to annotate this tree.
+     * @param prefix The leftmost elements of the tree.
+     * @param middle The subtree, which is a Finger Tree of 2-3 nodes.
+     * @param suffix The rightmost elements of the tree.
+     * @return A new finger tree with the given prefix, suffix, and middle, and annotated with the given value.
+     */
     public FingerTree<V, A> deep(final V v, final Digit<V, A> prefix, final FingerTree<V, Node<V, A>> middle,
                                  final Digit<V, A> suffix) {
       return new Deep<V, A>(m, v, prefix, middle, suffix);
@@ -115,49 +184,114 @@ public abstract class FingerTree<V, A> {
 
     // Digit constructors
 
+    /**
+     * A digit of one element.
+     *
+     * @param a The element of the digit.
+     * @return A digit of the given element.
+     */
     public One<V, A> one(final A a) {
       return new One<V, A>(m, a);
     }
 
+    /**
+     * A digit of two elements.
+     *
+     * @param a The first element of the digit.
+     * @param b The second element of the digit.
+     * @return A digit of the given elements.
+     */
     public Two<V, A> two(final A a, final A b) {
       return new Two<V, A>(m, v(a, b));
     }
 
+    /**
+     * A digit of three elements.
+     *
+     * @param a The first element of the digit.
+     * @param b The second element of the digit.
+     * @param c The third element of the digit.
+     * @return A digit of the given elements.
+     */
     public Three<V, A> three(final A a, final A b, final A c) {
       return new Three<V, A>(m, v(a, b, c));
     }
 
+    /**
+     * A digit of four elements.
+     *
+     * @param a The first element of the digit.
+     * @param b The second element of the digit.
+     * @param c The third element of the digit.
+     * @param d The fifth element of the digit.
+     * @return A digit of the given elements.
+     */
     public Four<V, A> four(final A a, final A b, final A c, final A d) {
       return new Four<V, A>(m, v(a, b, c, d));
     }
 
     // Node constructors
 
+    /**
+     * A binary tree node.
+     *
+     * @param a The left child of the node.
+     * @param b The right child of the node.
+     * @return A new binary tree node.
+     */
     public Node2<V, A> node2(final A a, final A b) {
       return new Node2<V, A>(m, v(a, b));
     }
 
+    /**
+     * A trinary tree node.
+     *
+     * @param a The left child of the node.
+     * @param b The middle child of the node.
+     * @param c The right child of the node.
+     * @return A new trinary tree node.
+     */
     public Node3<V, A> node3(final A a, final A b, final A c) {
       return new Node3<V, A>(m, v(a, b, c));
     }
 
   }
 
-  // The empty tree
+  /**
+   * The empty tree.
+   */
   public static final class Empty<V, A> extends FingerTree<V, A> {
     private Empty(final Measured<V, A> m) {
       super(m);
     }
 
+    /**
+     * Returns zero.
+     *
+     * @return Zero.
+     */
     public V measure() {
       return measured().zero();
     }
 
+    /**
+     * Pattern matching on the structure of this tree. Matches the empty tree.
+     *
+     * @param p A triplet of functions to match the different possible tree constructors.
+     * @return The result of applying the function on the Empty tree to this tree.
+     */
     public <B> B match(
         final P3<F<Empty<V, A>, B>, F<Single<V, A>, B>, F<Deep<V, A>, B>> p) {
       return p._1().f(this);
     }
 
+    /**
+     * Folds this tree to the right.
+     *
+     * @param aff A function with which to fold this tree.
+     * @param z   An initial element to apply to the fold.
+     * @return The second argument, since this is the empty tree.
+     */
     public <B> B foldRight(final F<A, F<B, B>> aff, final B z) {
       return z;
     }
