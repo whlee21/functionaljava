@@ -823,9 +823,9 @@ public abstract class List<A> implements Iterable<A> {
                  ys :
                  ys.isEmpty() ?
                  xs :
-                 o.isGreaterThan(ys.head(), xs.head()) ?
-                 cons(xs.head(), merge(xs.tail(), ys, o)) :
-                 cons(ys.head(), merge(xs, ys.tail(), o));
+                 o.isGreaterThan(xs.head(), ys.head()) ?
+                 cons(ys.head(), merge(xs, ys.tail(), o)) :
+                 cons(xs.head(), merge(xs.tail(), ys, o));
         }
       }
 
