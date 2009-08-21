@@ -136,16 +136,16 @@ object CheckStream {
       a.foldRight((a: Stream[String], b: P1[Stream[String]]) => a.append(b._1), nil[String]),
       join(a)))
 
-  val prop_qsort = forAll((a: Stream[String]) => {
-    val d = a.qsort(stringOrd)
+  val prop_sort = forAll((a: Stream[String]) => {
+    val d = a.sort(stringOrd)
     val e = streamEqual(stringEqual)
     e.eq(d, a.toList.sort(stringOrd).toStream)
   })
 
-  val prop_parallel_qsort = forAll((a: Stream[String], s: Strategy[Unit]) => {
-    val d = a.qsort(stringOrd, s)
+  val prop_parallel_sort = forAll((a: Stream[String], s: Strategy[Unit]) => {
+    val d = a.sort(stringOrd, s)
     val e = streamEqual(stringEqual)
-    e.eq(d, a.qsort(stringOrd))
+    e.eq(d, a.sort(stringOrd))
   })
 
   val prop_iterable = forAll((a: Stream[String]) => {
@@ -180,8 +180,8 @@ object CheckStream {
       ("prop_exists", prop_exists),
       ("prop_find", prop_find),
       ("prop_join", prop_join),
-      ("prop_qsort", prop_qsort),
-      ("prop_parallel_qsort", prop_parallel_qsort),
+      ("prop_sort", prop_sort),
+      ("prop_parallel_sort", prop_parallel_sort),
       ("prop_iterable", prop_iterable)
   ).map { case (n, p) => ("Stream." + n, p) }
 

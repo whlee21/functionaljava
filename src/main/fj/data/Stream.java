@@ -614,18 +614,19 @@ public abstract class Stream<A> implements Iterable<A> {
       return ys;
     if (ys.isEmpty())
       return xs;
-    A x = xs.head();
-    A y = ys.head();
-    if (o.isGreaterThan(x, y)) {
-      final A tmp = x;
-      x = y;
-      y = tmp;
-    }
-    return cons(x, p(cons(y, new P1<Stream<A>>() {
+    final A x = xs.head();
+    final A y = ys.head();
+    if (o.isGreaterThan(x, y))
+      return cons(y, new P1<Stream<A>>() {
+        public Stream<A> _1() {
+          return merge(o, xs, ys.tail()._1());
+        }
+      });
+    return cons(x, new P1<Stream<A>>() {
       public Stream<A> _1() {
-        return merge(o, xs.tail()._1(), ys.tail()._1());
+        return merge(o, xs.tail()._1(), ys);
       }
-    })));
+    });
   }
 
   /**
