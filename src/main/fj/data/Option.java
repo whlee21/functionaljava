@@ -477,6 +477,16 @@ public abstract class Option<A> implements Iterable<A> {
   }
 
   /**
+   * Returns the value from this optional value, or if there is no value, returns <code>null</code>.
+   * This is intended for interfacing with APIs that expect a <code>null</code> for non-existence.
+   *
+   * @return This optional value or <code>null</code> if there is no value.
+   */
+  public A toNull() {
+    return orSome((A) null);
+  }
+
+  /**
    * Returns <code>true</code> if this optional value has no value, or the predicate holds for the
    * given predicate function, <code>false</code> otherwise.
    *
