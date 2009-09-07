@@ -1,5 +1,6 @@
 package fj.control.parallel
 
+import fj.control._
 import org.scalacheck.Arbitrary
 import org.scalacheck.Arbitrary
 import org.scalacheck.Gen.value

@@ -7,6 +7,7 @@ import fjs.data.Option._
 import fj.{P2, P3}
 import fjs.P2._
 import fjs.P3._
+import fjs.test._
 
 object Check {
   private implicit def checkResults(r: fj.data.List[P2[String, CheckResult]]): List[(String, CheckResult)] =

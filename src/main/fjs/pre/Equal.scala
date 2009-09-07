@@ -1,6 +1,6 @@
 package fjs.pre
 
-import F._
+import fjs.F._
 
 object Equal {
   def equal[A](a1: A, a2: A)(implicit ea: fj.pre.Equal[A]) = ea eq (a1, a2)

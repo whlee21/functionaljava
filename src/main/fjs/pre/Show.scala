@@ -1,7 +1,7 @@
 package fjs.pre
 
 import fj.data.Stream
-import F._
+import fjs.F._
 
 object Show {
   implicit def show[A](f: A => Stream[java.lang.Character]): fj.pre.Show[A] =
