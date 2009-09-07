@@ -1,4 +1,5 @@
 package fj.data
+import fj._
 
 import control.parallel.Strategy
 import org.scalacheck.Prop._

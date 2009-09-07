@@ -2,7 +2,7 @@ package fjs.pre
 
 import fj.pre.Ordering
 import fj.data.{Option, Either, List, Stream, Array}
-import F._
+import fjs.F._
 
 object Ord {
   def compare[A](a1: A, a2: A)(implicit oa: fj.pre.Ord[A]) = oa compare (a1, a2)

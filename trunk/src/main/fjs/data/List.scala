@@ -6,7 +6,7 @@ final case class List[A](as: fj.data.List[A]) {
 
 import fj.data.List.{nil, cons}
 import fj.Function.curry
-import F2._
+import fjs.F2._
 
 object List {
   implicit def ScalaList_List[A](as: scala.List[A]): fj.data.List[A] =

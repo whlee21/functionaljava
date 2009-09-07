@@ -1,5 +1,6 @@
 package fj.data
 
+import fj._
 import org.scalacheck.Prop._
 import ArbitraryOption.arbitraryOption
 import ArbitraryP.arbitraryP1

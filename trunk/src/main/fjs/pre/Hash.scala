@@ -1,6 +1,6 @@
 package fjs.pre
 
-import F._
+import fjs.F._
 
 object Hash {
   def hash[A](a: A)(implicit h: fj.pre.Hash[A]) = h hash a
