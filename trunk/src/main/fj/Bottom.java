@@ -39,6 +39,34 @@ public final class Bottom {
   }
 
   /**
+   * Provides a thunk that throws an error using the given message when evaluated.
+   *
+   * @param s The message to fail with.
+   * @return A thunk that throws an error using the given message when evaluated.
+   */
+  public static P1<Error> error_(final String s) {
+    return new P1<Error>() {
+      @Override public Error _1() {
+        throw new Error(s);
+      }
+    };
+  }
+
+  /**
+   * Provides a function that throws an error using the given message, ignoring its argument.
+   *
+   * @param s The message to fail with.
+   * @return A function that throws an error using the given message, ignoring its argument.
+   */
+  public static <A, B> F<A, B> errorF(final String s) {
+    return new F<A, B>() {
+      public B f(final A a) {
+        throw new Error(s);
+      }
+    };
+  }
+
+  /**
    * Represents a deconstruction failure that was non-exhaustive.
    *
    * @param a  The value being deconstructed.
