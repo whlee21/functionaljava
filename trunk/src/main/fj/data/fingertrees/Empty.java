@@ -1,6 +1,7 @@
 package fj.data.fingertrees;
 
 import fj.F;
+import fj.P2;
 import static fj.Bottom.error;
 
 /**
@@ -12,7 +13,7 @@ public final class Empty<V, A> extends FingerTree<V, A> {
   }
 
   @Override public FingerTree<V, A> cons(final A a) {
-      return new Single<V, A>(measured(), a);
+    return new Single<V, A>(measured(), a);
   }
 
   @Override public FingerTree<V, A> snoc(final A a) {
@@ -21,6 +22,10 @@ public final class Empty<V, A> extends FingerTree<V, A> {
 
   @Override public FingerTree<V, A> append(final FingerTree<V, A> t) {
     return t;
+  }
+
+  @Override public P2<Integer, A> lookup(final F<V, Integer> o, final int i) {
+    throw error("Lookup of empty tree.");
   }
 
   /**

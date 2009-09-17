@@ -1,19 +1,13 @@
 package fj.data;
 
-import fj.F;
 import fj.Function;
+import static fj.Bottom.error;
 import static fj.pre.Monoid.intAdditionMonoid;
-import fj.data.fingertrees.One;
-import fj.data.fingertrees.Two;
-import fj.data.fingertrees.Three;
-import fj.data.fingertrees.Four;
-import fj.data.fingertrees.Node;
-import fj.data.fingertrees.Node3;
-import fj.data.fingertrees.Single;
-import fj.data.fingertrees.Digit;
-import fj.data.fingertrees.Deep;
 import static fj.data.fingertrees.FingerTree.measured;
-import fj.data.fingertrees.*;
+import static fj.pre.Ord.intOrd;
+import fj.data.fingertrees.FingerTree;
+import fj.data.fingertrees.MakeTree;
+import fj.data.fingertrees.Measured;
 
 /**
  * Provides an immutable finite sequence, implemented as a finger tree. This structure gives O(1) access to
@@ -73,4 +67,43 @@ public final class Seq<A> {
     return new Seq<A>(ftree.snoc(a));
   }
 
+  /**
+   * Appends the given sequence to this sequence.
+   *
+   * @param as A sequence to append to this one.
+   * @return A new sequence with the given sequence appended to this one.
+   */
+  public Seq<A> append(final Seq<A> as) {
+    return new Seq<A>(ftree.append(as.ftree));
+  }
+
+  /**
+   * Checks if this is the empty sequence.
+   *
+   * @return True if this sequence is empty, otherwise false.
+   */
+  public boolean isEmpty() {
+    return ftree.isEmpty();
+  }
+
+  /**
+   * Returns the number of elements in this sequence.
+   *
+   * @return the number of elements in this sequence.
+   */
+  public int length() {
+    return ftree.measure();
+  }
+
+  /**
+   * Returns the element at the given index.
+   *
+   * @param i The index of the element to return.
+   * @return The element at the given index, or throws an error if the index is out of bounds.
+   */
+  public A index(final int i) {
+    if (i < 0 || i >= length())
+      throw error("Index " + i + "out of bounds.");
+    return ftree.lookup(Function.<Integer>identity(), i)._2();
+  }
 }

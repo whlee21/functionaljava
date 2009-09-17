@@ -2,6 +2,7 @@ package fj.data.fingertrees;
 
 import fj.data.vector.V2;
 import fj.F;
+import fj.P2;
 
 /**
  * A two-element inner tree node.
@@ -24,6 +25,10 @@ public final class Node2<V, A> extends Node<V, A> {
 
   public Digit<V, A> toDigit() {
     return new Two<V, A>(measured(), as);
+  }
+
+  @Override public P2<Integer, A> lookup(final F<V, Integer> o, final int i) {
+    return null; // TODO
   }
 
   public <B> B match(final F<Node2<V, A>, B> n2, final F<Node3<V, A>, B> n3) {

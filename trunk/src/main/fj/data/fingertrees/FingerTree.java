@@ -1,6 +1,7 @@
 package fj.data.fingertrees;
 
 import fj.F;
+import fj.P2;
 import fj.pre.Monoid;
 
 /**
@@ -127,7 +128,7 @@ public abstract class FingerTree<V, A> {
    * @param a The element to add to the front of this tree.
    * @return A new tree with the given element at the front.
    */
-  public abstract FingerTree<V, A> cons(A a);
+  public abstract FingerTree<V, A> cons(final A a);
 
   /**
    * Adds the given element to this tree as the last element.
@@ -135,7 +136,7 @@ public abstract class FingerTree<V, A> {
    * @param a The element to add to the end of this tree.
    * @return A new tree with the given element at the end.
    */
-  public abstract FingerTree<V, A> snoc(A a);
+  public abstract FingerTree<V, A> snoc(final A a);
 
   /**
    * Appends one finger tree to another.
@@ -143,5 +144,7 @@ public abstract class FingerTree<V, A> {
    * @param t A finger tree to append to this one.
    * @return A new finger tree which is a concatenation of this tree and the given tree.
    */
-  public abstract FingerTree<V, A> append(FingerTree<V, A> t);
+  public abstract FingerTree<V, A> append(final FingerTree<V, A> t);
+
+  public abstract P2<Integer, A> lookup(final F<V, Integer> o, final int i);
 }

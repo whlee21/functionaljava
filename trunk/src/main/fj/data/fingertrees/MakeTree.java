@@ -1,5 +1,8 @@
 package fj.data.fingertrees;
 
+import fj.data.vector.V2;
+import fj.data.vector.V3;
+
 /**
  * A builder of trees and tree components, supplied with a particular monoid and measuring function.
  */
@@ -130,6 +133,26 @@ public final class MakeTree<V, A> {
    */
   public Node3<V, A> node3(final A a, final A b, final A c) {
     return new Node3<V, A>(m, fj.data.vector.V.v(a, b, c));
+  }
+
+  /**
+   * A binary tree node
+   *
+   * @param v A vector of the node's elements.
+   * @return A new binary tree node.
+   */
+  public Node2<V, A> node2(final V2<A> v) {
+    return new Node2<V, A>(m, v);
+  }
+
+  /**
+   * A trinary tree node
+   *
+   * @param v A vector of the node's elements.
+   * @return A new trinary tree node.
+   */
+  public Node3<V, A> node3(final V3<A> v) {
+    return new Node3<V, A>(m, v);
   }
 
 }
