@@ -2,6 +2,7 @@ package fj.data.fingertrees;
 
 import fj.data.vector.V3;
 import fj.F;
+import fj.P2;
 
 /**
  * A three-element inner tree node.
@@ -28,6 +29,10 @@ public final class Node3<V, A> extends Node<V, A> {
 
   public Digit<V, A> toDigit() {
     return new Three<V, A>(measured(), as);
+  }
+
+  public P2<Integer, A> lookup(final F<V, Integer> o, final int i) {
+    return null;  //TODO
   }
 
   public V3<A> toVector() {

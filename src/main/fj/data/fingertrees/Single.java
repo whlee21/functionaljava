@@ -1,6 +1,9 @@
 package fj.data.fingertrees;
 
 import fj.F;
+import fj.P2;
+import static fj.P.p;
+import fj.pre.Ord;
 
 /**
  * A tree with a single element.
@@ -70,6 +73,10 @@ public final class Single<V, A> extends FingerTree<V, A> {
 
   @Override public FingerTree<V, A> append(final FingerTree<V, A> t) {
     return t.cons(a);
+  }
+
+  @Override public P2<Integer, A> lookup(final F<V, Integer> o, final int i) {
+    return p(i, a);
   }
 
   /**
