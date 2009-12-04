@@ -47,3 +47,16 @@ That's where your JAR file will be.
 Want to compile all outstanding source files then start a Scala Read-Eval-Print-Loop with all the compiled classes on the classpath? That would be the 'repl' function. You get the drift.
 
 There is the full power of the Haskell programming language and tools to supplement your experience. No more piss-farting about with Apache Ant or Maven or Buildr or any of that nonsense, yay!
+
+
+But if you must have Maven...
+
+To create a Maven release:
+
+$ # Edit pom.xml in HEAD to point to correct version, 2.16 below.
+$ svn co https://functionaljava.googlecode.com/svn/tags/2.16 functionaljava-2.16
+$ cd functionaljava-2.16
+$ export ANT_OPTS=-Xmx1024m
+$ ant -Dbuild.number=2.16 -Dbuild.username=<SVN username> -Dbuild.password=<SVN password> maven-deploy
+$ # Post to list.
+
