@@ -260,7 +260,7 @@ public final class Monoid<A> {
    * A monoid that adds natural numbers.
    */
   public static final Monoid<Natural> naturalAdditionMonoid =
-      monoid(naturalMultiplicationSemigroup, Natural.ZERO);
+      monoid(naturalAdditionSemigroup, Natural.ZERO);
 
   /**
    * A monoid that multiplies natural numbers.
