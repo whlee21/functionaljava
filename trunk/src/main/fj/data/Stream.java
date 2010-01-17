@@ -1720,7 +1720,11 @@ public abstract class Stream<A> implements Iterable<A> {
     if (as.isEmpty())
       throw error("cycle on empty list");
     else
-      return as.append(cycle(as));
+      return as.append(new P1<Stream<A>>() {
+        public Stream<A> _1() {
+          return cycle(as);
+        }
+      });
   }
 
   /**
