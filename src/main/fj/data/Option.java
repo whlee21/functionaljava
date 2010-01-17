@@ -138,6 +138,32 @@ public abstract class Option<A> implements Iterable<A> {
   }
 
   /**
+   * Returns the value of this optional value or fails with the given message.
+   *
+   * @param message The message to fail with if this optional value has no value.
+   * @return The value of this optional value if there there is one.
+   */
+  public A valueE(final P1<String> message) {
+    if(isSome())
+      return some();
+    else
+      throw error(message._1());
+  }
+
+  /**
+   * Returns the value of this optional value or fails with the given message.
+   *
+   * @param message The message to fail with if this optional value has no value.
+   * @return The value of this optional value if there there is one.
+   */
+  public A valueE(final String message) {
+    if(isSome())
+      return some();
+    else
+      throw error(message);
+  }
+
+  /**
    * Maps the given function across this optional value.
    *
    * @param f The function to map across this optional value.
