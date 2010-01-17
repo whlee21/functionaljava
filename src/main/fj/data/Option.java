@@ -98,6 +98,17 @@ public abstract class Option<A> implements Iterable<A> {
   }
 
   /**
+   * Performs a reduction on this optional value using the given arguments.
+   *
+   * @param b The value to return if this optional value has no value.
+   * @param f The function to apply to the value of this optional value.
+   * @return A reduction on this optional value.
+   */
+  public <B> B option(final P1<B> b, final F<A, B> f) {
+    return isSome() ? f.f(some()) : b._1();
+  }
+
+  /**
    * Returns the length of this optional value; 1 is there is a value, 0 otherwise.
    *
    * @return The length of this optional value; 1 is there is a value, 0 otherwise.
