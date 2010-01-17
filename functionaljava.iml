@@ -21,9 +21,8 @@
       <excludeFolder url="file://$MODULE_DIR$/src/main/fjs" />
       <excludeFolder url="file://$MODULE_DIR$/src/test" />
     </content>
-    <orderEntry type="jdk" jdkName="1.6" jdkType="JavaSDK" />
+    <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" name="scala" level="application" />
   </component>
 </module>
 
