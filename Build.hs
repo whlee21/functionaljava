@@ -45,7 +45,7 @@ resources = "resources"
 cp = "classpath" ~?? [javaco, depso, testo, resources]
 wt v = Just ("Functional Java " ++ v)
 dt v = Just ("Functional Java " ++ v ++ " API Specification")
-hd = Just "<div><p><em>Copyright 2008 - 2009 Tony Morris, Runar Bjarnason, Tom Adams, Brad Clow, Ricky Clarkson</em></p>This software is released under an open source BSD licence.</div>"
+hd = Just "<div><p><em>Copyright 2008 - 2009 Tony Morris, Runar Bjarnason, Tom Adams, Brad Clow, Ricky Clarkson, Nick Partridge, Jason Zaugg</em></p>This software is released under an open source BSD licence.</div>"
 ds = ".deps"
 
 resolve = do e <- doesDirectoryExist ds
