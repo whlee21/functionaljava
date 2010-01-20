@@ -342,7 +342,7 @@ public final class Array<A> implements Iterable<A> {
    * Binds the given function across each element of this array and the given array with a final
    * join.
    *
-   * @param ab A given array to bind the given function with.
+   * @param sb A given array to bind the given function with.
    * @param f  The function to apply to each element of this array and the given array.
    * @return A new array after performing the map, then final join.
    */
@@ -354,7 +354,7 @@ public final class Array<A> implements Iterable<A> {
    * Binds the given function across each element of this array and the given array with a final
    * join.
    *
-   * @param ab A given array to bind the given function with.
+   * @param sb A given array to bind the given function with.
    * @param f  The function to apply to each element of this array and the given array.
    * @return A new array after performing the map, then final join.
    */
