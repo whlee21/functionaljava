@@ -211,7 +211,7 @@ object CheckList {
       ("prop_forall", prop_forall),
       ("prop_exists", prop_exists),
       ("prop_find", prop_find),
-      ("prop_nub", prop_nub),
+      ("prop_nub", prop_nub)
      // ("prop_iterateWhile", prop_iterateWhile)
   ).map { case (n, p) => ("List." + n, p) }
 
