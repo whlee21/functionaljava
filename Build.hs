@@ -32,7 +32,6 @@ test = ["src" </> "test"]
 
 build = "build"
 javaco = build </> "classes" </> "javac"
--- scalaco = build </> "classes" </> "scalac"
 depso = build </> "classes" </> "deps"
 testo = build </> "classes" </> "test"
 javadoco = build </> "javadoc"
