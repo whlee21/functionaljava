@@ -32,7 +32,7 @@ test = ["src" </> "test"]
 
 build = "build"
 javaco = build </> "classes" </> "javac"
-scalaco = build </> "classes" </> "scalac"
+-- scalaco = build </> "classes" </> "scalac"
 depso = build </> "classes" </> "deps"
 testo = build </> "classes" </> "test"
 javadoco = build </> "javadoc"
@@ -43,7 +43,7 @@ mavendir = build </> "maven"
 etcdir = "etc"
 
 resources = "resources"
-cp = "classpath" ~?? [javaco, scalaco, depso, testo, resources]
+cp = "classpath" ~?? [javaco, depso, testo, resources]
 wt v = Just ("Functional Java " ++ v)
 dt v = Just ("Functional Java " ++ v ++ " API Specification")
 hd = Just "<div><p><em>Copyright 2008 - 2009 Tony Morris, Runar Bjarnason, Tom Adams, Brad Clow, Ricky Clarkson</em></p>This software is released under an open source BSD licence.</div>"
@@ -66,52 +66,24 @@ clean = rmdir build
 fullClean :: IO ()
 fullClean = rmdir ds >> clean
 
-javac'' :: FilePath -> J.Javac
-javac'' d = J.javac {
-  J.directory = Just d
-}
-
-scalac'' :: FilePath -> S.Scalac
-scalac'' d = S.scalac {
-  S.directory = Just d
+javac' :: FilePath -> J.Javac
+javac' d = J.javac {
+  J.directory = Just d,
+  J.deprecation = True,
+  J.etc = Just "-Xlint:unchecked"
 }
 
 j :: J.Javac
-j = javac'' javaco
+j = javac' javaco
 
 javac :: IO ExitCode
 javac = j +->- src
 
-s :: S.Scalac
-s = j >=>=> scalac'' scalaco
-
-scalac :: IO ExitCode
-scalac = javac >>>> (s +->- src)
-
-d :: S.Scalac
-d = scalac'' depso
-
-dep :: IO ExitCode
-dep = d +->- deps
-
-tj :: S.Scalac
-tj = s >=>=> d >=>=> scalac'' testo
-
-compile :: IO ExitCode
-compile = dep >>>> scalac >>>> (tj +->- test)
-
--- todo scala function in Lastik
-scala :: String -> IO ExitCode
-scala k = system ("scala " ++ k)
-
 repl :: IO ExitCode
-repl = scala cp
+repl = javac >>>> system ("scala -i initrepl " ++ cp)
 
-tests :: IO ExitCode
-tests = compile >>>> scala (cp ++ " fj.Tests")
-
-javadoc'' :: Version -> Jd.Javadoc
-javadoc'' v = Jd.javadoc {
+javadoc' :: Version -> Jd.Javadoc
+javadoc' v = Jd.javadoc {
   Jd.directory = Just javadoco,
   Jd.windowtitle = wt v,
   Jd.doctitle = dt v,
@@ -122,20 +94,7 @@ javadoc'' v = Jd.javadoc {
 }
 
 javadoc :: Version -> IO ExitCode
-javadoc v = resolve >> javadoc'' v ->- src
-
-scaladoc'' :: Version -> Sd.Scaladoc
-scaladoc'' v = Sd.scaladoc {
-  Sd.directory = Just scaladoco,
-  Sd.doctitle = dt v,
-  Sd.header = hd,
-  Sd.windowtitle = wt v,
-  Sd.stylesheetfile = Just (ds </> "style.css"),
-  Sd.linksource = True
-}
-
-scaladoc :: Version -> IO ExitCode
-scaladoc v = resolve >> mkdir scaladoco >> copyFile (ds </> "script.js") (scaladoco </> "script.js") >> javac >>>> (j >=>=> scaladoc'' v ->- src)
+javadoc v = resolve >> javadoc' v ->- src
 
 nosvn :: FilePather Bool
 nosvn = fileName /=? ".svn"
@@ -144,16 +103,18 @@ nosvnf :: FilterPredicate
 nosvnf = constant nosvn ?&&? isFile
 
 archive :: IO ()
-archive = compile >>>>> do mkdir jardir
-                           writeArchive ([javaco, scalaco, resources] `zip` repeat ".")
-                                        nosvn
-                                        nosvnf
-                                        [OptVerbose]
-                                        (jardir </> "functionaljava.jar")
+archive = do mkdir jardir
+             writeArchive ([javaco, resources] `zip` repeat ".")
+                         nosvn
+                         nosvnf
+                         [OptVerbose]
+                         (jardir </> "functionaljava.jar")
 
 buildAll :: IO ExitCode
 buildAll = do v <- readVersion
-              resolve >> archive >> javadoc v >> scaladoc v
+              resolve
+              archive
+              javadoc v
 
 maven :: IO ()
 maven = do buildAll
@@ -166,6 +127,6 @@ release :: IO ()
 release = let k = build </> "functionaljava"
           in do buildAll
                 mkdir k
-                forM_ ([(1, javadoco), (1, scaladoco), (2, jardir), (1, etcdir)] ++ map ((,) 0) (src ++ test)) (\(l, d) -> copyDir nosvn nosvnf l d k)
+                forM_ ([(1, javadoco), (2, jardir), (1, etcdir)] ++ map ((,) 0) src) (\(l, d) -> copyDir nosvn nosvnf l d k)
                 mkdir releasedir
                 writeHashArchive [(build, "functionaljava")] always always' [OptVerbose] (releasedir </> "functionaljava.zip")
