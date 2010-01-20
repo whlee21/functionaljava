@@ -560,6 +560,7 @@ public final class Deep<V, A> extends FingerTree<V, A> {
     });
   }
 
+  @SuppressWarnings("unchecked")
   private static <V, A> FingerTree<V, Node<V, A>> append3(final Measured<V, A> m, final FingerTree<V, Node<V, A>> t1,
                                                           final Node<V, A> n1, final Node<V, A> n2, final Node<V, A> n3,
                                                           final FingerTree<V, Node<V, A>> t2) {
@@ -704,6 +705,7 @@ public final class Deep<V, A> extends FingerTree<V, A> {
     });
   }
 
+  @SuppressWarnings("unchecked")  
   private static <V, A> FingerTree<V, Node<V, A>> append4(final Measured<V, A> m,
                                                           final FingerTree<V, Node<V, A>> t1,
                                                           final Node<V, A> n1,
