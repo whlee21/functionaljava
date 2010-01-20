@@ -103,7 +103,8 @@ nosvnf :: FilterPredicate
 nosvnf = constant nosvn ?&&? isFile
 
 archive :: IO ()
-archive = do mkdir jardir
+archive = do javac
+             mkdir jardir
              writeArchive ([javaco, resources] `zip` repeat ".")
                          nosvn
                          nosvnf
@@ -120,7 +121,7 @@ maven :: IO ()
 maven = do buildAll
            mkdir mavendir
            v <- readVersion
-           forM_ [("javadoc", [javadoco]), ("scaladoc", [scaladoco]), ("sources", src), ("tests", test)] (\(n, f) ->
+           forM_ [("javadoc", [javadoco]), ("sources", src), ("tests", test)] (\(n, f) ->
              writeHashArchive (map (flip (,) ".") f) nosvn nosvnf [OptVerbose] (mavendir </> "fj-" ++ v ++ '-' :  n ++ ".jar"))
 
 release :: IO ()
