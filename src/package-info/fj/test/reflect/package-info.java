@@ -1,5 +1,5 @@
 /**
- * A wrapper around the {@link fj.test} package that uses annotations for configuring properties to
+ * A wrapper around the <code>fj.test</code> package that uses annotations for configuring properties to
  * check. The properties are found using {@link java.lang.reflect Java Reflection}. All annotations
  * are optional and a property is eligible for checking by default. A property is any of the
  * following member descriptions, unless the member or enclosing class is annotated with
