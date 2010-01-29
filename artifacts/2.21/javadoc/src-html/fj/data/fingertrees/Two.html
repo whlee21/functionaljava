@@ -1,0 +1,114 @@
+<HTML>
+<BODY BGCOLOR="white">
+<PRE>
+<FONT color="green">001</FONT>    package fj.data.fingertrees;<a name="line.1"></a>
+<FONT color="green">002</FONT>    <a name="line.2"></a>
+<FONT color="green">003</FONT>    import fj.data.vector.V2;<a name="line.3"></a>
+<FONT color="green">004</FONT>    import fj.F;<a name="line.4"></a>
+<FONT color="green">005</FONT>    <a name="line.5"></a>
+<FONT color="green">006</FONT>    /**<a name="line.6"></a>
+<FONT color="green">007</FONT>     * A two-element prefix or suffix of a finger tree.<a name="line.7"></a>
+<FONT color="green">008</FONT>     */<a name="line.8"></a>
+<FONT color="green">009</FONT>    public final class Two&lt;V, A&gt; extends Digit&lt;V, A&gt; {<a name="line.9"></a>
+<FONT color="green">010</FONT>      private final V2&lt;A&gt; as;<a name="line.10"></a>
+<FONT color="green">011</FONT>    <a name="line.11"></a>
+<FONT color="green">012</FONT>      Two(final Measured&lt;V, A&gt; m, final V2&lt;A&gt; as) {<a name="line.12"></a>
+<FONT color="green">013</FONT>        super(m);<a name="line.13"></a>
+<FONT color="green">014</FONT>        this.as = as;<a name="line.14"></a>
+<FONT color="green">015</FONT>      }<a name="line.15"></a>
+<FONT color="green">016</FONT>    <a name="line.16"></a>
+<FONT color="green">017</FONT>      /**<a name="line.17"></a>
+<FONT color="green">018</FONT>       * @see fj.data.fingertrees.Digit#foldRight(fj.F, Object)<a name="line.18"></a>
+<FONT color="green">019</FONT>       */<a name="line.19"></a>
+<FONT color="green">020</FONT>      public &lt;B&gt; B foldRight(final F&lt;A, F&lt;B, B&gt;&gt; aff, final B z) {<a name="line.20"></a>
+<FONT color="green">021</FONT>        return aff.f(as._1()).f(aff.f(as._2()).f(z));<a name="line.21"></a>
+<FONT color="green">022</FONT>      }<a name="line.22"></a>
+<FONT color="green">023</FONT>    <a name="line.23"></a>
+<FONT color="green">024</FONT>      /**<a name="line.24"></a>
+<FONT color="green">025</FONT>       * @see fj.data.fingertrees.Digit#foldLeft(fj.F, Object)<a name="line.25"></a>
+<FONT color="green">026</FONT>       */<a name="line.26"></a>
+<FONT color="green">027</FONT>      public &lt;B&gt; B foldLeft(final F&lt;B, F&lt;A, B&gt;&gt; bff, final B z) {<a name="line.27"></a>
+<FONT color="green">028</FONT>        return as.toStream().foldLeft(bff, z);<a name="line.28"></a>
+<FONT color="green">029</FONT>      }<a name="line.29"></a>
+<FONT color="green">030</FONT>    <a name="line.30"></a>
+<FONT color="green">031</FONT>      /**<a name="line.31"></a>
+<FONT color="green">032</FONT>       * @see fj.data.fingertrees.Digit#match(fj.F, fj.F, fj.F, fj.F)<a name="line.32"></a>
+<FONT color="green">033</FONT>       */<a name="line.33"></a>
+<FONT color="green">034</FONT>      @Override public &lt;B&gt; B match(<a name="line.34"></a>
+<FONT color="green">035</FONT>          final F&lt;One&lt;V, A&gt;, B&gt; one, final F&lt;Two&lt;V, A&gt;, B&gt; two, final F&lt;Three&lt;V, A&gt;, B&gt; three,<a name="line.35"></a>
+<FONT color="green">036</FONT>          final F&lt;Four&lt;V, A&gt;, B&gt; four) {<a name="line.36"></a>
+<FONT color="green">037</FONT>        return two.f(this);<a name="line.37"></a>
+<FONT color="green">038</FONT>      }<a name="line.38"></a>
+<FONT color="green">039</FONT>    <a name="line.39"></a>
+<FONT color="green">040</FONT>      /**<a name="line.40"></a>
+<FONT color="green">041</FONT>       * Returns the elements of this digit as a vector.<a name="line.41"></a>
+<FONT color="green">042</FONT>       *<a name="line.42"></a>
+<FONT color="green">043</FONT>       * @return the elements of this digit as a vector.<a name="line.43"></a>
+<FONT color="green">044</FONT>       */<a name="line.44"></a>
+<FONT color="green">045</FONT>      public V2&lt;A&gt; values() {<a name="line.45"></a>
+<FONT color="green">046</FONT>        return as;<a name="line.46"></a>
+<FONT color="green">047</FONT>      }<a name="line.47"></a>
+<FONT color="green">048</FONT>    }<a name="line.48"></a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</PRE>
+</BODY>
+</HTML>
