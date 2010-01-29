@@ -16,6 +16,7 @@ import Lastik.Output
 import Lastik.Util
 import Lastik.Directory
 import Control.Monad
+import Control.Arrow
 import System.Cmd
 import System.Exit
 import System.Directory
@@ -47,6 +48,8 @@ wt v = Just ("Functional Java " ++ v)
 dt v = Just ("Functional Java " ++ v ++ " API Specification")
 hd = Just "<div><p><em>Copyright 2008 - 2009 Tony Morris, Runar Bjarnason, Tom Adams, Brad Clow, Ricky Clarkson, Nick Partridge, Jason Zaugg</em></p>This software is released under an open source BSD licence.</div>"
 ds = ".deps"
+repo = "https://functionaljava.googlecode.com/svn/"
+commitMessage = "\"Automated build\""
 
 resolve = do e <- doesDirectoryExist ds
              unless e $ do mkdir ds
@@ -123,10 +126,24 @@ maven = do buildAll
            forM_ [("javadoc", [javadoco]), ("sources", src), ("tests", test)] (\(n, f) ->
              writeHashArchive (map (flip (,) ".") f) nosvn nosvnf [OptVerbose] (mavendir </> "fj-" ++ v ++ '-' :  n ++ ".jar"))
 
-release :: IO ()
+svn :: String -> IO ExitCode
+svn k = system ("svn " ++ k)
+
+svn' :: [String] -> IO ExitCode
+svn' = svn . join
+
+release :: IO ExitCode
 release = let k = build </> "functionaljava"
+              updateVersion z = let (a, b) = second (show . (+1) . read . drop 1) (break (== '.') z)
+                                in a ++ '.' : b
           in do buildAll
                 mkdir k
                 forM_ ([(1, javadoco), (2, jardir), (1, etcdir)] ++ map ((,) 0) src) (\(l, d) -> copyDir nosvn nosvnf l d k)
                 mkdir releasedir
                 writeHashArchive [(build, "functionaljava")] always always' [OptVerbose] (releasedir </> "functionaljava.zip")
+                v <- readVersion
+                svn' ["import ", build </> "functionaljava", " ", repo, "/artifacts/", v, " -m ", commitMessage]
+                svn' ["import ", releasedir, " ", repo, v, "/artifacts/release", " -m ", commitMessage]
+                svn' ["copy ", repo, "trunk", " ", repo, "/tags/", v, " -m ", commitMessage]
+                length v `seq` writeFile "version" (updateVersion v)
+                svn ("commit version -m " ++ commitMessage)
