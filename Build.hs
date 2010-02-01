@@ -143,7 +143,7 @@ release = let k = build </> "functionaljava"
                 writeHashArchive [(build, "functionaljava")] always always' [OptVerbose] (releasedir </> "functionaljava.zip")
                 v <- readVersion
                 svn' ["import ", build </> "functionaljava", " ", repo, "/artifacts/", v, " -m ", commitMessage]
-                svn' ["import ", releasedir, " ", repo, "/artifacts", v, "/release", " -m ", commitMessage]
+                svn' ["import ", releasedir, " ", repo, "/artifacts/", v, "/release", " -m ", commitMessage]
                 svn' ["copy ", repo, "trunk", " ", repo, "/tags/", v, " -m ", commitMessage]
                 length v `seq` writeFile "version" (updateVersion v)
                 svn ("commit version -m " ++ commitMessage)
