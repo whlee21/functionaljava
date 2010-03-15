@@ -9,10 +9,7 @@ module Build where
 
 import qualified Lastik.Java.Javac as J
 import qualified Lastik.Java.Javadoc as Jd
-import qualified Lastik.Scala.Scalac as S
-import qualified Lastik.Scala.Scaladoc as Sd
 import Lastik.Runner
-import Lastik.Output
 import Lastik.Util
 import Lastik.Directory
 import Control.Monad
@@ -23,34 +20,71 @@ import System.Directory
 import System.FilePath
 import Lastik.Find
 import Codec.Archive.Zip
-import qualified Data.ByteString.Lazy as B
-import Data.Digest.Pure.MD5
-import Data.Digest.Pure.SHA
 
+src :: [FilePath]
 src = ["src" </> "main", "src" </> "package-info"]
+
+deps :: [FilePath]
 deps = ["src" </> "deps-test"]
+
+test :: [FilePath]
 test = ["src" </> "test"]
 
+build :: FilePath
 build = "build"
+
+javaco :: FilePath
 javaco = build </> "classes" </> "javac"
+
+depso :: FilePath
 depso = build </> "classes" </> "deps"
+
+testo :: FilePath
 testo = build </> "classes" </> "test"
+
+javadoco :: FilePath
 javadoco = build </> "javadoc"
+
+scaladoco :: FilePath
 scaladoco = build </> "scaladoc"
+
+jardir :: FilePath
 jardir = build </> "jar"
+
+releasedir :: FilePath
 releasedir = build </> "release"
+
+mavendir :: FilePath
 mavendir = build </> "maven"
+
+etcdir :: FilePath
 etcdir = "etc"
 
+resources :: FilePath
 resources = "resources"
+
+cp :: String
 cp = "classpath" ~?? [javaco, depso, testo, resources]
+
+wt :: Version -> Maybe String
 wt v = Just ("Functional Java " ++ v)
+
+dt :: Version -> Maybe String
 dt v = Just ("Functional Java " ++ v ++ " API Specification")
+
+hd :: Maybe String
 hd = Just "<div><p><em>Copyright 2008 - 2009 Tony Morris, Runar Bjarnason, Tom Adams, Brad Clow, Ricky Clarkson, Nick Partridge, Jason Zaugg</em></p>This software is released under an open source BSD licence.</div>"
+
+ds :: String
 ds = ".deps"
+
+repo :: String
 repo = "https://functionaljava.googlecode.com/svn/"
+
+commitMessage :: String
 commitMessage = "\"Automated build\""
 
+resolve :: IO ()
 resolve = do e <- doesDirectoryExist ds
              unless e $ do mkdir ds
                            mapM_ (\d -> system ("wget -c --directory " ++ ds ++ ' ' : d)) k
