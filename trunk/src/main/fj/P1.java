@@ -3,14 +3,6 @@ package fj;
 import fj.data.List;
 import fj.data.Stream;
 import fj.data.Array;
-import fj.data.Option;
-import static fj.data.Option.none;
-import static fj.data.Option.some;
-import static fj.data.Option.fromNull;
-
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.atomic.AtomicReference;
-import java.lang.ref.WeakReference;
 import java.lang.ref.SoftReference;
 
 /**
@@ -210,7 +202,8 @@ public abstract class P1<A> {
   public P1<A> memo() {
     final P1<A> self = this;
     return new P1<A>() {
-      private Object latch = new Object();
+      private final Object latch = new Object();
+      @SuppressWarnings({"InstanceVariableMayNotBeInitialized"})
       private volatile SoftReference<A> v;
 
       public A _1() {
