@@ -337,6 +337,24 @@ public final class Monoid<A> {
   }
 
   /**
+   * A monoid for options that take the first available value.
+   *
+   * @return A monoid for options that take the first available value.
+   */
+  public static <A> Monoid<Option<A>> firstOptionMonoid() {
+    return monoid(Semigroup.<A>firstOptionSemigroup(), Option.<A>none());
+  }
+
+  /**
+   * A monoid for options that take the last available value.
+   *
+   * @return A monoid for options that take the last available value.
+   */
+  public static <A> Monoid<Option<A>> lastOptionMonoid() {
+    return monoid(Semigroup.<A>lastOptionSemigroup(), Option.<A>none());
+  }
+
+  /**
    * A monoid for streams.
    *
    * @return A monoid for streams.
