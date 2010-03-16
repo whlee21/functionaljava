@@ -328,13 +328,38 @@ public final class Semigroup<A> {
 
   /**
    * A semigroup for optional values.
-   *
-   * @return A semigroup for optional values.
+   ** @return A semigroup for optional values.
    */
   public static <A> Semigroup<Option<A>> optionSemigroup() {
     return semigroup(new F2<Option<A>, Option<A>, Option<A>>() {
       public Option<A> f(final Option<A> a1, final Option<A> a2) {
         return a1.isSome() ? a1 : a2;
+      }
+    });
+  }
+
+  /**
+   * A semigroup for optional values that take the first available value.
+   *
+   * @return A semigroup for optional values that take the first available value.
+   */
+  public static <A> Semigroup<Option<A>> firstOptionSemigroup() {
+    return semigroup(new F2<Option<A>, Option<A>, Option<A>>() {
+      public Option<A> f(final Option<A> a1, final Option<A> a2) {
+        return a1.orElse(a2);
+      }
+    });
+  }
+
+  /**
+   * A semigroup for optional values that take the last available value.
+   *
+   * @return A semigroup for optional values that take the last available value.
+   */
+  public static <A> Semigroup<Option<A>> lastOptionSemigroup() {
+    return semigroup(new F2<Option<A>, Option<A>, Option<A>>() {
+      public Option<A> f(final Option<A> a1, final Option<A> a2) {
+        return a2.orElse(a1);
       }
     });
   }
