@@ -219,4 +219,16 @@ public abstract class P1<A> {
     };
   }
 
+  /**
+   * Returns a constant function that always uses this value.
+   *
+   * @return A constant function that always uses this value. 
+   */
+  public <B> F<B, A> constant() {
+    return new F<B, A>() {
+      public A f(final B b) {
+          return _1();
+      }
+    };
+  }
 }
