@@ -359,7 +359,15 @@ public class Parser<I, A, E> {
    * @return A parser that repeats application of this parser one or many times.
    */
   public Parser<I, Stream<A>, E> repeat1() {
-    return bind(repeat(), Stream.<A>cons_());
+      return bind(new F<A, Parser<I, Stream<A>, E>>() {
+          public Parser<I, Stream<A>, E> f(final A a) {
+              return repeat().map(new F<Stream<A>, Stream<A>>() {
+                public Stream<A> f(final Stream<A> as) {
+                    return as.cons(a);
+                }
+            });
+          }
+      });
   }
 
   /**
