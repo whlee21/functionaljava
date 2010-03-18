@@ -127,4 +127,39 @@ public final class Integers {
     };
   }
 
+  /**
+   * A function that returns true if the given integer is greater than zero.
+   */
+  public static final F<Integer, Boolean> gtZero = new F<Integer, Boolean>() {
+    public Boolean f(final Integer i) {
+      return i > 0;
+    }
+  };
+
+  /**
+   * A function that returns true if the given integer is greater than or equal to zero.
+   */
+  public static final F<Integer, Boolean> gteZero = new F<Integer, Boolean>() {
+    public Boolean f(final Integer i) {
+      return i >= 0;
+    }
+  };
+
+  /**
+   * A function that returns true if the given integer is less than zero.
+   */
+  public static final F<Integer, Boolean> ltZero = new F<Integer, Boolean>() {
+    public Boolean f(final Integer i) {
+      return i < 0;
+    }
+  };
+
+  /**
+   * A function that returns true if the given integer is less than or equal to zero. 
+   */
+  public static final F<Integer, Boolean> lteZero = new F<Integer, Boolean>() {
+    public Boolean f(final Integer i) {
+      return i <= 0;
+    }
+  };
 }
