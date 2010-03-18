@@ -11,7 +11,7 @@
   <property name="build-java.version" value="1.58"/>
   <property name="etc.dir" value="etc"/>
   <property name="javadoc.doctitle" value="Functional Java ${build.number} API Specification"/>
-  <property name="javadoc.header" value="&lt;div&gt;&lt;p&gt;&lt;em&gt;Copyright 2008 - 2009 Tony Morris, Runar Bjarnason, Tom Adams, Brad Clow, Ricky Clarkson&lt;/em&gt;&lt;/p&gt;This software is released under an open source BSD licence.&lt;/div&gt;"/>
+  <property name="javadoc.header" value="&lt;div&gt;&lt;p&gt;&lt;em&gt;Copyright 2008 - 2010 Tony Morris, Runar Bjarnason, Tom Adams, Brad Clow, Ricky Clarkson&lt;/em&gt;&lt;/p&gt;This software is released under an open source BSD licence.&lt;/div&gt;"/>
   <property name="javadoc.windowtitle" value="Functional Java ${build.number}"/>
   <property name="projects.repository.uri" value="http://projects.tmorris.net/public"/>
   <property name="resources.dir" value="resources"/>
