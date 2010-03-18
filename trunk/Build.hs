@@ -73,7 +73,7 @@ dt :: Version -> Maybe String
 dt v = Just ("Functional Java " ++ v ++ " API Specification")
 
 hd :: Maybe String
-hd = Just "<div><p><em>Copyright 2008 - 2009 Tony Morris, Runar Bjarnason, Tom Adams, Brad Clow, Ricky Clarkson, Nick Partridge, Jason Zaugg</em></p>This software is released under an open source BSD licence.</div>"
+hd = Just "<div><p><em>Copyright 2008 - 2010 Tony Morris, Runar Bjarnason, Tom Adams, Brad Clow, Ricky Clarkson, Nick Partridge, Jason Zaugg</em></p>This software is released under an open source BSD licence.</div>"
 
 ds :: String
 ds = ".deps"
