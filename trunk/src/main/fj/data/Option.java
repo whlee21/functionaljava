@@ -7,6 +7,12 @@ import static fj.Unit.unit;
 import static fj.data.Array.array;
 import static fj.data.List.cons;
 import static fj.data.List.cons_;
+import static fj.data.Validation.parseByte;
+import static fj.data.Validation.parseDouble;
+import static fj.data.Validation.parseFloat;
+import static fj.data.Validation.parseInt;
+import static fj.data.Validation.parseLong;
+import static fj.data.Validation.parseShort;
 
 import java.util.Collection;
 import java.util.Iterator;
@@ -779,4 +785,39 @@ public abstract class Option<A> implements Iterable<A> {
     };
   }
 
+  public static final F<String, Option<Byte>> parseByte = new F<String, Option<Byte>>() {
+      public Option<Byte> f(final String s) {
+          return parseByte(s).toOption();
+      }
+  };
+
+  public static final F<String, Option<Double>> parseDouble = new F<String, Option<Double>>() {
+      public Option<Double> f(final String s) {
+          return parseDouble(s).toOption();
+      }
+  };
+
+  public static final F<String, Option<Float>> parseFloat = new F<String, Option<Float>>() {
+      public Option<Float> f(final String s) {
+          return parseFloat(s).toOption();
+      }
+  };
+
+  public static final F<String, Option<Integer>> parseInt = new F<String, Option<Integer>>() {
+      public Option<Integer> f(final String s) {
+          return parseInt(s).toOption();
+      }
+  };
+
+  public static final F<String, Option<Long>> parseLong = new F<String, Option<Long>>() {
+      public Option<Long> f(final String s) {
+          return parseLong(s).toOption();
+      }
+  };
+
+  public static final F<String, Option<Short>> parseShort = new F<String, Option<Short>>() {
+      public Option<Short> f(final String s) {
+          return parseShort(s).toOption();
+      }
+  };
 }
