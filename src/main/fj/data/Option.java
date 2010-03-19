@@ -3,6 +3,7 @@ package fj.data;
 import static fj.Bottom.error;
 import fj.*;
 import static fj.Function.*;
+import static fj.P.p;
 import static fj.Unit.unit;
 import static fj.data.Array.array;
 import static fj.data.List.cons;
@@ -660,6 +661,32 @@ public abstract class Option<A> implements Iterable<A> {
   }
 
   /**
+   * Returns an optional value that has a value of the given argument if the given boolean is true, otherwise, returns
+   * no value.
+   *
+   * @param p The value to be true to return the given value.
+   * @param a the value to return in an optional value if the given boolean is true.
+   * @return An optional value that has a value of the given argument if the given boolean is true, otherwise, returns
+   *         no value.
+   */
+  public static <A> Option<A> iif(final boolean p, final P1<A> a) {
+    return p ? some(a._1()) : Option.<A>none();
+  }
+
+  /**
+   * Returns an optional value that has a value of the given argument if the given boolean is true, otherwise, returns
+   * no value.
+   *
+   * @param p The value to be true to return the given value.
+   * @param a the value to return in an optional value if the given boolean is true.
+   * @return An optional value that has a value of the given argument if the given boolean is true, otherwise, returns
+   *         no value.
+   */
+  public static <A> Option<A> iif(final boolean p, final A a) {
+    return iif(p, p(a));
+  }
+
+  /**
    * First-class version of the iif function.
    *
    * @return a function that returns an optional value that has a value of the given argument, if the given predicate
@@ -785,36 +812,54 @@ public abstract class Option<A> implements Iterable<A> {
     };
   }
 
+  /**
+   * A function that parses a string to a byte.
+   */
   public static final F<String, Option<Byte>> parseByte = new F<String, Option<Byte>>() {
       public Option<Byte> f(final String s) {
           return parseByte(s).toOption();
       }
   };
 
+  /**
+   * A function that parses a string to a double.
+   */
   public static final F<String, Option<Double>> parseDouble = new F<String, Option<Double>>() {
       public Option<Double> f(final String s) {
           return parseDouble(s).toOption();
       }
   };
 
+  /**
+   * A function that parses a string to a float.
+   */
   public static final F<String, Option<Float>> parseFloat = new F<String, Option<Float>>() {
       public Option<Float> f(final String s) {
           return parseFloat(s).toOption();
       }
   };
 
+  /**
+   * A function that parses a string to an integer.
+   */
   public static final F<String, Option<Integer>> parseInt = new F<String, Option<Integer>>() {
       public Option<Integer> f(final String s) {
           return parseInt(s).toOption();
       }
   };
 
+  /**
+   * A function that parses a string to a long.
+   */
   public static final F<String, Option<Long>> parseLong = new F<String, Option<Long>>() {
       public Option<Long> f(final String s) {
           return parseLong(s).toOption();
       }
   };
 
+  /**
+   * A function that parses a string to a short.
+   */
   public static final F<String, Option<Short>> parseShort = new F<String, Option<Short>>() {
       public Option<Short> f(final String s) {
           return parseShort(s).toOption();
