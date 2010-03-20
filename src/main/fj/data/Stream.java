@@ -372,7 +372,7 @@ public abstract class Stream<A> implements Iterable<A> {
    * @return A function that, when given an argument, applies all the functions in the given stream to it
    *         and returns a stream of the results.
    */
-  public static <A, B> F<B, Stream<A>> sequence(final Stream<F<B, A>> fs) {
+  public static <A, B> F<B, Stream<A>> sequence_(final Stream<F<B, A>> fs) {
     return fs.foldRight(new F2<F<B, A>, P1<F<B, Stream<A>>>, F<B, Stream<A>>>() {
       public F<B, Stream<A>> f(final F<B, A> baf, final P1<F<B, Stream<A>>> p1) {
         return fj.Function.bind(baf, p1._1(), curry(new F2<A, Stream<A>, Stream<A>>() {
@@ -394,7 +394,7 @@ public abstract class Stream<A> implements Iterable<A> {
    *         in this list.
    */
   public <B, C> F<B, Stream<C>> mapM(final F<A, F<B, C>> f) {
-    return Stream.sequence(map(f));
+    return Stream.sequence_(map(f));
   }
 
   /**

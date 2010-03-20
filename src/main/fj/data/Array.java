@@ -7,6 +7,7 @@ import fj.P;
 import fj.P1;
 import fj.P2;
 import fj.Unit;
+
 import static fj.Function.*;
 import static fj.P.p;
 import static fj.P.p2;
@@ -17,8 +18,8 @@ import static fj.data.Option.some;
 
 import static java.lang.Math.min;
 import static java.lang.System.arraycopy;
+
 import java.util.AbstractCollection;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
@@ -110,7 +111,7 @@ public final class Array<A> implements Iterable<A> {
    * @return A copy of the underlying primitive array.
    */
   public A[] array(final Class<A[]> c) {
-    return Arrays.copyOf(a, a.length, c);
+    return copyOf(a, a.length, c);
   }
 
   /**
@@ -119,7 +120,7 @@ public final class Array<A> implements Iterable<A> {
    * @return A copy of the underlying primitive array;
    */
   public Object[] array() {
-    return Arrays.copyOf(a, a.length);
+    return copyOf(a, a.length);
   }
 
   /**
@@ -171,7 +172,7 @@ public final class Array<A> implements Iterable<A> {
     return Stream.unfold(new F<Integer, Option<P2<A, Integer>>>() {
       public Option<P2<A, Integer>> f(final Integer o) {
         return a.length > o ? some(p((A) a[o], o + 1))
-                            : Option.<P2<A, Integer>>none();
+            : Option.<P2<A, Integer>>none();
       }
     }, 0);
   }
@@ -906,5 +907,30 @@ public final class Array<A> implements Iterable<A> {
     public Collection<A> toCollection() {
       return a.toCollection();
     }
+  }
+
+  @SuppressWarnings({"SuspiciousSystemArraycopy", "unchecked"})
+  public static <T, U> T[] copyOf(final U[] a, final int len, final Class<? extends T[]> newType) {
+    final T[] copy = (newType == (Object) Object[].class)
+        ? (T[]) new Object[len]
+        : (T[]) java.lang.reflect.Array.newInstance(newType.getComponentType(), len);
+    System.arraycopy(a, 0, copy, 0,
+        Math.min(a.length, len));
+    return copy;
+  }
+
+  @SuppressWarnings({"unchecked"})
+  public static <T> T[] copyOf(final T[] a, final int len) {
+      return (T[]) copyOf(a, len, a.getClass());
+  }
+
+  public static char[] copyOfRange(final char[] a, final int from, final int to) {
+      final int len = to - from;
+      if (len < 0)
+          throw new IllegalArgumentException(from + " > " + to);
+      final char[] copy = new char[len];
+      System.arraycopy(a, from, copy, 0,
+                       Math.min(a.length - from, len));
+      return copy;
   }
 }

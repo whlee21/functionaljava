@@ -28,7 +28,6 @@ import fj.data.vector.V8;
 
 import java.math.BigInteger;
 import java.math.BigDecimal;
-import java.util.Arrays;
 
 /**
  * Renders an object for display.
@@ -137,7 +136,7 @@ public final class Show<A> {
         c = 0;
       }
     }
-    System.out.print(Arrays.copyOfRange(buffer, 0, c));
+    System.out.print(Array.copyOfRange(buffer, 0, c));
     return unit();
   }
 
