@@ -1,0 +1,131 @@
+<HTML>
+<BODY BGCOLOR="white">
+<PRE>
+<FONT color="green">001</FONT>    package fj.test;<a name="line.1"></a>
+<FONT color="green">002</FONT>    <a name="line.2"></a>
+<FONT color="green">003</FONT>    import fj.F;<a name="line.3"></a>
+<FONT color="green">004</FONT>    import fj.pre.Show;<a name="line.4"></a>
+<FONT color="green">005</FONT>    import static fj.pre.Show.anyShow;<a name="line.5"></a>
+<FONT color="green">006</FONT>    import static fj.pre.Show.showS;<a name="line.6"></a>
+<FONT color="green">007</FONT>    <a name="line.7"></a>
+<FONT color="green">008</FONT>    /**<a name="line.8"></a>
+<FONT color="green">009</FONT>     * An argument used in a property that may have undergone shrinking following falsification.<a name="line.9"></a>
+<FONT color="green">010</FONT>     *<a name="line.10"></a>
+<FONT color="green">011</FONT>     * @version %build.number%&lt;br&gt;<a name="line.11"></a>
+<FONT color="green">012</FONT>     *          &lt;ul&gt;<a name="line.12"></a>
+<FONT color="green">013</FONT>     *          &lt;li&gt;$LastChangedRevision$&lt;/li&gt;<a name="line.13"></a>
+<FONT color="green">014</FONT>     *          &lt;li&gt;$LastChangedDate$&lt;/li&gt;<a name="line.14"></a>
+<FONT color="green">015</FONT>     *          &lt;li&gt;$LastChangedBy$&lt;/li&gt;<a name="line.15"></a>
+<FONT color="green">016</FONT>     *          &lt;/ul&gt;<a name="line.16"></a>
+<FONT color="green">017</FONT>     */<a name="line.17"></a>
+<FONT color="green">018</FONT>    public final class Arg&lt;T&gt; {<a name="line.18"></a>
+<FONT color="green">019</FONT>      private final T value;<a name="line.19"></a>
+<FONT color="green">020</FONT>      private final int shrinks;<a name="line.20"></a>
+<FONT color="green">021</FONT>    <a name="line.21"></a>
+<FONT color="green">022</FONT>      private Arg(final T value, final int shrinks) {<a name="line.22"></a>
+<FONT color="green">023</FONT>        this.value = value;<a name="line.23"></a>
+<FONT color="green">024</FONT>        this.shrinks = shrinks;<a name="line.24"></a>
+<FONT color="green">025</FONT>      }<a name="line.25"></a>
+<FONT color="green">026</FONT>    <a name="line.26"></a>
+<FONT color="green">027</FONT>      /**<a name="line.27"></a>
+<FONT color="green">028</FONT>       * Construct a property argument with the given value and number of shrinks.<a name="line.28"></a>
+<FONT color="green">029</FONT>       *<a name="line.29"></a>
+<FONT color="green">030</FONT>       * @param value   The value to construct an argument with.<a name="line.30"></a>
+<FONT color="green">031</FONT>       * @param shrinks The number of shrinks to construct an argument with.<a name="line.31"></a>
+<FONT color="green">032</FONT>       * @return A new argument.<a name="line.32"></a>
+<FONT color="green">033</FONT>       */<a name="line.33"></a>
+<FONT color="green">034</FONT>      public static &lt;T&gt; Arg&lt;T&gt; arg(final T value, final int shrinks) {<a name="line.34"></a>
+<FONT color="green">035</FONT>        return new Arg&lt;T&gt;(value, shrinks);<a name="line.35"></a>
+<FONT color="green">036</FONT>      }<a name="line.36"></a>
+<FONT color="green">037</FONT>    <a name="line.37"></a>
+<FONT color="green">038</FONT>      /**<a name="line.38"></a>
+<FONT color="green">039</FONT>       * Returns the argument's value.<a name="line.39"></a>
+<FONT color="green">040</FONT>       *<a name="line.40"></a>
+<FONT color="green">041</FONT>       * @return The argument's value.<a name="line.41"></a>
+<FONT color="green">042</FONT>       */<a name="line.42"></a>
+<FONT color="green">043</FONT>      public Object value() {<a name="line.43"></a>
+<FONT color="green">044</FONT>        return value;<a name="line.44"></a>
+<FONT color="green">045</FONT>      }<a name="line.45"></a>
+<FONT color="green">046</FONT>    <a name="line.46"></a>
+<FONT color="green">047</FONT>      /**<a name="line.47"></a>
+<FONT color="green">048</FONT>       * Returns the argument's number of shrinks following falsification.<a name="line.48"></a>
+<FONT color="green">049</FONT>       *<a name="line.49"></a>
+<FONT color="green">050</FONT>       * @return The argument's number of shrinks following falsification.<a name="line.50"></a>
+<FONT color="green">051</FONT>       */<a name="line.51"></a>
+<FONT color="green">052</FONT>      public int shrinks() {<a name="line.52"></a>
+<FONT color="green">053</FONT>        return shrinks;<a name="line.53"></a>
+<FONT color="green">054</FONT>      }<a name="line.54"></a>
+<FONT color="green">055</FONT>    <a name="line.55"></a>
+<FONT color="green">056</FONT>      /**<a name="line.56"></a>
+<FONT color="green">057</FONT>       * The rendering of an argument (uses {@link Object#toString()} for the argument value).<a name="line.57"></a>
+<FONT color="green">058</FONT>       */<a name="line.58"></a>
+<FONT color="green">059</FONT>      public static final Show&lt;Arg&lt;?&gt;&gt; argShow = showS(new F&lt;Arg&lt;?&gt;, String&gt;() {<a name="line.59"></a>
+<FONT color="green">060</FONT>        public String f(final Arg&lt;?&gt; arg) {<a name="line.60"></a>
+<FONT color="green">061</FONT>          return anyShow().showS(arg.value) +<a name="line.61"></a>
+<FONT color="green">062</FONT>              (arg.shrinks &gt; 0 ? " (" + arg.shrinks + " shrink" + (arg.shrinks == 1 ? "" : 's') + ')' : "");<a name="line.62"></a>
+<FONT color="green">063</FONT>        }<a name="line.63"></a>
+<FONT color="green">064</FONT>      });<a name="line.64"></a>
+<FONT color="green">065</FONT>    }<a name="line.65"></a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</PRE>
+</BODY>
+</HTML>
