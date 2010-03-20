@@ -1068,7 +1068,7 @@ public abstract class List<A> implements Iterable<A> {
    *         in this list.
    */
   public <B, C> F<B, List<C>> mapM(final F<A, F<B, C>> f) {
-    return List.sequence(map(f));
+    return List.sequence_(map(f));
   }
 
   /**
@@ -1565,7 +1565,7 @@ public abstract class List<A> implements Iterable<A> {
    * @return A function that, when given an argument, applies all the functions in the given list to it
    *         and returns a list of the results.
    */
-  public static <A, B> F<B, List<A>> sequence(final List<F<B, A>> fs) {
+  public static <A, B> F<B, List<A>> sequence_(final List<F<B, A>> fs) {
     return fs.foldRight(fj.Function.<A, List<A>, List<A>, B>lift(List.<A>cons()), fj.Function
         .<B, List<A>>constant(List.<A>nil()));
   }
