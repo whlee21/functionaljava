@@ -106,7 +106,9 @@ javac' :: FilePath -> J.Javac
 javac' d = J.javac {
   J.directory = Just d,
   J.deprecation = True,
-  J.etc = Just "-Xlint:unchecked"
+  J.etc = Just "-Xlint:unchecked",
+  J.source = Just "1.5",
+  J.target = Just "1.5"
 }
 
 j :: J.Javac
