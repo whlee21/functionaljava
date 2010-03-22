@@ -1,6 +1,5 @@
 package fj;
 
-import static fj.data.List.asString;
 import fj.pre.Show;
 
 /**
