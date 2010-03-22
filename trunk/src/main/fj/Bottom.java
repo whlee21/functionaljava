@@ -44,9 +44,9 @@ public final class Bottom {
    * @param s The message to fail with.
    * @return A thunk that throws an error using the given message when evaluated.
    */
-  public static P1<Error> error_(final String s) {
-    return new P1<Error>() {
-      @Override public Error _1() {
+  public static <A> P1<A> error_(final String s) {
+    return new P1<A>() {
+      @Override public A _1() {
         throw new Error(s);
       }
     };
