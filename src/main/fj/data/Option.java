@@ -620,6 +620,20 @@ public abstract class Option<A> implements Iterable<A> {
   }
 
   /**
+   * Turns an unsafe nullable value into a safe optional value. If <code>t == null</code> then
+   * return none, otherwise, return the given value in some.
+   *
+   * @return If <code>t == null</code> then return it in some, otherwise, return none.
+   */
+  public static <T> F<T, Option<T>> fromNull() {
+    return new F<T, Option<T>>() {
+      public Option<T> f(final T t) {
+        return fromNull(t);
+      }
+    };
+  }
+
+  /**
    * Joins the given optional value of optional value using a bind operation.
    *
    * @param o The optional value of optional value to join.
