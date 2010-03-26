@@ -20,6 +20,28 @@ import static fj.Function.compose;
  */
 public final class Visitor {
   /**
+   * Returns the first value available in the given list of optional values. If none is found return the given default value.
+   *
+   * @param values The optional values to search.
+   * @param def The default value if no value is found in the list.
+   * @return The first value available in the given list of optional values. If none is found return the given default value.
+   */
+  public static <X> X findFirst(final List<Option<X>> values, final P1<X> def) {
+    return Monoid.<X>firstOptionMonoid().sumLeft(values).orSome(def);
+  }
+
+  /**
+   * Returns the first non-<code>null</code> value in the given list of optional values. If none is found return the given default value.
+   *
+   * @param values The potentially <code>null</code> values to search.
+   * @param def The default value if no value is found in the list.
+   * @return The first non-<code>null</code> value in the given list of optional values. If none is found return the given default value.
+   */
+  public static <X> X nullablefindFirst(final List<X> values, final P1<X> def) {
+    return findFirst(values.map(Option.<X>fromNull()), def);
+  }
+
+  /**
    * Returns the first value found in the list of visitors after application of the given value, otherwise returns the
    * given default.
    *
@@ -30,7 +52,7 @@ public final class Visitor {
    * given default.
    */
   public static <A, B> B visitor(final List<F<A, Option<B>>> visitors, final P1<B> def, final A value) {
-    return Monoid.<B>firstOptionMonoid().sumLeft(visitors.map(Function.<A, Option<B>>apply(value))).orSome(def);
+    return findFirst(visitors.map(Function.<A, Option<B>>apply(value)), def);
   }
 
   /**
