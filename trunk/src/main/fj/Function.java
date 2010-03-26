@@ -15,6 +15,20 @@ public final class Function {
   }
 
   /**
+   * Function application with the arguments flipped.
+   *
+   * @param a The value to apply the function to.
+   * @return A function that is partially-applied to the given value.
+   */
+  public static <A, B> F<F<A, B>, B> apply(final A a) {
+    return new F<F<A, B>, B>() {
+      public B f(final F<A, B> k) {
+        return k.f(a);
+      }
+    };
+  }
+
+  /**
    * Function composition.
    *
    * @return A function that composes two functions to produce a new function.
