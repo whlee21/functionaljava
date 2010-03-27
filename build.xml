@@ -1,135 +1,208 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<project name="scgen" default="dist" basedir=".">
+	<!-- ==== configuration ==== -->
 
-<!--
-    $LastChangedRevision$
-    $LastChangedDate$
-    $LastChangedBy$
--->
+	<property environment="env"/>
+	<property file="${user.home}/.build.properties"/>	<!-- these override the project local version -->
+	<property file="build.properties"/>
 
-<project name="Functional Java" default="target" basedir=".">
-  <property name="build.dir" value="build"/>
-  <property name="build-java.version" value="1.58"/>
-  <property name="etc.dir" value="etc"/>
-  <property name="javadoc.doctitle" value="Functional Java ${build.number} API Specification"/>
-  <property name="javadoc.header" value="&lt;div&gt;&lt;p&gt;&lt;em&gt;Copyright 2008 - 2010 Tony Morris, Runar Bjarnason, Tom Adams, Brad Clow, Ricky Clarkson&lt;/em&gt;&lt;/p&gt;This software is released under an open source BSD licence.&lt;/div&gt;"/>
-  <property name="javadoc.windowtitle" value="Functional Java ${build.number}"/>
-  <property name="projects.repository.uri" value="http://projects.tmorris.net/public"/>
-  <property name="resources.dir" value="resources"/>
-  <property name="scaladoc.bottom" value=""/>
-  <property name="scaladoc.doctitle" value="Functional Java ${build.number} API Specification"/>
-  <property name="scaladoc.footer" value=""/>
-  <property name="scaladoc.header" value="&lt;div&gt;&lt;p&gt;&lt;em&gt;Copyright 2008 - 2010 Tony Morris, Runar Bjarnason, Tom Adams, Brad Clow, Ricky Clarkson&lt;/em&gt;&lt;/p&gt;This software is released under an open source BSD licence.&lt;/div&gt;"/>
-  <property name="scaladoc.top" value=""/>
-  <property name="scaladoc.windowtitle" value="Functional Java ${build.number}"/>
-  <property name="scala.version" value="2.7.4"/>
-  <import file="buildj.xml" optional="true"/>
-  <import file="build-maven.xml" optional="true"/>
+	<property name="scala.home"		value="${env.SCALA_HOME}"/>
+	<property name="scala.library"	value="${scala.home}/lib/scala-library.jar"/>
+	<property name="scala.compiler" value="${scala.home}/lib/scala-compiler.jar"/>
+	<!-- @see http://www.scala-lang.org/docu/ant/index.html -->
+	<!-- 
+	TODO maybe try resource="scala/tools/ant/antlib.xml" so 
+	only one definition with a classpath is necessary
+	-->
+	<taskdef name="scalac" classname="scala.tools.ant.Scalac"
+			classpath="${scala.library}:${scala.compiler}"/>
+	<taskdef name="scaladoc" classname="scala.tools.ant.Scaladoc"
+			classpath="${scala.library}:${scala.compiler}"/>
+			
+	<!-- TODO unused -->
+	<path id="scala.ant">
+		<pathelement location="${scala.library}"/>
+		<pathelement location="${scala.compiler}"/>
+	</path>
+	
+	<path id="build.classpath">
+		<pathelement location="${scala.library}"/>
+		<fileset dir="lib"/>
+	</path>
+	
+	<path id="test.classpath">
+		<!-- why not this instead of including scala.library?
+		<pathelement path="${build.classpath}"/>
+		-->
+		<pathelement location="${scala.library}"/>
+		<fileset dir="lib"/>
+		<pathelement location="build/classes"/>
+	</path>
+	  
+	<!-- ==== main	==== -->
+	
+	<target name="clean" description="deletes everything that can be rebuilt">
+		<delete dir="build"/>
+	</target>
+	
+	<target name="test" depends="compile" description="generate and compile testcode">
+		<mkdir dir="build/proc-classes"/>
+		<javac
+			srcdir="src/test" 
+			destdir="build/proc-classes" 
+			encoding="${java.encoding}"
+			classpathref="test.classpath"
+			source="${java.source}"
+			target="${java.target}"
+			deprecation="yes"
+			debug="true"
+			fork="true"
+			memoryMaximumSize="256m"
+		>
+			<!-- addparams -->
+			<include name="**/*.java"/>
+			<compilerarg value="-processor"/>
+			<compilerarg value="net.psammead.scgen.processor.FunctionProcessor"/>
+			<!-- <compilerarg value="-Afunctional.library=own"/> -->
+			<compilerarg value="-Afunctional.library=fj"/>
+		</javac>
+	</target>
+	
+	<!-- ==== compile  ==== -->
+	
+	<target name="compile" description="compiles scala classes">
+		<mkdir dir="build/classes"/>
+		<scalac 
+			srcdir="src/main" 
+			destdir="build/classes" 
+			encoding="${scala.encoding}" 
+			classpathref="build.classpath"
+			deprecation="yes"
+			unchecked="yes"
+		>
+			<!-- addparams -->
+			<include name="**/*"/>
+		</scalac>
+		<javac
+			srcdir="src/main" 
+			destdir="build/classes" 
+			encoding="${scala.encoding}" 
+			classpathref="build.classpath"
+			deprecation="yes"
+			debug="true"
+			source="1.6"
+			target="1.6"
+		>
+			<!-- addparams -->
+			<include name="**/*.java"/>
+		</javac>
+	</target>
+	
+	<!--
+	<target name="apidoc" description="compiles apidoc">
+		<mkdir dir="build/apidoc"/>
+		<scaladoc
+			srcdir="src/main"
+			destdir="build/apidoc"
+			encoding="${scala.encoding}"
+			classpathref="build.classpath"
+			deprecation="yes"
+			unchecked="yes"
+			
+			doctitle="${project}"
+			windowtitle="${project}"
+		>
+			<include name="**/*.scala"/>
+		</scaladoc>
+	</target>
+	-->
+	
+	
+	<target name="doc" description="prepare documentation files">
+		<mkdir dir="build/doc"/>
+		<fixcrlf  srcDir="doc" destDir="build/doc" includes="changes.txt,index.html"
+			tab="remove" tablength="4" eol="crlf" eof="remove" encoding="ISO-8859-1" fixlast="true" />
+		<replace file="build/doc/index.html" token="$(project)" value="${project}"/>
+		<replace file="build/doc/index.html" token="$(version)" value="${version}"/>
+	</target>
+	
+	<!-- ==== pack ==== -->
+	
+	<target name="dist" depends="annotations,processor,srcjar" description="create jarfiles"/>
+	
+	<target name="srcjar" depends="" description="create the jar file with everything needed for a build">
+		<mkdir dir="build/jar"/>
+		<jar jarfile="build/jar/${project}-src.jar">
+			<zipfileset dir=".">
+				<include name="doc/index.html"/>
+				<include name="doc/changes.txt"/>
+				<include name="build.*"/>
+				<include name="src/**"/>
+				<include name="lib/functionaljava.jar"/>
+			</zipfileset>
+			<manifest>
+                <attribute name="Application" value="${description}"/>
+                <attribute name="Version" value="${version}" />
+				<attribute name="Creator" value="${author}"/>
+				<attribute name="License" value="${license}"/>
+			</manifest>
+		</jar>
+	</target>
 
-  <path id="libs.path" description="JAR files and ZIP fivles in the lib directory">
-    <fileset dir="${build.dir}/lib" includes="**/*.jar"/>
-    <fileset dir="${build.dir}/lib" includes="**/*.zip"/>
-  </path>
+	<!-- see http://java.sun.com/javase/6/docs/api/java/util/ServiceLoader.html -->
+	<target name="service">
+		<mkdir dir="build/serviceloader/META-INF/services"/>
+		<echo file="build/serviceloader/META-INF/services/javax.annotation.processing.Processor" message="net.psammead.scgen.processor.FunctionProcessor"/>
+	</target>
+	
+	<target name="processor" depends="compile,service" description="create processor jar">
+		<mkdir dir="build/jar"/>
+		<jar destfile="build/jar/scgen-processor.jar">
+			<!--
+			<zipfileset src="lib/lib-util.jar"/>
+			<zipfileset src="${scala.library}"/>
+			-->
+			<zipfileset dir="build/serviceloader"/>
+			<zipfileset dir="build/classes">
+				<include name="net/psammead/scgen/processor/**"/>
+				<include name="net/psammead/scgen/annotation/**"/>
+				<include name="net/psammead/scutil/**"/>
+			</zipfileset>
+			<manifest>
+			</manifest>
+		</jar>
+	</target>
+	
+	<target name="annotations" depends="compile" description="create annotation jar">
+		<mkdir dir="build/jar"/>
+		<jar destfile="build/jar/scgen-annotations.jar">
+			<zipfileset dir="build/classes">
+				<include name="net/psammead/scgen/annotation/**"/>
+			</zipfileset>
+			<manifest>
+			</manifest>
+		</jar>
+	</target>
+	
+	<!-- ==== export ==== -->
 
-  <path id="build.path" description="built class files">
-    <pathelement path="${build.dir}/classes/src"/>
-    <pathelement path="${build.dir}/classes/test-src"/>
-    <pathelement path="${build.dir}/classes/deps-src"/>
-    <pathelement path="${build.dir}/classes/deps-test-src"/>
-  </path>
-
-  <path id="fast.build.path" description="fast built class files">
-    <pathelement path="${build.dir}/classes/src"/>
-    <pathelement path="${build.dir}/classes/fast-test-src"/>
-    <pathelement path="${build.dir}/classes/deps-src"/>
-    <pathelement path="${build.dir}/classes/deps-test-src"/>
-  </path>
-
-  <path id="project.path" description="the project-wide path">
-    <path refid="libs.path"/>
-    <path refid="build.path"/>
-    <pathelement location="${resources.dir}"/>
-    <pathelement path="${java.class.path}"/>
-  </path>
-
-  <path id="fast.project.path" description="the project-wide path for fast builds">
-    <path refid="libs.path"/>
-    <path refid="fast.build.path"/>
-    <pathelement location="${resources.dir}"/>
-    <pathelement path="${java.class.path}"/>
-  </path>
-
-  <target name="init" description="initialise the project">
-    <get src="${projects.repository.uri}/build/java/artifacts/${build-java.version}/buildj.xml" dest="buildj.xml"
-      usetimestamp="true"/>
-    <echo file="${etc.dir}/VERSION"
-          message="Functional Java: ${build.number}&#010;&#010;"/>
-    <ant antfile="buildj.xml" target="init"/>
-  </target>
-
-  <target name="target" depends="init" description="run a given target">
-    <fail unless="t" message="Set the t property"/>
-    <ant antfile="buildj.xml" target="${t}"/>
-  </target>
-
-  <target name="clean" depends="init" description="delete the build environment">
-    <ant antfile="buildj.xml" target="clean"/>
-    <delete file="buildj.xml"/>
-  </target>
-
-  <target name="archive" depends="init">
-    <ant antfile="buildj.xml" target="archive"/>
-  </target>
-
-  <target name="javadoc" depends="init">
-    <ant antfile="buildj.xml" target="javadoc"/>
-  </target>
-
-  <target name="scaladoc" depends="init">
-    <ant antfile="buildj.xml" target="scaladoc"/>
-  </target>
-
-  <target name="dist" depends="init">
-    <ant antfile="buildj.xml" target="dist"/>
-  </target>
-
-  <target name="commit-archive" depends="init">
-    <ant antfile="buildj.xml" target="commit-archive"/>
-  </target>
-
-  <target name="maven" depends="init">
-    <ant antfile="buildj.xml" target="maven"/>
-  </target>
-
-  <target name="version" depends="init">
-    <ant antfile="buildj.xml" target="version"/>
-  </target>
-
-  <target name="fast-scalac-test" depends="init">
-    <ant antfile="buildj.xml" target="fast-scalac-test"/>
-  </target>
-
-  <target name="scalac-test" depends="init">
-    <ant antfile="buildj.xml" target="scalac-test"/>
-  </target>
-
-  <target name="fast-test" depends="fast-scalac-test" description="run tests">
-    <java classname="fj.Tests" failonerror="true">
-      <classpath refid="fast.project.path"/>
-    </java>
-  </target>
-
-  <target name="test" depends="scalac-test" description="run tests">
-    <java classname="fj.Tests" failonerror="true">
-      <classpath refid="project.path"/>
-    </java>
-  </target>
-
-  <target name="testx" depends="scalac-test" description="run tests">
-    <fail unless="test.name" message="set the test.name property"/>
-    <java classname="${test.name}" failonerror="true">
-      <classpath refid="project.path"/>
-    </java>
-  </target>
-
+	<target name="import" description="import artefacts from other projects">
+		<ant dir="../util" antfile="build.xml" target="export" inheritAll="false"/>
+		<copy toDir="lib">
+			<fileset dir="../util/build/export" includes="lib-util.jar,lib-util-src.jar"/>
+		</copy>
+	</target>
+	
+	<target name="export" depends="doc,processor,annotations" description="create artefacts">
+		<property name="export.dir" value="build/export"/>
+		<mkdir dir="${export.dir}"/>
+		<copy todir="${export.dir}">
+			<fileset dir="build/doc"	includes="changes.txt,index.html"/>
+			<fileset dir="build/jar"	includes="scgen-processor.jar,scgen-annotations.jar"/>
+			<!-- 
+			<fileset dir="lib"			includes="lib-util.jar,lib-util-src.jar"/>
+			-->
+			<fileset file="${scala.library}"/>
+		</copy>
+	</target>
 </project>
-
