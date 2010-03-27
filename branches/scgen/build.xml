@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<project name="scgen" default="dist" basedir=".">
+	<!-- ==== configuration ==== -->
+
+	<property environment="env"/>
+	<property file="${user.home}/.build.properties"/>	<!-- these override the project local version -->
+	<property file="build.properties"/>
+
+	<property name="scala.home"		value="${env.SCALA_HOME}"/>
+	<property name="scala.library"	value="${scala.home}/lib/scala-library.jar"/>
+	<property name="scala.compiler" value="${scala.home}/lib/scala-compiler.jar"/>
+	<!-- @see http://www.scala-lang.org/docu/ant/index.html -->
+	<!-- 
+	TODO maybe try resource="scala/tools/ant/antlib.xml" so 
+	only one definition with a classpath is necessary
+	-->
+	<taskdef name="scalac" classname="scala.tools.ant.Scalac"
+			classpath="${scala.library}:${scala.compiler}"/>
+	<taskdef name="scaladoc" classname="scala.tools.ant.Scaladoc"
+			classpath="${scala.library}:${scala.compiler}"/>
+			
+	<!-- TODO unused -->
+	<path id="scala.ant">
+		<pathelement location="${scala.library}"/>
+		<pathelement location="${scala.compiler}"/>
+	</path>
+	
+	<path id="build.classpath">
+		<pathelement location="${scala.library}"/>
+		<fileset dir="lib"/>
+	</path>
+	
+	<path id="test.classpath">
+		<!-- why not this instead of including scala.library?
+		<pathelement path="${build.classpath}"/>
+		-->
+		<pathelement location="${scala.library}"/>
+		<fileset dir="lib"/>
+		<pathelement location="build/classes"/>
+	</path>
+	  
+	<!-- ==== main	==== -->
+	
+	<target name="clean" description="deletes everything that can be rebuilt">
+		<delete dir="build"/>
+	</target>
+	
+	<target name="test" depends="compile" description="generate and compile testcode">
+		<mkdir dir="build/proc-classes"/>
+		<javac
+			srcdir="src/test" 
+			destdir="build/proc-classes" 
+			encoding="${java.encoding}"
+			classpathref="test.classpath"
+			source="${java.source}"
+			target="${java.target}"
+			deprecation="yes"
+			debug="true"
+			fork="true"
+			memoryMaximumSize="256m"
+		>
+			<!-- addparams -->
+			<include name="**/*.java"/>
+			<compilerarg value="-processor"/>
+			<compilerarg value="net.psammead.scgen.processor.FunctionProcessor"/>
+			<!-- <compilerarg value="-Afunctional.library=own"/> -->
+			<compilerarg value="-Afunctional.library=fj"/>
+		</javac>
+	</target>
+	
+	<!-- ==== compile  ==== -->
+	
+	<target name="compile" description="compiles scala classes">
+		<mkdir dir="build/classes"/>
+		<scalac 
+			srcdir="src/main" 
+			destdir="build/classes" 
+			encoding="${scala.encoding}" 
+			classpathref="build.classpath"
+			deprecation="yes"
+			unchecked="yes"
+		>
+			<!-- addparams -->
+			<include name="**/*"/>
+		</scalac>
+		<javac
+			srcdir="src/main" 
+			destdir="build/classes" 
+			encoding="${scala.encoding}" 
+			classpathref="build.classpath"
+			deprecation="yes"
+			debug="true"
+			source="1.6"
+			target="1.6"
+		>
+			<!-- addparams -->
+			<include name="**/*.java"/>
+		</javac>
+	</target>
+	
+	<!--
+	<target name="apidoc" description="compiles apidoc">
+		<mkdir dir="build/apidoc"/>
+		<scaladoc
+			srcdir="src/main"
+			destdir="build/apidoc"
+			encoding="${scala.encoding}"
+			classpathref="build.classpath"
+			deprecation="yes"
+			unchecked="yes"
+			
+			doctitle="${project}"
+			windowtitle="${project}"
+		>
+			<include name="**/*.scala"/>
+		</scaladoc>
+	</target>
+	-->
+	
+	
+	<target name="doc" description="prepare documentation files">
+		<mkdir dir="build/doc"/>
+		<fixcrlf  srcDir="doc" destDir="build/doc" includes="changes.txt,index.html"
+			tab="remove" tablength="4" eol="crlf" eof="remove" encoding="ISO-8859-1" fixlast="true" />
+		<replace file="build/doc/index.html" token="$(project)" value="${project}"/>
+		<replace file="build/doc/index.html" token="$(version)" value="${version}"/>
+	</target>
+	
+	<!-- ==== pack ==== -->
+	
+	<target name="dist" depends="annotations,processor,srcjar" description="create jarfiles"/>
+	
+	<target name="srcjar" depends="" description="create the jar file with everything needed for a build">
+		<mkdir dir="build/jar"/>
+		<jar jarfile="build/jar/${project}-src.jar">
+			<zipfileset dir=".">
+				<include name="doc/index.html"/>
+				<include name="doc/changes.txt"/>
+				<include name="build.*"/>
+				<include name="src/**"/>
+				<include name="lib/functionaljava.jar"/>
+			</zipfileset>
+			<manifest>
+                <attribute name="Application" value="${description}"/>
+                <attribute name="Version" value="${version}" />
+				<attribute name="Creator" value="${author}"/>
+				<attribute name="License" value="${license}"/>
+			</manifest>
+		</jar>
+	</target>
+
+	<!-- see http://java.sun.com/javase/6/docs/api/java/util/ServiceLoader.html -->
+	<target name="service">
+		<mkdir dir="build/serviceloader/META-INF/services"/>
+		<echo file="build/serviceloader/META-INF/services/javax.annotation.processing.Processor" message="net.psammead.scgen.processor.FunctionProcessor"/>
+	</target>
+	
+	<target name="processor" depends="compile,service" description="create processor jar">
+		<mkdir dir="build/jar"/>
+		<jar destfile="build/jar/scgen-processor.jar">
+			<!--
+			<zipfileset src="lib/lib-util.jar"/>
+			<zipfileset src="${scala.library}"/>
+			-->
+			<zipfileset dir="build/serviceloader"/>
+			<zipfileset dir="build/classes">
+				<include name="net/psammead/scgen/processor/**"/>
+				<include name="net/psammead/scgen/annotation/**"/>
+				<include name="net/psammead/scutil/**"/>
+			</zipfileset>
+			<manifest>
+			</manifest>
+		</jar>
+	</target>
+	
+	<target name="annotations" depends="compile" description="create annotation jar">
+		<mkdir dir="build/jar"/>
+		<jar destfile="build/jar/scgen-annotations.jar">
+			<zipfileset dir="build/classes">
+				<include name="net/psammead/scgen/annotation/**"/>
+			</zipfileset>
+			<manifest>
+			</manifest>
+		</jar>
+	</target>
+	
+	<!-- ==== export ==== -->
+
+	<target name="import" description="import artefacts from other projects">
+		<ant dir="../util" antfile="build.xml" target="export" inheritAll="false"/>
+		<copy toDir="lib">
+			<fileset dir="../util/build/export" includes="lib-util.jar,lib-util-src.jar"/>
+		</copy>
+	</target>
+	
+	<target name="export" depends="doc,processor,annotations" description="create artefacts">
+		<property name="export.dir" value="build/export"/>
+		<mkdir dir="${export.dir}"/>
+		<copy todir="${export.dir}">
+			<fileset dir="build/doc"	includes="changes.txt,index.html"/>
+			<fileset dir="build/jar"	includes="scgen-processor.jar,scgen-annotations.jar"/>
+			<!-- 
+			<fileset dir="lib"			includes="lib-util.jar,lib-util-src.jar"/>
+			-->
+			<fileset file="${scala.library}"/>
+		</copy>
+	</target>
+</project>
