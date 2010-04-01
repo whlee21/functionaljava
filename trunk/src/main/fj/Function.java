@@ -1,5 +1,7 @@
 package fj;
 
+import fj.data.Option;
+
 /**
  * Transformations on functions.
  *
@@ -233,6 +235,22 @@ public final class Function {
     return new F<F2<A, B, C>, F2<B, A, C>>() {
       public F2<B, A, C> f(final F2<A, B, C> f) {
         return flip(f);
+      }
+    };
+  }
+
+  /**
+   * Return a function that inspects the argument of the given function for a <code>null</code> value and if so, does
+   * not apply the value, instead returning an empty optional value.
+   *
+   * @param f The function to check for a <code>null</code> argument.
+   * @return A function that inspects the argument of the given function for a <code>null</code> value and if so, does
+   * not apply the value, instead returning an empty optional value.
+   */
+  public static <A, B> F<A, Option<B>> nullable(final F<A, B> f) {
+    return new F<A, Option<B>>() {
+      public Option<B> f(final A a) {
+        return a == null ? Option.<B>none() : Option.some(f.f(a));
       }
     };
   }
