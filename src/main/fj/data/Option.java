@@ -116,9 +116,9 @@ public abstract class Option<A> implements Iterable<A> {
   }
 
   /**
-   * Returns the length of this optional value; 1 is there is a value, 0 otherwise.
+   * Returns the length of this optional value; 1 if there is a value, 0 otherwise.
    *
-   * @return The length of this optional value; 1 is there is a value, 0 otherwise.
+   * @return The length of this optional value; 1 if there is a value, 0 otherwise.
    */
   public int length() {
     return isSome() ? 1 : 0;
