@@ -1,0 +1,82 @@
+Index: Build.hs
+===================================================================
+--- Build.hs	(revision 351)
++++ Build.hs	(working copy)
+@@ -5,20 +5,17 @@
+ * Lastik http://hackage.haskell.org/package/Lastik
+ 
+ -}
+-module Build where
++module Build2 where
+ 
+-import qualified Lastik.Java.Javac as J
+-import qualified Lastik.Java.Javadoc as Jd
+-import Lastik.Runner
+-import Lastik.Util
+-import Lastik.Directory
+-import Control.Monad
+-import Control.Arrow
++import System.Build
++import qualified System.Build.Java.Javac as J
++import qualified System.Build.Java.Javadoc as D
+ import System.Cmd
+-import System.Exit
+ import System.Directory
++import System.Exit
+ import System.FilePath
+-import Lastik.Find
++import Control.Arrow
++import Control.Monad
+ import Codec.Archive.Zip
+ 
+ src :: [FilePath]
+@@ -64,7 +61,7 @@
+ resources = "resources"
+ 
+ cp :: String
+-cp = "classpath" ~?? [javaco, depso, testo, resources]
++cp = "classpath" ~: [javaco, depso, testo, resources]
+ 
+ wt :: Version -> Maybe String
+ wt v = Just ("Functional Java " ++ v)
+@@ -115,20 +112,20 @@
+ j = javac' javaco
+ 
+ javac :: IO ExitCode
+-javac = j +->- src
++javac = j ->- src
+ 
+ repl :: IO ExitCode
+-repl = javac >>>> system ("scala -i initrepl " ++ cp)
++repl = javac >-- system ("scala -i initrepl " ++ cp)
+ 
+-javadoc' :: Version -> Jd.Javadoc
+-javadoc' v = Jd.javadoc {
+-  Jd.directory = Just javadoco,
+-  Jd.windowtitle = wt v,
+-  Jd.doctitle = dt v,
+-  Jd.header = hd,
+-  Jd.stylesheetfile = Just (ds </> "javadoc-style.css"),
+-  Jd.linkoffline = [("http://java.sun.com/j2se/1.5.0/docs/api", ds)],
+-  Jd.linksource = True
++javadoc' :: Version -> D.Javadoc
++javadoc' v = D.javadoc {
++  D.directory = Just javadoco,
++  D.windowtitle = wt v,
++  D.doctitle = dt v,
++  D.header = hd,
++  D.stylesheetfile = Just (ds </> "javadoc-style.css"),
++  D.linkoffline = [("http://java.sun.com/j2se/1.5.0/docs/api", ds)],
++  D.linksource = True
+ }
+ 
+ javadoc :: Version -> IO ExitCode
+@@ -174,7 +171,7 @@
+                                 in a ++ '.' : b
+           in do buildAll
+                 mkdir k
+-                forM_ ([(1, javadoco), (2, jardir), (1, etcdir)] ++ map ((,) 0) src) (\(l, d) -> copyDir nosvn nosvnf l d k)
++                forM_ ([(1, javadoco), (2, jardir), (1, etcdir)] ++ map ((,) 0) src) (\(l, d) -> copyl nosvn nosvnf l d k)
+                 mkdir releasedir
+                 writeHashArchive [(build, "functionaljava")] always always' [OptVerbose] (releasedir </> "functionaljava.zip")
+                 v <- readVersion
