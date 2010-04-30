@@ -92,4 +92,20 @@ public final class Visitor {
       }
     };
   }
+
+  /**
+   * Uses an association list to perform a lookup with equality and returns a function that can be applied to a default,
+   * followed by the associated key to return a value.
+   *
+   * @param x The association list.
+   * @param eq The equality for the association list keys.
+   * @return A function that can be applied to a default value (there is no association) and an associated key.
+   */
+  public static <A, B> F2<P1<B>, A, B> associationLazy(final List<P2<A, B>> x, final Equal<A> eq) {
+    return new F2<P1<B>, A, B>() {
+      public B f(final P1<B> def, final A a) {
+        return lookup(eq, x, a).orSome(def);
+      }
+    };
+  }
 }
