@@ -1,13 +1,17 @@
 package fj.function;
 
 import fj.F;
+import fj.F2;
 import fj.Function;
 import fj.P1;
+import fj.P2;
 import fj.data.List;
 import fj.data.Option;
+import fj.pre.Equal;
 import fj.pre.Monoid;
 
 import static fj.Function.compose;
+import static fj.data.List.lookup;
 
 /**
  * The essence of the visitor design pattern expressed polymorphically.
@@ -71,5 +75,21 @@ public final class Visitor {
         return compose(Option.<B>fromNull(), k);
       }
     }), def, value);
+  }
+
+  /**
+   * Uses an association list to perform a lookup with equality and returns a function that can be applied to a default,
+   * followed by the associated key to return a value.
+   *
+   * @param x The association list.
+   * @param eq The equality for the association list keys.
+   * @return A function that can be applied to a default value (there is no association) and an associated key.
+   */
+  public static <A, B> F2<B, A, B> association(final List<P2<A, B>> x, final Equal<A> eq) {
+    return new F2<B, A, B>() {
+      public B f(final B def, final A a) {
+        return lookup(eq, x, a).orSome(def);
+      }
+    };
   }
 }
