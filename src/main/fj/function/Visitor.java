@@ -11,6 +11,7 @@ import fj.pre.Equal;
 import fj.pre.Monoid;
 
 import static fj.Function.compose;
+import static fj.Function.curry;
 import static fj.data.List.lookup;
 
 /**
@@ -85,12 +86,12 @@ public final class Visitor {
    * @param eq The equality for the association list keys.
    * @return A function that can be applied to a default value (there is no association) and an associated key.
    */
-  public static <A, B> F2<B, A, B> association(final List<P2<A, B>> x, final Equal<A> eq) {
-    return new F2<B, A, B>() {
+  public static <A, B> F<B, F<A, B>> association(final List<P2<A, B>> x, final Equal<A> eq) {
+    return curry(new F2<B, A, B>() {
       public B f(final B def, final A a) {
         return lookup(eq, x, a).orSome(def);
       }
-    };
+    });
   }
 
   /**
@@ -101,11 +102,11 @@ public final class Visitor {
    * @param eq The equality for the association list keys.
    * @return A function that can be applied to a default value (there is no association) and an associated key.
    */
-  public static <A, B> F2<P1<B>, A, B> associationLazy(final List<P2<A, B>> x, final Equal<A> eq) {
-    return new F2<P1<B>, A, B>() {
+  public static <A, B> F<P1<B>, F<A, B>> associationLazy(final List<P2<A, B>> x, final Equal<A> eq) {
+    return curry(new F2<P1<B>, A, B>() {
       public B f(final P1<B> def, final A a) {
         return lookup(eq, x, a).orSome(def);
       }
-    };
+    });
   }
 }
