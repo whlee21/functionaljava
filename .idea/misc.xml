@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DependencyValidationManager">
+    <option name="SKIP_IMPORT_STATEMENTS" value="false" />
+  </component>
+  <component name="FacetAutodetectingManager">
+    <autodetection-disabled>
+      <facet-type id="Scala">
+        <modules>
+          <module name="functionaljava">
+            <files>
+              <file url="file://$PROJECT_DIR$/etc/demo/scala/concurrent/Fibs.scala" />
+              <file url="file://$PROJECT_DIR$/etc/demo/scala/concurrent/PingPong.scala" />
+              <file url="file://$PROJECT_DIR$/etc/demo/scala/test/AdditionCommutes.scala" />
+              <file url="file://$PROJECT_DIR$/etc/demo/scala/test/EqualsHashCode.scala" />
+              <file url="file://$PROJECT_DIR$/etc/demo/scala/test/IntegerOverflow.scala" />
+              <file url="file://$PROJECT_DIR$/etc/demo/scala/test/JavaLinkedList.scala" />
+              <file url="file://$PROJECT_DIR$/etc/demo/scala/test/ListFunctorLaws.scala" />
+              <file url="file://$PROJECT_DIR$/etc/demo/scala/test/OptionMonadFunctorLaw.scala" />
+              <file url="file://$PROJECT_DIR$/etc/demo/scala/test/Reflect.scala" />
+              <file url="file://$PROJECT_DIR$/etc/demo/scala/test/StringBuilderReverse.scala" />
+              <file url="file://$PROJECT_DIR$/etc/demo/scala/test/Triangulation.scala" />
+              <file url="file://$PROJECT_DIR$/src/main/fjs/Class.scala" />
+              <file url="file://$PROJECT_DIR$/src/main/fjs/Effect.scala" />
+              <file url="file://$PROJECT_DIR$/src/main/fjs/F.scala" />
+              <file url="file://$PROJECT_DIR$/src/main/fjs/F2.scala" />
+              <file url="file://$PROJECT_DIR$/src/main/fjs/F3.scala" />
+              <file url="file://$PROJECT_DIR$/src/main/fjs/F4.scala" />
+              <file url="file://$PROJECT_DIR$/src/main/fjs/F5.scala" />
+              <file url="file://$PROJECT_DIR$/src/main/fjs/F6.scala" />
+              <file url="file://$PROJECT_DIR$/src/main/fjs/F7.scala" />
+              <file url="file://$PROJECT_DIR$/src/main/fjs/F8.scala" />
+              <file url="file://$PROJECT_DIR$/src/main/fjs/P1.scala" />
+              <file url="file://$PROJECT_DIR$/src/main/fjs/P2.scala" />
+              <file url="file://$PROJECT_DIR$/src/main/fjs/P3.scala" />
+              <file url="file://$PROJECT_DIR$/src/main/fjs/P4.scala" />
+              <file url="file://$PROJECT_DIR$/src/main/fjs/P5.scala" />
+              <file url="file://$PROJECT_DIR$/src/main/fjs/P6.scala" />
+              <file url="file://$PROJECT_DIR$/src/main/fjs/P7.scala" />
+              <file url="file://$PROJECT_DIR$/src/main/fjs/P8.scala" />
+              <file url="file://$PROJECT_DIR$/src/main/fjs/Unit.scala" />
+              <file url="file://$PROJECT_DIR$/src/main/fjs/control/parallel/Actor.scala" />
+              <file url="file://$PROJECT_DIR$/src/main/fjs/control/parallel/Promise.scala" />
+              <file url="file://$PROJECT_DIR$/src/main/fjs/control/parallel/Strategy.scala" />
+              <file url="file://$PROJECT_DIR$/src/main/fjs/data/Array.scala" />
+              <file url="file://$PROJECT_DIR$/src/main/fjs/data/Either.scala" />
+              <file url="file://$PROJECT_DIR$/src/main/fjs/data/List.scala" />
+              <file url="file://$PROJECT_DIR$/src/main/fjs/data/Option.scala" />
+              <file url="file://$PROJECT_DIR$/src/main/fjs/data/Stream.scala" />
+              <file url="file://$PROJECT_DIR$/src/main/fjs/pre/Equal.scala" />
+              <file url="file://$PROJECT_DIR$/src/main/fjs/pre/Hash.scala" />
+              <file url="file://$PROJECT_DIR$/src/main/fjs/pre/Monoid.scala" />
+              <file url="file://$PROJECT_DIR$/src/main/fjs/pre/Ord.scala" />
+              <file url="file://$PROJECT_DIR$/src/main/fjs/pre/Semigroup.scala" />
+              <file url="file://$PROJECT_DIR$/src/main/fjs/pre/Show.scala" />
+              <file url="file://$PROJECT_DIR$/src/main/fjs/test/Arbitrary.scala" />
+              <file url="file://$PROJECT_DIR$/src/main/fjs/test/Bool.scala" />
+              <file url="file://$PROJECT_DIR$/src/main/fjs/test/Coarbitrary.scala" />
+              <file url="file://$PROJECT_DIR$/src/main/fjs/test/Gen.scala" />
+              <file url="file://$PROJECT_DIR$/src/main/fjs/test/Property.scala" />
+              <file url="file://$PROJECT_DIR$/src/main/fjs/test/Shrink.scala" />
+              <file url="file://$PROJECT_DIR$/src/main/fjs/test/reflect/Check.scala" />
+              <file url="file://$PROJECT_DIR$/src/test/fj/ArbitraryP.scala" />
+              <file url="file://$PROJECT_DIR$/src/test/fj/Implicit.scala" />
+              <file url="file://$PROJECT_DIR$/src/test/fj/Tests.scala" />
+              <file url="file://$PROJECT_DIR$/src/test/fj/control/parallel/ArbitraryStrategy.scala" />
+              <file url="file://$PROJECT_DIR$/src/test/fj/control/parallel/CheckStrategy.scala" />
+              <file url="file://$PROJECT_DIR$/src/test/fj/data/ArbitraryArray.scala" />
+              <file url="file://$PROJECT_DIR$/src/test/fj/data/ArbitraryHashMap.scala" />
+              <file url="file://$PROJECT_DIR$/src/test/fj/data/ArbitraryHashSet.scala" />
+              <file url="file://$PROJECT_DIR$/src/test/fj/data/ArbitraryList.scala" />
+              <file url="file://$PROJECT_DIR$/src/test/fj/data/ArbitraryOption.scala" />
+              <file url="file://$PROJECT_DIR$/src/test/fj/data/ArbitrarySet.scala" />
+              <file url="file://$PROJECT_DIR$/src/test/fj/data/ArbitraryStream.scala" />
+              <file url="file://$PROJECT_DIR$/src/test/fj/data/ArbitraryTree.scala" />
+              <file url="file://$PROJECT_DIR$/src/test/fj/data/ArbitraryTreeMap.scala" />
+              <file url="file://$PROJECT_DIR$/src/test/fj/data/CheckArray.scala" />
+              <file url="file://$PROJECT_DIR$/src/test/fj/data/CheckHashMap.scala" />
+              <file url="file://$PROJECT_DIR$/src/test/fj/data/CheckHashSet.scala" />
+              <file url="file://$PROJECT_DIR$/src/test/fj/data/CheckList.scala" />
+              <file url="file://$PROJECT_DIR$/src/test/fj/data/CheckOption.scala" />
+              <file url="file://$PROJECT_DIR$/src/test/fj/data/CheckSet.scala" />
+              <file url="file://$PROJECT_DIR$/src/test/fj/data/CheckStream.scala" />
+              <file url="file://$PROJECT_DIR$/src/test/fj/data/CheckTree.scala" />
+              <file url="file://$PROJECT_DIR$/src/test/fj/data/CheckTreeMap.scala" />
+            </files>
+          </module>
+        </modules>
+      </facet-type>
+    </autodetection-disabled>
+  </component>
+  <component name="IdProvider" IDEtalkID="BDD0614F12830C78A196F1C55F963FD4" />
+  <component name="JavadocGenerationManager">
+    <option name="OUTPUT_DIRECTORY" value="$PROJECT_DIR$/../../heap/docs" />
+    <option name="OPTION_SCOPE" value="public" />
+    <option name="OPTION_HIERARCHY" value="true" />
+    <option name="OPTION_NAVIGATOR" value="true" />
+    <option name="OPTION_INDEX" value="true" />
+    <option name="OPTION_SEPARATE_INDEX" value="true" />
+    <option name="OPTION_DOCUMENT_TAG_USE" value="false" />
+    <option name="OPTION_DOCUMENT_TAG_AUTHOR" value="false" />
+    <option name="OPTION_DOCUMENT_TAG_VERSION" value="false" />
+    <option name="OPTION_DOCUMENT_TAG_DEPRECATED" value="true" />
+    <option name="OPTION_DEPRECATED_LIST" value="true" />
+    <option name="OTHER_OPTIONS" />
+    <option name="HEAP_SIZE" />
+    <option name="LOCALE" />
+    <option name="OPEN_IN_BROWSER" value="true" />
+  </component>
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_1_5" assert-keyword="true" jdk-15="true" project-jdk-name="1.6" project-jdk-type="JavaSDK">
+    <output url="file://$PROJECT_DIR$/out" />
+  </component>
+  <component name="SvnBranchConfigurationManager">
+    <option name="myConfigurationMap">
+      <map>
+        <entry key="$PROJECT_DIR$">
+          <value>
+            <SvnBranchConfiguration>
+              <option name="branchMap">
+                <map>
+                  <entry key="https://functionaljava.googlecode.com/svn/artifacts">
+                    <value>
+                      <list />
+                    </value>
+                  </entry>
+                  <entry key="https://functionaljava.googlecode.com/svn/branches">
+                    <value>
+                      <list />
+                    </value>
+                  </entry>
+                  <entry key="https://functionaljava.googlecode.com/svn/maven">
+                    <value>
+                      <list />
+                    </value>
+                  </entry>
+                  <entry key="https://functionaljava.googlecode.com/svn/tags">
+                    <value>
+                      <list />
+                    </value>
+                  </entry>
+                </map>
+              </option>
+              <option name="branchUrls">
+                <list>
+                  <option value="https://functionaljava.googlecode.com/svn/artifacts" />
+                  <option value="https://functionaljava.googlecode.com/svn/branches" />
+                  <option value="https://functionaljava.googlecode.com/svn/maven" />
+                  <option value="https://functionaljava.googlecode.com/svn/tags" />
+                </list>
+              </option>
+              <option name="trunkUrl" value="https://functionaljava.googlecode.com/svn/trunk" />
+            </SvnBranchConfiguration>
+          </value>
+        </entry>
+      </map>
+    </option>
+    <option name="myVersion" value="124" />
+    <option name="mySupportsUserInfoFilter" value="true" />
+  </component>
+  <component name="WebServicesPlugin" addRequiredLibraries="true" />
+</project>
+
