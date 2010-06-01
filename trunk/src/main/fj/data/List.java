@@ -1097,6 +1097,21 @@ public abstract class List<A> implements Iterable<A> {
   }
 
   /**
+   * Returns all but the last element of this list. Undefiend for the empty list.
+   *
+   * @return All but the last element of this list. Undefiend for the empty list.
+   */
+  public List<A> init() {
+    List<A> ys = this;
+    final Buffer<A> a = Buffer.empty();
+    while(ys.isNotEmpty() && ys.tail().isNotEmpty()) {
+      a.snoc(head());
+      ys = ys.tail();
+    }
+    return a.toList();
+  }
+
+  /**
    * Inserts the given element before the first element that is greater than or equal to it according
    * to the given ordering.
    *
