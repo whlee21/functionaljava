@@ -56,16 +56,10 @@ public final class Deep<V, A> extends FingerTree<V, A> {
     return suffix;
   }
 
-  /**
-   * @see fj.data.fingertrees.FingerTree#foldRight(fj.F, Object)
-   */
   @Override public <B> B foldRight(final F<A, F<B, B>> aff, final B z) {
     return prefix.foldRight(aff, middle.foldRight(flip(Node.<V, A, B>foldRight_(aff)), suffix.foldRight(aff, z)));
   }
 
-  /**
-   * @see fj.data.fingertrees.FingerTree#reduceRight(fj.F)
-   */
   @Override public A reduceRight(final F<A, F<A, A>> aff) {
     return prefix.foldRight(aff, middle.foldRight(flip(Node.<V, A, A>foldRight_(aff)), suffix.reduceRight(aff)));
   }
@@ -96,7 +90,7 @@ public final class Deep<V, A> extends FingerTree<V, A> {
    * Pattern matching on the tree. Matches the function on the Deep tree.
    */
   @Override public <B> B match(final F<Empty<V, A>, B> empty, final F<Single<V, A>, B> single,
-                               final F<fj.data.fingertrees.Deep<V, A>, B> deep) {
+                               final F<Deep<V, A>, B> deep) {
     return deep.f(this);
   }
 

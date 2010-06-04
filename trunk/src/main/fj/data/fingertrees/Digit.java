@@ -2,6 +2,7 @@ package fj.data.fingertrees;
 
 import fj.F;
 import fj.F2;
+import fj.Function;
 import fj.data.vector.V2;
 import fj.data.vector.V3;
 import fj.data.vector.V4;
@@ -139,7 +140,7 @@ public abstract class Digit<V, A> {
    * @return the sum of the measurements of this digit according to the monoid.
    */
   public V measure() {
-    return foldLeft(fj.Function.curry(new F2<V, A, V>() {
+    return foldLeft(Function.curry(new F2<V, A, V>() {
       public V f(final V v, final A a) {
         return m.sum(v, m.measure(a));
       }
