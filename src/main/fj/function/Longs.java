@@ -3,8 +3,8 @@ package fj.function;
 import fj.F;
 import fj.F2;
 import static fj.Function.curry;
-import static fj.pre.Semigroup.longAdditionSemigroup;
-import static fj.pre.Semigroup.longMultiplicationSemigroup;
+import static fj.Semigroup.longAdditionSemigroup;
+import static fj.Semigroup.longMultiplicationSemigroup;
 
 import static java.lang.Math.abs;
 

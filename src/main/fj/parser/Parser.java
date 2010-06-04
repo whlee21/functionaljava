@@ -3,6 +3,7 @@ package fj.parser;
 import fj.F;
 import static fj.P.p;
 import fj.P1;
+import fj.Semigroup;
 import fj.Unit;
 import fj.Digit;
 import static fj.Unit.unit;
@@ -12,7 +13,6 @@ import fj.data.Stream;
 import fj.data.Validation;
 import static fj.data.Validation.success;
 import static fj.parser.Result.result;
-import fj.pre.Semigroup;
 
 /**
  * A parser is a function that takes some input (I) and produces either an error (E) or a parse result (A) and the

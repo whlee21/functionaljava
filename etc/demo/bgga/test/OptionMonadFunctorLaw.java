@@ -1,10 +1,9 @@
 package test;
 
-import fj.F;
 import static fj.Function.andThen;
 import fj.data.Option;
-import static fj.pre.Equal.optionEqual;
-import static fj.pre.Equal.stringEqual;
+import static fj.Equal.optionEqual;
+import static fj.Equal.stringEqual;
 import fj.test.Arbitrary;
 import static fj.test.Arbitrary.arbInteger;
 import static fj.test.Arbitrary.arbOption;

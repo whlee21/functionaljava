@@ -7,7 +7,7 @@ import fj.F2;
 import fj.P2;
 import fj.data.List;
 import static fj.data.List.list;
-import static fj.pre.Equal.stringBuilderEqual;
+import static fj.Equal.stringBuilderEqual;
 import static fj.test.Arbitrary.arbCharacter;
 import static fj.test.Arbitrary.arbInteger;
 import static fj.test.Arbitrary.arbIntegerBoundaries;

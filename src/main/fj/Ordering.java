@@ -1,4 +1,4 @@
-package fj.pre;
+package fj;
 
 /**
  * The comparison of two instances of a type may have one of three orderings; less than, equal or

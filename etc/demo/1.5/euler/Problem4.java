@@ -6,10 +6,10 @@ import fj.data.Stream;
 import static fj.data.Stream.iterate;
 import static fj.function.Integers.multiply;
 import static fj.function.Integers.subtract;
-import static fj.pre.Equal.charEqual;
-import static fj.pre.Equal.streamEqual;
-import static fj.pre.Ord.intOrd;
-import static fj.pre.Show.intShow;
+import static fj.Equal.charEqual;
+import static fj.Equal.streamEqual;
+import static fj.Ord.intOrd;
+import static fj.Show2.intShow;
 
 /**
  * Find the largest palindrome made from the product of two 3-digit numbers.

@@ -3,7 +3,7 @@ package fj.data.fingertrees;
 import fj.F;
 import fj.P2;
 import fj.data.Seq;
-import fj.pre.Monoid;
+import fj.Monoid;
 
 /**
  * Provides 2-3 finger trees, a functional representation of persistent sequences supporting access to the ends in

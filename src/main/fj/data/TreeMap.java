@@ -5,7 +5,7 @@ import fj.FW;
 import fj.P;
 import fj.P2;
 import fj.P3;
-import fj.pre.Ord;
+import fj.Ord;
 
 import java.util.Iterator;
 import java.util.Map;

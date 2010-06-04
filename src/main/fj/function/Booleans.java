@@ -4,12 +4,14 @@ import fj.F;
 import fj.F2;
 import fj.F3;
 import static fj.Function.*;
+
+import fj.Monoid;
 import fj.data.List;
 import fj.data.Stream;
-import fj.pre.Monoid;
-import static fj.pre.Semigroup.disjunctionSemigroup;
-import static fj.pre.Semigroup.conjunctionSemigroup;
-import static fj.pre.Semigroup.exclusiveDisjunctionSemiGroup;
+
+import static fj.Semigroup.disjunctionSemigroup;
+import static fj.Semigroup.conjunctionSemigroup;
+import static fj.Semigroup.exclusiveDisjunctionSemiGroup;
 
 /**
  * Curried logical functions.

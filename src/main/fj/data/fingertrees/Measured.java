@@ -1,6 +1,6 @@
 package fj.data.fingertrees;
 
-import fj.pre.Monoid;
+import fj.Monoid;
 import fj.F;
 
 /**

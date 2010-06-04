@@ -1,5 +1,6 @@
 package fj.data;
 
+import fj.Equal;
 import fj.F;
 import fj.F2;
 import static fj.Function.compose;
@@ -12,9 +13,8 @@ import static fj.data.Option.some;
 import static fj.data.Stream.join;
 import static fj.function.Booleans.or;
 import static fj.function.Characters.isSpaceChar;
-import fj.pre.Equal;
-import static fj.pre.Equal.charEqual;
-import static fj.pre.Equal.streamEqual;
+import static fj.Equal.charEqual;
+import static fj.Equal.streamEqual;
 
 import java.util.regex.Pattern;
 

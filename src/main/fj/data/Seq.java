@@ -2,7 +2,7 @@ package fj.data;
 
 import fj.Function;
 import static fj.Bottom.error;
-import static fj.pre.Monoid.intAdditionMonoid;
+import static fj.Monoid.intAdditionMonoid;
 import static fj.data.fingertrees.FingerTree.measured;
 
 import fj.data.fingertrees.FingerTree;

@@ -19,7 +19,6 @@ import static fj.data.Zipper.zipper;
 import static fj.data.IterableW.wrap;
 import static fj.data.Set.iterableSet;
 import static fj.data.Tree.node;
-import fj.pre.Ord;
 import static fj.P.p;
 
 /**

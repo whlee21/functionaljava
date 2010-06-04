@@ -1,5 +1,6 @@
 package fj.data;
 
+import fj.Equal;
 import fj.F;
 import fj.F2;
 import fj.F4;
@@ -8,21 +9,30 @@ import fj.P1;
 import fj.P2;
 import fj.P3;
 import fj.P4;
-import static fj.Function.*;
-import static fj.F2W.$$;
+import fj.Show2;
 import fj.function.Booleans;
-import static fj.data.Option.some;
-import static fj.data.Option.none;
-import static fj.data.Tree.node;
-import static fj.data.Tree.unfoldTree;
-import static fj.data.Stream.nil;
-import static fj.data.Stream.unfold;
-import fj.pre.Equal;
-import fj.pre.Show;
-import static fj.pre.Show.*;
-import static fj.pre.Equal.*;
 
 import java.util.Iterator;
+
+import static fj.Equal.p3Equal;
+import static fj.Equal.p4Equal;
+import static fj.Equal.streamEqual;
+import static fj.Equal.treeEqual;
+import static fj.F2W.$$;
+import static fj.Function.compose;
+import static fj.Function.curry;
+import static fj.Function.flip;
+import static fj.Function.uncurryF2;
+import static fj.Show2.p3Show;
+import static fj.Show2.p4Show;
+import static fj.Show2.streamShow;
+import static fj.Show2.treeShow;
+import static fj.data.Option.none;
+import static fj.data.Option.some;
+import static fj.data.Stream.nil;
+import static fj.data.Stream.unfold;
+import static fj.data.Tree.node;
+import static fj.data.Tree.unfoldTree;
 
 /**
  * Provides a zipper structure for rose trees, which is a Tree supplied with a location within that tree.
@@ -143,7 +153,7 @@ public class TreeZipper<A> implements Iterable<TreeZipper<A>> {
    * @param s A Show instance for tree elements.
    * @return A Show instance for tree zippers.
    */
-  public static <A> Show<TreeZipper<A>> show(final Show<A> s) {
+  public static <A> Show2<TreeZipper<A>> show(final Show2<A> s) {
     return p4Show(
         treeShow(s),
         streamShow(treeShow(s)),

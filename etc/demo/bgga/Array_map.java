@@ -1,7 +1,7 @@
 import fj.data.Array;
 import static fj.data.Array.array;
-import static fj.pre.Show.arrayShow;
-import static fj.pre.Show.intShow;
+import static fj.Show2.arrayShow;
+import static fj.Show2.intShow;
 
 public final class Array_map {
   public static void main(final String[] args) {

@@ -2,10 +2,13 @@ package fj.data;
 
 import static fj.Bottom.error;
 import fj.Effect;
+import fj.Equal;
 import fj.F;
 import fj.F2;
 import fj.F3;
 import fj.Function;
+import fj.Monoid;
+import fj.Ord;
 import fj.P;
 import fj.P1;
 import fj.P2;
@@ -23,12 +26,10 @@ import static fj.data.List.Buffer.*;
 import static fj.data.Option.none;
 import static fj.data.Option.some;
 import static fj.function.Booleans.not;
-import static fj.pre.Ordering.GT;
-import static fj.pre.Ord.intOrd;
-import fj.pre.Ord;
-import fj.pre.Equal;
-import fj.pre.Monoid;
-import fj.pre.Ordering;
+import static fj.Ordering.GT;
+import static fj.Ord.intOrd;
+
+import fj.Ordering;
 
 import java.util.AbstractCollection;
 import java.util.Collection;
@@ -1536,7 +1537,7 @@ public abstract class List<A> implements Iterable<A> {
    * Returns a partially applied version of {@link #lookup(Equal, List, Object)}.
    *
    * @param e The test for equality on keys.
-   * @return A partially applied version of {@link #lookup(Equal, List, Object)}.
+   * @return A partially applied version of {@link #lookup(fj.Equal , List, Object)}.
    */
   public static <A, B> F2<List<P2<A, B>>, A, Option<B>> lookup(final Equal<A> e) {
     return new F2<List<P2<A, B>>, A, Option<B>>() {

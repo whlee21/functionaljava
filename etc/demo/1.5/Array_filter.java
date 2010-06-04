@@ -1,7 +1,7 @@
 import fj.data.Array;
 import static fj.data.Array.array;
-import static fj.pre.Show.arrayShow;
-import static fj.pre.Show.intShow;
+import static fj.Show2.arrayShow;
+import static fj.Show2.intShow;
 import static fj.function.Integers.even;
 
 public final class Array_filter {

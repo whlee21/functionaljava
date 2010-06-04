@@ -1,15 +1,7 @@
-package fj.pre;
+package fj;
 
-import fj.F;
 import static fj.Function.compose;
-import fj.P1;
-import fj.P2;
-import fj.P3;
-import fj.P4;
-import fj.P5;
-import fj.P6;
-import fj.P7;
-import fj.P8;
+
 import fj.data.Array;
 import fj.data.Either;
 import fj.data.List;

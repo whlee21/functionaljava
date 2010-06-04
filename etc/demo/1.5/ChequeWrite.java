@@ -10,9 +10,9 @@ import static fj.data.Option.some;
 import fj.data.Stream;
 import static fj.data.Stream.stream;
 import fj.function.Characters;
-import static fj.pre.Equal.charEqual;
-import static fj.pre.Equal.listEqual;
-import static fj.pre.Show.stringShow;
+import static fj.Equal.charEqual;
+import static fj.Equal.listEqual;
+import static fj.Show2.stringShow;
 
 public final class ChequeWrite {
   private ChequeWrite() {}
