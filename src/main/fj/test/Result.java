@@ -127,10 +127,7 @@ public final class Result {
    * otherwise, return <code>this</code>.
    */
   public Result provenAsUnfalsified() {
-    if(isProven())
-      return unfalsified(args.some());
-    else
-      return this;
+    return isProven() ? unfalsified(args.some()) : this;
   }
 
   /**
