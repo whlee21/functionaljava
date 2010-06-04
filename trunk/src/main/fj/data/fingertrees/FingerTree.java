@@ -2,6 +2,7 @@ package fj.data.fingertrees;
 
 import fj.F;
 import fj.P2;
+import fj.data.Seq;
 import fj.pre.Monoid;
 
 /**
@@ -12,7 +13,7 @@ import fj.pre.Monoid;
  * <p/>
  * This class serves as a datastructure construction kit, rather than a datastructure in its own right. By supplying
  * a monoid, a measurement function, insertion, deletion, and so forth, any purely functional datastructure can be
- * emulated. See {@link fj.data.Seq} for an example.
+ * emulated. See {@link Seq} for an example.
  * <p/>
  * Based on "Finger trees: a simple general-purpose data structure", by Ralf Hinze and Ross Paterson.
  *

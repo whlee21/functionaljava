@@ -3,6 +3,8 @@ package fj.data.fingertrees;
 import fj.data.vector.V2;
 import fj.data.vector.V3;
 
+import static fj.data.vector.V.v;
+
 /**
  * A builder of trees and tree components, supplied with a particular monoid and measuring function.
  */
@@ -82,7 +84,7 @@ public final class MakeTree<V, A> {
    * @return A digit of the given elements.
    */
   public Two<V, A> two(final A a, final A b) {
-    return new Two<V, A>(m, fj.data.vector.V.v(a, b));
+    return new Two<V, A>(m, v(a, b));
   }
 
   /**
@@ -94,7 +96,7 @@ public final class MakeTree<V, A> {
    * @return A digit of the given elements.
    */
   public Three<V, A> three(final A a, final A b, final A c) {
-    return new Three<V, A>(m, fj.data.vector.V.v(a, b, c));
+    return new Three<V, A>(m, v(a, b, c));
   }
 
   /**
@@ -107,7 +109,7 @@ public final class MakeTree<V, A> {
    * @return A digit of the given elements.
    */
   public Four<V, A> four(final A a, final A b, final A c, final A d) {
-    return new Four<V, A>(m, fj.data.vector.V.v(a, b, c, d));
+    return new Four<V, A>(m, v(a, b, c, d));
   }
 
   // Node constructors
@@ -120,7 +122,7 @@ public final class MakeTree<V, A> {
    * @return A new binary tree node.
    */
   public Node2<V, A> node2(final A a, final A b) {
-    return new Node2<V, A>(m, fj.data.vector.V.v(a, b));
+    return new Node2<V, A>(m, v(a, b));
   }
 
   /**
@@ -132,7 +134,7 @@ public final class MakeTree<V, A> {
    * @return A new trinary tree node.
    */
   public Node3<V, A> node3(final A a, final A b, final A c) {
-    return new Node3<V, A>(m, fj.data.vector.V.v(a, b, c));
+    return new Node3<V, A>(m, v(a, b, c));
   }
 
   /**

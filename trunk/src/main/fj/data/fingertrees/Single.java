@@ -19,14 +19,14 @@ public final class Single<V, A> extends FingerTree<V, A> {
   }
 
   /**
-   * @see fj.data.fingertrees.FingerTree#foldRight(fj.F, Object)
+   * @see FingerTree#foldRight(F, Object)
    */
   @Override public <B> B foldRight(final F<A, F<B, B>> aff, final B z) {
     return aff.f(a).f(z);
   }
 
   /**
-   * @see fj.data.fingertrees.FingerTree#reduceRight(fj.F)
+   * @see FingerTree#reduceRight(F)
    */
   @Override public A reduceRight(final F<A, F<A, A>> aff) {
     return a;
@@ -56,7 +56,7 @@ public final class Single<V, A> extends FingerTree<V, A> {
   /**
    * Pattern matching on the structure of this tree. Matches the singleton tree.
    */
-  @Override public <B> B match(final F<Empty<V, A>, B> empty, final F<fj.data.fingertrees.Single<V, A>, B> single,
+  @Override public <B> B match(final F<Empty<V, A>, B> empty, final F<Single<V, A>, B> single,
                                final F<Deep<V, A>, B> deep) {
     return single.f(this);
   }
