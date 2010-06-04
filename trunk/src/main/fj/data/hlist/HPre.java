@@ -1,7 +1,7 @@
 package fj.data.hlist;
 
 import fj.F;
-import fj.Show2;
+import fj.Show;
 
 /**
  * A basic prelude of values lifted into the type system.
@@ -159,7 +159,7 @@ public final class HPre {
    * Type-level natural numbers.
    */
   public abstract static class HNat<A extends HNat<A>> {
-    public abstract Show2<A> show();
+    public abstract Show<A> show();
 
     public abstract Integer toInteger();
 
@@ -183,8 +183,8 @@ public final class HPre {
     private HZero() {
     }
 
-    public Show2<HZero> show() {
-      return Show2.showS(new F<HZero, String>() {
+    public Show<HZero> show() {
+      return Show.showS(new F<HZero, String>() {
         public String f(final HZero hZero) {
           return "HZero";
         }
@@ -208,8 +208,8 @@ public final class HPre {
 
     private final N pred;
 
-    public Show2<HSucc<N>> show() {
-      return Show2.showS(new F<HSucc<N>, String>() {
+    public Show<HSucc<N>> show() {
+      return Show.showS(new F<HSucc<N>, String>() {
         public String f(final HSucc<N> s) {
           return "HSucc (" + s.show().showS(s) + ')';
         }

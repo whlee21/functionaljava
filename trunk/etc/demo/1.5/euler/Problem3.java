@@ -10,7 +10,7 @@ import fj.data.Stream;
 import static fj.data.Stream.*;
 import fj.data.vector.V2;
 import static fj.Ord.naturalOrd;
-import static fj.Show2.naturalShow;
+import static fj.Show.naturalShow;
 
 /**
  * Find the largest prime factor of a composite number.

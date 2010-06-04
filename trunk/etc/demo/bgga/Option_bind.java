@@ -1,8 +1,8 @@
 import fj.data.Option;
 import static fj.data.Option.none;
 import static fj.data.Option.some;
-import static fj.Show2.intShow;
-import static fj.Show2.optionShow;
+import static fj.Show.intShow;
+import static fj.Show.optionShow;
 
 public final class Option_bind {
   public static void main(final String[] args) {

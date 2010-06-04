@@ -9,7 +9,7 @@ import static fj.function.Integers.subtract;
 import static fj.Equal.charEqual;
 import static fj.Equal.streamEqual;
 import static fj.Ord.intOrd;
-import static fj.Show2.intShow;
+import static fj.Show.intShow;
 
 /**
  * Find the largest palindrome made from the product of two 3-digit numbers.

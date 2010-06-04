@@ -70,7 +70,7 @@ public final class Bottom {
    * @param sa The rendering for the value being deconstructed.
    * @return A deconstruction failure that was non-exhaustive.
    */
-  public static <A> Error decons(final A a, final Show2<A> sa) {
+  public static <A> Error decons(final A a, final Show<A> sa) {
     return error("Deconstruction failure on type " + a.getClass() + " with value " + sa.show(a).toString());
   }
 

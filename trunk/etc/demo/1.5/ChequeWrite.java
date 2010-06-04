@@ -12,7 +12,7 @@ import static fj.data.Stream.stream;
 import fj.function.Characters;
 import static fj.Equal.charEqual;
 import static fj.Equal.listEqual;
-import static fj.Show2.stringShow;
+import static fj.Show.stringShow;
 
 public final class ChequeWrite {
   private ChequeWrite() {}
