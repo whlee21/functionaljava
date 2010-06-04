@@ -6,7 +6,13 @@ import static fj.Function.curry;
 import fj.P1;
 import fj.P2;
 import fj.Unit;
-import fj.data.*;
+import fj.data.Array;
+import fj.data.List;
+import fj.data.Natural;
+import fj.data.NonEmptyList;
+import fj.data.Option;
+import fj.data.Set;
+import fj.data.Stream;
 
 import java.math.BigInteger;
 import java.math.BigDecimal;

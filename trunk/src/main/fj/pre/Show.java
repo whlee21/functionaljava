@@ -15,8 +15,19 @@ import fj.P8;
 import fj.Unit;
 import static fj.P.p;
 import static fj.Unit.unit;
+
+import fj.data.Array;
+import fj.data.Either;
+import fj.data.LazyString;
+import fj.data.List;
+import fj.data.Natural;
+import fj.data.NonEmptyList;
+import fj.data.Option;
+import fj.data.Stream;
+import fj.data.Tree;
+import fj.data.Validation;
 import fj.data.hlist.HList;
-import fj.data.*;
+
 import static fj.data.Stream.*;
 import fj.data.vector.V2;
 import fj.data.vector.V3;

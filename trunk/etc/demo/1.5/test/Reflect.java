@@ -103,6 +103,7 @@ public final class Reflect {
     throw error("this should not be executed");
   }
 
+  @SuppressWarnings({"UnusedDeclaration"})
   Property leave(final int i) {
     throw error("this should not be executed");
   }
