@@ -1,7 +1,7 @@
 import static fj.data.List.list;
 import fj.data.List;
-import static fj.Show2.intShow;
-import static fj.Show2.listShow;
+import static fj.Show.intShow;
+import static fj.Show.listShow;
 
 public final class List_map {
   public static void main(final String[] args) {

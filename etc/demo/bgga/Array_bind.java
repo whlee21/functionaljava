@@ -1,7 +1,7 @@
 import fj.data.Array;
 import static fj.data.Array.array;
-import static fj.Show2.arrayShow;
-import static fj.Show2.intShow;
+import static fj.Show.arrayShow;
+import static fj.Show.intShow;
 
 public final class Array_bind {
   public static void main(final String[] args) {

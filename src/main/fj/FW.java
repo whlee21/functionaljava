@@ -660,9 +660,9 @@ public final class FW<A, B> implements F<A, B> {
    *
    * @return This function promoted to map over a Show as a contravariant functor.
    */
-  public FW<Show2<B>, Show2<A>> comapShow() {
-    return $(new F<Show2<B>, Show2<A>>() {
-      public Show2<A> f(final Show2<B> s) {
+  public FW<Show<B>, Show<A>> comapShow() {
+    return $(new F<Show<B>, Show<A>>() {
+      public Show<A> f(final Show<B> s) {
         return s.comap(f);
       }
     });

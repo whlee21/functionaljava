@@ -2,8 +2,8 @@ import fj.F;
 import fj.data.Set;
 import static fj.data.Set.empty;
 import fj.Ord;
-import static fj.Show2.intShow;
-import static fj.Show2.listShow;
+import static fj.Show.intShow;
+import static fj.Show.listShow;
 
 public final class Set_map {
   public static void main(final String[] args) {

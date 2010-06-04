@@ -9,7 +9,7 @@ import fj.P1;
 import fj.P2;
 import fj.P3;
 import fj.P4;
-import fj.Show2;
+import fj.Show;
 import fj.function.Booleans;
 
 import java.util.Iterator;
@@ -23,10 +23,10 @@ import static fj.Function.compose;
 import static fj.Function.curry;
 import static fj.Function.flip;
 import static fj.Function.uncurryF2;
-import static fj.Show2.p3Show;
-import static fj.Show2.p4Show;
-import static fj.Show2.streamShow;
-import static fj.Show2.treeShow;
+import static fj.Show.p3Show;
+import static fj.Show.p4Show;
+import static fj.Show.streamShow;
+import static fj.Show.treeShow;
 import static fj.data.Option.none;
 import static fj.data.Option.some;
 import static fj.data.Stream.nil;
@@ -153,7 +153,7 @@ public class TreeZipper<A> implements Iterable<TreeZipper<A>> {
    * @param s A Show instance for tree elements.
    * @return A Show instance for tree zippers.
    */
-  public static <A> Show2<TreeZipper<A>> show(final Show2<A> s) {
+  public static <A> Show<TreeZipper<A>> show(final Show<A> s) {
     return p4Show(
         treeShow(s),
         streamShow(treeShow(s)),

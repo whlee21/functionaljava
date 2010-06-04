@@ -40,10 +40,10 @@ import static fj.data.Stream.single;
  *          <li>$LastChangedDate$</li>
  *          </ul>
  */
-public final class Show2<A> {
+public final class Show<A> {
   private final F<A, Stream<Character>> f;
 
-  private Show2(final F<A, Stream<Character>> f) {
+  private Show(final F<A, Stream<Character>> f) {
     this.f = f;
   }
 
@@ -53,7 +53,7 @@ public final class Show2<A> {
    * @param f The function to map.
    * @return A new show.
    */
-  public <B> Show2<B> comap(final F<B, A> f) {
+  public <B> Show<B> comap(final F<B, A> f) {
     return show(compose(this.f, f));
   }
 
@@ -157,8 +157,8 @@ public final class Show2<A> {
    * @param f The function to use for the returned show instance.
    * @return A show instance.
    */
-  public static <A> Show2<A> show(final F<A, Stream<Character>> f) {
-    return new Show2<A>(f);
+  public static <A> Show<A> show(final F<A, Stream<Character>> f) {
+    return new Show<A>(f);
   }
 
   /**
@@ -167,8 +167,8 @@ public final class Show2<A> {
    * @param f The function to use for the returned show instance.
    * @return A show instance.
    */
-  public static <A> Show2<A> showS(final F<A, String> f) {
-    return new Show2<A>(new F<A, Stream<Character>>() {
+  public static <A> Show<A> showS(final F<A, String> f) {
+    return new Show<A>(new F<A, Stream<Character>>() {
       public Stream<Character> f(final A a) {
         return fromString(f.f(a));
       }
@@ -180,8 +180,8 @@ public final class Show2<A> {
    *
    * @return A show instance that uses {@link Object#toString()} to perform the display rendering.
    */
-  public static <A> Show2<A> anyShow() {
-    return new Show2<A>(new F<A, Stream<Character>>() {
+  public static <A> Show<A> anyShow() {
+    return new Show<A>(new F<A, Stream<Character>>() {
       public Stream<Character> f(final A a) {
         return Stream.fromString(a.toString());
       }
@@ -191,67 +191,67 @@ public final class Show2<A> {
   /**
    * A show instance for the <code>boolean</code> type.
    */
-  public static final Show2<Boolean> booleanShow = anyShow();
+  public static final Show<Boolean> booleanShow = anyShow();
 
   /**
    * A show instance for the <code>byte</code> type.
    */
-  public static final Show2<Byte> byteShow = anyShow();
+  public static final Show<Byte> byteShow = anyShow();
 
   /**
    * A show instance for the <code>char</code> type.
    */
-  public static final Show2<Character> charShow = anyShow();
+  public static final Show<Character> charShow = anyShow();
 
   /**
    * A show instance for the <code>double</code> type.
    */
-  public static final Show2<Double> doubleShow = anyShow();
+  public static final Show<Double> doubleShow = anyShow();
 
   /**
    * A show instance for the <code>float</code> type.
    */
-  public static final Show2<Float> floatShow = anyShow();
+  public static final Show<Float> floatShow = anyShow();
 
   /**
    * A show instance for the <code>int</code> type.
    */
-  public static final Show2<Integer> intShow = anyShow();
+  public static final Show<Integer> intShow = anyShow();
 
   /**
    * A show instance for the <code>BigInteger</code> type.
    */
-  public static final Show2<BigInteger> bigintShow = anyShow();
+  public static final Show<BigInteger> bigintShow = anyShow();
 
   /**
    * A show instance for the <code>BigDecimal</code> type.
    */
-  public static final Show2<BigDecimal> bigdecimalShow = anyShow();
+  public static final Show<BigDecimal> bigdecimalShow = anyShow();
 
   /**
    * A show instance for the <code>long</code> type.
    */
-  public static final Show2<Long> longShow = anyShow();
+  public static final Show<Long> longShow = anyShow();
 
   /**
    * A show instance for the <code>short</code> type.
    */
-  public static final Show2<Short> shortShow = anyShow();
+  public static final Show<Short> shortShow = anyShow();
 
   /**
    * A show instance for the {@link String} type.
    */
-  public static final Show2<String> stringShow = anyShow();
+  public static final Show<String> stringShow = anyShow();
 
   /**
    * A show instance for the {@link StringBuffer} type.
    */
-  public static final Show2<StringBuffer> stringBufferShow = anyShow();
+  public static final Show<StringBuffer> stringBufferShow = anyShow();
 
   /**
    * A show instance for the {@link StringBuilder} type.
    */
-  public static final Show2<StringBuilder> stringBuilderShow = anyShow();
+  public static final Show<StringBuilder> stringBuilderShow = anyShow();
 
   /**
    * A show instance for the {@link Option} type.
@@ -259,8 +259,8 @@ public final class Show2<A> {
    * @param sa Show for the element of the option.
    * @return A show instance for the {@link Option} type.
    */
-  public static <A> Show2<Option<A>> optionShow(final Show2<A> sa) {
-    return new Show2<Option<A>>(new F<Option<A>, Stream<Character>>() {
+  public static <A> Show<Option<A>> optionShow(final Show<A> sa) {
+    return new Show<Option<A>>(new F<Option<A>, Stream<Character>>() {
       public Stream<Character> f(final Option<A> o) {
         return o.isNone() ?
                fromString("None") :
@@ -276,8 +276,8 @@ public final class Show2<A> {
    * @param sb Show for the right side of the {@link Either}.
    * @return A show instance for the {@link Either} type.
    */
-  public static <A, B> Show2<Either<A, B>> eitherShow(final Show2<A> sa, final Show2<B> sb) {
-    return new Show2<Either<A, B>>(new F<Either<A, B>, Stream<Character>>() {
+  public static <A, B> Show<Either<A, B>> eitherShow(final Show<A> sa, final Show<B> sb) {
+    return new Show<Either<A, B>>(new F<Either<A, B>, Stream<Character>>() {
       public Stream<Character> f(final Either<A, B> e) {
         return e.isLeft() ?
                fromString("Left(").append(sa.f.f(e.left().value())).append(single(')')) :
@@ -293,8 +293,8 @@ public final class Show2<A> {
    * @param sb Show for the success side of the {@link Validation}.
    * @return A show instance for the {@link Validation} type.
    */
-  public static <A, B> Show2<Validation<A, B>> validationShow(final Show2<A> sa, final Show2<B> sb) {
-    return new Show2<Validation<A, B>>(new F<Validation<A, B>, Stream<Character>>() {
+  public static <A, B> Show<Validation<A, B>> validationShow(final Show<A> sa, final Show<B> sb) {
+    return new Show<Validation<A, B>>(new F<Validation<A, B>, Stream<Character>>() {
       public Stream<Character> f(final Validation<A, B> v) {
         return v.isFail() ?
                fromString("Fail(").append(sa.f.f(v.fail())).append(single(')')) :
@@ -309,8 +309,8 @@ public final class Show2<A> {
    * @param sa Show for the elements of the Stream.
    * @return A show instance for the {@link Stream} type.
    */
-  public static <A> Show2<List<A>> listShow(final Show2<A> sa) {
-    return new Show2<List<A>>(new F<List<A>, Stream<Character>>() {
+  public static <A> Show<List<A>> listShow(final Show<A> sa) {
+    return new Show<List<A>>(new F<List<A>, Stream<Character>>() {
       public Stream<Character> f(final List<A> as) {
         return streamShow(sa).show(as.toStream());
       }
@@ -323,7 +323,7 @@ public final class Show2<A> {
    * @param sa Show for the elements of the non-empty Stream.
    * @return A show instance for the {@link NonEmptyList} type.
    */
-  public static <A> Show2<NonEmptyList<A>> nonEmptyListShow(final Show2<A> sa) {
+  public static <A> Show<NonEmptyList<A>> nonEmptyListShow(final Show<A> sa) {
     return listShow(sa).comap(NonEmptyList.<A>toList_());
   }
 
@@ -333,8 +333,8 @@ public final class Show2<A> {
    * @param sa Show for the elements of the tree.
    * @return A show instance for the {@link Tree} type.
    */
-  public static <A> Show2<Tree<A>> treeShow(final Show2<A> sa) {
-    return new Show2<Tree<A>>(new F<Tree<A>, Stream<Character>>() {
+  public static <A> Show<Tree<A>> treeShow(final Show<A> sa) {
+    return new Show<Tree<A>>(new F<Tree<A>, Stream<Character>>() {
       public Stream<Character> f(final Tree<A> a) {
         final Stream<Character> b = sa.f.f(a.root())
             .append(p1Show(streamShow(treeShow(sa))).f.f(a.subForest()))
@@ -350,8 +350,8 @@ public final class Show2<A> {
    * @param sa Show for the elements of the stream.
    * @return A show instance for the {@link Stream} type.
    */
-  public static <A> Show2<Stream<A>> streamShow(final Show2<A> sa) {
-    return new Show2<Stream<A>>(new F<Stream<A>, Stream<Character>>() {
+  public static <A> Show<Stream<A>> streamShow(final Show<A> sa) {
+    return new Show<Stream<A>>(new F<Stream<A>, Stream<Character>>() {
       public Stream<Character> f(final Stream<A> as) {
         return join(as.map(sa.show_()).intersperse(fromString(",")).cons(fromString("<")).snoc(p(fromString(">"))));
       }
@@ -364,8 +364,8 @@ public final class Show2<A> {
    * @param sa Show for the elements of the array.
    * @return A show instance for the {@link Array} type.
    */
-  public static <A> Show2<Array<A>> arrayShow(final Show2<A> sa) {
-    return new Show2<Array<A>>(new F<Array<A>, Stream<Character>>() {
+  public static <A> Show<Array<A>> arrayShow(final Show<A> sa) {
+    return new Show<Array<A>>(new F<Array<A>, Stream<Character>>() {
       public Stream<Character> f(final Array<A> as) {
         Stream<Character> b = nil();
 
@@ -388,8 +388,8 @@ public final class Show2<A> {
    *
    * @return A show instance for the {@link Class} type.
    */
-  public static <A> Show2<Class<A>> classShow() {
-    return new Show2<Class<A>>(new F<fj.Class<A>, Stream<Character>>() {
+  public static <A> Show<Class<A>> classShow() {
+    return new Show<Class<A>>(new F<fj.Class<A>, Stream<Character>>() {
       public Stream<Character> f(final Class<A> c) {
         return anyShow().show(c.clas());
       }
@@ -402,8 +402,8 @@ public final class Show2<A> {
    * @param sa Show for the first element of the tuple.
    * @return A show instance for the {@link P1 tuple-1} type.
    */
-  public static <A> Show2<P1<A>> p1Show(final Show2<A> sa) {
-    return new Show2<P1<A>>(new F<P1<A>, Stream<Character>>() {
+  public static <A> Show<P1<A>> p1Show(final Show<A> sa) {
+    return new Show<P1<A>>(new F<P1<A>, Stream<Character>>() {
       public Stream<Character> f(final P1<A> p) {
         return cons('(', p(sa.show(p._1()))).snoc(')');
       }
@@ -417,8 +417,8 @@ public final class Show2<A> {
    * @param sb Show for the second element of the tuple.
    * @return A show instance for the {@link P2 tuple-2} type.
    */
-  public static <A, B> Show2<P2<A, B>> p2Show(final Show2<A> sa, final Show2<B> sb) {
-    return new Show2<P2<A, B>>(new F<P2<A, B>, Stream<Character>>() {
+  public static <A, B> Show<P2<A, B>> p2Show(final Show<A> sa, final Show<B> sb) {
+    return new Show<P2<A, B>>(new F<P2<A, B>, Stream<Character>>() {
       public Stream<Character> f(final P2<A, B> p) {
         return cons('(', p(sa.show(p._1()))).snoc(',').append(sb.show(p._2())).snoc(')');
       }
@@ -433,8 +433,8 @@ public final class Show2<A> {
    * @param sc Show for the third element of the tuple.
    * @return A show instance for the {@link P3 tuple-3} type.
    */
-  public static <A, B, C> Show2<P3<A, B, C>> p3Show(final Show2<A> sa, final Show2<B> sb, final Show2<C> sc) {
-    return new Show2<P3<A, B, C>>(new F<P3<A, B, C>, Stream<Character>>() {
+  public static <A, B, C> Show<P3<A, B, C>> p3Show(final Show<A> sa, final Show<B> sb, final Show<C> sc) {
+    return new Show<P3<A, B, C>>(new F<P3<A, B, C>, Stream<Character>>() {
       public Stream<Character> f(final P3<A, B, C> p) {
         return cons('(', p(sa.show(p._1()))).snoc(',').append(sb.show(p._2())).snoc(',')
             .append(sc.show(p._3())).snoc(')');
@@ -451,9 +451,9 @@ public final class Show2<A> {
    * @param sd Show for the fourth element of the tuple.
    * @return A show instance for the {@link P4 tuple-4} type.
    */
-  public static <A, B, C, D> Show2<P4<A, B, C, D>> p4Show(final Show2<A> sa, final Show2<B> sb,
-                                                         final Show2<C> sc, final Show2<D> sd) {
-    return new Show2<P4<A, B, C, D>>(new F<P4<A, B, C, D>, Stream<Character>>() {
+  public static <A, B, C, D> Show<P4<A, B, C, D>> p4Show(final Show<A> sa, final Show<B> sb,
+                                                         final Show<C> sc, final Show<D> sd) {
+    return new Show<P4<A, B, C, D>>(new F<P4<A, B, C, D>, Stream<Character>>() {
       public Stream<Character> f(final P4<A, B, C, D> p) {
         return cons('(', p(sa.show(p._1()))).snoc(',').append(sb.show(p._2())).snoc(',')
             .append(sc.show(p._3())).snoc(',').append(sd.show(p._4())).snoc(')');
@@ -471,9 +471,9 @@ public final class Show2<A> {
    * @param se Show for the fifth element of the tuple.
    * @return A show instance for the {@link P5 tuple-5} type.
    */
-  public static <A, B, C, D, E> Show2<P5<A, B, C, D, E>> p5Show(final Show2<A> sa, final Show2<B> sb,
-                                                               final Show2<C> sc, final Show2<D> sd, final Show2<E> se) {
-    return new Show2<P5<A, B, C, D, E>>(new F<P5<A, B, C, D, E>, Stream<Character>>() {
+  public static <A, B, C, D, E> Show<P5<A, B, C, D, E>> p5Show(final Show<A> sa, final Show<B> sb,
+                                                               final Show<C> sc, final Show<D> sd, final Show<E> se) {
+    return new Show<P5<A, B, C, D, E>>(new F<P5<A, B, C, D, E>, Stream<Character>>() {
       public Stream<Character> f(final P5<A, B, C, D, E> p) {
         return cons('(', p(sa.show(p._1()))).snoc(',').append(sb.show(p._2())).snoc(',')
             .append(sc.show(p._3())).snoc(',').append(sd.show(p._4())).snoc(',').append(se.show(p._5())).snoc(')');
@@ -492,10 +492,10 @@ public final class Show2<A> {
    * @param sf Show for the sixth element of the tuple.
    * @return A show instance for the {@link P6 tuple-6} type.
    */
-  public static <A, B, C, D, E, F$> Show2<P6<A, B, C, D, E, F$>> p6Show(final Show2<A> sa, final Show2<B> sb,
-                                                                       final Show2<C> sc, final Show2<D> sd,
-                                                                       final Show2<E> se, final Show2<F$> sf) {
-    return new Show2<P6<A, B, C, D, E, F$>>(new F<P6<A, B, C, D, E, F$>, Stream<Character>>() {
+  public static <A, B, C, D, E, F$> Show<P6<A, B, C, D, E, F$>> p6Show(final Show<A> sa, final Show<B> sb,
+                                                                       final Show<C> sc, final Show<D> sd,
+                                                                       final Show<E> se, final Show<F$> sf) {
+    return new Show<P6<A, B, C, D, E, F$>>(new F<P6<A, B, C, D, E, F$>, Stream<Character>>() {
       public Stream<Character> f(final P6<A, B, C, D, E, F$> p) {
         return cons('(', p(sa.show(p._1()))).snoc(',').append(sb.show(p._2())).snoc(',')
             .append(sc.show(p._3())).snoc(',').append(sd.show(p._4())).snoc(',')
@@ -516,11 +516,11 @@ public final class Show2<A> {
    * @param sg Show for the seventh element of the tuple.
    * @return A show instance for the {@link P7 tuple-7} type.
    */
-  public static <A, B, C, D, E, F$, G> Show2<P7<A, B, C, D, E, F$, G>> p7Show(final Show2<A> sa, final Show2<B> sb,
-                                                                             final Show2<C> sc, final Show2<D> sd,
-                                                                             final Show2<E> se, final Show2<F$> sf,
-                                                                             final Show2<G> sg) {
-    return new Show2<P7<A, B, C, D, E, F$, G>>(new F<P7<A, B, C, D, E, F$, G>, Stream<Character>>() {
+  public static <A, B, C, D, E, F$, G> Show<P7<A, B, C, D, E, F$, G>> p7Show(final Show<A> sa, final Show<B> sb,
+                                                                             final Show<C> sc, final Show<D> sd,
+                                                                             final Show<E> se, final Show<F$> sf,
+                                                                             final Show<G> sg) {
+    return new Show<P7<A, B, C, D, E, F$, G>>(new F<P7<A, B, C, D, E, F$, G>, Stream<Character>>() {
       public Stream<Character> f(final P7<A, B, C, D, E, F$, G> p) {
         return cons('(', p(sa.show(p._1()))).snoc(',').append(sb.show(p._2())).snoc(',')
             .append(sc.show(p._3())).snoc(',').append(sd.show(p._4())).snoc(',')
@@ -542,11 +542,11 @@ public final class Show2<A> {
    * @param sh Show for the eighth element of the tuple.
    * @return A show instance for the {@link P8 tuple-8} type.
    */
-  public static <A, B, C, D, E, F$, G, H> Show2<P8<A, B, C, D, E, F$, G, H>> p8Show(final Show2<A> sa, final Show2<B> sb,
-                                                                                   final Show2<C> sc, final Show2<D> sd,
-                                                                                   final Show2<E> se, final Show2<F$> sf,
-                                                                                   final Show2<G> sg, final Show2<H> sh) {
-    return new Show2<P8<A, B, C, D, E, F$, G, H>>(new F<P8<A, B, C, D, E, F$, G, H>, Stream<Character>>() {
+  public static <A, B, C, D, E, F$, G, H> Show<P8<A, B, C, D, E, F$, G, H>> p8Show(final Show<A> sa, final Show<B> sb,
+                                                                                   final Show<C> sc, final Show<D> sd,
+                                                                                   final Show<E> se, final Show<F$> sf,
+                                                                                   final Show<G> sg, final Show<H> sh) {
+    return new Show<P8<A, B, C, D, E, F$, G, H>>(new F<P8<A, B, C, D, E, F$, G, H>, Stream<Character>>() {
       public Stream<Character> f(final P8<A, B, C, D, E, F$, G, H> p) {
         return cons('(', p(sa.show(p._1()))).snoc(',').append(sb.show(p._2())).snoc(',')
             .append(sc.show(p._3())).snoc(',').append(sd.show(p._4())).snoc(',')
@@ -562,7 +562,7 @@ public final class Show2<A> {
    * @param ea A show for the elements of the vector.
    * @return A show instance for a vector-2.
    */
-  public static <A> Show2<V2<A>> v2Show(final Show2<A> ea) {
+  public static <A> Show<V2<A>> v2Show(final Show<A> ea) {
     return streamShow(ea).comap(V2.<A>toStream_());
   }
 
@@ -572,7 +572,7 @@ public final class Show2<A> {
    * @param ea A show for the elements of the vector.
    * @return A show instance for a vector-3.
    */
-  public static <A> Show2<V3<A>> v3Show(final Show2<A> ea) {
+  public static <A> Show<V3<A>> v3Show(final Show<A> ea) {
     return streamShow(ea).comap(V3.<A>toStream_());
   }
 
@@ -582,7 +582,7 @@ public final class Show2<A> {
    * @param ea A show for the elements of the vector.
    * @return A show instance for a vector-4.
    */
-  public static <A> Show2<V4<A>> v4Show(final Show2<A> ea) {
+  public static <A> Show<V4<A>> v4Show(final Show<A> ea) {
     return streamShow(ea).comap(V4.<A>toStream_());
   }
 
@@ -592,7 +592,7 @@ public final class Show2<A> {
    * @param ea A show for the elements of the vector.
    * @return A show instance for a vector-5.
    */
-  public static <A> Show2<V5<A>> v5Show(final Show2<A> ea) {
+  public static <A> Show<V5<A>> v5Show(final Show<A> ea) {
     return streamShow(ea).comap(V5.<A>toStream_());
   }
 
@@ -602,7 +602,7 @@ public final class Show2<A> {
    * @param ea A show for the elements of the vector.
    * @return A show instance for a vector-6.
    */
-  public static <A> Show2<V6<A>> v6Show(final Show2<A> ea) {
+  public static <A> Show<V6<A>> v6Show(final Show<A> ea) {
     return streamShow(ea).comap(V6.<A>toStream_());
   }
 
@@ -612,7 +612,7 @@ public final class Show2<A> {
    * @param ea A show for the elements of the vector.
    * @return A show instance for a vector-7.
    */
-  public static <A> Show2<V7<A>> v7Show(final Show2<A> ea) {
+  public static <A> Show<V7<A>> v7Show(final Show<A> ea) {
     return streamShow(ea).comap(V7.<A>toStream_());
   }
 
@@ -622,14 +622,14 @@ public final class Show2<A> {
    * @param ea A show for the elements of the vector.
    * @return A show instance for a vector-8.
    */
-  public static <A> Show2<V8<A>> v8Show(final Show2<A> ea) {
+  public static <A> Show<V8<A>> v8Show(final Show<A> ea) {
     return streamShow(ea).comap(V8.<A>toStream_());
   }
 
   /**
    * A show instance for natural numbers.
    */
-  public static final Show2<Natural> naturalShow = bigintShow.comap(new F<Natural, BigInteger>() {
+  public static final Show<Natural> naturalShow = bigintShow.comap(new F<Natural, BigInteger>() {
     public BigInteger f(final Natural natural) {
       return natural.bigIntegerValue();
     }
@@ -641,8 +641,8 @@ public final class Show2<A> {
    * @param sa A show instance for the elements of a stream.
    * @return A show instance for streams that splits into lines.
    */
-  public static <A> Show2<Stream<A>> unlineShow(final Show2<A> sa) {
-    return new Show2<Stream<A>>(new F<Stream<A>, Stream<Character>>() {
+  public static <A> Show<Stream<A>> unlineShow(final Show<A> sa) {
+    return new Show<Stream<A>>(new F<Stream<A>, Stream<Character>>() {
       public Stream<Character> f(final Stream<A> as) {
         return join(as.map(sa.show_()).intersperse(fromString("\n")));
       }
@@ -652,7 +652,7 @@ public final class Show2<A> {
   /**
    * A show instance for lazy strings.
    */
-  public static final Show2<LazyString> lazyStringShow = show(new F<LazyString, Stream<Character>>() {
+  public static final Show<LazyString> lazyStringShow = show(new F<LazyString, Stream<Character>>() {
     public Stream<Character> f(final LazyString string) {
       return string.toStream();
     }
@@ -661,7 +661,7 @@ public final class Show2<A> {
   /**
    * A show instance for the empty heterogeneous Stream.
    */
-  public static final Show2<HList.HNil> HListShow = showS(Function.<HList.HNil, String>constant("Nil"));
+  public static final Show<HList.HNil> HListShow = showS(Function.<HList.HNil, String>constant("Nil"));
 
   /**
    * A show instance for heterogeneous Streams.
@@ -670,7 +670,7 @@ public final class Show2<A> {
    * @param l A show instance for the rest of the Stream.
    * @return a show instance for heterogeneous Streams.
    */
-  public static <E, L extends HList<L>> Show2<HList.HCons<E, L>> HListShow(final Show2<E> e, final Show2<L> l) {
+  public static <E, L extends HList<L>> Show<HList.HCons<E, L>> HListShow(final Show<E> e, final Show<L> l) {
     return show(new F<HList.HCons<E, L>, Stream<Character>>() {
       public Stream<Character> f(final HList.HCons<E, L> c) {
         return e.show(c.head()).cons('[').append(l.show(c.tail())).snoc(']');

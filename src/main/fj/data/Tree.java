@@ -9,7 +9,7 @@ import static fj.F2W.$$;
 import static fj.Function.*;
 import static fj.data.Stream.*;
 import fj.Monoid;
-import fj.Show2;
+import fj.Show;
 
 import java.util.Collection;
 import java.util.Iterator;
@@ -289,7 +289,7 @@ public final class Tree<A> implements Iterable<A> {
     return cobind(id);
   }
 
-  private static <A> Stream<String> drawSubTrees(final Show2<A> s, final Stream<Tree<A>> ts) {
+  private static <A> Stream<String> drawSubTrees(final Show<A> s, final Stream<Tree<A>> ts) {
     return ts.isEmpty() ? Stream.<String>nil()
                         : ts.tail()._1().isEmpty() ? shift("`- ", "   ", ts.head().drawTree(s)).cons("|")
                                                    : shift("+- ", "|  ", ts.head().drawTree(s))
@@ -300,7 +300,7 @@ public final class Tree<A> implements Iterable<A> {
     return Stream.repeat(o).cons(f).zipWith(s, Monoid.stringMonoid.sum());
   }
 
-  private Stream<String> drawTree(final Show2<A> s) {
+  private Stream<String> drawTree(final Show<A> s) {
     return drawSubTrees(s, subForest._1()).cons(s.showS(root));
   }
 
@@ -310,7 +310,7 @@ public final class Tree<A> implements Iterable<A> {
    * @param s A show instance for the elements of the tree.
    * @return a String showing this tree in two dimensions.
    */
-  public String draw(final Show2<A> s) {
+  public String draw(final Show<A> s) {
     return Monoid.stringMonoid.join(drawTree(s), "\n");
   }
 
@@ -320,8 +320,8 @@ public final class Tree<A> implements Iterable<A> {
    * @param s A show instance for the elements of the tree.
    * @return a show instance that draws a 2-dimensional representation of a tree.
    */
-  public static <A> Show2<Tree<A>> show2D(final Show2<A> s) {
-    return Show2.showS(new F<Tree<A>, String>() {
+  public static <A> Show<Tree<A>> show2D(final Show<A> s) {
+    return Show.showS(new F<Tree<A>, String>() {
       public String f(final Tree<A> tree) {
         return tree.draw(s);
       }

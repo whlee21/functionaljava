@@ -10,7 +10,7 @@ import fj.P;
 import fj.P1;
 import fj.P2;
 import fj.P3;
-import fj.Show2;
+import fj.Show;
 import fj.function.Integers;
 
 import java.util.Iterator;
@@ -131,9 +131,9 @@ public class Zipper<A> implements Iterable<Zipper<A>> {
    * @param s A Show instance for the element type.
    * @return A Show instance for Zippers.
    */
-  public static <A> Show2<Zipper<A>> show(final Show2<A> s) {
-    final Show2<Stream<A>> ss = Show2.streamShow(s);
-    return Show2.p3Show(ss, s, ss).comap(Zipper.<A>p_());
+  public static <A> Show<Zipper<A>> show(final Show<A> s) {
+    final Show<Stream<A>> ss = Show.streamShow(s);
+    return Show.p3Show(ss, s, ss).comap(Zipper.<A>p_());
   }
 
   /**

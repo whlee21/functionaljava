@@ -3,8 +3,8 @@ import fj.data.List;
 import static fj.data.List.list;
 import static fj.data.List.single;
 import static fj.function.Integers.*;
-import static fj.Show2.intShow;
-import static fj.Show2.listShow;
+import static fj.Show.intShow;
+import static fj.Show.listShow;
 
 public class List_apply {
   public static void main(final String[] a) {
