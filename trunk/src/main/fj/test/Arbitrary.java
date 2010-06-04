@@ -652,6 +652,7 @@ public final class Arbitrary<A> {
    */
   public static <A> Arbitrary<Gen<A>> arbGen(final Arbitrary<A> aa) {
     return arbitrary(sized(new F<Integer, Gen<Gen<A>>>() {
+      @SuppressWarnings({"IfMayBeConditional"})
       public Gen<Gen<A>> f(final Integer i) {
         if (i == 0)
           return fail();
