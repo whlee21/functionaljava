@@ -18,16 +18,10 @@ public final class Single<V, A> extends FingerTree<V, A> {
     v = m.measure(a);
   }
 
-  /**
-   * @see FingerTree#foldRight(F, Object)
-   */
   @Override public <B> B foldRight(final F<A, F<B, B>> aff, final B z) {
     return aff.f(a).f(z);
   }
 
-  /**
-   * @see FingerTree#reduceRight(F)
-   */
   @Override public A reduceRight(final F<A, F<A, A>> aff) {
     return a;
   }

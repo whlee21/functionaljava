@@ -14,23 +14,14 @@ public final class Two<V, A> extends Digit<V, A> {
     this.as = as;
   }
 
-  /**
-   * @see Digit#foldRight(F, Object)
-   */
   public <B> B foldRight(final F<A, F<B, B>> aff, final B z) {
     return aff.f(as._1()).f(aff.f(as._2()).f(z));
   }
 
-  /**
-   * @see Digit#foldLeft(F, Object)
-   */
   public <B> B foldLeft(final F<B, F<A, B>> bff, final B z) {
     return as.toStream().foldLeft(bff, z);
   }
 
-  /**
-   * @see Digit#match(F, F, F, F)
-   */
   @Override public <B> B match(
       final F<One<V, A>, B> one, final F<Two<V, A>, B> two, final F<Three<V, A>, B> three,
       final F<Four<V, A>, B> four) {
