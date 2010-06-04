@@ -1,7 +1,21 @@
 package fj.data;
 
 import static fj.Bottom.error;
-import fj.*;
+
+import fj.Effect;
+import fj.F;
+import fj.F2;
+import fj.P;
+import fj.P1;
+import fj.P2;
+import fj.P3;
+import fj.P4;
+import fj.P5;
+import fj.P6;
+import fj.P7;
+import fj.P8;
+import fj.Unit;
+
 import static fj.Function.*;
 import static fj.P.p;
 import static fj.Unit.unit;

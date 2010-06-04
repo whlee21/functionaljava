@@ -4,10 +4,19 @@ import static fj.data.Stream.nil;
 import static fj.data.Stream.repeat;
 import static fj.data.Option.some;
 import static fj.data.Option.none;
+
+import fj.F;
+import fj.F2;
+import fj.F3;
+import fj.Function;
+import fj.P;
+import fj.P1;
+import fj.P2;
+import fj.P3;
 import fj.pre.Ord;
 import fj.pre.Equal;
 import fj.pre.Show;
-import fj.*;
+
 import static fj.F2W.$$;
 import static fj.Function.*;
 import fj.function.Integers;

@@ -1,17 +1,21 @@
 package fj.data;
 
-import static fj.Function.compose;
-import fj.*;
-import static fj.F2W.$$;
-import static fj.FW.$;
-import static fj.P.p;
-import static fj.data.IterableW.join;
-import static fj.data.List.iterableList;
-import static fj.data.Option.none;
+import fj.F;
+import fj.FW;
+import fj.P;
+import fj.P2;
+import fj.P3;
 import fj.pre.Ord;
 
 import java.util.Iterator;
 import java.util.Map;
+
+import static fj.F2W.$$;
+import static fj.FW.$;
+import static fj.Function.compose;
+import static fj.P.p;
+import static fj.data.IterableW.join;
+import static fj.data.List.iterableList;
 
 /**
  * An immutable, in-memory map, backed by a red-black tree.
