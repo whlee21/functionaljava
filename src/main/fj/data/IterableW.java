@@ -13,6 +13,7 @@ import static fj.Function.identity;
 
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.List;
 import java.util.ListIterator;
 import java.util.NoSuchElementException;
 
@@ -367,8 +368,8 @@ public final class IterableW<A> implements Iterable<A> {
    *
    * @return An immutable implementation of java.util.List for this iterable.
    */
-  public java.util.List<A> toStandardList() {
-    return new java.util.List<A>() {
+  public List<A> toStandardList() {
+    return new List<A>() {
 
       public int size() {
         return iterableStream(IterableW.this).length();
@@ -473,7 +474,7 @@ public final class IterableW<A> implements Iterable<A> {
         return toListIterator(toZipper().bind(Zipper.<A>move().f(index)));
       }
 
-      public java.util.List<A> subList(final int fromIndex, final int toIndex) {
+      public List<A> subList(final int fromIndex, final int toIndex) {
         return wrap(Stream.iterableStream(IterableW.this).drop(fromIndex).take(toIndex - fromIndex)).toStandardList();
       }
 

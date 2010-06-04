@@ -525,7 +525,7 @@ public abstract class Option<A> implements Iterable<A> {
    * @return An array projection of this optional value.
    */
   @SuppressWarnings({"unchecked"})
-  public Array<A> toArray(final java.lang.Class<A[]> c) {
+  public Array<A> toArray(final Class<A[]> c) {
     if (isSome()) {
       final A[] a = (A[]) java.lang.reflect.Array.newInstance(c.getComponentType(), 1);
       a[0] = some();

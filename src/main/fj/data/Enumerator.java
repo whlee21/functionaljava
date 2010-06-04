@@ -5,6 +5,8 @@ import fj.F2;
 import static fj.Function.*;
 import static fj.data.Option.none;
 import static fj.data.Option.some;
+
+import fj.Function;
 import fj.pre.Ord;
 import static fj.pre.Ord.*;
 import fj.pre.Ordering;
@@ -176,7 +178,7 @@ public final class Enumerator<A> {
                       max.map(f),
                       min.map(f),
                       order.comap(g),
-                      compose(compose(fj.Function.<Long, Option<A>, Option<B>>compose().f(of), plus), g));
+                      compose(compose(Function.<Long, Option<A>, Option<B>>compose().f(of), plus), g));
   }
 
   /**

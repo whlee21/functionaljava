@@ -13,6 +13,7 @@ import fj.F8;
 import static fj.Function.curry;
 import static fj.P.p;
 
+import fj.Function;
 import fj.P1;
 import fj.Unit;
 
@@ -212,7 +213,7 @@ public final class Validation<E, T> implements Iterable<T> {
    * @return A validation after binding.
    */
   public <A> Validation<E, A> sequence(final Validation<E, A> v) {
-    return bind(fj.Function.<T, Validation<E, A>>constant(v));
+    return bind(Function.<T, Validation<E, A>>constant(v));
   }
 
   /**

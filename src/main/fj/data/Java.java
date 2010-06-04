@@ -3,10 +3,11 @@ package fj.data;
 import fj.Effect;
 import fj.F;
 import static fj.P.p;
+
+import fj.Function;
 import fj.P1;
 import fj.P2;
 
-import static fj.data.Java.*;
 import static fj.data.List.list;
 import static fj.data.Option.some;
 
@@ -1085,7 +1086,7 @@ public final class Java {
    * @return A function that converts eithers to array lists.
    */
   public static <A, B> F<Either<A, B>, ArrayList<A>> Either_ArrayListA() {
-    return fj.Function.compose(Java.<A>Option_ArrayList(), Conversions.<A, B>Either_OptionA());
+    return Function.compose(Java.<A>Option_ArrayList(), Conversions.<A, B>Either_OptionA());
   }
 
   /**
@@ -1094,7 +1095,7 @@ public final class Java {
    * @return A function that converts eithers to array lists.
    */
   public static <A, B> F<Either<A, B>, ArrayList<B>> Either_ArrayListB() {
-    return fj.Function.compose(Java.<B>Option_ArrayList(), Conversions.<A, B>Either_OptionB());
+    return Function.compose(Java.<B>Option_ArrayList(), Conversions.<A, B>Either_OptionB());
   }
 
   /**
@@ -1103,7 +1104,7 @@ public final class Java {
    * @return A function that converts eithers to bit sets.
    */
   public static <B> F<Either<Boolean, B>, BitSet> Either_BitSetA() {
-    return fj.Function.compose(Option_BitSet, Conversions.<Boolean, B>Either_OptionA());
+    return Function.compose(Option_BitSet, Conversions.<Boolean, B>Either_OptionA());
   }
 
   /**
@@ -1112,7 +1113,7 @@ public final class Java {
    * @return A function that converts eithers to bit sets.
    */
   public static <A> F<Either<A, Boolean>, BitSet> Either_BitSetB() {
-    return fj.Function.compose(Option_BitSet, Conversions.<A, Boolean>Either_OptionB());
+    return Function.compose(Option_BitSet, Conversions.<A, Boolean>Either_OptionB());
   }
 
   /**
@@ -1121,7 +1122,7 @@ public final class Java {
    * @return A function that converts eithers to enum sets.
    */
   public static <A extends Enum<A>, B> F<Either<A, B>, EnumSet<A>> Either_EnumSetA() {
-    return fj.Function.compose(Java.<A>Option_EnumSet(), Conversions.<A, B>Either_OptionA());
+    return Function.compose(Java.<A>Option_EnumSet(), Conversions.<A, B>Either_OptionA());
   }
 
   /**
@@ -1130,7 +1131,7 @@ public final class Java {
    * @return A function that converts eithers to enum sets.
    */
   public static <A, B extends Enum<B>> F<Either<A, B>, EnumSet<B>> Either_EnumSetB() {
-    return fj.Function.compose(Java.<B>Option_EnumSet(), Conversions.<A, B>Either_OptionB());
+    return Function.compose(Java.<B>Option_EnumSet(), Conversions.<A, B>Either_OptionB());
   }
 
   /**
@@ -1139,7 +1140,7 @@ public final class Java {
    * @return A function that converts eithers to hash sets.
    */
   public static <A, B> F<Either<A, B>, HashSet<A>> Either_HashSetA() {
-    return fj.Function.compose(Java.<A>Option_HashSet(), Conversions.<A, B>Either_OptionA());
+    return Function.compose(Java.<A>Option_HashSet(), Conversions.<A, B>Either_OptionA());
   }
 
   /**
@@ -1148,7 +1149,7 @@ public final class Java {
    * @return A function that converts eithers to hash sets.
    */
   public static <A, B> F<Either<A, B>, HashSet<B>> Either_HashSetB() {
-    return fj.Function.compose(Java.<B>Option_HashSet(), Conversions.<A, B>Either_OptionB());
+    return Function.compose(Java.<B>Option_HashSet(), Conversions.<A, B>Either_OptionB());
   }
 
   /**
@@ -1157,7 +1158,7 @@ public final class Java {
    * @return A function that converts eithers to linked hash sets.
    */
   public static <A, B> F<Either<A, B>, LinkedHashSet<A>> Either_LinkedHashSetA() {
-    return fj.Function.compose(Java.<A>Option_LinkedHashSet(), Conversions.<A, B>Either_OptionA());
+    return Function.compose(Java.<A>Option_LinkedHashSet(), Conversions.<A, B>Either_OptionA());
   }
 
   /**
@@ -1166,7 +1167,7 @@ public final class Java {
    * @return A function that converts eithers to linked hash sets.
    */
   public static <A, B> F<Either<A, B>, LinkedHashSet<B>> Either_LinkedHashSetB() {
-    return fj.Function.compose(Java.<B>Option_LinkedHashSet(), Conversions.<A, B>Either_OptionB());
+    return Function.compose(Java.<B>Option_LinkedHashSet(), Conversions.<A, B>Either_OptionB());
   }
 
   /**
@@ -1175,7 +1176,7 @@ public final class Java {
    * @return A function that converts eithers to linked lists.
    */
   public static <A, B> F<Either<A, B>, LinkedList<A>> Either_LinkedListA() {
-    return fj.Function.compose(Java.<A>Option_LinkedList(), Conversions.<A, B>Either_OptionA());
+    return Function.compose(Java.<A>Option_LinkedList(), Conversions.<A, B>Either_OptionA());
   }
 
   /**
@@ -1184,7 +1185,7 @@ public final class Java {
    * @return A function that eithers options to priority queues.
    */
   public static <A, B> F<Either<A, B>, PriorityQueue<A>> Option_PriorityQueueA() {
-    return fj.Function.compose(Java.<A>Option_PriorityQueue(), Conversions.<A, B>Either_OptionA());
+    return Function.compose(Java.<A>Option_PriorityQueue(), Conversions.<A, B>Either_OptionA());
   }
 
   /**
@@ -1193,7 +1194,7 @@ public final class Java {
    * @return A function that eithers options to priority queues.
    */
   public static <A, B> F<Either<A, B>, PriorityQueue<B>> Option_PriorityQueueB() {
-    return fj.Function.compose(Java.<B>Option_PriorityQueue(), Conversions.<A, B>Either_OptionB());
+    return Function.compose(Java.<B>Option_PriorityQueue(), Conversions.<A, B>Either_OptionB());
   }
 
   /**
@@ -1202,7 +1203,7 @@ public final class Java {
    * @return A function that converts eithers to linked lists.
    */
   public static <A, B> F<Either<A, B>, LinkedList<B>> Either_LinkedListB() {
-    return fj.Function.compose(Java.<B>Option_LinkedList(), Conversions.<A, B>Either_OptionB());
+    return Function.compose(Java.<B>Option_LinkedList(), Conversions.<A, B>Either_OptionB());
   }
 
   /**
@@ -1211,7 +1212,7 @@ public final class Java {
    * @return A function that converts eithers to stacks.
    */
   public static <A, B> F<Either<A, B>, Stack<A>> Either_StackA() {
-    return fj.Function.compose(Java.<A>Option_Stack(), Conversions.<A, B>Either_OptionA());
+    return Function.compose(Java.<A>Option_Stack(), Conversions.<A, B>Either_OptionA());
   }
 
   /**
@@ -1220,7 +1221,7 @@ public final class Java {
    * @return A function that converts eithers to stacks.
    */
   public static <A, B> F<Either<A, B>, Stack<B>> Either_StackB() {
-    return fj.Function.compose(Java.<B>Option_Stack(), Conversions.<A, B>Either_OptionB());
+    return Function.compose(Java.<B>Option_Stack(), Conversions.<A, B>Either_OptionB());
   }
 
   /**
@@ -1229,7 +1230,7 @@ public final class Java {
    * @return A function that converts eithers to tree sets.
    */
   public static <A, B> F<Either<A, B>, TreeSet<A>> Either_TreeSetA() {
-    return fj.Function.compose(Java.<A>Option_TreeSet(), Conversions.<A, B>Either_OptionA());
+    return Function.compose(Java.<A>Option_TreeSet(), Conversions.<A, B>Either_OptionA());
   }
 
   /**
@@ -1238,7 +1239,7 @@ public final class Java {
    * @return A function that converts eithers to tree sets.
    */
   public static <A, B> F<Either<A, B>, TreeSet<B>> Either_TreeSetB() {
-    return fj.Function.compose(Java.<B>Option_TreeSet(), Conversions.<A, B>Either_OptionB());
+    return Function.compose(Java.<B>Option_TreeSet(), Conversions.<A, B>Either_OptionB());
   }
 
   /**
@@ -1247,7 +1248,7 @@ public final class Java {
    * @return A function that converts eithers to vectors.
    */
   public static <A, B> F<Either<A, B>, Vector<A>> Either_VectorA() {
-    return fj.Function.compose(Java.<A>Option_Vector(), Conversions.<A, B>Either_OptionA());
+    return Function.compose(Java.<A>Option_Vector(), Conversions.<A, B>Either_OptionA());
   }
 
   /**
@@ -1256,7 +1257,7 @@ public final class Java {
    * @return A function that converts eithers to vectors.
    */
   public static <A, B> F<Either<A, B>, Vector<B>> Either_VectorB() {
-    return fj.Function.compose(Java.<B>Option_Vector(), Conversions.<A, B>Either_OptionB());
+    return Function.compose(Java.<B>Option_Vector(), Conversions.<A, B>Either_OptionB());
   }
 
   /**
@@ -1266,7 +1267,7 @@ public final class Java {
    * @return A function that converts eithers to array blocking queues.
    */
   public static <A, B> F<Either<A, B>, ArrayBlockingQueue<A>> Either_ArrayBlockingQueueA(final boolean fair) {
-    return fj.Function.compose(Java.<A>Option_ArrayBlockingQueue(fair), Conversions.<A, B>Either_OptionA());
+    return Function.compose(Java.<A>Option_ArrayBlockingQueue(fair), Conversions.<A, B>Either_OptionA());
   }
 
   /**
@@ -1276,7 +1277,7 @@ public final class Java {
    * @return A function that converts eithers to array blocking queues.
    */
   public static <A, B> F<Either<A, B>, ArrayBlockingQueue<B>> Either_ArrayBlockingQueueB(final boolean fair) {
-    return fj.Function.compose(Java.<B>Option_ArrayBlockingQueue(fair), Conversions.<A, B>Either_OptionB());
+    return Function.compose(Java.<B>Option_ArrayBlockingQueue(fair), Conversions.<A, B>Either_OptionB());
   }
 
   /**
@@ -1285,7 +1286,7 @@ public final class Java {
    * @return A function that converts eithers to concurrent linked queues.
    */
   public static <A, B> F<Either<A, B>, ConcurrentLinkedQueue<A>> Either_ConcurrentLinkedQueueA() {
-    return fj.Function.compose(Java.<A>Option_ConcurrentLinkedQueue(), Conversions.<A, B>Either_OptionA());
+    return Function.compose(Java.<A>Option_ConcurrentLinkedQueue(), Conversions.<A, B>Either_OptionA());
   }
 
   /**
@@ -1294,7 +1295,7 @@ public final class Java {
    * @return A function that converts eithers to concurrent linked queues.
    */
   public static <A, B> F<Either<A, B>, ConcurrentLinkedQueue<B>> Either_ConcurrentLinkedQueueB() {
-    return fj.Function.compose(Java.<B>Option_ConcurrentLinkedQueue(), Conversions.<A, B>Either_OptionB());
+    return Function.compose(Java.<B>Option_ConcurrentLinkedQueue(), Conversions.<A, B>Either_OptionB());
   }
 
   /**
@@ -1303,7 +1304,7 @@ public final class Java {
    * @return A function that converts eithers to copy on write array lists.
    */
   public static <A, B> F<Either<A, B>, CopyOnWriteArrayList<A>> Either_CopyOnWriteArrayListA() {
-    return fj.Function.compose(Java.<A>Option_CopyOnWriteArrayList(), Conversions.<A, B>Either_OptionA());
+    return Function.compose(Java.<A>Option_CopyOnWriteArrayList(), Conversions.<A, B>Either_OptionA());
   }
 
   /**
@@ -1312,7 +1313,7 @@ public final class Java {
    * @return A function that converts eithers to copy on write array lists.
    */
   public static <A, B> F<Either<A, B>, CopyOnWriteArrayList<B>> Either_CopyOnWriteArrayListB() {
-    return fj.Function.compose(Java.<B>Option_CopyOnWriteArrayList(), Conversions.<A, B>Either_OptionB());
+    return Function.compose(Java.<B>Option_CopyOnWriteArrayList(), Conversions.<A, B>Either_OptionB());
   }
 
   /**
@@ -1321,7 +1322,7 @@ public final class Java {
    * @return A function that converts eithers to copy on write array sets.
    */
   public static <A, B> F<Either<A, B>, CopyOnWriteArraySet<A>> Either_CopyOnWriteArraySetA() {
-    return fj.Function.compose(Java.<A>Option_CopyOnWriteArraySet(), Conversions.<A, B>Either_OptionA());
+    return Function.compose(Java.<A>Option_CopyOnWriteArraySet(), Conversions.<A, B>Either_OptionA());
   }
 
   /**
@@ -1330,7 +1331,7 @@ public final class Java {
    * @return A function that converts eithers to copy on write array sets.
    */
   public static <A, B> F<Either<A, B>, CopyOnWriteArraySet<B>> Either_CopyOnWriteArraySetB() {
-    return fj.Function.compose(Java.<B>Option_CopyOnWriteArraySet(), Conversions.<A, B>Either_OptionB());
+    return Function.compose(Java.<B>Option_CopyOnWriteArraySet(), Conversions.<A, B>Either_OptionB());
   }
 
   /**
@@ -1339,7 +1340,7 @@ public final class Java {
    * @return A function that converts eithers to delay queues.
    */
   public static <A extends Delayed, B> F<Either<A, B>, DelayQueue<A>> Either_DelayQueueA() {
-    return fj.Function.compose(Java.<A>Option_DelayQueue(), Conversions.<A, B>Either_OptionA());
+    return Function.compose(Java.<A>Option_DelayQueue(), Conversions.<A, B>Either_OptionA());
   }
 
   /**
@@ -1348,7 +1349,7 @@ public final class Java {
    * @return A function that converts eithers to delay queues.
    */
   public static <A, B extends Delayed> F<Either<A, B>, DelayQueue<B>> Either_DelayQueueB() {
-    return fj.Function.compose(Java.<B>Option_DelayQueue(), Conversions.<A, B>Either_OptionB());
+    return Function.compose(Java.<B>Option_DelayQueue(), Conversions.<A, B>Either_OptionB());
   }
 
   /**
@@ -1357,7 +1358,7 @@ public final class Java {
    * @return A function that converts eithers to linked blocking queues.
    */
   public static <A, B> F<Either<A, B>, LinkedBlockingQueue<A>> Either_LinkedBlockingQueueA() {
-    return fj.Function.compose(Java.<A>Option_LinkedBlockingQueue(), Conversions.<A, B>Either_OptionA());
+    return Function.compose(Java.<A>Option_LinkedBlockingQueue(), Conversions.<A, B>Either_OptionA());
   }
 
   /**
@@ -1366,7 +1367,7 @@ public final class Java {
    * @return A function that converts eithers to linked blocking queues.
    */
   public static <A, B> F<Either<A, B>, LinkedBlockingQueue<B>> Either_LinkedBlockingQueueB() {
-    return fj.Function.compose(Java.<B>Option_LinkedBlockingQueue(), Conversions.<A, B>Either_OptionB());
+    return Function.compose(Java.<B>Option_LinkedBlockingQueue(), Conversions.<A, B>Either_OptionB());
   }
 
   /**
@@ -1375,7 +1376,7 @@ public final class Java {
    * @return A function that converts eithers to priority blocking queues.
    */
   public static <A, B> F<Either<A, B>, PriorityBlockingQueue<A>> Either_PriorityBlockingQueueA() {
-    return fj.Function.compose(Java.<A>Option_PriorityBlockingQueue(), Conversions.<A, B>Either_OptionA());
+    return Function.compose(Java.<A>Option_PriorityBlockingQueue(), Conversions.<A, B>Either_OptionA());
   }
 
   /**
@@ -1384,7 +1385,7 @@ public final class Java {
    * @return A function that converts eithers to priority blocking queues.
    */
   public static <A, B> F<Either<A, B>, PriorityBlockingQueue<B>> Either_PriorityBlockingQueueB() {
-    return fj.Function.compose(Java.<B>Option_PriorityBlockingQueue(), Conversions.<A, B>Either_OptionB());
+    return Function.compose(Java.<B>Option_PriorityBlockingQueue(), Conversions.<A, B>Either_OptionB());
   }
 
   /**
@@ -1394,7 +1395,7 @@ public final class Java {
    * @return A function that converts eithers to synchronous queues.
    */
   public static <A, B> F<Either<A, B>, SynchronousQueue<A>> Either_SynchronousQueueA(final boolean fair) {
-    return fj.Function.compose(Java.<A>Option_SynchronousQueue(fair), Conversions.<A, B>Either_OptionA());
+    return Function.compose(Java.<A>Option_SynchronousQueue(fair), Conversions.<A, B>Either_OptionA());
   }
 
   /**
@@ -1404,7 +1405,7 @@ public final class Java {
    * @return A function that converts eithers to synchronous queues.
    */
   public static <A, B> F<Either<A, B>, SynchronousQueue<B>> Either_SynchronousQueueB(final boolean fair) {
-    return fj.Function.compose(Java.<B>Option_SynchronousQueue(fair), Conversions.<A, B>Either_OptionB());
+    return Function.compose(Java.<B>Option_SynchronousQueue(fair), Conversions.<A, B>Either_OptionB());
   }
 
   // END Either ->
@@ -1415,49 +1416,49 @@ public final class Java {
    * A function that converts strings to array lists.
    */
   public static final F<String, ArrayList<Character>> String_ArrayList =
-      fj.Function.compose(Java.<Character>List_ArrayList(), Conversions.String_List);
+      Function.compose(Java.<Character>List_ArrayList(), Conversions.String_List);
 
   /**
    * A function that converts strings to hash sets.
    */
   public static final F<String, HashSet<Character>> String_HashSet =
-      fj.Function.compose(Java.<Character>List_HashSet(), Conversions.String_List);
+      Function.compose(Java.<Character>List_HashSet(), Conversions.String_List);
 
   /**
    * A function that converts strings to linked hash sets.
    */
   public static final F<String, LinkedHashSet<Character>> String_LinkedHashSet =
-      fj.Function.compose(Java.<Character>List_LinkedHashSet(), Conversions.String_List);
+      Function.compose(Java.<Character>List_LinkedHashSet(), Conversions.String_List);
 
   /**
    * A function that converts strings to linked lists.
    */
   public static final F<String, LinkedList<Character>> String_LinkedList =
-      fj.Function.compose(Java.<Character>List_LinkedList(), Conversions.String_List);
+      Function.compose(Java.<Character>List_LinkedList(), Conversions.String_List);
 
   /**
    * A function that converts strings to priority queues.
    */
   public static final F<String, PriorityQueue<Character>> String_PriorityQueue =
-      fj.Function.compose(Java.<Character>List_PriorityQueue(), Conversions.String_List);
+      Function.compose(Java.<Character>List_PriorityQueue(), Conversions.String_List);
 
   /**
    * A function that converts strings to stacks.
    */
   public static final F<String, Stack<Character>> String_Stack =
-      fj.Function.compose(Java.<Character>List_Stack(), Conversions.String_List);
+      Function.compose(Java.<Character>List_Stack(), Conversions.String_List);
 
   /**
    * A function that converts strings to tree sets.
    */
   public static final F<String, TreeSet<Character>> String_TreeSet =
-      fj.Function.compose(Java.<Character>List_TreeSet(), Conversions.String_List);
+      Function.compose(Java.<Character>List_TreeSet(), Conversions.String_List);
 
   /**
    * A function that converts strings to vectors.
    */
   public static final F<String, Vector<Character>> String_Vector =
-      fj.Function.compose(Java.<Character>List_Vector(), Conversions.String_List);
+      Function.compose(Java.<Character>List_Vector(), Conversions.String_List);
 
   /**
    * A function that converts strings to array blocking queues.
@@ -1466,38 +1467,38 @@ public final class Java {
    * @return A function that converts strings to array blocking queues.
    */
   public static F<String, ArrayBlockingQueue<Character>> String_ArrayBlockingQueue(final boolean fair) {
-    return fj.Function.compose(Java.<Character>List_ArrayBlockingQueue(fair), Conversions.String_List);
+    return Function.compose(Java.<Character>List_ArrayBlockingQueue(fair), Conversions.String_List);
   }
 
   /**
    * A function that converts strings to concurrent linked queues.
    */
   public static final F<String, ConcurrentLinkedQueue<Character>> String_ConcurrentLinkedQueue =
-      fj.Function.compose(Java.<Character>List_ConcurrentLinkedQueue(), Conversions.String_List);
+      Function.compose(Java.<Character>List_ConcurrentLinkedQueue(), Conversions.String_List);
 
   /**
    * A function that converts strings to copy on write array lists.
    */
   public static final F<String, CopyOnWriteArrayList<Character>> String_CopyOnWriteArrayList =
-      fj.Function.compose(Java.<Character>List_CopyOnWriteArrayList(), Conversions.String_List);
+      Function.compose(Java.<Character>List_CopyOnWriteArrayList(), Conversions.String_List);
 
   /**
    * A function that converts strings to copy on write array sets.
    */
   public static final F<String, CopyOnWriteArraySet<Character>> String_CopyOnWriteArraySet =
-      fj.Function.compose(Java.<Character>List_CopyOnWriteArraySet(), Conversions.String_List);
+      Function.compose(Java.<Character>List_CopyOnWriteArraySet(), Conversions.String_List);
 
   /**
    * A function that converts strings to linked blocking queues.
    */
   public static final F<String, LinkedBlockingQueue<Character>> String_LinkedBlockingQueue =
-      fj.Function.compose(Java.<Character>List_LinkedBlockingQueue(), Conversions.String_List);
+      Function.compose(Java.<Character>List_LinkedBlockingQueue(), Conversions.String_List);
 
   /**
    * A function that converts strings to priority blocking queues.
    */
   public static final F<String, PriorityBlockingQueue<Character>> String_PriorityBlockingQueue =
-      fj.Function.compose(Java.<Character>List_PriorityBlockingQueue(), Conversions.String_List);
+      Function.compose(Java.<Character>List_PriorityBlockingQueue(), Conversions.String_List);
 
   /**
    * A function that converts strings to synchronous queues.
@@ -1506,7 +1507,7 @@ public final class Java {
    * @return A function that converts strings to synchronous queues.
    */
   public static F<String, SynchronousQueue<Character>> String_SynchronousQueue(final boolean fair) {
-    return fj.Function.compose(Java.<Character>List_SynchronousQueue(fair), Conversions.String_List);
+    return Function.compose(Java.<Character>List_SynchronousQueue(fair), Conversions.String_List);
   }
 
   // END String ->
@@ -1517,49 +1518,49 @@ public final class Java {
    * A function that converts string buffers to array lists.
    */
   public static final F<StringBuffer, ArrayList<Character>> StringBuffer_ArrayList =
-      fj.Function.compose(Java.<Character>List_ArrayList(), Conversions.StringBuffer_List);
+      Function.compose(Java.<Character>List_ArrayList(), Conversions.StringBuffer_List);
 
   /**
    * A function that converts string buffers to hash sets.
    */
   public static final F<StringBuffer, HashSet<Character>> StringBuffer_HashSet =
-      fj.Function.compose(Java.<Character>List_HashSet(), Conversions.StringBuffer_List);
+      Function.compose(Java.<Character>List_HashSet(), Conversions.StringBuffer_List);
 
   /**
    * A function that converts string buffers to linked hash sets.
    */
   public static final F<StringBuffer, LinkedHashSet<Character>> StringBuffer_LinkedHashSet =
-      fj.Function.compose(Java.<Character>List_LinkedHashSet(), Conversions.StringBuffer_List);
+      Function.compose(Java.<Character>List_LinkedHashSet(), Conversions.StringBuffer_List);
 
   /**
    * A function that converts string buffers to linked lists.
    */
   public static final F<StringBuffer, LinkedList<Character>> StringBuffer_LinkedList =
-      fj.Function.compose(Java.<Character>List_LinkedList(), Conversions.StringBuffer_List);
+      Function.compose(Java.<Character>List_LinkedList(), Conversions.StringBuffer_List);
 
   /**
    * A function that converts string buffers to priority queues.
    */
   public static final F<StringBuffer, PriorityQueue<Character>> StringBuffer_PriorityQueue =
-      fj.Function.compose(Java.<Character>List_PriorityQueue(), Conversions.StringBuffer_List);
+      Function.compose(Java.<Character>List_PriorityQueue(), Conversions.StringBuffer_List);
 
   /**
    * A function that converts string buffers to stacks.
    */
   public static final F<StringBuffer, Stack<Character>> StringBuffer_Stack =
-      fj.Function.compose(Java.<Character>List_Stack(), Conversions.StringBuffer_List);
+      Function.compose(Java.<Character>List_Stack(), Conversions.StringBuffer_List);
 
   /**
    * A function that converts string buffers to tree sets.
    */
   public static final F<StringBuffer, TreeSet<Character>> StringBuffer_TreeSet =
-      fj.Function.compose(Java.<Character>List_TreeSet(), Conversions.StringBuffer_List);
+      Function.compose(Java.<Character>List_TreeSet(), Conversions.StringBuffer_List);
 
   /**
    * A function that converts string buffers to vectors.
    */
   public static final F<StringBuffer, Vector<Character>> StringBuffer_Vector =
-      fj.Function.compose(Java.<Character>List_Vector(), Conversions.StringBuffer_List);
+      Function.compose(Java.<Character>List_Vector(), Conversions.StringBuffer_List);
 
   /**
    * A function that converts string buffers to array blocking queues.
@@ -1568,38 +1569,38 @@ public final class Java {
    * @return A function that converts string buffers to array blocking queues.
    */
   public static F<StringBuffer, ArrayBlockingQueue<Character>> StringBuffer_ArrayBlockingQueue(final boolean fair) {
-    return fj.Function.compose(Java.<Character>List_ArrayBlockingQueue(fair), Conversions.StringBuffer_List);
+    return Function.compose(Java.<Character>List_ArrayBlockingQueue(fair), Conversions.StringBuffer_List);
   }
 
   /**
    * A function that converts string buffers to concurrent linked queues.
    */
   public static final F<StringBuffer, ConcurrentLinkedQueue<Character>> StringBuffer_ConcurrentLinkedQueue =
-      fj.Function.compose(Java.<Character>List_ConcurrentLinkedQueue(), Conversions.StringBuffer_List);
+      Function.compose(Java.<Character>List_ConcurrentLinkedQueue(), Conversions.StringBuffer_List);
 
   /**
    * A function that converts string buffers to copy on write array lists.
    */
   public static final F<StringBuffer, CopyOnWriteArrayList<Character>> StringBuffer_CopyOnWriteArrayList =
-      fj.Function.compose(Java.<Character>List_CopyOnWriteArrayList(), Conversions.StringBuffer_List);
+      Function.compose(Java.<Character>List_CopyOnWriteArrayList(), Conversions.StringBuffer_List);
 
   /**
    * A function that converts string buffers to copy on write array sets.
    */
   public static final F<StringBuffer, CopyOnWriteArraySet<Character>> StringBuffer_CopyOnWriteArraySet =
-      fj.Function.compose(Java.<Character>List_CopyOnWriteArraySet(), Conversions.StringBuffer_List);
+      Function.compose(Java.<Character>List_CopyOnWriteArraySet(), Conversions.StringBuffer_List);
 
   /**
    * A function that converts string buffers to linked blocking queues.
    */
   public static final F<StringBuffer, LinkedBlockingQueue<Character>> StringBuffer_LinkedBlockingQueue =
-      fj.Function.compose(Java.<Character>List_LinkedBlockingQueue(), Conversions.StringBuffer_List);
+      Function.compose(Java.<Character>List_LinkedBlockingQueue(), Conversions.StringBuffer_List);
 
   /**
    * A function that converts string buffers to priority blocking queues.
    */
   public static final F<StringBuffer, PriorityBlockingQueue<Character>> StringBuffer_PriorityBlockingQueue =
-      fj.Function.compose(Java.<Character>List_PriorityBlockingQueue(), Conversions.StringBuffer_List);
+      Function.compose(Java.<Character>List_PriorityBlockingQueue(), Conversions.StringBuffer_List);
 
   /**
    * A function that converts string buffers to synchronous queues.
@@ -1608,7 +1609,7 @@ public final class Java {
    * @return A function that converts string buffers to synchronous queues.
    */
   public static F<StringBuffer, SynchronousQueue<Character>> StringBuffer_SynchronousQueue(final boolean fair) {
-    return fj.Function.compose(Java.<Character>List_SynchronousQueue(fair), Conversions.StringBuffer_List);
+    return Function.compose(Java.<Character>List_SynchronousQueue(fair), Conversions.StringBuffer_List);
   }
 
   // END StringBuffer ->
@@ -1619,49 +1620,49 @@ public final class Java {
    * A function that converts string builders to array lists.
    */
   public static final F<StringBuilder, ArrayList<Character>> StringBuilder_ArrayList =
-      fj.Function.compose(Java.<Character>List_ArrayList(), Conversions.StringBuilder_List);
+      Function.compose(Java.<Character>List_ArrayList(), Conversions.StringBuilder_List);
 
   /**
    * A function that converts string builders to hash sets.
    */
   public static final F<StringBuilder, HashSet<Character>> StringBuilder_HashSet =
-      fj.Function.compose(Java.<Character>List_HashSet(), Conversions.StringBuilder_List);
+      Function.compose(Java.<Character>List_HashSet(), Conversions.StringBuilder_List);
 
   /**
    * A function that converts string builders to linked hash sets.
    */
   public static final F<StringBuilder, LinkedHashSet<Character>> StringBuilder_LinkedHashSet =
-      fj.Function.compose(Java.<Character>List_LinkedHashSet(), Conversions.StringBuilder_List);
+      Function.compose(Java.<Character>List_LinkedHashSet(), Conversions.StringBuilder_List);
 
   /**
    * A function that converts string builders to linked lists.
    */
   public static final F<StringBuilder, LinkedList<Character>> StringBuilder_LinkedList =
-      fj.Function.compose(Java.<Character>List_LinkedList(), Conversions.StringBuilder_List);
+      Function.compose(Java.<Character>List_LinkedList(), Conversions.StringBuilder_List);
 
   /**
    * A function that converts string builders to priority queues.
    */
   public static final F<StringBuilder, PriorityQueue<Character>> StringBuilder_PriorityQueue =
-      fj.Function.compose(Java.<Character>List_PriorityQueue(), Conversions.StringBuilder_List);
+      Function.compose(Java.<Character>List_PriorityQueue(), Conversions.StringBuilder_List);
 
   /**
    * A function that converts string builders to stacks.
    */
   public static final F<StringBuilder, Stack<Character>> StringBuilder_Stack =
-      fj.Function.compose(Java.<Character>List_Stack(), Conversions.StringBuilder_List);
+      Function.compose(Java.<Character>List_Stack(), Conversions.StringBuilder_List);
 
   /**
    * A function that converts string builders to tree sets.
    */
   public static final F<StringBuilder, TreeSet<Character>> StringBuilder_TreeSet =
-      fj.Function.compose(Java.<Character>List_TreeSet(), Conversions.StringBuilder_List);
+      Function.compose(Java.<Character>List_TreeSet(), Conversions.StringBuilder_List);
 
   /**
    * A function that converts string builders to vectors.
    */
   public static final F<StringBuilder, Vector<Character>> StringBuilder_Vector =
-      fj.Function.compose(Java.<Character>List_Vector(), Conversions.StringBuilder_List);
+      Function.compose(Java.<Character>List_Vector(), Conversions.StringBuilder_List);
 
   /**
    * A function that converts string builders to array blocking queues.
@@ -1670,38 +1671,38 @@ public final class Java {
    * @return A function that converts string builders to array blocking queues.
    */
   public static F<StringBuilder, ArrayBlockingQueue<Character>> StringBuilder_ArrayBlockingQueue(final boolean fair) {
-    return fj.Function.compose(Java.<Character>List_ArrayBlockingQueue(fair), Conversions.StringBuilder_List);
+    return Function.compose(Java.<Character>List_ArrayBlockingQueue(fair), Conversions.StringBuilder_List);
   }
 
   /**
    * A function that converts string builders to concurrent linked queues.
    */
   public static final F<StringBuilder, ConcurrentLinkedQueue<Character>> StringBuilder_ConcurrentLinkedQueue =
-      fj.Function.compose(Java.<Character>List_ConcurrentLinkedQueue(), Conversions.StringBuilder_List);
+      Function.compose(Java.<Character>List_ConcurrentLinkedQueue(), Conversions.StringBuilder_List);
 
   /**
    * A function that converts string builders to copy on write array lists.
    */
   public static final F<StringBuilder, CopyOnWriteArrayList<Character>> StringBuilder_CopyOnWriteArrayList =
-      fj.Function.compose(Java.<Character>List_CopyOnWriteArrayList(), Conversions.StringBuilder_List);
+      Function.compose(Java.<Character>List_CopyOnWriteArrayList(), Conversions.StringBuilder_List);
 
   /**
    * A function that converts string builders to copy on write array sets.
    */
   public static final F<StringBuilder, CopyOnWriteArraySet<Character>> StringBuilder_CopyOnWriteArraySet =
-      fj.Function.compose(Java.<Character>List_CopyOnWriteArraySet(), Conversions.StringBuilder_List);
+      Function.compose(Java.<Character>List_CopyOnWriteArraySet(), Conversions.StringBuilder_List);
 
   /**
    * A function that converts string builders to linked blocking queues.
    */
   public static final F<StringBuilder, LinkedBlockingQueue<Character>> StringBuilder_LinkedBlockingQueue =
-      fj.Function.compose(Java.<Character>List_LinkedBlockingQueue(), Conversions.StringBuilder_List);
+      Function.compose(Java.<Character>List_LinkedBlockingQueue(), Conversions.StringBuilder_List);
 
   /**
    * A function that converts string builders to priority blocking queues.
    */
   public static final F<StringBuilder, PriorityBlockingQueue<Character>> StringBuilder_PriorityBlockingQueue =
-      fj.Function.compose(Java.<Character>List_PriorityBlockingQueue(), Conversions.StringBuilder_List);
+      Function.compose(Java.<Character>List_PriorityBlockingQueue(), Conversions.StringBuilder_List);
 
   /**
    * A function that converts string builders to synchronous queues.
@@ -1710,7 +1711,7 @@ public final class Java {
    * @return A function that converts string builders to synchronous queues.
    */
   public static F<StringBuilder, SynchronousQueue<Character>> StringBuilder_SynchronousQueue(final boolean fair) {
-    return fj.Function.compose(Java.<Character>List_SynchronousQueue(fair), Conversions.StringBuilder_List);
+    return Function.compose(Java.<Character>List_SynchronousQueue(fair), Conversions.StringBuilder_List);
   }
 
   // END StringBuffer ->
