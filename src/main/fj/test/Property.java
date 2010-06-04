@@ -108,16 +108,7 @@ public final class Property {
       public F<Result, Result> f(final Result res1) {
         return new F<Result, Result>() {
           public Result f(final Result res2) {
-            if (res1.isException() || res1.isFalsified())
-              return res1;
-            else if (res2.isException() || res2.isFalsified())
-              return res2;
-            else if (res1.isProven() || res1.isUnfalsified())
-              return res1;
-            else if (res2.isProven() || res2.isUnfalsified())
-              return res2;
-            else
-              return noResult();
+            return res1.isException() || res1.isFalsified() ? res1 : res2.isException() || res2.isFalsified() ? res2 : res1.isProven() || res1.isUnfalsified() ? res1 : res2.isProven() || res2.isUnfalsified() ? res2 : noResult();
           }
         };
       }

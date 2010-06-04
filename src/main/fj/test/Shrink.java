@@ -299,6 +299,7 @@ public final class Shrink<A> {
         }
       }
 
+      @SuppressWarnings({"IfMayBeConditional"})
       Stream<List<A>> shrinkOne(final List<A> as) {
         if (as.isEmpty())
           return nil();

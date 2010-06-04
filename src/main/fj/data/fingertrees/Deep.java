@@ -159,7 +159,7 @@ public final class Deep<V, A> extends FingerTree<V, A> {
     });
   }
 
-  @SuppressWarnings({"ReturnOfNull"})
+  @SuppressWarnings({"ReturnOfNull", "IfStatementWithIdenticalBranches"})
   @Override public P2<Integer, A> lookup(final F<V, Integer> o, final int i) {
     final int spr = o.f(prefix.measure());
     final int spm = o.f(middle.measure());
