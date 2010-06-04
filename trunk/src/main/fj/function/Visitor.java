@@ -24,6 +24,10 @@ import static fj.data.List.lookup;
  *          </ul>
  */
 public final class Visitor {
+  private Visitor() {
+    throw new UnsupportedOperationException();
+  }
+
   /**
    * Returns the first value available in the given list of optional values. If none is found return the given default value.
    *

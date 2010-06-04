@@ -129,16 +129,7 @@ public final class Property {
       public F<Result, Result> f(final Result res1) {
         return new F<Result, Result>() {
           public Result f(final Result res2) {
-            if (res1.isException() || res1.isProven() || res1.isUnfalsified())
-              return res1;
-            else if (res2.isException() || res2.isProven() || res2.isUnfalsified())
-              return res2;
-            else if (res1.isFalsified())
-              return res2;
-            else if (res2.isFalsified())
-              return res1;
-            else
-              return noResult();
+            return res1.isException() || res1.isProven() || res1.isUnfalsified() ? res1 : res2.isException() || res2.isProven() || res2.isUnfalsified() ? res2 : res1.isFalsified() ? res2 : res2.isFalsified() ? res1 : noResult();
           }
         };
       }
@@ -459,6 +450,7 @@ public final class Property {
         return new F<Rand, Result>() {
           public Result f(final Rand r) {
             final class Util {
+              @SuppressWarnings({"IfMayBeConditional"})
               Option<P2<A, Result>> first(final Stream<A> as, final int shrinks) {
                 final Stream<Option<P2<A, Result>>> results = as.map(new F<A, Option<P2<A, Result>>>() {
                   public Option<P2<A, Result>> f(final A a) {
