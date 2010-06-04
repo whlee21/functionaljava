@@ -1,10 +1,5 @@
 package fj.data;
 
-import static fj.data.Stream.nil;
-import static fj.data.Stream.repeat;
-import static fj.data.Option.some;
-import static fj.data.Option.none;
-
 import fj.F;
 import fj.F2;
 import fj.F3;
@@ -13,15 +8,23 @@ import fj.P;
 import fj.P1;
 import fj.P2;
 import fj.P3;
-import fj.pre.Ord;
+import fj.function.Integers;
 import fj.pre.Equal;
+import fj.pre.Ord;
 import fj.pre.Show;
 
-import static fj.F2W.$$;
-import static fj.Function.*;
-import fj.function.Integers;
-
 import java.util.Iterator;
+
+import static fj.F2W.$$;
+import static fj.Function.compose;
+import static fj.Function.curry;
+import static fj.Function.flip;
+import static fj.Function.join;
+import static fj.Function.uncurryF2;
+import static fj.data.Option.none;
+import static fj.data.Option.some;
+import static fj.data.Stream.nil;
+import static fj.data.Stream.repeat;
 
 /**
  * Provides a pointed stream, which is a non-empty zipper-like stream structure that tracks an index (focus)
