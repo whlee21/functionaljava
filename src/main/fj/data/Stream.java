@@ -4,6 +4,7 @@ import fj.Effect;
 import fj.F;
 import fj.F2;
 import fj.F3;
+import fj.Function;
 import fj.P;
 import fj.P1;
 import fj.P2;
@@ -139,7 +140,7 @@ public abstract class Stream<A> implements Iterable<A> {
    * @return The final result after the right-fold reduction.
    */
   public <B> B foldRight1(final F<A, F<B, B>> f, final B b) {
-    return foldRight(compose(fj.Function.<P1<B>, B, B>andThen().f(P1.<B>__1()), f), b);
+    return foldRight(compose(Function.<P1<B>, B, B>andThen().f(P1.<B>__1()), f), b);
   }
 
   /**
@@ -376,13 +377,13 @@ public abstract class Stream<A> implements Iterable<A> {
   public static <A, B> F<B, Stream<A>> sequence_(final Stream<F<B, A>> fs) {
     return fs.foldRight(new F2<F<B, A>, P1<F<B, Stream<A>>>, F<B, Stream<A>>>() {
       public F<B, Stream<A>> f(final F<B, A> baf, final P1<F<B, Stream<A>>> p1) {
-        return fj.Function.bind(baf, p1._1(), curry(new F2<A, Stream<A>, Stream<A>>() {
+        return Function.bind(baf, p1._1(), curry(new F2<A, Stream<A>, Stream<A>>() {
           public Stream<A> f(final A a, final Stream<A> stream) {
             return cons(a, p(stream));
           }
         }));
       }
-    }, fj.Function
+    }, Function
         .<B, Stream<A>>constant(Stream.<A>nil()));
   }
 

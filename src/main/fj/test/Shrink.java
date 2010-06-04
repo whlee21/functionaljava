@@ -10,6 +10,8 @@ import static fj.P.p5;
 import static fj.P.p6;
 import static fj.P.p7;
 import static fj.P.p8;
+
+import fj.Function;
 import fj.P1;
 import fj.P2;
 import fj.P3;
@@ -189,7 +191,7 @@ public final class Shrink<A> {
    * A shrink strategy for booleans using false as the bottom of the shrink.
    */
   public static final Shrink<Boolean> shrinkBoolean =
-      shrink(fj.Function.<Boolean, Stream<Boolean>>constant(Stream.single(false)));
+      shrink(Function.<Boolean, Stream<Boolean>>constant(Stream.single(false)));
 
   /**
    * A shrink strategy for integers using 0 as the bottom of the shrink.

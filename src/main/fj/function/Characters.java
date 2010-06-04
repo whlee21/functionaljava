@@ -9,6 +9,9 @@ import static fj.Function.curry;
  * First-class functions on Characters.
  */
 public final class Characters {
+  private Characters() {
+    throw new UnsupportedOperationException();
+  }
   public static final F<Character, String> toString = new F<Character, String>() {
     public String f(final Character c) {return Character.toString(c);}
   };
