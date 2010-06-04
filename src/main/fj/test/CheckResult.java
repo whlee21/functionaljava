@@ -3,7 +3,6 @@ package fj.test;
 import static fj.Bottom.decons;
 import fj.F;
 import fj.data.List;
-import static fj.data.List.asString;
 import fj.data.Option;
 import static fj.data.Option.some;
 import fj.pre.Show;
