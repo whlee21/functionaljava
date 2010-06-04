@@ -219,6 +219,7 @@ public abstract class Set<A> implements Iterable<A> {
     return new Tree<A>(ord, Color.B, l(), head(), r());
   }
 
+  @SuppressWarnings({"SuspiciousNameCombination"})
   private static <A> Tree<A> tr(final Ord<A> o,
                                 final Set<A> a, final A x, final Set<A> b,
                                 final A y,
