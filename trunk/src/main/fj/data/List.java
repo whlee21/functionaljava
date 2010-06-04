@@ -5,6 +5,7 @@ import fj.Effect;
 import fj.F;
 import fj.F2;
 import fj.F3;
+import fj.Function;
 import fj.P;
 import fj.P1;
 import fj.P2;
@@ -200,7 +201,7 @@ public abstract class List<A> implements Iterable<A> {
    * @param c The class type of the array to return.
    * @return A array projection of this list.
    */
-  @SuppressWarnings({"unchecked"})
+  @SuppressWarnings({"unchecked", "UnnecessaryFullyQualifiedName"})
   public Array<A> toArray(final Class<A[]> c) {
     final A[] a = (A[]) java.lang.reflect.Array.newInstance(c.getComponentType(), length());
     List<A> x = this;
@@ -1579,7 +1580,7 @@ public abstract class List<A> implements Iterable<A> {
    *         and returns a list of the results.
    */
   public static <A, B> F<B, List<A>> sequence_(final List<F<B, A>> fs) {
-    return fs.foldRight(fj.Function.<A, List<A>, List<A>, B>lift(List.<A>cons()), fj.Function
+    return fs.foldRight(Function.<A, List<A>, List<A>, B>lift(List.<A>cons()), Function
         .<B, List<A>>constant(List.<A>nil()));
   }
 

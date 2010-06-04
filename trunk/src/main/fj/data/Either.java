@@ -5,6 +5,8 @@ import fj.Effect;
 import fj.F;
 import static fj.Function.identity;
 import static fj.P.p;
+
+import fj.Function;
 import fj.P1;
 import fj.Unit;
 import static fj.Unit.unit;
@@ -263,7 +265,7 @@ public abstract class Either<A, B> {
      * @return An either after binding through this projection.
      */
     public <X> Either<X, B> sequence(final Either<X, B> e) {
-      return bind(fj.Function.<A, Either<X, B>>constant(e));
+      return bind(Function.<A, Either<X, B>>constant(e));
     }
 
     /**
@@ -497,7 +499,7 @@ public abstract class Either<A, B> {
      * @return An either after binding through this projection.
      */
     public <X> Either<A, X> sequence(final Either<A, X> e) {
-      return bind(fj.Function.<B, Either<A, X>>constant(e));
+      return bind(Function.<B, Either<A, X>>constant(e));
     }
 
     /**

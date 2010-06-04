@@ -61,7 +61,7 @@ public final class Empty<V, A> extends FingerTree<V, A> {
    * Pattern matching on the structure of this tree. Matches the empty tree.
    */
   @Override public <B> B match(
-      final F<fj.data.fingertrees.Empty<V, A>, B> empty, final F<Single<V, A>, B> single, final F<Deep<V, A>, B> deep) {
+      final F<Empty<V, A>, B> empty, final F<Single<V, A>, B> single, final F<Deep<V, A>, B> deep) {
     return empty.f(this);
   }
 
