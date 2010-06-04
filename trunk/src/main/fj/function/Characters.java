@@ -2,7 +2,7 @@ package fj.function;
 
 import fj.F;
 import fj.F2;
-import fj.data.Stream;
+
 import static fj.Function.curry;
 
 /**

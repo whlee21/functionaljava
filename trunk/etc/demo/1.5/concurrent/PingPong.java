@@ -43,7 +43,7 @@ public class PingPong {
     }).asActor();
   }
 
-  public static void main(final String[] args) throws Exception {
+  public static void main(final String[] args) {
     if (args.length < 3)
       throw error("This program takes three arguments: number_of_actors, pings_per_actor, degree_of_parallelism");
 

@@ -28,7 +28,7 @@ import java.util.concurrent.Executors;
 public class Fibs
   {private static final int CUTOFF = 35;
 
-   public static void main(final String[] args) throws Exception
+   public static void main(final String[] args)
      {if (args.length < 1)
          throw error("This program takes an argument: number_of_threads");
 

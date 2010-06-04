@@ -426,8 +426,6 @@ public final class Arbitrary<A> {
         public F<Integer, Long> f(final Integer i1) {
           return new F<Integer, Long>() {
             public Long f(final Integer i2) {
-              //No it isn't
-              //noinspection RedundantCast
               return (long) i1 << 32L & i2;
             }
           };
@@ -758,7 +756,6 @@ public final class Arbitrary<A> {
   public static Arbitrary<Throwable> arbThrowable(final Arbitrary<String> as) {
     return arbitrary(as.gen.map(new F<String, Throwable>() {
       public Throwable f(final String msg) {
-        //noinspection ThrowableInstanceNeverThrown
         return new Throwable(msg);
       }
     }));
@@ -1038,10 +1035,8 @@ public final class Arbitrary<A> {
    * @param aa An arbitrary implementation for the type over which the stack is defined.
    * @return An arbitrary implementation for stacks.
    */
-  @SuppressWarnings({"UseOfObsoleteCollectionType"})
   public static <A> Arbitrary<Stack<A>> arbStack(final Arbitrary<A> aa) {
     return arbitrary(arbArray(aa).gen.map(new F<Array<A>, Stack<A>>() {
-      @SuppressWarnings({"UseOfObsoleteCollectionType"})
       public Stack<A> f(final Array<A> a) {
         final Stack<A> s = new Stack<A>();
         s.addAll(a.toCollection());

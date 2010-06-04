@@ -4,7 +4,7 @@ import fj.Function;
 import static fj.Bottom.error;
 import static fj.pre.Monoid.intAdditionMonoid;
 import static fj.data.fingertrees.FingerTree.measured;
-import static fj.pre.Ord.intOrd;
+
 import fj.data.fingertrees.FingerTree;
 import fj.data.fingertrees.MakeTree;
 import fj.data.fingertrees.Measured;

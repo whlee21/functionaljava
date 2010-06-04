@@ -3,7 +3,6 @@ package fj.data.fingertrees;
 import fj.F;
 import fj.Function;
 import fj.P2;
-import fj.pre.Ord;
 import fj.data.vector.V2;
 import fj.data.vector.V3;
 import fj.data.vector.V4;

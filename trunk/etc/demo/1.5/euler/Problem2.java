@@ -2,7 +2,6 @@ package euler;
 
 import fj.F2;
 import static fj.Function.curry;
-import fj.P1;
 import static fj.FW.$;
 import fj.data.Stream;
 import static fj.data.Stream.cons;

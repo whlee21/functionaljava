@@ -3,7 +3,6 @@ package fj.data.fingertrees;
 import fj.F;
 import fj.P2;
 import static fj.P.p;
-import fj.pre.Ord;
 
 /**
  * A tree with a single element.
