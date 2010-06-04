@@ -19,7 +19,6 @@ import static fj.P.p2;
 import static fj.Unit.unit;
 import static fj.data.Array.array;
 import static fj.data.Array.mkArray;
-import static fj.data.List.*;
 import static fj.data.List.Buffer.*;
 import static fj.data.Option.none;
 import static fj.data.Option.some;
@@ -1017,6 +1016,7 @@ public abstract class List<A> implements Iterable<A> {
    * @param o An ordering for the elements.
    * @return A list without duplicates.
    */
+  @SuppressWarnings({"unchecked"})
   public List<A> nub(final Ord<A> o) {
     return sort(o).group(o.equal()).map(List.<A>head_());
   }
