@@ -1,5 +1,8 @@
 package fj.test.reflect;
 
+import fj.P1;
+import fj.test.Property;
+
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Inherited;
@@ -8,7 +11,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Specifies the check parameters on a {@link fj.test.Property} property with typical defaults.
+ * Specifies the check parameters on a {@link Property} property with typical defaults.
  *
  * @version %build.number%<br>
  *          <ul>
@@ -31,10 +34,10 @@ public @interface CheckParams {
 
   /**
    * The maximum number of tests discarded because they did not satisfy pre-conditions
-   * (i.e. {@link fj.test.Property#implies(boolean, fj.P1)}).
+   * (i.e. {@link Property#implies(boolean, P1)}).
    *
    * @return The maximum number of tests discarded because they did not satisfy pre-conditions
-   * (i.e. {@link fj.test.Property#implies(boolean, fj.P1)}).
+   * (i.e. {@link Property#implies(boolean, P1)}).
    */
   int maxDiscarded() default 500;
 

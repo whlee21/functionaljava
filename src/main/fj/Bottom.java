@@ -82,7 +82,7 @@ public final class Bottom {
    * @param c The type being deconstructed.
    * @return A deconstruction failure that was non-exhaustive.
    */
-  public static <A> Error decons(final java.lang.Class<A> c) {
+  public static <A> Error decons(final Class<A> c) {
     return error("Deconstruction failure on type " + c);
   }
 
