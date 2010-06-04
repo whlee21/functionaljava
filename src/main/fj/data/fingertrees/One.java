@@ -14,21 +14,21 @@ public final class One<V, A> extends Digit<V, A> {
   }
 
   /**
-   * @see fj.data.fingertrees.Digit#foldRight(fj.F, Object)
+   * @see Digit#foldRight(F, Object)
    */
   public <B> B foldRight(final F<A, F<B, B>> aff, final B z) {
     return aff.f(a).f(z);
   }
 
   /**
-   * @see fj.data.fingertrees.Digit#foldLeft(fj.F, Object)
+   * @see Digit#foldLeft(F, Object)
    */
   public <B> B foldLeft(final F<B, F<A, B>> bff, final B z) {
     return bff.f(z).f(a);
   }
 
   /**
-   * @see fj.data.fingertrees.Digit#match(fj.F, fj.F, fj.F, fj.F)
+   * @see Digit#match(F, F, F, F)
    */
   @Override public <B> B match(
       final F<One<V, A>, B> one, final F<Two<V, A>, B> two, final F<Three<V, A>, B> three,

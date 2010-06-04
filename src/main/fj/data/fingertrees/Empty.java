@@ -28,16 +28,10 @@ public final class Empty<V, A> extends FingerTree<V, A> {
     throw error("Lookup of empty tree.");
   }
 
-  /**
-   * @see fj.data.fingertrees.FingerTree#foldRight(fj.F, Object)
-   */
   @Override public <B> B foldRight(final F<A, F<B, B>> aff, final B z) {
     return z;
   }
 
-  /**
-   * @see fj.data.fingertrees.FingerTree#reduceRight(fj.F)
-   */
   public A reduceRight(final F<A, F<A, A>> aff) {
     throw error("Reduction of empty tree");
   }
