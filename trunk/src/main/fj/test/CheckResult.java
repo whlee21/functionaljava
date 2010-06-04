@@ -242,6 +242,7 @@ public final class CheckResult {
         return args.length() == 1 ? "argument: " + sa.showS(args.head()) : "arguments: " + listShow(sa).showS(args);
       }
 
+      @SuppressWarnings({"ThrowableResultOfMethodCallIgnored"})
       public String f(final CheckResult r) {
         if (r.isProven())
           return "OK, property proven with " + arguments(r);

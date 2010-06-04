@@ -31,6 +31,7 @@ public final class Node3<V, A> extends Node<V, A> {
     return new Three<V, A>(measured(), as);
   }
 
+  @SuppressWarnings({"ReturnOfNull"})
   public P2<Integer, A> lookup(final F<V, Integer> o, final int i) {
     return null;  //TODO
   }

@@ -27,6 +27,7 @@ public final class Node2<V, A> extends Node<V, A> {
     return new Two<V, A>(measured(), as);
   }
 
+  @SuppressWarnings({"ReturnOfNull"})
   @Override public P2<Integer, A> lookup(final F<V, Integer> o, final int i) {
     return null; // TODO
   }
