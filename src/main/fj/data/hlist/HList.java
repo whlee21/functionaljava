@@ -271,8 +271,8 @@ public abstract class HList<A extends HList<A>> {
    * The nonempty list
    */
   public static final class HCons<E, L extends HList<L>> extends HList<HCons<E, L>> {
-    private E e;
-    private L l;
+    private final E e;
+    private final L l;
 
     HCons(final E e, final L l) {
       this.e = e;

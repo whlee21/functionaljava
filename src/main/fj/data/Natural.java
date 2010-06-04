@@ -15,7 +15,7 @@ import java.math.BigInteger;
  * Represents a natural number (zero, one, two, etc.)
  */
 public class Natural extends Number {
-  private BigInteger value;
+  private final BigInteger value;
   private static final long serialVersionUID = -588673650944359682L;
 
   private Natural(final BigInteger i) {
