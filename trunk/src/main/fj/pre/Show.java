@@ -334,7 +334,7 @@ public final class Show<A> {
   public static <A> Show<Tree<A>> treeShow(final Show<A> sa) {
     return new Show<Tree<A>>(new F<Tree<A>, Stream<Character>>() {
       public Stream<Character> f(final Tree<A> a) {
-        Stream<Character> b = sa.f.f(a.root())
+        final Stream<Character> b = sa.f.f(a.root())
             .append(p1Show(streamShow(treeShow(sa))).f.f(a.subForest()))
             .snoc(')');
         return cons('(', p(b));

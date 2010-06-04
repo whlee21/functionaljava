@@ -240,7 +240,7 @@ public final class Deep<V, A> extends FingerTree<V, A> {
           }
         }, new F<Two<V, A>, FingerTree<V, Node<V, A>>>() {
           public FingerTree<V, Node<V, A>> f(final Two<V, A> two) {
-            V2<A> v2 = two.values();
+            final V2<A> v2 = two.values();
             return append2(m, m1, mk.node3(v1), mk.node2(v2), m2);
           }
         }, new F<Three<V, A>, FingerTree<V, Node<V, A>>>() {
@@ -305,7 +305,7 @@ public final class Deep<V, A> extends FingerTree<V, A> {
           }
         }, new F<Deep<V, Node<V, A>>, FingerTree<V, Node<V, A>>>() {
           public FingerTree<V, Node<V, A>> f(final Deep<V, Node<V, A>> deep2) {
-            Measured<V, Node<V, A>> nm = m.nodeMeasured();
+            final Measured<V, Node<V, A>> nm = m.nodeMeasured();
             return new Deep<V, Node<V, A>>(nm, m.sum(m.sum(deep1.v, nm.measure(a)), deep2.v), deep1.prefix,
                                            addDigits1(nm, deep1.middle, deep1.suffix, a, deep2.prefix, deep2.middle),
                                            deep2.suffix);
@@ -551,7 +551,7 @@ public final class Deep<V, A> extends FingerTree<V, A> {
           }
         }, new F<Four<V, Node<V, A>>, FingerTree<V, Node<V, Node<V, A>>>>() {
           public FingerTree<V, Node<V, Node<V, A>>> f(final Four<V, Node<V, A>> four2) {
-            V4<Node<V, A>> v2 = four2.values();
+            final V4<Node<V, A>> v2 = four2.values();
             return append4(m, m1, mk.node3(v1._1(), v1._2(), v1._3()), mk.node3(v1._4(), n1, n2),
                            mk.node2(v2._1(), v2._2()), mk.node2(v2._3(), v2._4()), m2);
           }
