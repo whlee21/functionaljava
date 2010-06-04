@@ -131,7 +131,7 @@ public enum Digit {
    * @return The right-most digit in the given long value as a digit.
    */
   public static Digit fromLong(final long i) {
-    long x = Math.abs(i) % 10L;
+    final long x = Math.abs(i) % 10L;
     return x == 0L ? _0 :
         x == 1L ? _1 :
             x == 2L ? _2 :
