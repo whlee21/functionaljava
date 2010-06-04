@@ -1,6 +1,5 @@
 package fj.data;
 
-import static fj.Bottom.error;
 import fj.Effect;
 import fj.F;
 import fj.F2;
@@ -9,29 +8,36 @@ import fj.P;
 import fj.P1;
 import fj.P2;
 import fj.Unit;
-import static fj.Function.*;
-import static fj.P.p;
-import static fj.P.p2;
-import static fj.Unit.unit;
 import fj.control.parallel.Promise;
-import static fj.control.parallel.Promise.promise;
 import fj.control.parallel.Strategy;
-import static fj.data.Option.some;
-import static fj.data.Option.none;
-import static fj.data.Array.mkArray;
-import static fj.data.Array.array;
-import fj.function.Booleans;
-import static fj.function.Booleans.not;
+import fj.pre.Equal;
 import fj.pre.Monoid;
 import fj.pre.Ord;
 import fj.pre.Ordering;
-import fj.pre.Equal;
-import static fj.pre.Ordering.*;
 
 import java.util.AbstractCollection;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
+
+import static fj.Bottom.error;
+import static fj.Function.compose;
+import static fj.Function.constant;
+import static fj.Function.curry;
+import static fj.Function.flip;
+import static fj.Function.identity;
+import static fj.P.p;
+import static fj.P.p2;
+import static fj.Unit.unit;
+import static fj.control.parallel.Promise.promise;
+import static fj.data.Array.array;
+import static fj.data.Array.mkArray;
+import static fj.data.Option.none;
+import static fj.data.Option.some;
+import static fj.function.Booleans.not;
+import static fj.pre.Ordering.EQ;
+import static fj.pre.Ordering.GT;
+import static fj.pre.Ordering.LT;
 
 /**
  * A lazy (not yet evaluated), immutable, singly linked list.
