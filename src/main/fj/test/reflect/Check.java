@@ -313,6 +313,7 @@ public final class Check {
 
     return ms.filter(new F<PropertyMember, Boolean>() {
       public Boolean f(final PropertyMember m) {
+        //noinspection ObjectEquality
         return m.isProperty() &&
             m.type() == Property.class &&
             !m.element().isAnnotationPresent(NoCheck.class) &&

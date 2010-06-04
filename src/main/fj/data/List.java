@@ -1740,6 +1740,7 @@ public abstract class List<A> implements Iterable<A> {
       return b;
     }
 
+    @SuppressWarnings({"ObjectEquality"})
     private void copy() {
       List<A> s = start;
       final Cons<A> t = tail;

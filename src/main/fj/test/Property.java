@@ -174,6 +174,7 @@ public final class Property {
    * @param maxSize       The maximum size to use for checking.
    * @return A result after checking this property.
    */
+  @SuppressWarnings({"ThrowableResultOfMethodCallIgnored"})
   public CheckResult check(final Rand r,
                            final int minSuccessful,
                            final int maxDiscarded,
