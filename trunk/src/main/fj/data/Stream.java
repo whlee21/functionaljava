@@ -394,7 +394,7 @@ public abstract class Stream<A> implements Iterable<A> {
    *         in this list.
    */
   public <B, C> F<B, Stream<C>> mapM(final F<A, F<B, C>> f) {
-    return Stream.sequence_(map(f));
+    return sequence_(map(f));
   }
 
   /**
@@ -649,7 +649,7 @@ public abstract class Stream<A> implements Iterable<A> {
       final A x = head();
       final P1<Stream<A>> xs = tail();
       final Promise<Stream<A>> left = Promise.join(s, xs.map(flt(o, s, x, id)));
-      final Promise<Stream<A>> right = xs.map(flt(o, s, x, Booleans.not))._1();
+      final Promise<Stream<A>> right = xs.map(flt(o, s, x, not))._1();
       final Monoid<Stream<A>> m = Monoid.streamMonoid();
       return right.fmap(m.sum(single(x))).apply(left.fmap(m.sum()));
     }
@@ -1176,7 +1176,7 @@ public abstract class Stream<A> implements Iterable<A> {
    */
   public Stream<A> replace(final F<A, Boolean> p, final A a) {
     if (isEmpty())
-      return Stream.nil();
+      return nil();
     else {
       final P2<Stream<A>, Stream<A>> s = span(p);
       return s._1().append(cons(a, new P1<Stream<A>>() {
@@ -1196,7 +1196,7 @@ public abstract class Stream<A> implements Iterable<A> {
    *         the given predicate and the second element is the remainder of the stream.
    */
   public P2<Stream<A>, Stream<A>> split(final F<A, Boolean> p) {
-    return span(compose(Booleans.not, p));
+    return span(compose(not, p));
   }
 
   /**
@@ -1688,7 +1688,7 @@ public abstract class Stream<A> implements Iterable<A> {
             }
           });
         } else
-          return Stream.nil();
+          return nil();
       }
     }
 
