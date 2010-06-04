@@ -370,7 +370,6 @@ public final class Shrink<A> {
   public static Shrink<Throwable> shrinkThrowable(final Shrink<String> ss) {
     return ss.map(new F<String, Throwable>() {
       public Throwable f(final String s) {
-        //noinspection ThrowableInstanceNeverThrown
         return new Throwable(s);
       }
     }, new F<Throwable, String>() {
