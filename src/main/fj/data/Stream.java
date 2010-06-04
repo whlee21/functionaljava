@@ -1097,7 +1097,6 @@ public abstract class Stream<A> implements Iterable<A> {
 
     Stream<A> xs = this;
 
-    //noinspection ForLoopWithMissingComponent,StatementWithEmptyBody
     for (; xs.isNotEmpty() && c < i; xs = xs.tail()._1())
       c++;
 

@@ -729,7 +729,6 @@ public abstract class List<A> implements Iterable<A> {
 
     List<A> xs = this;
 
-    //noinspection ForLoopWithMissingComponent
     for (; xs.isNotEmpty() && c < i; xs = xs.tail())
       c++;
 

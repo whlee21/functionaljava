@@ -106,8 +106,6 @@ public final class Primitive {
    */
   public static final F<Byte, Double> Byte_Double = new F<Byte, Double>() {
     public Double f(final Byte b) {
-      //No it isn't
-      //noinspection RedundantCast
       return (double) b;
     }
   };
@@ -117,8 +115,6 @@ public final class Primitive {
    */
   public static final F<Byte, Float> Byte_Float = new F<Byte, Float>() {
     public Float f(final Byte b) {
-      //No it isn't
-      //noinspection RedundantCast
       return (float) b;
     }
   };
@@ -128,8 +124,6 @@ public final class Primitive {
    */
   public static final F<Byte, Integer> Byte_Integer = new F<Byte, Integer>() {
     public Integer f(final Byte b) {
-      //No it isn't
-      //noinspection RedundantCast
       return (int) b;
     }
   };
@@ -139,8 +133,6 @@ public final class Primitive {
    */
   public static final F<Byte, Long> Byte_Long = new F<Byte, Long>() {
     public Long f(final Byte b) {
-      //No it isn't
-      //noinspection RedundantCast
       return (long) b;
     }
   };
@@ -150,8 +142,6 @@ public final class Primitive {
    */
   public static final F<Byte, Short> Byte_Short = new F<Byte, Short>() {
     public Short f(final Byte b) {
-      //No it isn't
-      //noinspection RedundantCast
       return (short) b;
     }
   };
@@ -393,8 +383,6 @@ public final class Primitive {
    */
   public static final F<Integer, Double> Integer_Double = new F<Integer, Double>() {
     public Double f(final Integer i) {
-      //No it isn't
-      //noinspection RedundantCast
       return (double) i;
     }
   };
@@ -404,8 +392,6 @@ public final class Primitive {
    */
   public static final F<Integer, Float> Integer_Float = new F<Integer, Float>() {
     public Float f(final Integer i) {
-      //No it isn't
-      //noinspection RedundantCast
       return (float) i;
     }
   };
@@ -415,8 +401,6 @@ public final class Primitive {
    */
   public static final F<Integer, Long> Integer_Long = new F<Integer, Long>() {
     public Long f(final Integer i) {
-      //No it isn't
-      //noinspection RedundantCast
       return (long) i;
     }
   };
@@ -426,8 +410,6 @@ public final class Primitive {
    */
   public static final F<Integer, Short> Integer_Short = new F<Integer, Short>() {
     public Short f(final Integer i) {
-      //No it isn't
-      //noinspection RedundantCast
       return (short) (int) i;
     }
   };
