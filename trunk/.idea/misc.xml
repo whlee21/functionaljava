@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="DependencyValidationManager">
+    <scope name="Main Source" pattern="file[functionaljava]:src/main//*||file[functionaljava]:src/package-info//*" />
+    <scope name="Demo Source" pattern="file[functionaljava]:etc/demo/1.5//*" />
     <option name="SKIP_IMPORT_STATEMENTS" value="false" />
   </component>
   <component name="EntryPointsManager">
