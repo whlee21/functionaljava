@@ -908,9 +908,9 @@ public final class Array<A> implements Iterable<A> {
     }
   }
 
-  @SuppressWarnings({"SuspiciousSystemArraycopy", "unchecked", "ObjectEquality"})
+  @SuppressWarnings({"SuspiciousSystemArraycopy", "unchecked", "ObjectEquality", "RedundantCast"})
   public static <T, U> T[] copyOf(final U[] a, final int len, final Class<? extends T[]> newType) {
-    final T[] copy = newType == Object[].class
+    final T[] copy = (Object)newType == Object[].class
         ? (T[]) new Object[len]
         : (T[]) java.lang.reflect.Array.newInstance(newType.getComponentType(), len);
     System.arraycopy(a, 0, copy, 0,
