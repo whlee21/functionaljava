@@ -1,6 +1,5 @@
 package fj.pre;
 
-import fj.Function;
 import fj.F;
 import fj.F2;
 import fj.P;
@@ -8,9 +7,6 @@ import fj.P1;
 import fj.P2;
 import fj.P3;
 import fj.Unit;
-import static fj.FW.$;
-import static fj.Function.compose;
-import static fj.Function.curry;
 import fj.data.Array;
 import fj.data.Either;
 import fj.data.List;
@@ -20,10 +16,15 @@ import fj.data.Option;
 import fj.data.Set;
 import fj.data.Stream;
 import fj.data.Validation;
-import static fj.pre.Ordering.*;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
+
+import static fj.FW.$;
+import static fj.Function.curry;
+import static fj.pre.Ordering.EQ;
+import static fj.pre.Ordering.GT;
+import static fj.pre.Ordering.LT;
 
 /**
  * Tests for ordering between two objects.
@@ -175,7 +176,7 @@ public final class Ord<A> {
   /**
    * A function that returns the greater of its two arguments.
    */
-  public F<A, F<A, A>> max = curry(new F2<A, A, A>() {
+  public final F<A, F<A, A>> max = curry(new F2<A, A, A>() {
     public A f(final A a, final A a1) {
       return max(a, a1);
     }
@@ -184,7 +185,7 @@ public final class Ord<A> {
   /**
    * A function that returns the lesser of its two arguments.
    */
-  public F<A, F<A, A>> min = curry(new F2<A, A, A>() {
+  public final F<A, F<A, A>> min = curry(new F2<A, A, A>() {
     public A f(final A a, final A a1) {
       return min(a, a1);
     }
