@@ -572,7 +572,7 @@ public class Parser<I, A, E> {
     public static <E> Parser<Stream<Character>, Stream<Character>, E> characters(final P1<E> missing, final int n) {
       return n <= 0 ?
           Parser.<Stream<Character>, Stream<Character>, E>value(Stream.<Character>nil()) :
-          CharsParser.character(missing).bind(CharsParser.characters(missing, n - 1), Stream.<Character>cons_());
+          character(missing).bind(characters(missing, n - 1), Stream.<Character>cons_());
     }
 
     /**

@@ -562,7 +562,7 @@ public final class Array<A> implements Iterable<A> {
    */
   public static Array<Integer> range(final int from, final int to) {
     if (from >= to)
-      return Array.empty();
+      return empty();
     else {
       final Array<Integer> a = new Array<Integer>(new Integer[to - from]);
 
