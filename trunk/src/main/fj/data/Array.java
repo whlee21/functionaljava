@@ -36,7 +36,6 @@ import java.util.NoSuchElementException;
 public final class Array<A> implements Iterable<A> {
   private final Object[] a;
 
-  @SuppressWarnings({"AssignmentToCollectionOrArrayFieldFromParameter"})
   private Array(final Object[] a) {
     this.a = a;
   }
@@ -909,9 +908,9 @@ public final class Array<A> implements Iterable<A> {
     }
   }
 
-  @SuppressWarnings({"SuspiciousSystemArraycopy", "unchecked", "UnnecessaryParentheses"})
+  @SuppressWarnings({"SuspiciousSystemArraycopy", "unchecked", "ObjectEquality"})
   public static <T, U> T[] copyOf(final U[] a, final int len, final Class<? extends T[]> newType) {
-    final T[] copy = (newType == Object[].class)
+    final T[] copy = newType == Object[].class
         ? (T[]) new Object[len]
         : (T[]) java.lang.reflect.Array.newInstance(newType.getComponentType(), len);
     System.arraycopy(a, 0, copy, 0,
