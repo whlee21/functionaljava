@@ -1,8 +1,5 @@
 package fj;
 
-import static fj.F2W.$$;
-import static fj.Function.compose;
-import static fj.P.p;
 import fj.control.parallel.Actor;
 import fj.control.parallel.Promise;
 import fj.control.parallel.Strategy;
@@ -18,13 +15,6 @@ import fj.data.Tree;
 import fj.data.TreeZipper;
 import fj.data.Validation;
 import fj.data.Zipper;
-import static fj.data.Stream.iterableStream;
-import static fj.data.Zipper.fromStream;
-import fj.pre.Equal;
-import fj.pre.Hash;
-import fj.pre.Monoid;
-import fj.pre.Ord;
-import fj.pre.Show;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -37,6 +27,12 @@ import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.PriorityBlockingQueue;
 import java.util.concurrent.SynchronousQueue;
+
+import static fj.F2W.$$;
+import static fj.Function.compose;
+import static fj.P.p;
+import static fj.data.Stream.iterableStream;
+import static fj.data.Zipper.fromStream;
 
 /**
  * A wrapper for functions of arity 1, that decorates them with higher-order functions.
@@ -664,9 +660,9 @@ public final class FW<A, B> implements F<A, B> {
    *
    * @return This function promoted to map over a Show as a contravariant functor.
    */
-  public FW<Show<B>, Show<A>> comapShow() {
-    return $(new F<Show<B>, Show<A>>() {
-      public Show<A> f(final Show<B> s) {
+  public FW<Show2<B>, Show2<A>> comapShow() {
+    return $(new F<Show2<B>, Show2<A>>() {
+      public Show2<A> f(final Show2<B> s) {
         return s.comap(f);
       }
     });

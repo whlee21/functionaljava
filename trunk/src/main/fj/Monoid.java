@@ -1,10 +1,5 @@
-package fj.pre;
+package fj;
 
-import fj.F;
-import fj.F2;
-import fj.Function;
-import fj.P1;
-import static fj.pre.Semigroup.*;
 import static fj.Function.curry;
 import static fj.Function.compose;
 import static fj.Function.flip;
@@ -226,87 +221,87 @@ public final class Monoid<A> {
   /**
    * A monoid that adds integers.
    */
-  public static final Monoid<Integer> intAdditionMonoid = monoid(intAdditionSemigroup, 0);
+  public static final Monoid<Integer> intAdditionMonoid = monoid(Semigroup.intAdditionSemigroup, 0);
 
   /**
    * A monoid that multiplies integers.
    */
-  public static final Monoid<Integer> intMultiplicationMonoid = monoid(intMultiplicationSemigroup, 1);
+  public static final Monoid<Integer> intMultiplicationMonoid = monoid(Semigroup.intMultiplicationSemigroup, 1);
 
   /**
    * A monoid that adds big integers.
    */
-  public static final Monoid<BigInteger> bigintAdditionMonoid = monoid(bigintAdditionSemigroup, BigInteger.ZERO);
+  public static final Monoid<BigInteger> bigintAdditionMonoid = monoid(Semigroup.bigintAdditionSemigroup, BigInteger.ZERO);
 
   /**
    * A monoid that multiplies big integers.
    */
   public static final Monoid<BigInteger> bigintMultiplicationMonoid =
-      monoid(bigintMultiplicationSemigroup, BigInteger.ONE);
+      monoid(Semigroup.bigintMultiplicationSemigroup, BigInteger.ONE);
 
   /**
    * A monoid that adds big decimals.
    */
   public static final Monoid<BigDecimal> bigdecimalAdditionMonoid =
-      monoid(bigdecimalAdditionSemigroup, BigDecimal.ZERO);
+      monoid(Semigroup.bigdecimalAdditionSemigroup, BigDecimal.ZERO);
 
   /**
    * A monoid that multiplies big decimals.
    */
   public static final Monoid<BigDecimal> bigdecimalMultiplicationMonoid =
-      monoid(bigdecimalMultiplicationSemigroup, BigDecimal.ONE);
+      monoid(Semigroup.bigdecimalMultiplicationSemigroup, BigDecimal.ONE);
 
   /**
    * A monoid that adds natural numbers.
    */
   public static final Monoid<Natural> naturalAdditionMonoid =
-      monoid(naturalAdditionSemigroup, Natural.ZERO);
+      monoid(Semigroup.naturalAdditionSemigroup, Natural.ZERO);
 
   /**
    * A monoid that multiplies natural numbers.
    */
   public static final Monoid<Natural> naturalMultiplicationMonoid =
-      monoid(naturalMultiplicationSemigroup, Natural.ONE);
+      monoid(Semigroup.naturalMultiplicationSemigroup, Natural.ONE);
 
   /**
    * A monoid that adds longs.
    */
-  public static final Monoid<Long> longAdditionMonoid = monoid(longAdditionSemigroup, 0L);
+  public static final Monoid<Long> longAdditionMonoid = monoid(Semigroup.longAdditionSemigroup, 0L);
 
   /**
    * A monoid that multiplies longs.
    */
-  public static final Monoid<Long> longMultiplicationMonoid = monoid(longMultiplicationSemigroup, 1L);
+  public static final Monoid<Long> longMultiplicationMonoid = monoid(Semigroup.longMultiplicationSemigroup, 1L);
 
   /**
    * A monoid that ORs booleans.
    */
-  public static final Monoid<Boolean> disjunctionMonoid = monoid(disjunctionSemigroup, false);
+  public static final Monoid<Boolean> disjunctionMonoid = monoid(Semigroup.disjunctionSemigroup, false);
 
   /**
    * A monoid that XORs booleans.
    */
-  public static final Monoid<Boolean> exclusiveDisjunctionMonoid = monoid(exclusiveDisjunctionSemiGroup, false);
+  public static final Monoid<Boolean> exclusiveDisjunctionMonoid = monoid(Semigroup.exclusiveDisjunctionSemiGroup, false);
 
   /**
    * A monoid that ANDs booleans.
    */
-  public static final Monoid<Boolean> conjunctionMonoid = monoid(conjunctionSemigroup, true);
+  public static final Monoid<Boolean> conjunctionMonoid = monoid(Semigroup.conjunctionSemigroup, true);
 
   /**
    * A monoid that appends strings.
    */
-  public static final Monoid<String> stringMonoid = monoid(stringSemigroup, "");
+  public static final Monoid<String> stringMonoid = monoid(Semigroup.stringSemigroup, "");
 
   /**
    * A monoid that appends string buffers.
    */
-  public static final Monoid<StringBuffer> stringBufferMonoid = monoid(stringBufferSemigroup, new StringBuffer());
+  public static final Monoid<StringBuffer> stringBufferMonoid = monoid(Semigroup.stringBufferSemigroup, new StringBuffer());
 
   /**
    * A monoid that appends string builders.
    */
-  public static final Monoid<StringBuilder> stringBuilderMonoid = monoid(stringBuilderSemigroup, new StringBuilder());
+  public static final Monoid<StringBuilder> stringBuilderMonoid = monoid(Semigroup.stringBuilderSemigroup, new StringBuilder());
 
   /**
    * A monoid for functions.

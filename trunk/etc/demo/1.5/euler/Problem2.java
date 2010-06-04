@@ -7,7 +7,7 @@ import fj.data.Stream;
 import static fj.data.Stream.cons;
 import static fj.function.Integers.even;
 import static fj.function.Integers.sum;
-import static fj.pre.Ord.intOrd;
+import static fj.Ord.intOrd;
 
 import static java.lang.System.out;
 

@@ -1,12 +1,5 @@
-package fj.pre;
+package fj;
 
-import fj.F;
-import fj.F2;
-import fj.P;
-import fj.P1;
-import fj.P2;
-import fj.P3;
-import fj.Unit;
 import fj.data.Array;
 import fj.data.Either;
 import fj.data.List;
@@ -22,9 +15,6 @@ import java.math.BigInteger;
 
 import static fj.FW.$;
 import static fj.Function.curry;
-import static fj.pre.Ordering.EQ;
-import static fj.pre.Ordering.GT;
-import static fj.pre.Ordering.LT;
 
 /**
  * Tests for ordering between two objects.
@@ -70,7 +60,7 @@ public final class Ord<A> {
    * @return <code>true</code> if the given arguments are equal, <code>false</code> otherwise.
    */
   public boolean eq(final A a1, final A a2) {
-    return compare(a1, a2) == EQ;
+    return compare(a1, a2) == Ordering.EQ;
   }
 
   /**
@@ -106,7 +96,7 @@ public final class Ord<A> {
    *         <code>false</code> otherwise.
    */
   public boolean isLessThan(final A a1, final A a2) {
-    return compare(a1, a2) == LT;
+    return compare(a1, a2) == Ordering.LT;
   }
 
   /**
@@ -119,7 +109,7 @@ public final class Ord<A> {
    *         argument, <code>false</code> otherwise.
    */
   public boolean isGreaterThan(final A a1, final A a2) {
-    return compare(a1, a2) == GT;
+    return compare(a1, a2) == Ordering.GT;
   }
 
   /**
@@ -131,7 +121,7 @@ public final class Ord<A> {
   public F<A, Boolean> isLessThan(final A a) {
     return new F<A, Boolean>() {
       public Boolean f(final A a2) {
-        return compare(a2, a) == LT;
+        return compare(a2, a) == Ordering.LT;
       }
     };
   }
@@ -145,7 +135,7 @@ public final class Ord<A> {
   public F<A, Boolean> isGreaterThan(final A a) {
     return new F<A, Boolean>() {
       public Boolean f(final A a2) {
-        return compare(a2, a) == GT;
+        return compare(a2, a) == Ordering.GT;
       }
     };
   }
@@ -210,7 +200,7 @@ public final class Ord<A> {
           return new F<Boolean, Ordering>() {
             public Ordering f(final Boolean a2) {
               final int x = a1.compareTo(a2);
-              return x < 0 ? LT : x == 0 ? EQ : GT;
+              return x < 0 ? Ordering.LT : x == 0 ? Ordering.EQ : Ordering.GT;
             }
           };
         }
@@ -225,7 +215,7 @@ public final class Ord<A> {
           return new F<Byte, Ordering>() {
             public Ordering f(final Byte a2) {
               final int x = a1.compareTo(a2);
-              return x < 0 ? LT : x == 0 ? EQ : GT;
+              return x < 0 ? Ordering.LT : x == 0 ? Ordering.EQ : Ordering.GT;
             }
           };
         }
@@ -240,7 +230,7 @@ public final class Ord<A> {
           return new F<Character, Ordering>() {
             public Ordering f(final Character a2) {
               final int x = a1.compareTo(a2);
-              return x < 0 ? LT : x == 0 ? EQ : GT;
+              return x < 0 ? Ordering.LT : x == 0 ? Ordering.EQ : Ordering.GT;
             }
           };
         }
@@ -255,7 +245,7 @@ public final class Ord<A> {
           return new F<Double, Ordering>() {
             public Ordering f(final Double a2) {
               final int x = a1.compareTo(a2);
-              return x < 0 ? LT : x == 0 ? EQ : GT;
+              return x < 0 ? Ordering.LT : x == 0 ? Ordering.EQ : Ordering.GT;
             }
           };
         }
@@ -270,7 +260,7 @@ public final class Ord<A> {
           return new F<Float, Ordering>() {
             public Ordering f(final Float a2) {
               final int x = a1.compareTo(a2);
-              return x < 0 ? LT : x == 0 ? EQ : GT;
+              return x < 0 ? Ordering.LT : x == 0 ? Ordering.EQ : Ordering.GT;
             }
           };
         }
@@ -285,7 +275,7 @@ public final class Ord<A> {
           return new F<Integer, Ordering>() {
             public Ordering f(final Integer a2) {
               final int x = a1.compareTo(a2);
-              return x < 0 ? LT : x == 0 ? EQ : GT;
+              return x < 0 ? Ordering.LT : x == 0 ? Ordering.EQ : Ordering.GT;
             }
           };
         }
@@ -300,7 +290,7 @@ public final class Ord<A> {
           return new F<BigInteger, Ordering>() {
             public Ordering f(final BigInteger a2) {
               final int x = a1.compareTo(a2);
-              return x < 0 ? LT : x == 0 ? EQ : GT;
+              return x < 0 ? Ordering.LT : x == 0 ? Ordering.EQ : Ordering.GT;
             }
           };
         }
@@ -315,7 +305,7 @@ public final class Ord<A> {
           return new F<BigDecimal, Ordering>() {
             public Ordering f(final BigDecimal a2) {
               final int x = a1.compareTo(a2);
-              return x < 0 ? LT : x == 0 ? EQ : GT;
+              return x < 0 ? Ordering.LT : x == 0 ? Ordering.EQ : Ordering.GT;
             }
           };
         }
@@ -330,7 +320,7 @@ public final class Ord<A> {
           return new F<Long, Ordering>() {
             public Ordering f(final Long a2) {
               final int x = a1.compareTo(a2);
-              return x < 0 ? LT : x == 0 ? EQ : GT;
+              return x < 0 ? Ordering.LT : x == 0 ? Ordering.EQ : Ordering.GT;
             }
           };
         }
@@ -345,7 +335,7 @@ public final class Ord<A> {
           return new F<Short, Ordering>() {
             public Ordering f(final Short a2) {
               final int x = a1.compareTo(a2);
-              return x < 0 ? LT : x == 0 ? EQ : GT;
+              return x < 0 ? Ordering.LT : x == 0 ? Ordering.EQ : Ordering.GT;
             }
           };
         }
@@ -357,14 +347,14 @@ public final class Ord<A> {
   public static final Ord<Ordering> orderingOrd = new Ord<Ordering>(curry(new F2<Ordering, Ordering, Ordering>() {
     public Ordering f(final Ordering o1, final Ordering o2) {
       return o1 == o2 ?
-             EQ :
-             o1 == LT ?
-             LT :
-             o2 == LT ?
-             GT :
-             o1 == EQ ?
-             LT :
-             GT;
+             Ordering.EQ :
+             o1 == Ordering.LT ?
+             Ordering.LT :
+             o2 == Ordering.LT ?
+             Ordering.GT :
+             o1 == Ordering.EQ ?
+             Ordering.LT :
+             Ordering.GT;
     }
   }));
 
@@ -377,7 +367,7 @@ public final class Ord<A> {
           return new F<String, Ordering>() {
             public Ordering f(final String a2) {
               final int x = a1.compareTo(a2);
-              return x < 0 ? LT : x == 0 ? EQ : GT;
+              return x < 0 ? Ordering.LT : x == 0 ? Ordering.EQ : Ordering.GT;
             }
           };
         }
@@ -424,10 +414,10 @@ public final class Ord<A> {
           public Ordering f(final Option<A> o2) {
             return o1.isNone() ?
                    o2.isNone() ?
-                   EQ :
-                   LT :
+                   Ordering.EQ :
+                   Ordering.LT :
                    o2.isNone() ?
-                   GT :
+                   Ordering.GT :
                    oa.f.f(o1.some()).f(o2.some());
           }
         };
@@ -450,9 +440,9 @@ public final class Ord<A> {
             return e1.isLeft() ?
                    e2.isLeft() ?
                    oa.f.f(e1.left().value()).f(e2.left().value()) :
-                   LT :
+                   Ordering.LT :
                    e2.isLeft() ?
-                   GT :
+                   Ordering.GT :
                    ob.f.f(e1.right().value()).f(e2.right().value());
           }
         };
@@ -483,12 +473,12 @@ public final class Ord<A> {
         return new F<List<A>, Ordering>() {
           public Ordering f(final List<A> l2) {
             if (l1.isEmpty())
-              return l2.isEmpty() ? EQ : LT;
+              return l2.isEmpty() ? Ordering.EQ : Ordering.LT;
             else if (l2.isEmpty())
-              return l1.isEmpty() ? EQ : GT;
+              return l1.isEmpty() ? Ordering.EQ : Ordering.GT;
             else {
               final Ordering c = oa.compare(l1.head(), l2.head());
-              return c == EQ ? listOrd(oa).f.f(l1.tail()).f(l2.tail()) : c;
+              return c == Ordering.EQ ? listOrd(oa).f.f(l1.tail()).f(l2.tail()) : c;
             }
           }
         };
@@ -518,12 +508,12 @@ public final class Ord<A> {
         return new F<Stream<A>, Ordering>() {
           public Ordering f(final Stream<A> s2) {
             if (s1.isEmpty())
-              return s2.isEmpty() ? EQ : LT;
+              return s2.isEmpty() ? Ordering.EQ : Ordering.LT;
             else if (s2.isEmpty())
-              return s1.isEmpty() ? EQ : GT;
+              return s1.isEmpty() ? Ordering.EQ : Ordering.GT;
             else {
               final Ordering c = oa.compare(s1.head(), s2.head());
-              return c == EQ ? streamOrd(oa).f.f(s1.tail()._1()).f(s2.tail()._1()) : c;
+              return c == Ordering.EQ ? streamOrd(oa).f.f(s1.tail()._1()).f(s2.tail()._1()) : c;
             }
           }
         };
@@ -546,16 +536,16 @@ public final class Ord<A> {
             //noinspection ForLoopWithMissingComponent
             for (; i < a1.length() && i < a2.length(); i++) {
               final Ordering c = oa.compare(a1.get(i), a2.get(i));
-              if (c == GT || c == LT)
+              if (c == Ordering.GT || c == Ordering.LT)
                 return c;
             }
             return i == a1.length() ?
                    i == a2.length() ?
-                   EQ :
-                   LT :
+                   Ordering.EQ :
+                   Ordering.LT :
                    i == a1.length() ?
-                   EQ :
-                   GT;
+                   Ordering.EQ :
+                   Ordering.GT;
           }
         };
       }
@@ -581,7 +571,7 @@ public final class Ord<A> {
    */
   public static final Ord<Unit> unitOrd = ord(curry(new F2<Unit, Unit, Ordering>() {
     public Ordering f(final Unit u1, final Unit u2) {
-      return EQ;
+      return Ordering.EQ;
     }
   }));
 
@@ -646,7 +636,7 @@ public final class Ord<A> {
         return new F<A, Ordering>() {
           public Ordering f(final A a2) {
             final int x = a1.compareTo(a2);
-            return x < 0 ? LT : x == 0 ? EQ : GT;
+            return x < 0 ? Ordering.LT : x == 0 ? Ordering.EQ : Ordering.GT;
           }
         };
       }

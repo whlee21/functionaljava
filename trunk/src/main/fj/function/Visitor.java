@@ -1,14 +1,14 @@
 package fj.function;
 
+import fj.Equal;
 import fj.F;
 import fj.F2;
 import fj.Function;
+import fj.Monoid;
 import fj.P1;
 import fj.P2;
 import fj.data.List;
 import fj.data.Option;
-import fj.pre.Equal;
-import fj.pre.Monoid;
 
 import static fj.Function.compose;
 import static fj.Function.curry;

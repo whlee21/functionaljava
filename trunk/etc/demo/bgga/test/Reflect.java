@@ -1,29 +1,16 @@
 package test;
 
-import static fj.Bottom.error;
-import fj.P2;
-import fj.data.List;
-import static fj.data.List.list;
-import fj.data.Option;
-import static fj.pre.Equal.stringBuilderEqual;
-import static fj.test.Arbitrary.arbCharacter;
 import static fj.test.Arbitrary.arbInteger;
-import static fj.test.Arbitrary.arbIntegerBoundaries;
-import static fj.test.Arbitrary.arbStringBuilder;
-import static fj.test.Bool.bool;
-import fj.test.CheckResult;
 import static fj.test.CheckResult.summary;
 import fj.test.Property;
 import static fj.test.Property.prop;
 import static fj.test.Property.property;
-import static fj.test.Shrink.shrinkInteger;
+
 import fj.test.reflect.Category;
 import static fj.test.reflect.Check.check;
 import fj.test.reflect.CheckParams;
 import fj.test.reflect.Name;
 import fj.test.reflect.NoCheck;
-
-import static java.lang.System.out;
 
 /*
   Performs four test runs of these properties using various test parameters and categories.

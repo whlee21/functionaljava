@@ -1,8 +1,8 @@
 import fj.F;
 import fj.data.Array;
 import static fj.data.Array.array;
-import static fj.pre.Show.arrayShow;
-import static fj.pre.Show.intShow;
+import static fj.Show2.arrayShow;
+import static fj.Show2.intShow;
 
 public final class Array_bind {
   public static void main(final String[] args) {

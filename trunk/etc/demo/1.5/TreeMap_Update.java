@@ -1,7 +1,7 @@
 import fj.data.TreeMap;
 import static fj.data.TreeMap.empty;
 import static fj.function.Integers.add;
-import static fj.pre.Ord.stringOrd;
+import static fj.Ord.stringOrd;
 
 /**
  * Queries and updates an entry in a TreeMap in one go.

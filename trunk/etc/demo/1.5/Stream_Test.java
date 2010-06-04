@@ -1,8 +1,8 @@
 import static fj.data.Enumerator.naturalEnumerator;
 import static fj.data.Natural.natural;
 import static fj.data.Stream.forever;
-import static fj.pre.Show.naturalShow;
-import static fj.pre.Show.unlineShow;
+import static fj.Show2.naturalShow;
+import static fj.Show2.unlineShow;
 
 /**
  * Produces natural numbers forever.

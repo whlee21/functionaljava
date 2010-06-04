@@ -15,7 +15,7 @@ import fj.data.Option;
 import static fj.data.Option.fromNull;
 import fj.data.Stream;
 import static fj.data.Stream.fromString;
-import static fj.pre.Monoid.longAdditionMonoid;
+import static fj.Monoid.longAdditionMonoid;
 
 import java.io.BufferedReader;
 import java.io.File;

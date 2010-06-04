@@ -1,11 +1,7 @@
-package fj.pre;
+package fj;
 
-import fj.F;
-import fj.F2;
 import static fj.Function.curry;
-import fj.P1;
-import fj.P2;
-import fj.Unit;
+
 import fj.data.Array;
 import fj.data.List;
 import fj.data.Natural;

@@ -1,9 +1,9 @@
 package fj.test;
 
 import fj.F;
-import fj.pre.Show;
-import static fj.pre.Show.anyShow;
-import static fj.pre.Show.showS;
+import fj.Show2;
+import static fj.Show2.anyShow;
+import static fj.Show2.showS;
 
 /**
  * An argument used in a property that may have undergone shrinking following falsification.
@@ -56,7 +56,7 @@ public final class Arg<T> {
   /**
    * The rendering of an argument (uses {@link Object#toString()} for the argument value).
    */
-  public static final Show<Arg<?>> argShow = showS(new F<Arg<?>, String>() {
+  public static final Show2<Arg<?>> argShow = showS(new F<Arg<?>, String>() {
     public String f(final Arg<?> arg) {
       return anyShow().showS(arg.value) +
           (arg.shrinks > 0 ? " (" + arg.shrinks + " shrink" + (arg.shrinks == 1 ? "" : 's') + ')' : "");

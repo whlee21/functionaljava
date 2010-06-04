@@ -7,10 +7,11 @@ import static fj.data.Option.none;
 import static fj.data.Option.some;
 
 import fj.Function;
-import fj.pre.Ord;
-import static fj.pre.Ord.*;
-import fj.pre.Ordering;
-import static fj.pre.Ordering.*;
+import fj.Ord;
+
+import static fj.Ord.*;
+import fj.Ordering;
+import static fj.Ordering.*;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;

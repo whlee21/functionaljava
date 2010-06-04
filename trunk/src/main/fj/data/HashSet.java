@@ -1,9 +1,9 @@
 package fj.data;
 
+import fj.Equal;
+import fj.Hash;
 import fj.Unit;
 import static fj.Unit.unit;
-import fj.pre.Equal;
-import fj.pre.Hash;
 
 import java.util.Collection;
 import java.util.Iterator;

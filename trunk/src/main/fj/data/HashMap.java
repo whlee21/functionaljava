@@ -2,10 +2,11 @@ package fj.data;
 
 import fj.F;
 import static fj.P.p;
+
+import fj.Hash;
 import fj.P2;
 import static fj.data.Option.fromNull;
-import fj.pre.Equal;
-import fj.pre.Hash;
+import fj.Equal;
 
 import java.util.Collection;
 import java.util.Iterator;

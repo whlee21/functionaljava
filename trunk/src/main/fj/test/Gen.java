@@ -15,8 +15,8 @@ import fj.data.List;
 import static fj.data.List.nil;
 import static fj.data.List.replicate;
 import fj.data.Option;
-import static fj.pre.Monoid.intAdditionMonoid;
-import static fj.pre.Ord.intOrd;
+import static fj.Monoid.intAdditionMonoid;
+import static fj.Ord.intOrd;
 
 import static java.lang.Math.max;
 import static java.lang.Math.min;

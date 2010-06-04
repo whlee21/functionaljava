@@ -1,21 +1,13 @@
 package test;
 
-import fj.F;
 import fj.Function;
 import static fj.Function.compose;
-import fj.P2;
-import fj.data.List;
-import static fj.pre.Equal.listEqual;
-import static fj.pre.Equal.stringEqual;
-import static fj.test.Arbitrary.arbF;
-import static fj.test.Arbitrary.arbInteger;
+import static fj.Equal.listEqual;
+import static fj.Equal.stringEqual;
 import static fj.test.Arbitrary.arbList;
-import static fj.test.Arbitrary.arbLong;
 import static fj.test.Arbitrary.arbString;
-import fj.test.CheckResult;
 import static fj.test.CheckResult.summary;
-import static fj.test.Coarbitrary.coarbInteger;
-import static fj.test.Coarbitrary.coarbLong;
+
 import fj.test.Property;
 import static fj.test.Property.prop;
 import static fj.test.Property.property;

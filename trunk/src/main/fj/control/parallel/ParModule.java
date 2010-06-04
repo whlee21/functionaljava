@@ -4,6 +4,7 @@ import fj.Effect;
 import fj.F;
 import fj.F2;
 import fj.Function;
+import fj.Monoid;
 import fj.P;
 import fj.P1;
 import fj.P2;
@@ -27,7 +28,6 @@ import fj.data.TreeZipper;
 import fj.data.Zipper;
 import static fj.data.Option.some;
 import static fj.data.Stream.iterableStream;
-import fj.pre.Monoid;
 
 /**
  * A module of higher-order concurrency features.

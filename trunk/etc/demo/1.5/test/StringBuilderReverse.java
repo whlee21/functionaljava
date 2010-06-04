@@ -4,7 +4,7 @@ import fj.Effect;
 import fj.F;
 import fj.F2;
 import static fj.data.List.list;
-import static fj.pre.Equal.stringBuilderEqual;
+import static fj.Equal.stringBuilderEqual;
 import static fj.test.Arbitrary.arbCharacter;
 import static fj.test.Arbitrary.arbStringBuilder;
 import static fj.test.CheckResult.summary;

@@ -2,12 +2,12 @@ package fj.test;
 
 import static fj.Bottom.decons;
 import fj.F;
+import fj.Show2;
 import fj.data.List;
 import fj.data.Option;
 import static fj.data.Option.some;
-import fj.pre.Show;
-import static fj.pre.Show.listShow;
-import static fj.pre.Show.showS;
+import static fj.Show2.listShow;
+import static fj.Show2.showS;
 import static fj.test.Arg.argShow;
 
 import java.io.StringWriter;
@@ -230,7 +230,7 @@ public final class CheckResult {
    * @param sa The rendering of arguments.
    * @return A rendering of a check result that summarises in one line.
    */
-  public static Show<CheckResult> summary(final Show<Arg<?>> sa) {
+  public static Show2<CheckResult> summary(final Show2<Arg<?>> sa) {
     return showS(new F<CheckResult, String>() {
       private String test(final CheckResult r) {
         return r.succeeded() == 1 ? "test" : "tests";
@@ -272,13 +272,13 @@ public final class CheckResult {
   /**
    * A rendering of a check result that summarises in one line.
    */
-  public static final Show<CheckResult> summary = summary(argShow);
+  public static final Show2<CheckResult> summary = summary(argShow);
 
   /**
    * A rendering of a check result that summarises in one line but throws an exception in the result
    * is a failure (falsified, property exception or generator exception).
    */
-  public static final Show<CheckResult> summaryEx = summaryEx(argShow);
+  public static final Show2<CheckResult> summaryEx = summaryEx(argShow);
 
   /**
    * A rendering of a check result that summarises in one line but throws an exception in the result
@@ -288,7 +288,7 @@ public final class CheckResult {
    * @return A rendering of a check result that summarises in one line but throws an exception in
    *         the result is a failure (falsified, property exception or generator exception).
    */
-  public static Show<CheckResult> summaryEx(final Show<Arg<?>> sa) {
+  public static Show2<CheckResult> summaryEx(final Show2<Arg<?>> sa) {
     return showS(new F<CheckResult, String>() {
       public String f(final CheckResult r) {
         final String s = summary(sa).show(r).toString();

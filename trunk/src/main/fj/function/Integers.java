@@ -3,13 +3,14 @@ package fj.function;
 import fj.F;
 import fj.F2;
 import static fj.Function.curry;
+
+import fj.Monoid;
 import fj.data.List;
 import fj.data.Option;
 import static fj.data.Option.some;
 import static fj.data.Option.none;
-import fj.pre.Monoid;
-import static fj.pre.Semigroup.intAdditionSemigroup;
-import static fj.pre.Semigroup.intMultiplicationSemigroup;
+import static fj.Semigroup.intAdditionSemigroup;
+import static fj.Semigroup.intMultiplicationSemigroup;
 
 import static java.lang.Math.abs;
 

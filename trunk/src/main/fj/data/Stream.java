@@ -1,20 +1,20 @@
 package fj.data;
 
 import fj.Effect;
+import fj.Equal;
 import fj.F;
 import fj.F2;
 import fj.F3;
 import fj.Function;
+import fj.Monoid;
+import fj.Ord;
 import fj.P;
 import fj.P1;
 import fj.P2;
 import fj.Unit;
 import fj.control.parallel.Promise;
 import fj.control.parallel.Strategy;
-import fj.pre.Equal;
-import fj.pre.Monoid;
-import fj.pre.Ord;
-import fj.pre.Ordering;
+import fj.Ordering;
 
 import java.util.AbstractCollection;
 import java.util.Collection;
@@ -36,9 +36,9 @@ import static fj.data.Array.mkArray;
 import static fj.data.Option.none;
 import static fj.data.Option.some;
 import static fj.function.Booleans.not;
-import static fj.pre.Ordering.EQ;
-import static fj.pre.Ordering.GT;
-import static fj.pre.Ordering.LT;
+import static fj.Ordering.EQ;
+import static fj.Ordering.GT;
+import static fj.Ordering.LT;
 
 /**
  * A lazy (not yet evaluated), immutable, singly linked list.
