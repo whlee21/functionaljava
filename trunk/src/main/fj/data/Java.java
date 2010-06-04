@@ -5,6 +5,8 @@ import fj.F;
 import static fj.P.p;
 import fj.P1;
 import fj.P2;
+
+import static fj.data.Java.*;
 import static fj.data.List.list;
 import static fj.data.Option.some;
 
@@ -192,7 +194,6 @@ public final class Java {
    */
   public static <A> F<List<A>, ArrayBlockingQueue<A>> List_ArrayBlockingQueue(final boolean fair) {
     return new F<List<A>, ArrayBlockingQueue<A>>() {
-      @SuppressWarnings({"UseOfObsoleteCollectionType"})
       public ArrayBlockingQueue<A> f(final List<A> as) {
         return new ArrayBlockingQueue<A>(as.length(), fair, as.toCollection());
       }
@@ -206,7 +207,6 @@ public final class Java {
    */
   public static <A> F<List<A>, ConcurrentLinkedQueue<A>> List_ConcurrentLinkedQueue() {
     return new F<List<A>, ConcurrentLinkedQueue<A>>() {
-      @SuppressWarnings({"UseOfObsoleteCollectionType"})
       public ConcurrentLinkedQueue<A> f(final List<A> as) {
         return new ConcurrentLinkedQueue<A>(as.toCollection());
       }
@@ -220,7 +220,6 @@ public final class Java {
    */
   public static <A> F<List<A>, CopyOnWriteArrayList<A>> List_CopyOnWriteArrayList() {
     return new F<List<A>, CopyOnWriteArrayList<A>>() {
-      @SuppressWarnings({"UseOfObsoleteCollectionType"})
       public CopyOnWriteArrayList<A> f(final List<A> as) {
         return new CopyOnWriteArrayList<A>(as.toCollection());
       }
@@ -234,7 +233,6 @@ public final class Java {
    */
   public static <A> F<List<A>, CopyOnWriteArraySet<A>> List_CopyOnWriteArraySet() {
     return new F<List<A>, CopyOnWriteArraySet<A>>() {
-      @SuppressWarnings({"UseOfObsoleteCollectionType"})
       public CopyOnWriteArraySet<A> f(final List<A> as) {
         return new CopyOnWriteArraySet<A>(as.toCollection());
       }
@@ -248,7 +246,6 @@ public final class Java {
    */
   public static <A extends Delayed> F<List<A>, DelayQueue<A>> List_DelayQueue() {
     return new F<List<A>, DelayQueue<A>>() {
-      @SuppressWarnings({"UseOfObsoleteCollectionType"})
       public DelayQueue<A> f(final List<A> as) {
         return new DelayQueue<A>(as.toCollection());
       }
@@ -262,7 +259,6 @@ public final class Java {
    */
   public static <A> F<List<A>, LinkedBlockingQueue<A>> List_LinkedBlockingQueue() {
     return new F<List<A>, LinkedBlockingQueue<A>>() {
-      @SuppressWarnings({"UseOfObsoleteCollectionType"})
       public LinkedBlockingQueue<A> f(final List<A> as) {
         return new LinkedBlockingQueue<A>(as.toCollection());
       }
@@ -276,7 +272,6 @@ public final class Java {
    */
   public static <A> F<List<A>, PriorityBlockingQueue<A>> List_PriorityBlockingQueue() {
     return new F<List<A>, PriorityBlockingQueue<A>>() {
-      @SuppressWarnings({"UseOfObsoleteCollectionType"})
       public PriorityBlockingQueue<A> f(final List<A> as) {
         return new PriorityBlockingQueue<A>(as.toCollection());
       }
@@ -291,7 +286,6 @@ public final class Java {
    */
   public static <A> F<List<A>, SynchronousQueue<A>> List_SynchronousQueue(final boolean fair) {
     return new F<List<A>, SynchronousQueue<A>>() {
-      @SuppressWarnings({"UseOfObsoleteCollectionType"})
       public SynchronousQueue<A> f(final List<A> as) {
         final SynchronousQueue<A> q = new SynchronousQueue<A>(fair);
         q.addAll(as.toCollection());
@@ -448,7 +442,6 @@ public final class Java {
    */
   public static <A> F<Array<A>, ArrayBlockingQueue<A>> Array_ArrayBlockingQueue(final boolean fair) {
     return new F<Array<A>, ArrayBlockingQueue<A>>() {
-      @SuppressWarnings({"UseOfObsoleteCollectionType"})
       public ArrayBlockingQueue<A> f(final Array<A> as) {
         return new ArrayBlockingQueue<A>(as.length(), fair, as.toCollection());
       }
@@ -462,7 +455,6 @@ public final class Java {
    */
   public static <A> F<Array<A>, ConcurrentLinkedQueue<A>> Array_ConcurrentLinkedQueue() {
     return new F<Array<A>, ConcurrentLinkedQueue<A>>() {
-      @SuppressWarnings({"UseOfObsoleteCollectionType"})
       public ConcurrentLinkedQueue<A> f(final Array<A> as) {
         return new ConcurrentLinkedQueue<A>(as.toCollection());
       }
@@ -476,7 +468,6 @@ public final class Java {
    */
   public static <A> F<Array<A>, CopyOnWriteArrayList<A>> Array_CopyOnWriteArrayList() {
     return new F<Array<A>, CopyOnWriteArrayList<A>>() {
-      @SuppressWarnings({"UseOfObsoleteCollectionType"})
       public CopyOnWriteArrayList<A> f(final Array<A> as) {
         return new CopyOnWriteArrayList<A>(as.toCollection());
       }
@@ -490,7 +481,6 @@ public final class Java {
    */
   public static <A> F<Array<A>, CopyOnWriteArraySet<A>> Array_CopyOnWriteArraySet() {
     return new F<Array<A>, CopyOnWriteArraySet<A>>() {
-      @SuppressWarnings({"UseOfObsoleteCollectionType"})
       public CopyOnWriteArraySet<A> f(final Array<A> as) {
         return new CopyOnWriteArraySet<A>(as.toCollection());
       }
@@ -504,7 +494,6 @@ public final class Java {
    */
   public static <A extends Delayed> F<Array<A>, DelayQueue<A>> Array_DelayQueue() {
     return new F<Array<A>, DelayQueue<A>>() {
-      @SuppressWarnings({"UseOfObsoleteCollectionType"})
       public DelayQueue<A> f(final Array<A> as) {
         return new DelayQueue<A>(as.toCollection());
       }
@@ -518,7 +507,6 @@ public final class Java {
    */
   public static <A> F<Array<A>, LinkedBlockingQueue<A>> Array_LinkedBlockingQueue() {
     return new F<Array<A>, LinkedBlockingQueue<A>>() {
-      @SuppressWarnings({"UseOfObsoleteCollectionType"})
       public LinkedBlockingQueue<A> f(final Array<A> as) {
         return new LinkedBlockingQueue<A>(as.toCollection());
       }
@@ -532,7 +520,6 @@ public final class Java {
    */
   public static <A> F<Array<A>, PriorityBlockingQueue<A>> Array_PriorityBlockingQueue() {
     return new F<Array<A>, PriorityBlockingQueue<A>>() {
-      @SuppressWarnings({"UseOfObsoleteCollectionType"})
       public PriorityBlockingQueue<A> f(final Array<A> as) {
         return new PriorityBlockingQueue<A>(as.toCollection());
       }
@@ -547,7 +534,6 @@ public final class Java {
    */
   public static <A> F<Array<A>, SynchronousQueue<A>> Array_SynchronousQueue(final boolean fair) {
     return new F<Array<A>, SynchronousQueue<A>>() {
-      @SuppressWarnings({"UseOfObsoleteCollectionType"})
       public SynchronousQueue<A> f(final Array<A> as) {
         final SynchronousQueue<A> q = new SynchronousQueue<A>(fair);
         q.addAll(as.toCollection());
@@ -740,7 +726,6 @@ public final class Java {
    */
   public static <A> F<Stream<A>, ArrayBlockingQueue<A>> Stream_ArrayBlockingQueue(final boolean fair) {
     return new F<Stream<A>, ArrayBlockingQueue<A>>() {
-      @SuppressWarnings({"UseOfObsoleteCollectionType"})
       public ArrayBlockingQueue<A> f(final Stream<A> as) {
         return new ArrayBlockingQueue<A>(as.length(), fair, as.toCollection());
       }
@@ -754,7 +739,6 @@ public final class Java {
    */
   public static <A> F<Stream<A>, ConcurrentLinkedQueue<A>> Stream_ConcurrentLinkedQueue() {
     return new F<Stream<A>, ConcurrentLinkedQueue<A>>() {
-      @SuppressWarnings({"UseOfObsoleteCollectionType"})
       public ConcurrentLinkedQueue<A> f(final Stream<A> as) {
         return new ConcurrentLinkedQueue<A>(as.toCollection());
       }
@@ -768,7 +752,6 @@ public final class Java {
    */
   public static <A> F<Stream<A>, CopyOnWriteArrayList<A>> Stream_CopyOnWriteArrayList() {
     return new F<Stream<A>, CopyOnWriteArrayList<A>>() {
-      @SuppressWarnings({"UseOfObsoleteCollectionType"})
       public CopyOnWriteArrayList<A> f(final Stream<A> as) {
         return new CopyOnWriteArrayList<A>(as.toCollection());
       }
@@ -782,7 +765,6 @@ public final class Java {
    */
   public static <A> F<Stream<A>, CopyOnWriteArraySet<A>> Stream_CopyOnWriteArraySet() {
     return new F<Stream<A>, CopyOnWriteArraySet<A>>() {
-      @SuppressWarnings({"UseOfObsoleteCollectionType"})
       public CopyOnWriteArraySet<A> f(final Stream<A> as) {
         return new CopyOnWriteArraySet<A>(as.toCollection());
       }
@@ -796,7 +778,6 @@ public final class Java {
    */
   public static <A extends Delayed> F<Stream<A>, DelayQueue<A>> Stream_DelayQueue() {
     return new F<Stream<A>, DelayQueue<A>>() {
-      @SuppressWarnings({"UseOfObsoleteCollectionType"})
       public DelayQueue<A> f(final Stream<A> as) {
         return new DelayQueue<A>(as.toCollection());
       }
@@ -810,7 +791,6 @@ public final class Java {
    */
   public static <A> F<Stream<A>, LinkedBlockingQueue<A>> Stream_LinkedBlockingQueue() {
     return new F<Stream<A>, LinkedBlockingQueue<A>>() {
-      @SuppressWarnings({"UseOfObsoleteCollectionType"})
       public LinkedBlockingQueue<A> f(final Stream<A> as) {
         return new LinkedBlockingQueue<A>(as.toCollection());
       }
@@ -824,7 +804,6 @@ public final class Java {
    */
   public static <A> F<Stream<A>, PriorityBlockingQueue<A>> Stream_PriorityBlockingQueue() {
     return new F<Stream<A>, PriorityBlockingQueue<A>>() {
-      @SuppressWarnings({"UseOfObsoleteCollectionType"})
       public PriorityBlockingQueue<A> f(final Stream<A> as) {
         return new PriorityBlockingQueue<A>(as.toCollection());
       }
@@ -839,7 +818,6 @@ public final class Java {
    */
   public static <A> F<Stream<A>, SynchronousQueue<A>> Stream_SynchronousQueue(final boolean fair) {
     return new F<Stream<A>, SynchronousQueue<A>>() {
-      @SuppressWarnings({"UseOfObsoleteCollectionType"})
       public SynchronousQueue<A> f(final Stream<A> as) {
         final SynchronousQueue<A> q = new SynchronousQueue<A>(fair);
         q.addAll(as.toCollection());
@@ -997,7 +975,6 @@ public final class Java {
    */
   public static <A> F<Option<A>, ArrayBlockingQueue<A>> Option_ArrayBlockingQueue(final boolean fair) {
     return new F<Option<A>, ArrayBlockingQueue<A>>() {
-      @SuppressWarnings({"UseOfObsoleteCollectionType"})
       public ArrayBlockingQueue<A> f(final Option<A> as) {
         return new ArrayBlockingQueue<A>(as.length(), fair, as.toCollection());
       }
@@ -1011,7 +988,6 @@ public final class Java {
    */
   public static <A> F<Option<A>, ConcurrentLinkedQueue<A>> Option_ConcurrentLinkedQueue() {
     return new F<Option<A>, ConcurrentLinkedQueue<A>>() {
-      @SuppressWarnings({"UseOfObsoleteCollectionType"})
       public ConcurrentLinkedQueue<A> f(final Option<A> as) {
         return new ConcurrentLinkedQueue<A>(as.toCollection());
       }
@@ -1025,7 +1001,6 @@ public final class Java {
    */
   public static <A> F<Option<A>, CopyOnWriteArrayList<A>> Option_CopyOnWriteArrayList() {
     return new F<Option<A>, CopyOnWriteArrayList<A>>() {
-      @SuppressWarnings({"UseOfObsoleteCollectionType"})
       public CopyOnWriteArrayList<A> f(final Option<A> as) {
         return new CopyOnWriteArrayList<A>(as.toCollection());
       }
@@ -1039,7 +1014,6 @@ public final class Java {
    */
   public static <A> F<Option<A>, CopyOnWriteArraySet<A>> Option_CopyOnWriteArraySet() {
     return new F<Option<A>, CopyOnWriteArraySet<A>>() {
-      @SuppressWarnings({"UseOfObsoleteCollectionType"})
       public CopyOnWriteArraySet<A> f(final Option<A> as) {
         return new CopyOnWriteArraySet<A>(as.toCollection());
       }
@@ -1053,7 +1027,6 @@ public final class Java {
    */
   public static <A extends Delayed> F<Option<A>, DelayQueue<A>> Option_DelayQueue() {
     return new F<Option<A>, DelayQueue<A>>() {
-      @SuppressWarnings({"UseOfObsoleteCollectionType"})
       public DelayQueue<A> f(final Option<A> as) {
         return new DelayQueue<A>(as.toCollection());
       }
@@ -1067,7 +1040,6 @@ public final class Java {
    */
   public static <A> F<Option<A>, LinkedBlockingQueue<A>> Option_LinkedBlockingQueue() {
     return new F<Option<A>, LinkedBlockingQueue<A>>() {
-      @SuppressWarnings({"UseOfObsoleteCollectionType"})
       public LinkedBlockingQueue<A> f(final Option<A> as) {
         return new LinkedBlockingQueue<A>(as.toCollection());
       }
@@ -1081,7 +1053,6 @@ public final class Java {
    */
   public static <A> F<Option<A>, PriorityBlockingQueue<A>> Option_PriorityBlockingQueue() {
     return new F<Option<A>, PriorityBlockingQueue<A>>() {
-      @SuppressWarnings({"UseOfObsoleteCollectionType"})
       public PriorityBlockingQueue<A> f(final Option<A> as) {
         return new PriorityBlockingQueue<A>(as.toCollection());
       }
@@ -1096,7 +1067,6 @@ public final class Java {
    */
   public static <A> F<Option<A>, SynchronousQueue<A>> Option_SynchronousQueue(final boolean fair) {
     return new F<Option<A>, SynchronousQueue<A>>() {
-      @SuppressWarnings({"UseOfObsoleteCollectionType"})
       public SynchronousQueue<A> f(final Option<A> as) {
         final SynchronousQueue<A> q = new SynchronousQueue<A>(fair);
         q.addAll(as.toCollection());
@@ -1133,7 +1103,7 @@ public final class Java {
    * @return A function that converts eithers to bit sets.
    */
   public static <B> F<Either<Boolean, B>, BitSet> Either_BitSetA() {
-    return fj.Function.compose(Java.Option_BitSet, Conversions.<Boolean, B>Either_OptionA());
+    return fj.Function.compose(Option_BitSet, Conversions.<Boolean, B>Either_OptionA());
   }
 
   /**
@@ -1142,7 +1112,7 @@ public final class Java {
    * @return A function that converts eithers to bit sets.
    */
   public static <A> F<Either<A, Boolean>, BitSet> Either_BitSetB() {
-    return fj.Function.compose(Java.Option_BitSet, Conversions.<A, Boolean>Either_OptionB());
+    return fj.Function.compose(Option_BitSet, Conversions.<A, Boolean>Either_OptionB());
   }
 
   /**

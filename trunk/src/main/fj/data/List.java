@@ -18,6 +18,8 @@ import static fj.P.p2;
 import static fj.Unit.unit;
 import static fj.data.Array.array;
 import static fj.data.Array.mkArray;
+import static fj.data.List.*;
+import static fj.data.List.Buffer.*;
 import static fj.data.Option.none;
 import static fj.data.Option.some;
 import static fj.function.Booleans.not;
@@ -238,7 +240,7 @@ public abstract class List<A> implements Iterable<A> {
    * @return A new list after the given function has been applied to each element.
    */
   public <B> List<B> map(final F<A, B> f) {
-    final Buffer<B> bs = Buffer.empty();
+    final Buffer<B> bs = empty();
 
     for (List<A> xs = this; xs.isNotEmpty(); xs = xs.tail()) {
       bs.snoc(f.f(xs.head()));
@@ -280,7 +282,7 @@ public abstract class List<A> implements Iterable<A> {
    * @return A new list whose elements all match the given predicate.
    */
   public List<A> filter(final F<A, Boolean> f) {
-    final Buffer<A> b = Buffer.empty();
+    final Buffer<A> b = empty();
 
     for (List<A> xs = this; xs.isNotEmpty(); xs = xs.tail()) {
       final A h = xs.head();
@@ -324,7 +326,7 @@ public abstract class List<A> implements Iterable<A> {
    * @return The first elements of the head of this list that match the given predicate function.
    */
   public List<A> takeWhile(final F<A, Boolean> f) {
-    final Buffer<A> b = Buffer.empty();
+    final Buffer<A> b = empty();
     boolean taking = true;
 
     for (List<A> xs = this; xs.isNotEmpty() && taking; xs = xs.tail()) {
@@ -364,7 +366,7 @@ public abstract class List<A> implements Iterable<A> {
    *         the given predicate and the second element is the remainder of the list.
    */
   public P2<List<A>, List<A>> span(final F<A, Boolean> p) {
-    final Buffer<A> b = Buffer.empty();
+    final Buffer<A> b = empty();
     for (List<A> xs = this; xs.isNotEmpty(); xs = xs.tail()) {
       if (p.f(xs.head()))
         b.snoc(xs.head());
@@ -413,7 +415,7 @@ public abstract class List<A> implements Iterable<A> {
    * @return A new list after performing the map, then final join.
    */
   public <B> List<B> bind(final F<A, List<B>> f) {
-    final Buffer<B> b = Buffer.empty();
+    final Buffer<B> b = empty();
 
     for (List<A> xs = this; xs.isNotEmpty(); xs = xs.tail()) {
       b.append(f.f(xs.head()));
@@ -592,7 +594,7 @@ public abstract class List<A> implements Iterable<A> {
    * @return A new list that has appended the given list.
    */
   public List<A> append(final List<A> as) {
-    return Buffer.fromList(this).append(as).toList();
+    return fromList(this).append(as).toList();
   }
 
   /**
@@ -727,7 +729,7 @@ public abstract class List<A> implements Iterable<A> {
 
     List<A> xs = this;
 
-    //noinspection ForLoopWithMissingComponent,StatementWithEmptyBody
+    //noinspection ForLoopWithMissingComponent
     for (; xs.isNotEmpty() && c < i; xs = xs.tail())
       c++;
 
@@ -922,7 +924,7 @@ public abstract class List<A> implements Iterable<A> {
    * @return A new list with the given element appended.
    */
   public List<A> snoc(final A a) {
-    return Buffer.fromList(this).snoc(a).toList();
+    return fromList(this).snoc(a).toList();
   }
 
   /**
@@ -1068,7 +1070,7 @@ public abstract class List<A> implements Iterable<A> {
    *         in this list.
    */
   public <B, C> F<B, List<C>> mapM(final F<A, F<B, C>> f) {
-    return List.sequence_(map(f));
+    return sequence_(map(f));
   }
 
   /**
@@ -1103,7 +1105,7 @@ public abstract class List<A> implements Iterable<A> {
    */
   public List<A> init() {
     List<A> ys = this;
-    final Buffer<A> a = Buffer.empty();
+    final Buffer<A> a = empty();
     while(ys.isNotEmpty() && ys.tail().isNotEmpty()) {
       a.snoc(head());
       ys = ys.tail();
@@ -1122,7 +1124,7 @@ public abstract class List<A> implements Iterable<A> {
    */
   public List<A> insertBy(final F<A, F<A, Ordering>> f, final A x) {
     List<A> ys = this;
-    Buffer<A> xs = Buffer.empty();
+    Buffer<A> xs = empty();
     while (ys.isNotEmpty() && f.f(x).f(ys.head()) == GT) {
       xs = xs.snoc(ys.head());
       ys = ys.tail();
@@ -1375,7 +1377,7 @@ public abstract class List<A> implements Iterable<A> {
    * @return A new list that is a result of unfolding until the function does not produce a value.
    */
   public static <A, B> List<A> unfold(final F<B, Option<P2<A, B>>> f, final B b) {
-    Buffer<A> buf = Buffer.empty();
+    Buffer<A> buf = empty();
     for (Option<P2<A, B>> o = f.f(b); o.isSome(); o = f.f(o.some()._2())) {
       buf = buf.snoc(o.some()._1());
     }
@@ -1389,8 +1391,8 @@ public abstract class List<A> implements Iterable<A> {
    * @return A list of first components and a list of second components.
    */
   public static <A, B> P2<List<A>, List<B>> unzip(final List<P2<A, B>> xs) {
-    Buffer<A> ba = Buffer.empty();
-    Buffer<B> bb = Buffer.empty();
+    Buffer<A> ba = empty();
+    Buffer<B> bb = empty();
     for (final P2<A, B> p : xs) {
       ba = ba.snoc(p._1());
       bb = bb.snoc(p._2());
@@ -1618,7 +1620,7 @@ public abstract class List<A> implements Iterable<A> {
    * @return A list from the given iterable.
    */
   public static <A> List<A> iterableList(final Iterable<A> i) {
-    final Buffer<A> bs = Buffer.empty();
+    final Buffer<A> bs = empty();
 
     for (final A a : i)
       bs.snoc(a);
@@ -1731,7 +1733,7 @@ public abstract class List<A> implements Iterable<A> {
      * @return A buffer from the given iterable.
      */
     public static <A> Buffer<A> iterableBuffer(final Iterable<A> i) {
-      final Buffer<A> b = Buffer.empty();
+      final Buffer<A> b = empty();
 
       for (final A a : i)
         b.snoc(a);

@@ -236,7 +236,7 @@ public final class Promise<A> {
    * @return A new promise after performing the map, then final join.
    */
   public <B, C> Promise<C> bind(final P1<Promise<B>> p, final F<A, F<B, C>> f) {
-    return Promise.join(s, p).apply(fmap(f));
+    return join(s, p).apply(fmap(f));
   }
 
   /**
