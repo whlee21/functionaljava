@@ -800,10 +800,7 @@ public abstract class List<A> implements Iterable<A> {
    * @return The list of final segments of this list, longest first.
    */
   public List<List<A>> tails() {
-    if (isEmpty())
-      return single(List.<A>nil());
-    else
-      return cons(this, tail().tails());
+    return isEmpty() ? single(List.<A>nil()) : cons(this, tail().tails());
   }
 
   /**

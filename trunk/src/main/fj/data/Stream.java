@@ -225,22 +225,19 @@ public abstract class Stream<A> implements Iterable<A> {
    * @return A new stream with the given value between each two elements of the stream.
    */
   public Stream<A> intersperse(final A a) {
-    if (isEmpty()) return this;
-    else {
-      return cons(head(), new P1<Stream<A>>() {
-        public Stream<A> _1() {
-          return prefix(a, tail()._1());
-        }
+    return isEmpty() ? this : cons(head(), new P1<Stream<A>>() {
+      public Stream<A> _1() {
+        return prefix(a, tail()._1());
+      }
 
-        public Stream<A> prefix(final A x, final Stream<A> xs) {
-          return xs.isEmpty() ? xs : cons(x, p(cons(xs.head(), new P1<Stream<A>>() {
-            public Stream<A> _1() {
-              return prefix(a, xs.tail()._1());
-            }
-          })));
-        }
-      });
-    }
+      public Stream<A> prefix(final A x, final Stream<A> xs) {
+        return xs.isEmpty() ? xs : cons(x, p(cons(xs.head(), new P1<Stream<A>>() {
+          public Stream<A> _1() {
+            return prefix(a, xs.tail()._1());
+          }
+        })));
+      }
+    });
   }
 
   /**
@@ -306,13 +303,11 @@ public abstract class Stream<A> implements Iterable<A> {
    */
   public Stream<A> filter(final F<A, Boolean> f) {
     final Stream<A> as = dropWhile(not(f));
-    if (as.isNotEmpty())
-      return cons(as.head(), new P1<Stream<A>>() {
-        public Stream<A> _1() {
-          return as.tail()._1().filter(f);
-        }
-      });
-    else return as;
+    return as.isNotEmpty() ? cons(as.head(), new P1<Stream<A>>() {
+      public Stream<A> _1() {
+        return as.tail()._1().filter(f);
+      }
+    }) : as;
   }
 
   /**
@@ -804,22 +799,19 @@ public abstract class Stream<A> implements Iterable<A> {
    */
   public static <A> Stream<A> range(final Enumerator<A> e, final A from, final A to, final long step) {
     final Ordering o = e.order().compare(from, to);
-    if (o == EQ || step > 0L && o == GT || step < 0L && o == LT)
-      return single(from);
-    else
-      return cons(from, new P1<Stream<A>>() {
-        public Stream<A> _1() {
-          return Stream.join(e.plus(from, step).filter(new F<A, Boolean>() {
-            public Boolean f(final A a) {
-              return !(o == LT ? e.order().isLessThan(to, a) : e.order().isGreaterThan(to, a));
-            }
-          }).map(new F<A, Stream<A>>() {
-            public Stream<A> f(final A a) {
-              return range(e, a, to, step);
-            }
-          }).toStream());
-        }
-      });
+    return o == EQ || step > 0L && o == GT || step < 0L && o == LT ? single(from) : cons(from, new P1<Stream<A>>() {
+      public Stream<A> _1() {
+        return Stream.join(e.plus(from, step).filter(new F<A, Boolean>() {
+          public Boolean f(final A a) {
+            return !(o == LT ? e.order().isLessThan(to, a) : e.order().isGreaterThan(to, a));
+          }
+        }).map(new F<A, Stream<A>>() {
+          public Stream<A> f(final A a) {
+            return range(e, a, to, step);
+          }
+        }).toStream());
+      }
+    });
   }
 
   /**

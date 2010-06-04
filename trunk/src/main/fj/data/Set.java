@@ -227,17 +227,7 @@ public abstract class Set<A> implements Iterable<A> {
   }
 
   private static <A> Set<A> balance(final Ord<A> ord, final Color c, final Set<A> l, final A h, final Set<A> r) {
-    if (c == Color.B && l.isTR() && l.l().isTR()) {
-      return tr(ord, l.l().l(), l.l().head(), l.l().r(), l.head(), l.r(), h, r);
-    } else if (c == Color.B && l.isTR() && l.r().isTR()) {
-      return tr(ord, l.l(), l.head(), l.r().l(), l.r().head(), l.r().r(), h, r);
-    } else if (c == Color.B && r.isTR() && r.l().isTR()) {
-      return tr(ord, l, h, r.l().l(), r.l().head(), r.l().r(), r.head(), r.r());
-    } else if (c == Color.B && r.isTR() && r.r().isTR()) {
-      return tr(ord, l, h, r.l(), r.head(), r.r().l(), r.r().head(), r.r().r());
-    } else {
-      return new Tree<A>(ord, c, l, h, r);
-    }
+    return c == Color.B && l.isTR() && l.l().isTR() ? tr(ord, l.l().l(), l.l().head(), l.l().r(), l.head(), l.r(), h, r) : c == Color.B && l.isTR() && l.r().isTR() ? tr(ord, l.l(), l.head(), l.r().l(), l.r().head(), l.r().r(), h, r) : c == Color.B && r.isTR() && r.l().isTR() ? tr(ord, l, h, r.l().l(), r.l().head(), r.l().r(), r.head(), r.r()) : c == Color.B && r.isTR() && r.r().isTR() ? tr(ord, l, h, r.l(), r.head(), r.r().l(), r.r().head(), r.r().r()) : new Tree<A>(ord, c, l, h, r);
   }
 
   private boolean isTR() {
