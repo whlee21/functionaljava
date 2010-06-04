@@ -996,7 +996,7 @@ public abstract class Stream<A> implements Iterable<A> {
    * @param c The class type of the array to return.
    * @return A array projection of this stream.
    */
-  @SuppressWarnings({"unchecked"})
+  @SuppressWarnings({"unchecked", "UnnecessaryFullyQualifiedName"})
   public Array<A> toArray(final Class<A[]> c) {
     final A[] a = (A[]) java.lang.reflect.Array.newInstance(c.getComponentType(), length());
 
