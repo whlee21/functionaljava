@@ -38,7 +38,7 @@ import static fj.data.Tree.unfoldTree;
  * Provides a zipper structure for rose trees, which is a Tree supplied with a location within that tree.
  * Provides navigation, insertion, deletion, and memorization of visited locations within a tree.
  */
-public class TreeZipper<A> implements Iterable<TreeZipper<A>> {
+public final class TreeZipper<A> implements Iterable<TreeZipper<A>> {
 
   /**
    * Returns an iterator of all the positions of this TreeZipper. Exists for use with the foreach syntax.

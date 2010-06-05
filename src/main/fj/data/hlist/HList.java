@@ -15,7 +15,7 @@ import static fj.Function.compose;
  */
 public abstract class HList<A extends HList<A>> {
 
-  protected HList() {
+  HList() {
   }
 
   /**
@@ -204,7 +204,7 @@ public abstract class HList<A extends HList<A>> {
    * @param <L> The type of the heterogeneous list to be folded.
    * @param <R> The return type of the fold.
    */
-  public static class HFoldr<G, V, L, R> {
+  public static final class HFoldr<G, V, L, R> {
 
     private final F3<G, V, L, R> foldRight;
 

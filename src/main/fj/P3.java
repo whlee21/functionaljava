@@ -39,7 +39,7 @@ public abstract class P3<A, B, C> {
    * @param f The function to map with.
    * @return A product with the given function applied.
    */
-  public <X> P3<X, B, C> map1(final F<A, X> f) {
+  public final <X> P3<X, B, C> map1(final F<A, X> f) {
     return new P3<X, B, C>() {
       public X _1() {
         return f.f(P3.this._1());
@@ -61,7 +61,7 @@ public abstract class P3<A, B, C> {
    * @param f The function to map with.
    * @return A product with the given function applied.
    */
-  public <X> P3<A, X, C> map2(final F<B, X> f) {
+  public final <X> P3<A, X, C> map2(final F<B, X> f) {
     return new P3<A, X, C>() {
       public A _1() {
         return P3.this._1();
@@ -83,7 +83,7 @@ public abstract class P3<A, B, C> {
    * @param f The function to map with.
    * @return A product with the given function applied.
    */
-  public <X> P3<A, B, X> map3(final F<C, X> f) {
+  public final <X> P3<A, B, X> map3(final F<C, X> f) {
     return new P3<A, B, X>() {
       public A _1() {
         return P3.this._1();
@@ -104,7 +104,7 @@ public abstract class P3<A, B, C> {
    *
    * @return the 1-product projection over the first element.
    */
-  public P1<A> _1_() {
+  public final P1<A> _1_() {
     return $(P3.<A, B, C>__1()).lazy().f(this);
   }
 
@@ -113,7 +113,7 @@ public abstract class P3<A, B, C> {
    *
    * @return the 1-product projection over the second element.
    */
-  public P1<B> _2_() {
+  public final P1<B> _2_() {
     return $(P3.<A, B, C>__2()).lazy().f(this);
   }
 
@@ -122,7 +122,7 @@ public abstract class P3<A, B, C> {
    *
    * @return the 1-product projection over the third element.
    */
-  public P1<C> _3_() {
+  public final P1<C> _3_() {
     return $(P3.<A, B, C>__3()).lazy().f(this);
   }
 
@@ -131,7 +131,7 @@ public abstract class P3<A, B, C> {
    *
    * @return A P3 that calls this P3 once for any given element and remembers the value for subsequent calls.
    */
-  public P3<A, B, C> memo() {
+  public final P3<A, B, C> memo() {
     return new P3<A, B, C>() {
       private final P1<A> a = _1_().memo();
       private final P1<B> b = _2_().memo();

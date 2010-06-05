@@ -68,7 +68,7 @@ public abstract class P7<A, B, C, D, E, F, G> {
    * @param f The function to map with.
    * @return A product with the given function applied.
    */
-  public <X> P7<X, B, C, D, E, F, G> map1(final fj.F<A, X> f) {
+  public final <X> P7<X, B, C, D, E, F, G> map1(final fj.F<A, X> f) {
     return new P7<X, B, C, D, E, F, G>() {
       public X _1() {
         return f.f(P7.this._1());
@@ -106,7 +106,7 @@ public abstract class P7<A, B, C, D, E, F, G> {
    * @param f The function to map with.
    * @return A product with the given function applied.
    */
-  public <X> P7<A, X, C, D, E, F, G> map2(final fj.F<B, X> f) {
+  public final <X> P7<A, X, C, D, E, F, G> map2(final fj.F<B, X> f) {
     return new P7<A, X, C, D, E, F, G>() {
       public A _1() {
         return P7.this._1();
@@ -144,7 +144,7 @@ public abstract class P7<A, B, C, D, E, F, G> {
    * @param f The function to map with.
    * @return A product with the given function applied.
    */
-  public <X> P7<A, B, X, D, E, F, G> map3(final fj.F<C, X> f) {
+  public final <X> P7<A, B, X, D, E, F, G> map3(final fj.F<C, X> f) {
     return new P7<A, B, X, D, E, F, G>() {
       public A _1() {
         return P7.this._1();
@@ -182,7 +182,7 @@ public abstract class P7<A, B, C, D, E, F, G> {
    * @param f The function to map with.
    * @return A product with the given function applied.
    */
-  public <X> P7<A, B, C, X, E, F, G> map4(final fj.F<D, X> f) {
+  public final <X> P7<A, B, C, X, E, F, G> map4(final fj.F<D, X> f) {
     return new P7<A, B, C, X, E, F, G>() {
       public A _1() {
         return P7.this._1();
@@ -220,7 +220,7 @@ public abstract class P7<A, B, C, D, E, F, G> {
    * @param f The function to map with.
    * @return A product with the given function applied.
    */
-  public <X> P7<A, B, C, D, X, F, G> map5(final fj.F<E, X> f) {
+  public final <X> P7<A, B, C, D, X, F, G> map5(final fj.F<E, X> f) {
     return new P7<A, B, C, D, X, F, G>() {
       public A _1() {
         return P7.this._1();
@@ -258,7 +258,7 @@ public abstract class P7<A, B, C, D, E, F, G> {
    * @param f The function to map with.
    * @return A product with the given function applied.
    */
-  public <X> P7<A, B, C, D, E, X, G> map6(final fj.F<F, X> f) {
+  public final <X> P7<A, B, C, D, E, X, G> map6(final fj.F<F, X> f) {
     return new P7<A, B, C, D, E, X, G>() {
       public A _1() {
         return P7.this._1();
@@ -296,7 +296,7 @@ public abstract class P7<A, B, C, D, E, F, G> {
    * @param f The function to map with.
    * @return A product with the given function applied.
    */
-  public <X> P7<A, B, C, D, E, F, X> map7(final fj.F<G, X> f) {
+  public final <X> P7<A, B, C, D, E, F, X> map7(final fj.F<G, X> f) {
     return new P7<A, B, C, D, E, F, X>() {
       public A _1() {
         return P7.this._1();
@@ -333,7 +333,7 @@ public abstract class P7<A, B, C, D, E, F, G> {
    *
    * @return the 1-product projection over the first element.
    */
-  public P1<A> _1_() {
+  public final P1<A> _1_() {
     return $(P7.<A, B, C, D, E, F, G>__1()).lazy().f(this);
   }
 
@@ -342,7 +342,7 @@ public abstract class P7<A, B, C, D, E, F, G> {
    *
    * @return the 1-product projection over the second element.
    */
-  public P1<B> _2_() {
+  public final P1<B> _2_() {
     return $(P7.<A, B, C, D, E, F, G>__2()).lazy().f(this);
   }
 
@@ -351,7 +351,7 @@ public abstract class P7<A, B, C, D, E, F, G> {
    *
    * @return the 1-product projection over the third element.
    */
-  public P1<C> _3_() {
+  public final P1<C> _3_() {
     return $(P7.<A, B, C, D, E, F, G>__3()).lazy().f(this);
   }
 
@@ -360,7 +360,7 @@ public abstract class P7<A, B, C, D, E, F, G> {
    *
    * @return the 1-product projection over the fourth element.
    */
-  public P1<D> _4_() {
+  public final P1<D> _4_() {
     return $(P7.<A, B, C, D, E, F, G>__4()).lazy().f(this);
   }
 
@@ -369,7 +369,7 @@ public abstract class P7<A, B, C, D, E, F, G> {
    *
    * @return the 1-product projection over the fifth element.
    */
-  public P1<E> _5_() {
+  public final P1<E> _5_() {
     return $(P7.<A, B, C, D, E, F, G>__5()).lazy().f(this);
   }
 
@@ -378,7 +378,7 @@ public abstract class P7<A, B, C, D, E, F, G> {
    *
    * @return the 1-product projection over the sixth element.
    */
-  public P1<F> _6_() {
+  public final P1<F> _6_() {
     return $(P7.<A, B, C, D, E, F, G>__6()).lazy().f(this);
   }
 
@@ -387,7 +387,7 @@ public abstract class P7<A, B, C, D, E, F, G> {
    *
    * @return the 1-product projection over the seventh element.
    */
-  public P1<G> _7_() {
+  public final P1<G> _7_() {
     return $(P7.<A, B, C, D, E, F, G>__7()).lazy().f(this);
   }
 
@@ -396,7 +396,7 @@ public abstract class P7<A, B, C, D, E, F, G> {
    *
    * @return A P7 that calls this P7 once for any given element and remembers the value for subsequent calls.
    */
-  public P7<A, B, C, D, E, F, G> memo() {
+  public final P7<A, B, C, D, E, F, G> memo() {
     return new P7<A, B, C, D, E, F, G>() {
       private final P1<A> a = _1_().memo();
       private final P1<B> b = _2_().memo();

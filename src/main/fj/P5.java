@@ -53,7 +53,7 @@ public abstract class P5<A, B, C, D, E> {
    * @param f The function to map with.
    * @return A product with the given function applied.
    */
-  public <X> P5<X, B, C, D, E> map1(final F<A, X> f) {
+  public final <X> P5<X, B, C, D, E> map1(final F<A, X> f) {
     return new P5<X, B, C, D, E>() {
       public X _1() {
         return f.f(P5.this._1());
@@ -83,7 +83,7 @@ public abstract class P5<A, B, C, D, E> {
    * @param f The function to map with.
    * @return A product with the given function applied.
    */
-  public <X> P5<A, X, C, D, E> map2(final F<B, X> f) {
+  public final <X> P5<A, X, C, D, E> map2(final F<B, X> f) {
     return new P5<A, X, C, D, E>() {
       public A _1() {
         return P5.this._1();
@@ -113,7 +113,7 @@ public abstract class P5<A, B, C, D, E> {
    * @param f The function to map with.
    * @return A product with the given function applied.
    */
-  public <X> P5<A, B, X, D, E> map3(final F<C, X> f) {
+  public final <X> P5<A, B, X, D, E> map3(final F<C, X> f) {
     return new P5<A, B, X, D, E>() {
       public A _1() {
         return P5.this._1();
@@ -143,7 +143,7 @@ public abstract class P5<A, B, C, D, E> {
    * @param f The function to map with.
    * @return A product with the given function applied.
    */
-  public <X> P5<A, B, C, X, E> map4(final F<D, X> f) {
+  public final <X> P5<A, B, C, X, E> map4(final F<D, X> f) {
     return new P5<A, B, C, X, E>() {
       public A _1() {
         return P5.this._1();
@@ -173,7 +173,7 @@ public abstract class P5<A, B, C, D, E> {
    * @param f The function to map with.
    * @return A product with the given function applied.
    */
-  public <X> P5<A, B, C, D, X> map5(final F<E, X> f) {
+  public final <X> P5<A, B, C, D, X> map5(final F<E, X> f) {
     return new P5<A, B, C, D, X>() {
       public A _1() {
         return P5.this._1();
@@ -202,7 +202,7 @@ public abstract class P5<A, B, C, D, E> {
    *
    * @return the 1-product projection over the first element.
    */
-  public P1<A> _1_() {
+  public final P1<A> _1_() {
     return $(P5.<A, B, C, D, E>__1()).lazy().f(this);
   }
 
@@ -211,7 +211,7 @@ public abstract class P5<A, B, C, D, E> {
    *
    * @return the 1-product projection over the second element.
    */
-  public P1<B> _2_() {
+  public final P1<B> _2_() {
     return $(P5.<A, B, C, D, E>__2()).lazy().f(this);
   }
 
@@ -220,7 +220,7 @@ public abstract class P5<A, B, C, D, E> {
    *
    * @return the 1-product projection over the third element.
    */
-  public P1<C> _3_() {
+  public final P1<C> _3_() {
     return $(P5.<A, B, C, D, E>__3()).lazy().f(this);
   }
 
@@ -229,7 +229,7 @@ public abstract class P5<A, B, C, D, E> {
    *
    * @return the 1-product projection over the fourth element.
    */
-  public P1<D> _4_() {
+  public final P1<D> _4_() {
     return $(P5.<A, B, C, D, E>__4()).lazy().f(this);
   }
 
@@ -238,7 +238,7 @@ public abstract class P5<A, B, C, D, E> {
    *
    * @return the 1-product projection over the fifth element.
    */
-  public P1<E> _5_() {
+  public final P1<E> _5_() {
     return $(P5.<A, B, C, D, E>__5()).lazy().f(this);
   }
 
@@ -247,7 +247,7 @@ public abstract class P5<A, B, C, D, E> {
    *
    * @return A P5 that calls this P5 once for any given element and remembers the value for subsequent calls.
    */
-  public P5<A, B, C, D, E> memo() {
+  public final P5<A, B, C, D, E> memo() {
     return new P5<A, B, C, D, E>() {
       private final P1<A> a = _1_().memo();
       private final P1<B> b = _2_().memo();

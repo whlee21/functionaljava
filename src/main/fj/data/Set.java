@@ -33,12 +33,12 @@ public abstract class Set<A> implements Iterable<A> {
 
   private final Ord<A> ord;
 
-  public boolean isEmpty() {
+  public final boolean isEmpty() {
     return this instanceof Empty;
   }
 
   @SuppressWarnings({"ClassEscapesDefinedScope"})
-  protected abstract Color color();
+  abstract Color color();
 
   abstract Set<A> l();
 
@@ -51,7 +51,7 @@ public abstract class Set<A> implements Iterable<A> {
    *
    * @return the order of this Set.
    */
-  public Ord<A> ord() {
+  public final Ord<A> ord() {
     return ord;
   }
 
@@ -118,7 +118,7 @@ public abstract class Set<A> implements Iterable<A> {
    *         (2) A new set with the given function applied to the first set element
    *         that was equal to the given element.
    */
-  public P2<Boolean, Set<A>> update(final A a, final F<A, A> f) {
+  public final P2<Boolean, Set<A>> update(final A a, final F<A, A> f) {
     return isEmpty()
            ? P.p(false, this)
            : tryUpdate(a, f).either(new F<A, P2<Boolean, Set<A>>>() {
@@ -165,7 +165,7 @@ public abstract class Set<A> implements Iterable<A> {
    * @param x An element to check for membership in this set.
    * @return true if the given element is a member of this set.
    */
-  public boolean member(final A x) {
+  public final boolean member(final A x) {
     return !isEmpty() && (ord.isLessThan(x, head()) && l().member(x) || ord.eq(head(), x) || r().member(x));
   }
 
@@ -189,7 +189,7 @@ public abstract class Set<A> implements Iterable<A> {
    * @param x An element to insert into this set.
    * @return A new set with the given element inserted.
    */
-  public Set<A> insert(final A x) {
+  public final Set<A> insert(final A x) {
     return ins(x).makeBlack();
   }
 
@@ -241,7 +241,7 @@ public abstract class Set<A> implements Iterable<A> {
    *
    * @return an iterator over this set.
    */
-  public Iterator<A> iterator() {
+  public final Iterator<A> iterator() {
     return toStream().iterator();
   }
 
@@ -263,7 +263,7 @@ public abstract class Set<A> implements Iterable<A> {
    * @param f A function to map across this set.
    * @return The set of the results of applying the given function to the elements of this set.
    */
-  public <B> Set<B> map(final Ord<B> o, final F<A, B> f) {
+  public final <B> Set<B> map(final Ord<B> o, final F<A, B> f) {
     return iterableSet(o, toStream().map(f));
   }
 
@@ -274,7 +274,7 @@ public abstract class Set<A> implements Iterable<A> {
    * @param m The monoid to fold this Set with.
    * @return The result of folding the Set with the given monoid.
    */
-  public <B> B foldMap(final F<A, B> f, final Monoid<B> m) {
+  public final <B> B foldMap(final F<A, B> f, final Monoid<B> m) {
     return isEmpty() ?
            m.zero() :
            m.sum(m.sum(r().foldMap(f, m), f.f(head())), l().foldMap(f, m));
@@ -285,7 +285,7 @@ public abstract class Set<A> implements Iterable<A> {
    *
    * @return a list representation of this set.
    */
-  public List<A> toList() {
+  public final List<A> toList() {
     return foldMap(List.cons(List.<A>nil()), Monoid.<A>listMonoid());
   }
 
@@ -294,7 +294,7 @@ public abstract class Set<A> implements Iterable<A> {
    *
    * @return a stream representation of this set.
    */
-  public Stream<A> toStream() {
+  public final Stream<A> toStream() {
     return foldMap(Stream.<A>single(), Monoid.<A>streamMonoid());
   }
 
@@ -305,7 +305,7 @@ public abstract class Set<A> implements Iterable<A> {
    * @param f A function to bind across this set.
    * @return A new set after applying the given function and joining the resulting sets.
    */
-  public <B> Set<B> bind(final Ord<B> o, final F<A, Set<B>> f) {
+  public final <B> Set<B> bind(final Ord<B> o, final F<A, Set<B>> f) {
     return join(o, map(Ord.setOrd(o), f));
   }
 
@@ -315,7 +315,7 @@ public abstract class Set<A> implements Iterable<A> {
    * @param s A set to add to this set.
    * @return A new set containing all elements of both sets.
    */
-  public Set<A> union(final Set<A> s) {
+  public final Set<A> union(final Set<A> s) {
     return iterableSet(ord, s.toStream().append(toStream()));
   }
 
@@ -326,7 +326,7 @@ public abstract class Set<A> implements Iterable<A> {
    * @param f The predicate function to filter on.
    * @return A new set whose elements all match the given predicate.
    */
-  public Set<A> filter(final F<A, Boolean> f) {
+  public final Set<A> filter(final F<A, Boolean> f) {
     return iterableSet(ord, toStream().filter(f));
   }
 
@@ -336,7 +336,7 @@ public abstract class Set<A> implements Iterable<A> {
    * @param a an element to remove.
    * @return A new set containing all the elements of this set, except the given element.
    */
-  public Set<A> delete(final A a) {
+  public final Set<A> delete(final A a) {
     return minus(single(ord, a));
   }
 
@@ -345,7 +345,7 @@ public abstract class Set<A> implements Iterable<A> {
    *
    * @return A function that deletes a given element from a given set.
    */
-  public F<A, F<Set<A>, Set<A>>> delete() {
+  public final F<A, F<Set<A>, Set<A>>> delete() {
     return curry(new F2<A, Set<A>, Set<A>>() {
       public Set<A> f(final A a, final Set<A> set) {
         return set.delete(a);
@@ -359,7 +359,7 @@ public abstract class Set<A> implements Iterable<A> {
    * @param s A set of elements to retain.
    * @return A new set which is the intersection of this set and the given set.
    */
-  public Set<A> intersect(final Set<A> s) {
+  public final Set<A> intersect(final Set<A> s) {
     return filter(Set.<A>member().f(s));
   }
 
@@ -369,7 +369,7 @@ public abstract class Set<A> implements Iterable<A> {
    * @param s A set of elements to delete.
    * @return A new set which contains only the elements of this set that do not occur in the given set.
    */
-  public Set<A> minus(final Set<A> s) {
+  public final Set<A> minus(final Set<A> s) {
     return filter(compose(not, Set.<A>member().f(s)));
   }
 
@@ -378,7 +378,7 @@ public abstract class Set<A> implements Iterable<A> {
    *
    * @return The number of elements in this set.
    */
-  public int size() {
+  public final int size() {
     final F<A, Integer> one = constant(1);
     return foldMap(one, Monoid.intAdditionMonoid);
   }
@@ -396,7 +396,7 @@ public abstract class Set<A> implements Iterable<A> {
    *         and all the elements in the second set are greater than the given value, and the optional value is the
    *         given value if found, otherwise None.
    */
-  public P3<Set<A>, Option<A>, Set<A>> split(final A a) {
+  public final P3<Set<A>, Option<A>, Set<A>> split(final A a) {
     if (isEmpty())
       return P.p(empty(ord), Option.<A>none(), empty(ord));
     else {
@@ -419,7 +419,7 @@ public abstract class Set<A> implements Iterable<A> {
    * @param s A set which is a superset of this set if this method returns true.
    * @return true if this set is a subset of the given set.
    */
-  public boolean subsetOf(final Set<A> s) {
+  public final boolean subsetOf(final Set<A> s) {
     if (isEmpty() || s.isEmpty())
       return isEmpty();
     else {

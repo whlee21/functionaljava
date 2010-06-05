@@ -46,7 +46,7 @@ public abstract class P4<A, B, C, D> {
    * @param f The function to map with.
    * @return A product with the given function applied.
    */
-  public <X> P4<X, B, C, D> map1(final F<A, X> f) {
+  public final <X> P4<X, B, C, D> map1(final F<A, X> f) {
     return new P4<X, B, C, D>() {
       public X _1() {
         return f.f(P4.this._1());
@@ -72,7 +72,7 @@ public abstract class P4<A, B, C, D> {
    * @param f The function to map with.
    * @return A product with the given function applied.
    */
-  public <X> P4<A, X, C, D> map2(final F<B, X> f) {
+  public final <X> P4<A, X, C, D> map2(final F<B, X> f) {
     return new P4<A, X, C, D>() {
       public A _1() {
         return P4.this._1();
@@ -98,7 +98,7 @@ public abstract class P4<A, B, C, D> {
    * @param f The function to map with.
    * @return A product with the given function applied.
    */
-  public <X> P4<A, B, X, D> map3(final F<C, X> f) {
+  public final <X> P4<A, B, X, D> map3(final F<C, X> f) {
     return new P4<A, B, X, D>() {
       public A _1() {
         return P4.this._1();
@@ -124,7 +124,7 @@ public abstract class P4<A, B, C, D> {
    * @param f The function to map with.
    * @return A product with the given function applied.
    */
-  public <X> P4<A, B, C, X> map4(final F<D, X> f) {
+  public final <X> P4<A, B, C, X> map4(final F<D, X> f) {
     return new P4<A, B, C, X>() {
       public A _1() {
         return P4.this._1();
@@ -149,7 +149,7 @@ public abstract class P4<A, B, C, D> {
    *
    * @return the 1-product projection over the first element.
    */
-  public P1<A> _1_() {
+  public final P1<A> _1_() {
     return $(P4.<A, B, C, D>__1()).lazy().f(this);
   }
 
@@ -158,7 +158,7 @@ public abstract class P4<A, B, C, D> {
    *
    * @return the 1-product projection over the second element.
    */
-  public P1<B> _2_() {
+  public final P1<B> _2_() {
     return $(P4.<A, B, C, D>__2()).lazy().f(this);
   }
 
@@ -167,7 +167,7 @@ public abstract class P4<A, B, C, D> {
    *
    * @return the 1-product projection over the third element.
    */
-  public P1<C> _3_() {
+  public final P1<C> _3_() {
     return $(P4.<A, B, C, D>__3()).lazy().f(this);
   }
 
@@ -176,7 +176,7 @@ public abstract class P4<A, B, C, D> {
    *
    * @return the 1-product projection over the fourth element.
    */
-  public P1<D> _4_() {
+  public final P1<D> _4_() {
     return $(P4.<A, B, C, D>__4()).lazy().f(this);
   }
 
@@ -185,7 +185,7 @@ public abstract class P4<A, B, C, D> {
    *
    * @return A P4 that calls this P4 once for any given element and remembers the value for subsequent calls.
    */
-  public P4<A, B, C, D> memo() {
+  public final P4<A, B, C, D> memo() {
     return new P4<A, B, C, D>() {
       private final P1<A> a = _1_().memo();
       private final P1<B> b = _2_().memo();

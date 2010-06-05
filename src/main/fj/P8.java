@@ -75,7 +75,7 @@ public abstract class P8<A, B, C, D, E, F, G, H> {
    * @param f The function to map with.
    * @return A product with the given function applied.
    */
-  public <X> P8<X, B, C, D, E, F, G, H> map1(final fj.F<A, X> f) {
+  public final <X> P8<X, B, C, D, E, F, G, H> map1(final fj.F<A, X> f) {
     return new P8<X, B, C, D, E, F, G, H>() {
       public X _1() {
         return f.f(P8.this._1());
@@ -117,7 +117,7 @@ public abstract class P8<A, B, C, D, E, F, G, H> {
    * @param f The function to map with.
    * @return A product with the given function applied.
    */
-  public <X> P8<A, X, C, D, E, F, G, H> map2(final fj.F<B, X> f) {
+  public final <X> P8<A, X, C, D, E, F, G, H> map2(final fj.F<B, X> f) {
     return new P8<A, X, C, D, E, F, G, H>() {
       public A _1() {
         return P8.this._1();
@@ -159,7 +159,7 @@ public abstract class P8<A, B, C, D, E, F, G, H> {
    * @param f The function to map with.
    * @return A product with the given function applied.
    */
-  public <X> P8<A, B, X, D, E, F, G, H> map3(final fj.F<C, X> f) {
+  public final <X> P8<A, B, X, D, E, F, G, H> map3(final fj.F<C, X> f) {
     return new P8<A, B, X, D, E, F, G, H>() {
       public A _1() {
         return P8.this._1();
@@ -201,7 +201,7 @@ public abstract class P8<A, B, C, D, E, F, G, H> {
    * @param f The function to map with.
    * @return A product with the given function applied.
    */
-  public <X> P8<A, B, C, X, E, F, G, H> map4(final fj.F<D, X> f) {
+  public final <X> P8<A, B, C, X, E, F, G, H> map4(final fj.F<D, X> f) {
     return new P8<A, B, C, X, E, F, G, H>() {
       public A _1() {
         return P8.this._1();
@@ -243,7 +243,7 @@ public abstract class P8<A, B, C, D, E, F, G, H> {
    * @param f The function to map with.
    * @return A product with the given function applied.
    */
-  public <X> P8<A, B, C, D, X, F, G, H> map5(final fj.F<E, X> f) {
+  public final <X> P8<A, B, C, D, X, F, G, H> map5(final fj.F<E, X> f) {
     return new P8<A, B, C, D, X, F, G, H>() {
       public A _1() {
         return P8.this._1();
@@ -285,7 +285,7 @@ public abstract class P8<A, B, C, D, E, F, G, H> {
    * @param f The function to map with.
    * @return A product with the given function applied.
    */
-  public <X> P8<A, B, C, D, E, X, G, H> map6(final fj.F<F, X> f) {
+  public final <X> P8<A, B, C, D, E, X, G, H> map6(final fj.F<F, X> f) {
     return new P8<A, B, C, D, E, X, G, H>() {
       public A _1() {
         return P8.this._1();
@@ -327,7 +327,7 @@ public abstract class P8<A, B, C, D, E, F, G, H> {
    * @param f The function to map with.
    * @return A product with the given function applied.
    */
-  public <X> P8<A, B, C, D, E, F, X, H> map7(final fj.F<G, X> f) {
+  public final <X> P8<A, B, C, D, E, F, X, H> map7(final fj.F<G, X> f) {
     return new P8<A, B, C, D, E, F, X, H>() {
       public A _1() {
         return P8.this._1();
@@ -369,7 +369,7 @@ public abstract class P8<A, B, C, D, E, F, G, H> {
    * @param f The function to map with.
    * @return A product with the given function applied.
    */
-  public <X> P8<A, B, C, D, E, F, G, X> map8(final fj.F<H, X> f) {
+  public final <X> P8<A, B, C, D, E, F, G, X> map8(final fj.F<H, X> f) {
     return new P8<A, B, C, D, E, F, G, X>() {
       public A _1() {
         return P8.this._1();
@@ -411,7 +411,7 @@ public abstract class P8<A, B, C, D, E, F, G, H> {
    *
    * @return the 1-product projection over the first element.
    */
-  public P1<A> _1_() {
+  public final P1<A> _1_() {
     return $(P8.<A, B, C, D, E, F, G, H>__1()).lazy().f(this);
   }
 
@@ -420,7 +420,7 @@ public abstract class P8<A, B, C, D, E, F, G, H> {
    *
    * @return the 1-product projection over the second element.
    */
-  public P1<B> _2_() {
+  public final P1<B> _2_() {
     return $(P8.<A, B, C, D, E, F, G, H>__2()).lazy().f(this);
   }
 
@@ -429,7 +429,7 @@ public abstract class P8<A, B, C, D, E, F, G, H> {
    *
    * @return the 1-product projection over the third element.
    */
-  public P1<C> _3_() {
+  public final P1<C> _3_() {
     return $(P8.<A, B, C, D, E, F, G, H>__3()).lazy().f(this);
   }
 
@@ -438,7 +438,7 @@ public abstract class P8<A, B, C, D, E, F, G, H> {
    *
    * @return the 1-product projection over the fourth element.
    */
-  public P1<D> _4_() {
+  public final P1<D> _4_() {
     return $(P8.<A, B, C, D, E, F, G, H>__4()).lazy().f(this);
   }
 
@@ -447,7 +447,7 @@ public abstract class P8<A, B, C, D, E, F, G, H> {
    *
    * @return the 1-product projection over the fifth element.
    */
-  public P1<E> _5_() {
+  public final P1<E> _5_() {
     return $(P8.<A, B, C, D, E, F, G, H>__5()).lazy().f(this);
   }
 
@@ -456,7 +456,7 @@ public abstract class P8<A, B, C, D, E, F, G, H> {
    *
    * @return the 1-product projection over the sixth element.
    */
-  public P1<F> _6_() {
+  public final P1<F> _6_() {
     return $(P8.<A, B, C, D, E, F, G, H>__6()).lazy().f(this);
   }
 
@@ -465,7 +465,7 @@ public abstract class P8<A, B, C, D, E, F, G, H> {
    *
    * @return the 1-product projection over the seventh element.
    */
-  public P1<G> _7_() {
+  public final P1<G> _7_() {
     return $(P8.<A, B, C, D, E, F, G, H>__7()).lazy().f(this);
   }
 
@@ -474,7 +474,7 @@ public abstract class P8<A, B, C, D, E, F, G, H> {
    *
    * @return the 1-product projection over the eighth element.
    */
-  public P1<H> _8_() {
+  public final P1<H> _8_() {
     return $(P8.<A, B, C, D, E, F, G, H>__8()).lazy().f(this);
   }
 
@@ -483,7 +483,7 @@ public abstract class P8<A, B, C, D, E, F, G, H> {
    *
    * @return A P8 that calls this P8 once for any given element and remembers the value for subsequent calls.
    */
-  public P8<A, B, C, D, E, F, G, H> memo() {
+  public final P8<A, B, C, D, E, F, G, H> memo() {
     return new P8<A, B, C, D, E, F, G, H>() {
       private final P1<A> a = _1_().memo();
       private final P1<B> b = _2_().memo();

@@ -55,7 +55,7 @@ public abstract class List<A> implements Iterable<A> {
    *
    * @return A iterator for this list.
    */
-  public Iterator<A> iterator() {
+  public final Iterator<A> iterator() {
     return toCollection().iterator();
   }
 
@@ -78,7 +78,7 @@ public abstract class List<A> implements Iterable<A> {
    *
    * @return The length of this list.
    */
-  public int length() {
+  public final int length() {
     return foldLeft(new F<Integer, F<A, Integer>>() {
       public F<A, Integer> f(final Integer i) {
         return new F<A, Integer>() {
@@ -95,7 +95,7 @@ public abstract class List<A> implements Iterable<A> {
    *
    * @return <code>true</code> if this list is empty, <code>false</code> otherwise.
    */
-  public boolean isEmpty() {
+  public final boolean isEmpty() {
     return this instanceof Nil;
   }
 
@@ -104,7 +104,7 @@ public abstract class List<A> implements Iterable<A> {
    *
    * @return <code>false</code> if this list is empty, <code>true</code> otherwise.
    */
-  public boolean isNotEmpty() {
+  public final boolean isNotEmpty() {
     return this instanceof Cons;
   }
 
@@ -115,7 +115,7 @@ public abstract class List<A> implements Iterable<A> {
    * @param cons The function to apply to the head and tail of this list if it is not empty.
    * @return A reduction on this list.
    */
-  public <B> B list(final B nil, final F<A, F<List<A>, B>> cons) {
+  public final <B> B list(final B nil, final F<A, F<List<A>, B>> cons) {
     return isEmpty() ? nil : cons.f(head()).f(tail());
   }
 
@@ -125,7 +125,7 @@ public abstract class List<A> implements Iterable<A> {
    * @param a The argument to return if this list is empty.
    * @return The head of this list if there is one or the given argument if this list is empty.
    */
-  public A orHead(final P1<A> a) {
+  public final A orHead(final P1<A> a) {
     return isEmpty() ? a._1() : head();
   }
 
@@ -135,7 +135,7 @@ public abstract class List<A> implements Iterable<A> {
    * @param as The argument to return if this list is empty.
    * @return The tail of this list if there is one or the given argument if this list is empty.
    */
-  public List<A> orTail(final P1<List<A>> as) {
+  public final List<A> orTail(final P1<List<A>> as) {
     return isEmpty() ? as._1() : tail();
   }
 
@@ -145,7 +145,7 @@ public abstract class List<A> implements Iterable<A> {
    *
    * @return An option projection of this list.
    */
-  public Option<A> toOption() {
+  public final Option<A> toOption() {
     return isEmpty() ? Option.<A>none() : some(head());
   }
 
@@ -156,7 +156,7 @@ public abstract class List<A> implements Iterable<A> {
    * @param x The value to return in left if this list is empty.
    * @return An either projection of this list.
    */
-  public <X> Either<X, A> toEither(final P1<X> x) {
+  public final <X> Either<X, A> toEither(final P1<X> x) {
     return isEmpty() ? Either.<X, A>left(x._1()) : Either.<X, A>right(head());
   }
 
@@ -165,7 +165,7 @@ public abstract class List<A> implements Iterable<A> {
    *
    * @return A stream projection of this list.
    */
-  public Stream<A> toStream() {
+  public final Stream<A> toStream() {
     final Stream<A> nil = Stream.nil();
     return foldRight(new F<A, F<Stream<A>, Stream<A>>>() {
       public F<Stream<A>, Stream<A>> f(final A a) {
@@ -184,7 +184,7 @@ public abstract class List<A> implements Iterable<A> {
    * @return A array projection of this list.
    */
   @SuppressWarnings({"unchecked"})
-  public Array<A> toArray() {
+  public final Array<A> toArray() {
     final Object[] a = new Object[length()];
     List<A> x = this;
     for (int i = 0; i < length(); i++) {
@@ -202,7 +202,7 @@ public abstract class List<A> implements Iterable<A> {
    * @return A array projection of this list.
    */
   @SuppressWarnings({"unchecked", "UnnecessaryFullyQualifiedName"})
-  public Array<A> toArray(final Class<A[]> c) {
+  public final Array<A> toArray(final Class<A[]> c) {
     final A[] a = (A[]) java.lang.reflect.Array.newInstance(c.getComponentType(), length());
     List<A> x = this;
     for (int i = 0; i < length(); i++) {
@@ -219,7 +219,7 @@ public abstract class List<A> implements Iterable<A> {
    * @param a The element to prepend.
    * @return A new list with the given element at the head.
    */
-  public List<A> cons(final A a) {
+  public final List<A> cons(final A a) {
     return new Cons<A>(a, this);
   }
 
@@ -230,7 +230,7 @@ public abstract class List<A> implements Iterable<A> {
    * @param a The element to prepend.
    * @return A new list with the given element at the head.
    */
-  public List<A> conss(final A a) {
+  public final List<A> conss(final A a) {
     return new Cons<A>(a, this);
   }
 
@@ -240,7 +240,7 @@ public abstract class List<A> implements Iterable<A> {
    * @param f The function to map across this list.
    * @return A new list after the given function has been applied to each element.
    */
-  public <B> List<B> map(final F<A, B> f) {
+  public final <B> List<B> map(final F<A, B> f) {
     final Buffer<B> bs = empty();
 
     for (List<A> xs = this; xs.isNotEmpty(); xs = xs.tail()) {
@@ -256,7 +256,7 @@ public abstract class List<A> implements Iterable<A> {
    * @param f The side-effect to perform for the given element.
    * @return The unit value.
    */
-  public Unit foreach(final F<A, Unit> f) {
+  public final Unit foreach(final F<A, Unit> f) {
     for (List<A> xs = this; xs.isNotEmpty(); xs = xs.tail()) {
       f.f(xs.head());
     }
@@ -269,7 +269,7 @@ public abstract class List<A> implements Iterable<A> {
    *
    * @param f The side-effect to perform for the given element.
    */
-  public void foreach(final Effect<A> f) {
+  public final void foreach(final Effect<A> f) {
     for (List<A> xs = this; xs.isNotEmpty(); xs = xs.tail()) {
       f.e(xs.head());
     }
@@ -282,7 +282,7 @@ public abstract class List<A> implements Iterable<A> {
    * @param f The predicate function to filter on.
    * @return A new list whose elements all match the given predicate.
    */
-  public List<A> filter(final F<A, Boolean> f) {
+  public final List<A> filter(final F<A, Boolean> f) {
     final Buffer<A> b = empty();
 
     for (List<A> xs = this; xs.isNotEmpty(); xs = xs.tail()) {
@@ -302,7 +302,7 @@ public abstract class List<A> implements Iterable<A> {
    * @param f The predicate function to filter on.
    * @return A new list whose elements do not match the given predicate.
    */
-  public List<A> removeAll(final F<A, Boolean> f) {
+  public final List<A> removeAll(final F<A, Boolean> f) {
     return filter(compose(not, f));
   }
 
@@ -314,7 +314,7 @@ public abstract class List<A> implements Iterable<A> {
    * @param e An <code>Equals</code> instance for the element's type.
    * @return A new list whose elements do not match the given predicate.
    */
-  public List<A> delete(final A a, final Equal<A> e) {
+  public final List<A> delete(final A a, final Equal<A> e) {
     final P2<List<A>, List<A>> p = span(compose(not, e.eq(a)));
     return p._2().isEmpty() ? p._1() : p._1().append(p._2().tail());
   }
@@ -326,7 +326,7 @@ public abstract class List<A> implements Iterable<A> {
    *          hold, or the list is exhausted.
    * @return The first elements of the head of this list that match the given predicate function.
    */
-  public List<A> takeWhile(final F<A, Boolean> f) {
+  public final List<A> takeWhile(final F<A, Boolean> f) {
     final Buffer<A> b = empty();
     boolean taking = true;
 
@@ -349,7 +349,7 @@ public abstract class List<A> implements Iterable<A> {
    * @param f The predicate function to apply through this list.
    * @return The list whose first element does not match the given predicate function.
    */
-  public List<A> dropWhile(final F<A, Boolean> f) {
+  public final List<A> dropWhile(final F<A, Boolean> f) {
     List<A> xs;
 
     //noinspection StatementWithEmptyBody
@@ -366,7 +366,7 @@ public abstract class List<A> implements Iterable<A> {
    * @return A tuple where the first element is the longest prefix of this list that satisfies
    *         the given predicate and the second element is the remainder of the list.
    */
-  public P2<List<A>, List<A>> span(final F<A, Boolean> p) {
+  public final P2<List<A>, List<A>> span(final F<A, Boolean> p) {
     final Buffer<A> b = empty();
     for (List<A> xs = this; xs.isNotEmpty(); xs = xs.tail()) {
       if (p.f(xs.head()))
@@ -385,7 +385,7 @@ public abstract class List<A> implements Iterable<A> {
    * @return A tuple where the first element is the longest prefix of this list that does not satisfy
    *         the given predicate and the second element is the remainder of the list.
    */
-  public P2<List<A>, List<A>> breakk(final F<A, Boolean> p) {
+  public final P2<List<A>, List<A>> breakk(final F<A, Boolean> p) {
     return span(new F<A, Boolean>() {
       public Boolean f(final A a) {
         return !p.f(a);
@@ -399,7 +399,7 @@ public abstract class List<A> implements Iterable<A> {
    * @param e The equality implementation for the elements.
    * @return A list of grouped elements.
    */
-  public List<List<A>> group(final Equal<A> e) {
+  public final List<List<A>> group(final Equal<A> e) {
     if (isEmpty())
       return nil();
     else {
@@ -415,7 +415,7 @@ public abstract class List<A> implements Iterable<A> {
    * @param f The function to apply to each element of this list.
    * @return A new list after performing the map, then final join.
    */
-  public <B> List<B> bind(final F<A, List<B>> f) {
+  public final <B> List<B> bind(final F<A, List<B>> f) {
     final Buffer<B> b = empty();
 
     for (List<A> xs = this; xs.isNotEmpty(); xs = xs.tail()) {
@@ -433,7 +433,7 @@ public abstract class List<A> implements Iterable<A> {
    * @param f  The function to apply to each element of this list and the given list.
    * @return A new list after performing the map, then final join.
    */
-  public <B, C> List<C> bind(final List<B> lb, final F<A, F<B, C>> f) {
+  public final <B, C> List<C> bind(final List<B> lb, final F<A, F<B, C>> f) {
     return lb.apply(map(f));
   }
 
@@ -445,7 +445,7 @@ public abstract class List<A> implements Iterable<A> {
    * @param f  The function to apply to each element of this list and the given list.
    * @return A new list after performing the map, then final join.
    */
-  public <B, C> List<C> bind(final List<B> lb, final F2<A, B, C> f) {
+  public final <B, C> List<C> bind(final List<B> lb, final F2<A, B, C> f) {
     return bind(lb, curry(f));
   }
 
@@ -472,7 +472,7 @@ public abstract class List<A> implements Iterable<A> {
    * @param f  The function to apply to each element of this list and the given lists.
    * @return A new list after performing the map, then final join.
    */
-  public <B, C, D> List<D> bind(final List<B> lb, final List<C> lc, final F<A, F<B, F<C, D>>> f) {
+  public final <B, C, D> List<D> bind(final List<B> lb, final List<C> lc, final F<A, F<B, F<C, D>>> f) {
     return lc.apply(bind(lb, f));
   }
 
@@ -486,7 +486,7 @@ public abstract class List<A> implements Iterable<A> {
    * @param f  The function to apply to each element of this list and the given lists.
    * @return A new list after performing the map, then final join.
    */
-  public <B, C, D, E> List<E> bind(final List<B> lb, final List<C> lc, final List<D> ld,
+  public final <B, C, D, E> List<E> bind(final List<B> lb, final List<C> lc, final List<D> ld,
                                    final F<A, F<B, F<C, F<D, E>>>> f) {
     return ld.apply(bind(lb, lc, f));
   }
@@ -502,7 +502,7 @@ public abstract class List<A> implements Iterable<A> {
    * @param f  The function to apply to each element of this list and the given lists.
    * @return A new list after performing the map, then final join.
    */
-  public <B, C, D, E, F$> List<F$> bind(final List<B> lb, final List<C> lc, final List<D> ld, final List<E> le,
+  public final <B, C, D, E, F$> List<F$> bind(final List<B> lb, final List<C> lc, final List<D> ld, final List<E> le,
                                         final F<A, F<B, F<C, F<D, F<E, F$>>>>> f) {
     return le.apply(bind(lb, lc, ld, f));
   }
@@ -519,7 +519,7 @@ public abstract class List<A> implements Iterable<A> {
    * @param f  The function to apply to each element of this list and the given lists.
    * @return A new list after performing the map, then final join.
    */
-  public <B, C, D, E, F$, G> List<G> bind(final List<B> lb, final List<C> lc, final List<D> ld, final List<E> le,
+  public final <B, C, D, E, F$, G> List<G> bind(final List<B> lb, final List<C> lc, final List<D> ld, final List<E> le,
                                           final List<F$> lf, final F<A, F<B, F<C, F<D, F<E, F<F$, G>>>>>> f) {
     return lf.apply(bind(lb, lc, ld, le, f));
   }
@@ -537,7 +537,7 @@ public abstract class List<A> implements Iterable<A> {
    * @param f  The function to apply to each element of this list and the given lists.
    * @return A new list after performing the map, then final join.
    */
-  public <B, C, D, E, F$, G, H> List<H> bind(final List<B> lb, final List<C> lc, final List<D> ld, final List<E> le,
+  public final <B, C, D, E, F$, G, H> List<H> bind(final List<B> lb, final List<C> lc, final List<D> ld, final List<E> le,
                                              final List<F$> lf, final List<G> lg,
                                              final F<A, F<B, F<C, F<D, F<E, F<F$, F<G, H>>>>>>> f) {
     return lg.apply(bind(lb, lc, ld, le, lf, f));
@@ -557,7 +557,7 @@ public abstract class List<A> implements Iterable<A> {
    * @param f  The function to apply to each element of this list and the given lists.
    * @return A new list after performing the map, then final join.
    */
-  public <B, C, D, E, F$, G, H, I> List<I> bind(final List<B> lb, final List<C> lc, final List<D> ld, final List<E> le,
+  public final <B, C, D, E, F$, G, H, I> List<I> bind(final List<B> lb, final List<C> lc, final List<D> ld, final List<E> le,
                                                 final List<F$> lf, final List<G> lg, final List<H> lh,
                                                 final F<A, F<B, F<C, F<D, F<E, F<F$, F<G, F<H, I>>>>>>>> f) {
     return lh.apply(bind(lb, lc, ld, le, lf, lg, f));
@@ -569,7 +569,7 @@ public abstract class List<A> implements Iterable<A> {
    * @param bs The list to apply in the final join.
    * @return A new list after the final join.
    */
-  public <B> List<B> sequence(final List<B> bs) {
+  public final <B> List<B> sequence(final List<B> bs) {
     final F<A, List<B>> c = constant(bs);
     return bind(c);
   }
@@ -580,7 +580,7 @@ public abstract class List<A> implements Iterable<A> {
    * @param lf The list of functions to apply.
    * @return A new list after applying the given list of functions through this list.
    */
-  public <B> List<B> apply(final List<F<A, B>> lf) {
+  public final <B> List<B> apply(final List<F<A, B>> lf) {
     return lf.bind(new F<F<A, B>, List<B>>() {
       public List<B> f(final F<A, B> f) {
         return map(f);
@@ -594,7 +594,7 @@ public abstract class List<A> implements Iterable<A> {
    * @param as The list to append to this one.
    * @return A new list that has appended the given list.
    */
-  public List<A> append(final List<A> as) {
+  public final List<A> append(final List<A> as) {
     return fromList(this).append(as).toList();
   }
 
@@ -605,7 +605,7 @@ public abstract class List<A> implements Iterable<A> {
    * @param b The beginning value to start the application from.
    * @return The final result after the right-fold reduction.
    */
-  public <B> B foldRight(final F<A, F<B, B>> f, final B b) {
+  public final <B> B foldRight(final F<A, F<B, B>> f, final B b) {
     return isEmpty() ? b : f.f(head()).f(tail().foldRight(f, b));
   }
 
@@ -616,7 +616,7 @@ public abstract class List<A> implements Iterable<A> {
    * @param b The beginning value to start the application from.
    * @return The final result after the right-fold reduction.
    */
-  public <B> B foldRight(final F2<A, B, B> f, final B b) {
+  public final <B> B foldRight(final F2<A, B, B> f, final B b) {
     return foldRight(curry(f), b);
   }
 
@@ -627,7 +627,7 @@ public abstract class List<A> implements Iterable<A> {
    * @param b The beginning value to start the application from.
    * @return The final result after the left-fold reduction.
    */
-  public <B> B foldLeft(final F<B, F<A, B>> f, final B b) {
+  public final <B> B foldLeft(final F<B, F<A, B>> f, final B b) {
     B x = b;
 
     for (List<A> xs = this; !xs.isEmpty(); xs = xs.tail()) {
@@ -644,7 +644,7 @@ public abstract class List<A> implements Iterable<A> {
    * @param b The beginning value to start the application from.
    * @return The final result after the left-fold reduction.
    */
-  public <B> B foldLeft(final F2<B, A, B> f, final B b) {
+  public final <B> B foldLeft(final F2<B, A, B> f, final B b) {
     return foldLeft(curry(f), b);
   }
 
@@ -655,7 +655,7 @@ public abstract class List<A> implements Iterable<A> {
    * @param f The function to apply on each element of the list.
    * @return The final result after the left-fold reduction.
    */
-  public A foldLeft1(final F2<A, A, A> f) {
+  public final A foldLeft1(final F2<A, A, A> f) {
     return foldLeft1(curry(f));
   }
 
@@ -666,7 +666,7 @@ public abstract class List<A> implements Iterable<A> {
    * @param f The function to apply on each element of the list.
    * @return The final result after the left-fold reduction.
    */
-  public A foldLeft1(final F<A, F<A, A>> f) {
+  public final A foldLeft1(final F<A, F<A, A>> f) {
     if (isEmpty())
       throw error("Undefined: foldLeft1 on empty list");
     return tail().foldLeft(f, head());
@@ -677,7 +677,7 @@ public abstract class List<A> implements Iterable<A> {
    *
    * @return A new list that is the reverse of this one.
    */
-  public List<A> reverse() {
+  public final List<A> reverse() {
     return foldLeft(new F<List<A>, F<A, List<A>>>() {
       public F<A, List<A>> f(final List<A> as) {
         return new F<A, List<A>>() {
@@ -695,7 +695,7 @@ public abstract class List<A> implements Iterable<A> {
    * @param i The index at which to get the element to return.
    * @return The element at the given index if it exists, fails otherwise.
    */
-  public A index(final int i) {
+  public final A index(final int i) {
     if (i < 0 || i > length() - 1)
       throw error("index " + i + " out of range on list with length " + length());
     else {
@@ -715,7 +715,7 @@ public abstract class List<A> implements Iterable<A> {
    * @param i The maximum number of elements to take from this list.
    * @return A new list with a length the same, or less than, this list.
    */
-  public List<A> take(final int i) {
+  public final List<A> take(final int i) {
     return i <= 0 || isEmpty() ? List.<A>nil() : cons(head(), tail().take(i - 1));
   }
 
@@ -725,7 +725,7 @@ public abstract class List<A> implements Iterable<A> {
    * @param i The number of elements to drop from the head of this list.
    * @return A list with a length the same, or less than, this list.
    */
-  public List<A> drop(final int i) {
+  public final List<A> drop(final int i) {
     int c = 0;
 
     List<A> xs = this;
@@ -743,7 +743,7 @@ public abstract class List<A> implements Iterable<A> {
    * @param i The index at which to split this list in two parts.
    * @return A pair of lists split at the given index of this list.
    */
-  public P2<List<A>, List<A>> splitAt(final int i) {
+  public final P2<List<A>, List<A>> splitAt(final int i) {
     P2<List<A>, List<A>> s = p(List.<A>nil(), List.<A>nil());
 
     int c = 0;
@@ -771,7 +771,7 @@ public abstract class List<A> implements Iterable<A> {
    * @param n The size of the partitions into which to split this list.
    * @return A list of sublists of this list, of at most the given size.
    */
-  public List<List<A>> partition(final int n) {
+  public final List<List<A>> partition(final int n) {
     if (n < 1)
       throw error("Can't create list partitions shorter than 1 element long.");
     if (isEmpty())
@@ -788,7 +788,7 @@ public abstract class List<A> implements Iterable<A> {
    *
    * @return The list of initial segments of this list, shortest first.
    */
-  public List<List<A>> inits() {
+  public final List<List<A>> inits() {
     List<List<A>> s = single(List.<A>nil());
     if (isNotEmpty())
       s = s.append(tail().inits().map(List.<A>cons().f(head())));
@@ -800,7 +800,7 @@ public abstract class List<A> implements Iterable<A> {
    *
    * @return The list of final segments of this list, longest first.
    */
-  public List<List<A>> tails() {
+  public final List<List<A>> tails() {
     return isEmpty() ? single(List.<A>nil()) : cons(this, tail().tails());
   }
 
@@ -810,7 +810,7 @@ public abstract class List<A> implements Iterable<A> {
    * @param o The order over the elements of this list.
    * @return A sorted list according to the given order.
    */
-  public List<A> sort(final Ord<A> o) {
+  public final List<A> sort(final Ord<A> o) {
     if (isEmpty())
       return nil();
     else if (tail().isEmpty())
@@ -842,7 +842,7 @@ public abstract class List<A> implements Iterable<A> {
    * @param f  The function to zip this list and the given list with.
    * @return A new list with a length the same as the shortest of this list and the given list.
    */
-  public <B, C> List<C> zipWith(final List<B> bs, final F<A, F<B, C>> f) {
+  public final <B, C> List<C> zipWith(final List<B> bs, final F<A, F<B, C>> f) {
     return isEmpty() || bs.isEmpty() ? List.<C>nil() : cons(f.f(head()).f(bs.head()), tail().zipWith(bs.tail(), f));
   }
 
@@ -855,7 +855,7 @@ public abstract class List<A> implements Iterable<A> {
    * @param f  The function to zip this list and the given list with.
    * @return A new list with a length the same as the shortest of this list and the given list.
    */
-  public <B, C> List<C> zipWith(final List<B> bs, final F2<A, B, C> f) {
+  public final <B, C> List<C> zipWith(final List<B> bs, final F2<A, B, C> f) {
     return zipWith(bs, curry(f));
   }
 
@@ -879,7 +879,7 @@ public abstract class List<A> implements Iterable<A> {
    * @param bs The list to zip this list with.
    * @return A new list with a length the same as the shortest of this list and the given list.
    */
-  public <B> List<P2<A, B>> zip(final List<B> bs) {
+  public final <B> List<P2<A, B>> zip(final List<B> bs) {
     final F<A, F<B, P2<A, B>>> __2 = p2();
     return zipWith(bs, __2);
   }
@@ -902,7 +902,7 @@ public abstract class List<A> implements Iterable<A> {
    *
    * @return A new list with the same length as this list.
    */
-  public List<P2<A, Integer>> zipIndex() {
+  public final List<P2<A, Integer>> zipIndex() {
     return zipWith(range(0, length()), new F<A, F<Integer, P2<A, Integer>>>() {
       public F<Integer, P2<A, Integer>> f(final A a) {
         return new F<Integer, P2<A, Integer>>() {
@@ -920,7 +920,7 @@ public abstract class List<A> implements Iterable<A> {
    * @param a The element to append to this list.
    * @return A new list with the given element appended.
    */
-  public List<A> snoc(final A a) {
+  public final List<A> snoc(final A a) {
     return fromList(this).snoc(a).toList();
   }
 
@@ -932,7 +932,7 @@ public abstract class List<A> implements Iterable<A> {
    * @return <code>true</code> if the predicate holds for all of the elements of this list,
    *         <code>false</code> otherwise.
    */
-  public boolean forall(final F<A, Boolean> f) {
+  public final boolean forall(final F<A, Boolean> f) {
     return isEmpty() || f.f(head()) && tail().forall(f);
   }
 
@@ -944,7 +944,7 @@ public abstract class List<A> implements Iterable<A> {
    * @return <code>true</code> if the predicate holds for at least one of the elements of this
    *         list.
    */
-  public boolean exists(final F<A, Boolean> f) {
+  public final boolean exists(final F<A, Boolean> f) {
     return find(f).isSome();
   }
 
@@ -956,7 +956,7 @@ public abstract class List<A> implements Iterable<A> {
    * @return The first occurrence of an element that matches the given predicate or no value if no
    *         elements match.
    */
-  public Option<A> find(final F<A, Boolean> f) {
+  public final Option<A> find(final F<A, Boolean> f) {
     for (List<A> as = this; as.isNotEmpty(); as = as.tail()) {
       if (f.f(as.head()))
         return some(as.head());
@@ -971,7 +971,7 @@ public abstract class List<A> implements Iterable<A> {
    * @param a The separator to intersperse in this list.
    * @return A list with the given separator interspersed.
    */
-  public List<A> intersperse(final A a) {
+  public final List<A> intersperse(final A a) {
     return isEmpty() || tail().isEmpty() ?
            this :
            cons(head(), cons(a, tail().intersperse(a)));
@@ -984,7 +984,7 @@ public abstract class List<A> implements Iterable<A> {
    * @return This list through the given list then joins the results.
    */
   @SuppressWarnings({"unchecked"})
-  public List<A> intercalate(final List<List<A>> as) {
+  public final List<A> intercalate(final List<List<A>> as) {
     return join(as.intersperse(this));
   }
 
@@ -993,7 +993,7 @@ public abstract class List<A> implements Iterable<A> {
    *
    * @return A list without duplicates according to object equality.
    */
-  public List<A> nub() {
+  public final List<A> nub() {
     return nub(Equal.<A>anyEqual());
   }
 
@@ -1003,7 +1003,7 @@ public abstract class List<A> implements Iterable<A> {
    * @param eq Equality over the elements.
    * @return A list without duplicates.
    */
-  public List<A> nub(final Equal<A> eq) {
+  public final List<A> nub(final Equal<A> eq) {
     return isEmpty() ? this : cons(head(), tail().filter(new F<A, Boolean>() {
       public Boolean f(final A a) {
         return !eq.eq(a, head());
@@ -1018,7 +1018,7 @@ public abstract class List<A> implements Iterable<A> {
    * @return A list without duplicates.
    */
   @SuppressWarnings({"unchecked"})
-  public List<A> nub(final Ord<A> o) {
+  public final List<A> nub(final Ord<A> o) {
     return sort(o).group(o.equal()).map(List.<A>head_());
   }
 
@@ -1055,7 +1055,7 @@ public abstract class List<A> implements Iterable<A> {
    * @param xs a list to subtract from this list.
    * @return a list of all the items in this list that do not appear in the given list.
    */
-  public List<A> minus(final Equal<A> eq, final List<A> xs) {
+  public final List<A> minus(final Equal<A> eq, final List<A> xs) {
     return removeAll(compose(Monoid.disjunctionMonoid.sumLeft(), xs.mapM(curry(eq.eq()))));
   }
 
@@ -1067,7 +1067,7 @@ public abstract class List<A> implements Iterable<A> {
    * @return A function that, when given an argument, applies the given function to that argument and every element
    *         in this list.
    */
-  public <B, C> F<B, List<C>> mapM(final F<A, F<B, C>> f) {
+  public final <B, C> F<B, List<C>> mapM(final F<A, F<B, C>> f) {
     return sequence_(map(f));
   }
 
@@ -1080,7 +1080,7 @@ public abstract class List<A> implements Iterable<A> {
    * @return The index of the first element in this list which is equal (by the given equality) to the
    *         query element, or None if there is no such element.
    */
-  public Option<Integer> elementIndex(final Equal<A> e, final A a) {
+  public final Option<Integer> elementIndex(final Equal<A> e, final A a) {
     return lookup(e, zipIndex(), a);
   }
 
@@ -1089,7 +1089,7 @@ public abstract class List<A> implements Iterable<A> {
    *
    * @return The last element of this list or throws an error if this list is empty.
    */
-  public A last() {
+  public final A last() {
     A a = head();
     for (List<A> xs = tail(); xs.isNotEmpty(); xs = xs.tail())
       a = xs.head();
@@ -1101,7 +1101,7 @@ public abstract class List<A> implements Iterable<A> {
    *
    * @return All but the last element of this list. Undefiend for the empty list.
    */
-  public List<A> init() {
+  public final List<A> init() {
     List<A> ys = this;
     final Buffer<A> a = empty();
     while(ys.isNotEmpty() && ys.tail().isNotEmpty()) {
@@ -1120,7 +1120,7 @@ public abstract class List<A> implements Iterable<A> {
    * @return A new list with the given element inserted before the first element that is greater than or equal to
    *         it according to the given ordering.
    */
-  public List<A> insertBy(final F<A, F<A, Ordering>> f, final A x) {
+  public final List<A> insertBy(final F<A, F<A, Ordering>> f, final A x) {
     List<A> ys = this;
     Buffer<A> xs = empty();
     while (ys.isNotEmpty() && f.f(x).f(ys.head()) == GT) {
@@ -1136,7 +1136,7 @@ public abstract class List<A> implements Iterable<A> {
    * @param o An ordering for the elements of the list.
    * @return The most common element in this list.
    */
-  public A mode(final Ord<A> o) {
+  public final A mode(final Ord<A> o) {
     return sort(o).group(o.equal()).maximum(intOrd.comap(List.<A>length_())).head();
   }
 
@@ -1159,7 +1159,7 @@ public abstract class List<A> implements Iterable<A> {
    * @param o An ordering for the elements of the list.
    * @return The maximum element in this list according to the given ordering.
    */
-  public A maximum(final Ord<A> o) {
+  public final A maximum(final Ord<A> o) {
     return foldLeft1(o.max);
   }
 
@@ -1169,7 +1169,7 @@ public abstract class List<A> implements Iterable<A> {
    * @param o An ordering for the elements of the list.
    * @return The minimum element in this list according to the given ordering.
    */
-  public A minimum(final Ord<A> o) {
+  public final A minimum(final Ord<A> o) {
     return foldLeft1(o.min);
   }
 
@@ -1178,7 +1178,7 @@ public abstract class List<A> implements Iterable<A> {
    *
    * @return An immutable collection of this list.
    */
-  public Collection<A> toCollection() {
+  public final Collection<A> toCollection() {
     return new AbstractCollection<A>() {
       public Iterator<A> iterator() {
         return new Iterator<A>() {
@@ -1537,7 +1537,7 @@ public abstract class List<A> implements Iterable<A> {
    * Returns a partially applied version of {@link #lookup(Equal, List, Object)}.
    *
    * @param e The test for equality on keys.
-   * @return A partially applied version of {@link #lookup(fj.Equal , List, Object)}.
+   * @return A partially applied version of {@link #lookup(Equal , List, Object)}.
    */
   public static <A, B> F2<List<P2<A, B>>, A, Option<B>> lookup(final Equal<A> e) {
     return new F2<List<P2<A, B>>, A, Option<B>>() {

@@ -28,7 +28,7 @@ public abstract class Node<V, A> {
     });
   }
 
-  public <B> Node<V, B> map(final F<A, B> f, final Measured<V, B> m) {
+  public final <B> Node<V, B> map(final F<A, B> f, final Measured<V, B> m) {
     return match(new F<Node2<V, A>, Node<V, B>>() {
       public Node<V, B> f(final Node2<V, A> node2) {
         return new Node2<V, B>(m, node2.toVector().map(f));
@@ -55,11 +55,11 @@ public abstract class Node<V, A> {
     this.measure = measure;
   }
 
-  public V measure() {
+  public final V measure() {
     return measure;
   }
 
-  protected Measured<V, A> measured() {
+  Measured<V, A> measured() {
     return m;
   }
 

@@ -95,7 +95,7 @@ public abstract class Coarbitrary<A> {
    * @param a The value to produce the generator from.
    * @return A curried version of {@link #coarbitrary(Object, Gen)}.
    */
-  public <B> F<Gen<B>, Gen<B>> coarbitrary(final A a) {
+  public final <B> F<Gen<B>, Gen<B>> coarbitrary(final A a) {
     return new F<Gen<B>, Gen<B>>() {
       public Gen<B> f(final Gen<B> g) {
         return coarbitrary(a, g);
@@ -109,7 +109,7 @@ public abstract class Coarbitrary<A> {
    * @param f The function to compose.
    * @return A new coarbitrary composed with the given function.
    */
-  public <B> Coarbitrary<B> compose(final F<B, A> f) {
+  public final <B> Coarbitrary<B> compose(final F<B, A> f) {
     return new Coarbitrary<B>() {
       public <X> Gen<X> coarbitrary(final B b, final Gen<X> g) {
         return Coarbitrary.this.coarbitrary(f.f(b), g);
@@ -123,7 +123,7 @@ public abstract class Coarbitrary<A> {
    * @param f The function to co-map with.
    * @return A co-mapped coarbitrary.
    */
-  public <B> Coarbitrary<B> comap(final F<B, A> f) {
+  public final <B> Coarbitrary<B> comap(final F<B, A> f) {
     return new Coarbitrary<B>() {
       public <X> Gen<X> coarbitrary(final B b, final Gen<X> g) {
         return Coarbitrary.this.coarbitrary(f.f(b), g);
