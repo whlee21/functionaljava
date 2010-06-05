@@ -79,11 +79,11 @@ public abstract class FingerTree<V, A> {
    *
    * @return true if this tree is the empty tree, otherwise false.
    */
-  public boolean isEmpty() {
+  public final boolean isEmpty() {
     return this instanceof Empty;
   }
 
-  protected Measured<V, A> measured() {
+  Measured<V, A> measured() {
     return m;
   }
 
