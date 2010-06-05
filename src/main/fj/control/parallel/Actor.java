@@ -40,7 +40,7 @@ public final class Actor<A> {
    * @return A new actor that uses the given parallelization strategy and has the given side-effect.
    */
   public static <A> Actor<A> actor(final Strategy<Unit> s, final Effect<A> e) {
-    return new Actor<A>(s, P1.curry(Effect.Projection.e(e)));
+    return new Actor<A>(s, P1.curry(e.e()));
   }
 
   /**

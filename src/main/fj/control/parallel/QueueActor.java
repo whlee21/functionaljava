@@ -67,7 +67,7 @@ public final class QueueActor<A> {
    * @return A new actor, equipped with a queue so that it processes one message at a time.
    */
   public static <A> QueueActor<A> queueActor(final Strategy<Unit> s, final F<A, P1<Unit>> e) {
-    return queueActor(s, Effect.Projection.f(compose(P1.<Unit>__1(), e)));
+    return queueActor(s, Effect.f(compose(P1.<Unit>__1(), e)));
   }
 
   /**
