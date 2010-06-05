@@ -34,7 +34,7 @@ public abstract class P2<A, B> {
    *
    * @return A new product-2 with the elements swapped.
    */
-  public P2<B, A> swap() {
+  public final P2<B, A> swap() {
     return new P2<B, A>() {
       public B _1() {
         return P2.this._2();
@@ -52,7 +52,7 @@ public abstract class P2<A, B> {
    * @param f The function to map with.
    * @return A product with the given function applied.
    */
-  public <X> P2<X, B> map1(final F<A, X> f) {
+  public final <X> P2<X, B> map1(final F<A, X> f) {
     return new P2<X, B>() {
       public X _1() {
         return f.f(P2.this._1());
@@ -70,7 +70,7 @@ public abstract class P2<A, B> {
    * @param f The function to map with.
    * @return A product with the given function applied.
    */
-  public <X> P2<A, X> map2(final F<B, X> f) {
+  public final <X> P2<A, X> map2(final F<B, X> f) {
     return new P2<A, X>() {
       public A _1() {
         return P2.this._1();
@@ -91,7 +91,7 @@ public abstract class P2<A, B> {
    * @return A new product with the first function applied to the second element
    *         and the second function applied to the second element.
    */
-  public <C, D> P2<C, D> split(final F<A, C> f, final F<B, D> g) {
+  public final <C, D> P2<C, D> split(final F<A, C> f, final F<B, D> g) {
     final F<P2<A, D>, P2<C, D>> ff = map1_(f);
     final F<P2<A, B>, P2<A, D>> gg = map2_(g);
     return compose(ff, gg).f(this);
@@ -104,7 +104,7 @@ public abstract class P2<A, B> {
    * @return A new product with the result of the given function applied to this product as the first element,
    *         and with the second element intact.
    */
-  public <C> P2<C, B> cobind(final F<P2<A, B>, C> k) {
+  public final <C> P2<C, B> cobind(final F<P2<A, B>, C> k) {
     return new P2<C, B>() {
 
       public C _1() {
@@ -122,7 +122,7 @@ public abstract class P2<A, B> {
    *
    * @return A new product with this product in its first element and with the second element intact.
    */
-  public P2<P2<A, B>, B> duplicate() {
+  public final P2<P2<A, B>, B> duplicate() {
     final F<P2<A, B>, P2<A, B>> id = identity();
     return cobind(id);
   }
@@ -133,7 +133,7 @@ public abstract class P2<A, B> {
    * @param c The value with which to replace the first element of this product.
    * @return A new product with the first element replaced with the given value.
    */
-  public <C> P2<C, B> inject(final C c) {
+  public final <C> P2<C, B> inject(final C c) {
     final F<P2<A, B>, C> co = constant(c);
     return cobind(co);
   }
@@ -144,7 +144,7 @@ public abstract class P2<A, B> {
    * @param fs A list of functions to apply to this product.
    * @return A list of the results of applying the given list of functions to this product.
    */
-  public <C> List<C> sequenceW(final List<F<P2<A, B>, C>> fs) {
+  public final <C> List<C> sequenceW(final List<F<P2<A, B>, C>> fs) {
     List.Buffer<C> cs = List.Buffer.empty();
     for (final F<P2<A, B>, C> f : fs)
       cs = cs.snoc(f.f(this));
@@ -157,7 +157,7 @@ public abstract class P2<A, B> {
    * @param fs A stream of functions to apply to this product.
    * @return A stream of the results of applying the given stream of functions to this product.
    */
-  public <C> Stream<C> sequenceW(final Stream<F<P2<A, B>, C>> fs) {
+  public final <C> Stream<C> sequenceW(final Stream<F<P2<A, B>, C>> fs) {
     return fs.isEmpty()
            ? Stream.<C>nil()
            : Stream.cons(fs.head().f(this), new P1<Stream<C>>() {
@@ -172,7 +172,7 @@ public abstract class P2<A, B> {
    *
    * @return the 1-product projection over the first element.
    */
-  public P1<A> _1_() {
+  public final P1<A> _1_() {
     return $(P2.<A, B>__1()).lazy().f(this);
   }
 
@@ -181,7 +181,7 @@ public abstract class P2<A, B> {
    *
    * @return the 1-product projection over the second element.
    */
-  public P1<B> _2_() {
+  public final P1<B> _2_() {
     return $(P2.<A, B>__2()).lazy().f(this);
   }
 
@@ -190,7 +190,7 @@ public abstract class P2<A, B> {
    *
    * @return A P2 that calls this P2 once for any given element and remembers the value for subsequent calls.
    */
-  public P2<A, B> memo() {
+  public final P2<A, B> memo() {
     return new P2<A, B>() {
       private final P1<A> a = _1_().memo();
       private final P1<B> b = _2_().memo();

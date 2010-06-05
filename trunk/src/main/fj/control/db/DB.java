@@ -40,7 +40,7 @@ public abstract class DB<A> {
    *
    * @return The callable-valued function which is isomorphic to this database action.
    */
-  public F<Connection, Callable<A>> asFunction() {
+  public final F<Connection, Callable<A>> asFunction() {
     return new F<Connection, Callable<A>>() {
       public Callable<A> f(final Connection c) {
         return new Callable<A>() {
@@ -58,7 +58,7 @@ public abstract class DB<A> {
    * @param f The function to map over the result.
    * @return A new database action that applies the given function to the result of this action.
    */
-  public <B> DB<B> map(final F<A, B> f) {
+  public final <B> DB<B> map(final F<A, B> f) {
     return new DB<B>() {
       public B run(final Connection c) throws SQLException {
         return f.f(DB.this.run(c));
@@ -100,7 +100,7 @@ public abstract class DB<A> {
    * @param f The function to bind across the result of this database action.
    * @return A new database action equivalent to applying the given function to the result of this action.
    */
-  public <B> DB<B> bind(final F<A, DB<B>> f) {
+  public final <B> DB<B> bind(final F<A, DB<B>> f) {
     return new DB<B>() {
       public B run(final Connection c) throws SQLException {
         return f.f(DB.this.run(c)).run(c);

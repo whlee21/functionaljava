@@ -61,7 +61,7 @@ public abstract class P6<A, B, C, D, E, F> {
    * @param f The function to map with.
    * @return A product with the given function applied.
    */
-  public <X> P6<X, B, C, D, E, F> map1(final fj.F<A, X> f) {
+  public final <X> P6<X, B, C, D, E, F> map1(final fj.F<A, X> f) {
     return new P6<X, B, C, D, E, F>() {
       public X _1() {
         return f.f(P6.this._1());
@@ -95,7 +95,7 @@ public abstract class P6<A, B, C, D, E, F> {
    * @param f The function to map with.
    * @return A product with the given function applied.
    */
-  public <X> P6<A, X, C, D, E, F> map2(final fj.F<B, X> f) {
+  public final <X> P6<A, X, C, D, E, F> map2(final fj.F<B, X> f) {
     return new P6<A, X, C, D, E, F>() {
       public A _1() {
         return P6.this._1();
@@ -129,7 +129,7 @@ public abstract class P6<A, B, C, D, E, F> {
    * @param f The function to map with.
    * @return A product with the given function applied.
    */
-  public <X> P6<A, B, X, D, E, F> map3(final fj.F<C, X> f) {
+  public final <X> P6<A, B, X, D, E, F> map3(final fj.F<C, X> f) {
     return new P6<A, B, X, D, E, F>() {
       public A _1() {
         return P6.this._1();
@@ -163,7 +163,7 @@ public abstract class P6<A, B, C, D, E, F> {
    * @param f The function to map with.
    * @return A product with the given function applied.
    */
-  public <X> P6<A, B, C, X, E, F> map4(final fj.F<D, X> f) {
+  public final <X> P6<A, B, C, X, E, F> map4(final fj.F<D, X> f) {
     return new P6<A, B, C, X, E, F>() {
       public A _1() {
         return P6.this._1();
@@ -197,7 +197,7 @@ public abstract class P6<A, B, C, D, E, F> {
    * @param f The function to map with.
    * @return A product with the given function applied.
    */
-  public <X> P6<A, B, C, D, X, F> map5(final fj.F<E, X> f) {
+  public final <X> P6<A, B, C, D, X, F> map5(final fj.F<E, X> f) {
     return new P6<A, B, C, D, X, F>() {
       public A _1() {
         return P6.this._1();
@@ -231,7 +231,7 @@ public abstract class P6<A, B, C, D, E, F> {
    * @param f The function to map with.
    * @return A product with the given function applied.
    */
-  public <X> P6<A, B, C, D, E, X> map6(final fj.F<F, X> f) {
+  public final <X> P6<A, B, C, D, E, X> map6(final fj.F<F, X> f) {
     return new P6<A, B, C, D, E, X>() {
       public A _1() {
         return P6.this._1();
@@ -264,7 +264,7 @@ public abstract class P6<A, B, C, D, E, F> {
    *
    * @return the 1-product projection over the first element.
    */
-  public P1<A> _1_() {
+  public final P1<A> _1_() {
     return $(P6.<A, B, C, D, E, F>__1()).lazy().f(this);
   }
 
@@ -273,7 +273,7 @@ public abstract class P6<A, B, C, D, E, F> {
    *
    * @return the 1-product projection over the second element.
    */
-  public P1<B> _2_() {
+  public final P1<B> _2_() {
     return $(P6.<A, B, C, D, E, F>__2()).lazy().f(this);
   }
 
@@ -282,7 +282,7 @@ public abstract class P6<A, B, C, D, E, F> {
    *
    * @return the 1-product projection over the third element.
    */
-  public P1<C> _3_() {
+  public final P1<C> _3_() {
     return $(P6.<A, B, C, D, E, F>__3()).lazy().f(this);
   }
 
@@ -291,7 +291,7 @@ public abstract class P6<A, B, C, D, E, F> {
    *
    * @return the 1-product projection over the fourth element.
    */
-  public P1<D> _4_() {
+  public final P1<D> _4_() {
     return $(P6.<A, B, C, D, E, F>__4()).lazy().f(this);
   }
 
@@ -300,7 +300,7 @@ public abstract class P6<A, B, C, D, E, F> {
    *
    * @return the 1-product projection over the fifth element.
    */
-  public P1<E> _5_() {
+  public final P1<E> _5_() {
     return $(P6.<A, B, C, D, E, F>__5()).lazy().f(this);
   }
 
@@ -309,7 +309,7 @@ public abstract class P6<A, B, C, D, E, F> {
    *
    * @return the 1-product projection over the sixth element.
    */
-  public P1<F> _6_() {
+  public final P1<F> _6_() {
     return $(P6.<A, B, C, D, E, F>__6()).lazy().f(this);
   }
 
@@ -318,7 +318,7 @@ public abstract class P6<A, B, C, D, E, F> {
    *
    * @return A P6 that calls this P6 once for any given element and remembers the value for subsequent calls.
    */
-  public P6<A, B, C, D, E, F> memo() {
+  public final P6<A, B, C, D, E, F> memo() {
     return new P6<A, B, C, D, E, F>() {
       private final P1<A> a = _1_().memo();
       private final P1<B> b = _2_().memo();

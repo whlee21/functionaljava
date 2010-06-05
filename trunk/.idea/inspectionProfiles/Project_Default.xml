@@ -23,6 +23,11 @@
     <inspection_tool class="BvConstraintMappingsInspection" enabled="false" level="ERROR" enabled_by_default="false" />
     <inspection_tool class="CStyleArrayDeclaration" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="CallToStringConcatCanBeReplacedByOperator" enabled="true" level="WARNING" enabled_by_default="true" />
+    <inspection_tool class="CanBeFinal" enabled="true" level="WARNING" enabled_by_default="true">
+      <option name="REPORT_CLASSES" value="true" />
+      <option name="REPORT_METHODS" value="true" />
+      <option name="REPORT_FIELDS" value="true" />
+    </inspection_tool>
     <inspection_tool class="CastConflictsWithInstanceof" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="CheckEmptyScriptTag" enabled="false" level="WARNING" enabled_by_default="false" />
     <inspection_tool class="CheckImageSize" enabled="false" level="WARNING" enabled_by_default="false" />

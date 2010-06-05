@@ -28,7 +28,7 @@ public abstract class P1<A> {
    * @param f The function to map with.
    * @return A product with the given function applied.
    */
-  public <X> P1<X> map(final F<A, X> f) {
+  public final <X> P1<X> map(final F<A, X> f) {
     return new P1<X>() {
       public X _1() {
         return f.f(P1.this._1());
@@ -199,7 +199,7 @@ public abstract class P1<A> {
    *
    * @return A P1 that calls this P1 once and remembers the value for subsequent calls.
    */
-  public P1<A> memo() {
+  public final P1<A> memo() {
     final P1<A> self = this;
     return new P1<A>() {
       private final Object latch = new Object();
@@ -224,7 +224,7 @@ public abstract class P1<A> {
    *
    * @return A constant function that always uses this value. 
    */
-  public <B> F<B, A> constant() {
+  public final <B> F<B, A> constant() {
     return new F<B, A>() {
       public A f(final B b) {
           return _1();

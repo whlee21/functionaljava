@@ -41,7 +41,7 @@ public abstract class Either<A, B> {
    *
    * @return A left projection of this either.
    */
-  public LeftProjection<A, B> left() {
+  public final LeftProjection<A, B> left() {
     return new LeftProjection<A, B>(this);
   }
 
@@ -50,7 +50,7 @@ public abstract class Either<A, B> {
    *
    * @return A right projection of this either.
    */
-  public RightProjection<A, B> right() {
+  public final RightProjection<A, B> right() {
     return new RightProjection<A, B>(this);
   }
 
@@ -75,7 +75,7 @@ public abstract class Either<A, B> {
    * @param right The function to call if this is right.
    * @return The reduced value.
    */
-  public <X> X either(final F<A, X> left, final F<B, X> right) {
+  public final <X> X either(final F<A, X> left, final F<B, X> right) {
     return isLeft() ?
            left.f(left().value()) :
            right.f(right().value());
@@ -86,7 +86,7 @@ public abstract class Either<A, B> {
    *
    * @return The value of this either swapped to the opposing side.
    */
-  public Either<B, A> swap() {
+  public final Either<B, A> swap() {
     return isLeft() ? new Right<B, A>(((Left<A, B>) this).a) : new Left<B, A>(((Right<A, B>) this).b);
   }
 

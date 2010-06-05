@@ -33,7 +33,7 @@ import static fj.data.Stream.repeat;
  * <p/>
  * Based on the pointedlist library by Jeff Wheeler.
  */
-public class Zipper<A> implements Iterable<Zipper<A>> {
+public final class Zipper<A> implements Iterable<Zipper<A>> {
   private final Stream<A> left;
   private final A focus;
   private final Stream<A> right;

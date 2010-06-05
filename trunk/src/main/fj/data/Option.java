@@ -52,7 +52,7 @@ public abstract class Option<A> implements Iterable<A> {
    *
    * @return A iterator for this optional value.
    */
-  public Iterator<A> iterator() {
+  public final Iterator<A> iterator() {
     return toCollection().iterator();
   }
 
@@ -68,7 +68,7 @@ public abstract class Option<A> implements Iterable<A> {
    *
    * @return <code>true</code> if this optional value has a value, <code>false</code> otherwise.
    */
-  public boolean isSome() {
+  public final boolean isSome() {
     return this instanceof Some;
   }
 
@@ -77,7 +77,7 @@ public abstract class Option<A> implements Iterable<A> {
    *
    * @return <code>false</code> if this optional value has a value, <code>true</code> otherwise.
    */
-  public boolean isNone() {
+  public final boolean isNone() {
     return this instanceof None;
   }
 
@@ -114,7 +114,7 @@ public abstract class Option<A> implements Iterable<A> {
    * @param f The function to apply to the value of this optional value.
    * @return A reduction on this optional value.
    */
-  public <B> B option(final B b, final F<A, B> f) {
+  public final <B> B option(final B b, final F<A, B> f) {
     return isSome() ? f.f(some()) : b;
   }
 
@@ -125,7 +125,7 @@ public abstract class Option<A> implements Iterable<A> {
    * @param f The function to apply to the value of this optional value.
    * @return A reduction on this optional value.
    */
-  public <B> B option(final P1<B> b, final F<A, B> f) {
+  public final <B> B option(final P1<B> b, final F<A, B> f) {
     return isSome() ? f.f(some()) : b._1();
   }
 
@@ -134,7 +134,7 @@ public abstract class Option<A> implements Iterable<A> {
    *
    * @return The length of this optional value; 1 if there is a value, 0 otherwise.
    */
-  public int length() {
+  public final int length() {
     return isSome() ? 1 : 0;
   }
 
@@ -144,7 +144,7 @@ public abstract class Option<A> implements Iterable<A> {
    * @param a The argument to return if this optiona value has no value.
    * @return The value of this optional value or the given argument.
    */
-  public A orSome(final P1<A> a) {
+  public final A orSome(final P1<A> a) {
     return isSome() ? some() : a._1();
   }
 
@@ -154,7 +154,7 @@ public abstract class Option<A> implements Iterable<A> {
    * @param a The argument to return if this optiona value has no value.
    * @return The value of this optional value or the given argument.
    */
-  public A orSome(final A a) {
+  public final A orSome(final A a) {
     return isSome() ? some() : a;
   }
 
@@ -164,7 +164,7 @@ public abstract class Option<A> implements Iterable<A> {
    * @param message The message to fail with if this optional value has no value.
    * @return The value of this optional value if there there is one.
    */
-  public A valueE(final P1<String> message) {
+  public final A valueE(final P1<String> message) {
     if(isSome())
       return some();
     else
@@ -177,7 +177,7 @@ public abstract class Option<A> implements Iterable<A> {
    * @param message The message to fail with if this optional value has no value.
    * @return The value of this optional value if there there is one.
    */
-  public A valueE(final String message) {
+  public final A valueE(final String message) {
     if(isSome())
       return some();
     else
@@ -190,7 +190,7 @@ public abstract class Option<A> implements Iterable<A> {
    * @param f The function to map across this optional value.
    * @return A new optional value after the given function has been applied to its element.
    */
-  public <B> Option<B> map(final F<A, B> f) {
+  public final <B> Option<B> map(final F<A, B> f) {
     return isSome() ? some(f.f(some())) : Option.<B>none();
   }
 
@@ -213,7 +213,7 @@ public abstract class Option<A> implements Iterable<A> {
    * @param f The side-effect to perform for the given element.
    * @return The unit value.
    */
-  public Unit foreach(final F<A, Unit> f) {
+  public final Unit foreach(final F<A, Unit> f) {
     return isSome() ? f.f(some()) : unit();
   }
 
@@ -222,7 +222,7 @@ public abstract class Option<A> implements Iterable<A> {
    *
    * @param f The side-effect to perform for the given element.
    */
-  public void foreach(final Effect<A> f) {
+  public final void foreach(final Effect<A> f) {
     if (isSome())
       f.e(some());
   }
@@ -234,7 +234,7 @@ public abstract class Option<A> implements Iterable<A> {
    * @param f The predicate function to filter on.
    * @return A new optional value whose value matches the given predicate if it has one.
    */
-  public Option<A> filter(final F<A, Boolean> f) {
+  public final Option<A> filter(final F<A, Boolean> f) {
     return isSome() ? f.f(some()) ? this : Option.<A>none() : Option.<A>none();
   }
 
@@ -244,7 +244,7 @@ public abstract class Option<A> implements Iterable<A> {
    * @param f The function to apply to the element of this optional value.
    * @return A new optional value after performing the map, then final join.
    */
-  public <B> Option<B> bind(final F<A, Option<B>> f) {
+  public final <B> Option<B> bind(final F<A, Option<B>> f) {
     return isSome() ? f.f(some()) : Option.<B>none();
   }
 
@@ -257,7 +257,7 @@ public abstract class Option<A> implements Iterable<A> {
    *           value.
    * @return A new optional value after performing the map, then final join.
    */
-  public <B, C> Option<C> bind(final Option<B> ob, final F<A, F<B, C>> f) {
+  public final <B, C> Option<C> bind(final Option<B> ob, final F<A, F<B, C>> f) {
     return ob.apply(map(f));
   }
 
@@ -271,7 +271,7 @@ public abstract class Option<A> implements Iterable<A> {
    *           value.
    * @return A new optional value after performing the map, then final join.
    */
-  public <B, C, D> Option<D> bind(final Option<B> ob, final Option<C> oc, final F<A, F<B, F<C, D>>> f) {
+  public final <B, C, D> Option<D> bind(final Option<B> ob, final Option<C> oc, final F<A, F<B, F<C, D>>> f) {
     return oc.apply(bind(ob, f));
   }
 
@@ -286,7 +286,7 @@ public abstract class Option<A> implements Iterable<A> {
    *           value.
    * @return A new optional value after performing the map, then final join.
    */
-  public <B, C, D, E> Option<E> bind(final Option<B> ob, final Option<C> oc, final Option<D> od,
+  public final <B, C, D, E> Option<E> bind(final Option<B> ob, final Option<C> oc, final Option<D> od,
                                      final F<A, F<B, F<C, F<D, E>>>> f) {
     return od.apply(bind(ob, oc, f));
   }
@@ -303,7 +303,7 @@ public abstract class Option<A> implements Iterable<A> {
    *           value.
    * @return A new optional value after performing the map, then final join.
    */
-  public <B, C, D, E, F$> Option<F$> bind(final Option<B> ob, final Option<C> oc, final Option<D> od,
+  public final <B, C, D, E, F$> Option<F$> bind(final Option<B> ob, final Option<C> oc, final Option<D> od,
                                           final Option<E> oe, final F<A, F<B, F<C, F<D, F<E, F$>>>>> f) {
     return oe.apply(bind(ob, oc, od, f));
   }
@@ -321,7 +321,7 @@ public abstract class Option<A> implements Iterable<A> {
    *           value.
    * @return A new optional value after performing the map, then final join.
    */
-  public <B, C, D, E, F$, G> Option<G> bind(final Option<B> ob, final Option<C> oc, final Option<D> od,
+  public final <B, C, D, E, F$, G> Option<G> bind(final Option<B> ob, final Option<C> oc, final Option<D> od,
                                             final Option<E> oe, final Option<F$> of,
                                             final F<A, F<B, F<C, F<D, F<E, F<F$, G>>>>>> f) {
     return of.apply(bind(ob, oc, od, oe, f));
@@ -341,7 +341,7 @@ public abstract class Option<A> implements Iterable<A> {
    *           value.
    * @return A new optional value after performing the map, then final join.
    */
-  public <B, C, D, E, F$, G, H> Option<H> bind(final Option<B> ob, final Option<C> oc, final Option<D> od,
+  public final <B, C, D, E, F$, G, H> Option<H> bind(final Option<B> ob, final Option<C> oc, final Option<D> od,
                                                final Option<E> oe, final Option<F$> of, final Option<G> og,
                                                final F<A, F<B, F<C, F<D, F<E, F<F$, F<G, H>>>>>>> f) {
     return og.apply(bind(ob, oc, od, oe, of, f));
@@ -362,42 +362,42 @@ public abstract class Option<A> implements Iterable<A> {
    *           value.
    * @return A new optional value after performing the map, then final join.
    */
-  public <B, C, D, E, F$, G, H, I> Option<I> bind(final Option<B> ob, final Option<C> oc, final Option<D> od,
+  public final <B, C, D, E, F$, G, H, I> Option<I> bind(final Option<B> ob, final Option<C> oc, final Option<D> od,
                                                   final Option<E> oe, final Option<F$> of, final Option<G> og,
                                                   final Option<H> oh,
                                                   final F<A, F<B, F<C, F<D, F<E, F<F$, F<G, F<H, I>>>>>>>> f) {
     return oh.apply(bind(ob, oc, od, oe, of, og, f));
   }
 
-  public <B> Option<P2<A,B>> bindProduct(final Option<B> ob) {
+  public final <B> Option<P2<A,B>> bindProduct(final Option<B> ob) {
     return bind(ob, P.<A,B>p2()); 
   }
 
-  public <B,C> Option<P3<A,B,C>> bindProduct(final Option<B> ob, final Option<C> oc) {
+  public final <B, C> Option<P3<A,B,C>> bindProduct(final Option<B> ob, final Option<C> oc) {
     return bind(ob, oc, P.<A,B,C>p3());
   }
   
-  public <B,C,D> Option<P4<A,B,C,D>> bindProduct(final Option<B> ob, final Option<C> oc, final Option<D> od) {
+  public final <B, C, D> Option<P4<A,B,C,D>> bindProduct(final Option<B> ob, final Option<C> oc, final Option<D> od) {
     return bind(ob, oc, od, P.<A, B, C, D>p4());
   }
   
-  public <B,C,D,E> Option<P5<A,B,C,D,E>> bindProduct(final Option<B> ob, final Option<C> oc, final Option<D> od,
+  public final <B,C,D,E> Option<P5<A,B,C,D,E>> bindProduct(final Option<B> ob, final Option<C> oc, final Option<D> od,
                                                      final Option<E> oe) {
     return bind(ob, oc, od, oe, P.<A, B, C, D, E>p5());
   }
 
-  public <B,C,D,E,F$> Option<P6<A,B,C,D,E,F$>> bindProduct(final Option<B> ob, final Option<C> oc, final Option<D> od,
+  public final <B,C,D,E,F$> Option<P6<A,B,C,D,E,F$>> bindProduct(final Option<B> ob, final Option<C> oc, final Option<D> od,
                                                            final Option<E> oe, final Option<F$> of) {
     return bind(ob, oc, od, oe, of, P.<A, B, C, D, E, F$>p6());
   }
 
-  public <B,C,D,E,F$,G> Option<P7<A,B,C,D,E,F$,G>> bindProduct(final Option<B> ob, final Option<C> oc,
+  public final <B,C,D,E,F$,G> Option<P7<A,B,C,D,E,F$,G>> bindProduct(final Option<B> ob, final Option<C> oc,
                                                                final Option<D> od, final Option<E> oe,
                                                                final Option<F$> of, final Option<G> og) {
     return bind(ob, oc, od, oe, of, og, P.<A, B, C, D, E, F$, G>p7());
   }
 
-  public <B,C,D,E,F$,G,H> Option<P8<A,B,C,D,E,F$,G,H>> bindProduct(final Option<B> ob, final Option<C> oc,
+  public final <B,C,D,E,F$,G,H> Option<P8<A,B,C,D,E,F$,G,H>> bindProduct(final Option<B> ob, final Option<C> oc,
                                                                    final Option<D> od, final Option<E> oe,
                                                                    final Option<F$> of, final Option<G> og,
                                                                    final Option<H> oh) {
@@ -410,7 +410,7 @@ public abstract class Option<A> implements Iterable<A> {
    * @param o The optional value to apply in the final join.
    * @return A new optional value after the final join.
    */
-  public <B> Option<B> sequence(final Option<B> o) {
+  public final <B> Option<B> sequence(final Option<B> o) {
     final F<A, Option<B>> c = constant(o);
     return bind(c);
   }
@@ -422,7 +422,7 @@ public abstract class Option<A> implements Iterable<A> {
    * @return A new optional value after applying the given optional value of functions through this
    *         optional value.
    */
-  public <B> Option<B> apply(final Option<F<A, B>> of) {
+  public final <B> Option<B> apply(final Option<F<A, B>> of) {
     return of.bind(new F<F<A, B>, Option<B>>() {
       public Option<B> f(final F<A, B> f) {
         return map(new F<A, B>() {
@@ -440,7 +440,7 @@ public abstract class Option<A> implements Iterable<A> {
    * @param o The optional value to return if this optional value has no value.
    * @return This optional value if there is one, otherwise, returns the argument optional value.
    */
-  public Option<A> orElse(final P1<Option<A>> o) {
+  public final Option<A> orElse(final P1<Option<A>> o) {
     return isSome() ? this : o._1();
   }
 
@@ -450,7 +450,7 @@ public abstract class Option<A> implements Iterable<A> {
    * @param o The optional value to return if this optional value has no value.
    * @return This optional value if there is one, otherwise, returns the argument optional value.
    */
-  public Option<A> orElse(final Option<A> o) {
+  public final Option<A> orElse(final Option<A> o) {
     return isSome() ? this : o;
   }
 
@@ -461,7 +461,7 @@ public abstract class Option<A> implements Iterable<A> {
    * @param x The value to return in left if this optional value has no value.
    * @return An either projection of this optional value.
    */
-  public <X> Either<X, A> toEither(final P1<X> x) {
+  public final <X> Either<X, A> toEither(final P1<X> x) {
     return isSome() ? Either.<X, A>right(some()) : Either.<X, A>left(x._1());
   }
 
@@ -472,7 +472,7 @@ public abstract class Option<A> implements Iterable<A> {
    * @param x The value to return in left if this optional value has no value.
    * @return An either projection of this optional value.
    */
-  public <X> Either<X, A> toEither(final X x) {
+  public final <X> Either<X, A> toEither(final X x) {
     return isSome() ? Either.<X, A>right(some()) : Either.<X, A>left(x);
   }
 
@@ -495,7 +495,7 @@ public abstract class Option<A> implements Iterable<A> {
    *
    * @return A list projection of this optional value.
    */
-  public List<A> toList() {
+  public final List<A> toList() {
     return isSome() ? cons(some(), List.<A>nil()) : List.<A>nil();
   }
 
@@ -504,7 +504,7 @@ public abstract class Option<A> implements Iterable<A> {
    *
    * @return A stream projection of this optional value.
    */
-  public Stream<A> toStream() {
+  public final Stream<A> toStream() {
     return isSome() ? Stream.<A>nil().cons(some()) : Stream.<A>nil();
   }
 
@@ -514,7 +514,7 @@ public abstract class Option<A> implements Iterable<A> {
    * @return An array projection of this optional value.
    */
   @SuppressWarnings({"unchecked"})
-  public Array<A> toArray() {
+  public final Array<A> toArray() {
     return isSome() ? array(some()) : Array.<A>empty();
   }
 
@@ -525,7 +525,7 @@ public abstract class Option<A> implements Iterable<A> {
    * @return An array projection of this optional value.
    */
   @SuppressWarnings({"unchecked"})
-  public Array<A> toArray(final Class<A[]> c) {
+  public final Array<A> toArray(final Class<A[]> c) {
     if (isSome()) {
       final A[] a = (A[]) java.lang.reflect.Array.newInstance(c.getComponentType(), 1);
       a[0] = some();
@@ -540,7 +540,7 @@ public abstract class Option<A> implements Iterable<A> {
    *
    * @return This optional value or <code>null</code> if there is no value.
    */
-  public A toNull() {
+  public final A toNull() {
     return orSome((A) null);
   }
 
@@ -552,7 +552,7 @@ public abstract class Option<A> implements Iterable<A> {
    * @return <code>true</code> if this optional value has no value, or the predicate holds for the
    *         given predicate function, <code>false</code> otherwise.
    */
-  public boolean forall(final F<A, Boolean> f) {
+  public final boolean forall(final F<A, Boolean> f) {
     return isNone() || f.f(some());
   }
 
@@ -564,7 +564,7 @@ public abstract class Option<A> implements Iterable<A> {
    * @return <code>true</code> is this optional value has a value and the given predicate function
    *         holds on that value, <code>false</code> otherwise.
    */
-  public boolean exists(final F<A, Boolean> f) {
+  public final boolean exists(final F<A, Boolean> f) {
     return isSome() && f.f(some());
   }
 
@@ -573,7 +573,7 @@ public abstract class Option<A> implements Iterable<A> {
    *
    * @return An immutable collection of this optional value.
    */
-  public Collection<A> toCollection() {
+  public final Collection<A> toCollection() {
     return toList().toCollection();
   }
 

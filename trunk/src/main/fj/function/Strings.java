@@ -13,7 +13,7 @@ import static fj.Function.curry;
  *          <li>$LastChangedDate$</li>
  *          </ul>
  */
-public class Strings {
+public final class Strings {
   private Strings() {
     throw new UnsupportedOperationException();
   }

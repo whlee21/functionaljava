@@ -96,7 +96,7 @@ public abstract class Digit<V, A> {
    * @return A new digit with the same structure as this digit, but with all elements transformed
    *         with the given function and measured with the given measuring.
    */
-  public <B> Digit<V, B> map(final F<A, B> f, final Measured<V, B> m) {
+  public final <B> Digit<V, B> map(final F<A, B> f, final Measured<V, B> m) {
     return match(new F<One<V, A>, Digit<V, B>>() {
       public Digit<V, B> f(final One<V, A> one) {
         return new One<V, B>(m, f.f(one.value()));
@@ -139,7 +139,7 @@ public abstract class Digit<V, A> {
    *
    * @return the sum of the measurements of this digit according to the monoid.
    */
-  public V measure() {
+  public final V measure() {
     return foldLeft(Function.curry(new F2<V, A, V>() {
       public V f(final V v, final A a) {
         return m.sum(v, m.measure(a));
@@ -151,7 +151,7 @@ public abstract class Digit<V, A> {
    * Returns the tree representation of this digit.
    * @return the tree representation of this digit. 
    */
-  public FingerTree<V, A> toTree() {
+  public final FingerTree<V, A> toTree() {
     final MakeTree<V, A> mk = mkTree(m);
     return match(new F<One<V, A>, FingerTree<V, A>>() {
       public FingerTree<V, A> f(final One<V, A> one) {

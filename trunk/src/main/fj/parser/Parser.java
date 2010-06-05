@@ -24,7 +24,7 @@ import static fj.parser.Result.result;
  *          <li>$LastChangedDate$</li>
  *          </ul>
  */
-public class Parser<I, A, E> {
+public final class Parser<I, A, E> {
   private final F<I, Validation<E, Result<I, A>>> f;
 
   private Parser(final F<I, Validation<E, Result<I, A>>> f) {
