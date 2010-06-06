@@ -3,6 +3,9 @@ package fj.data;
 import fj.F;
 import fj.Function;
 
+import static fj.data.Either.left;
+import static fj.data.Either.right;
+
 // todo (WIP)
 public abstract class Either3<A, B, C> {
   public abstract <X> X either3(F<A, X> thiss, F<B, X> that, F<C, X> other);
@@ -23,6 +26,38 @@ public abstract class Either3<A, B, C> {
     return either3(Function.<A, Boolean>constant(false),
                    Function.<B, Boolean>constant(false),
                    Function.<C, Boolean>constant(true));
+  }
+
+  public final Either<A, Either<B, C>> eEither() {
+    return either3(new F<A, Either<A, Either<B, C>>>() {
+      public Either<A, Either<B, C>> f(final A a) {
+        return left(a);
+      }
+    }, new F<B, Either<A, Either<B, C>>>() {
+      public Either<A, Either<B, C>> f(final B b) {
+        return right(Either.<B, C>left(b));
+      }
+    }, new F<C, Either<A, Either<B, C>>>() {
+      public Either<A, Either<B, C>> f(final C c) {
+        return right(Either.<B, C>right(c));
+      }
+    });
+  }
+
+  public final Either<Either<A, B>, C> eitherE() {
+    return either3(new F<A, Either<Either<A, B>, C>>() {
+      public Either<Either<A, B>, C> f(final A a) {
+        return left(Either.<A, B>left(a));
+      }
+    }, new F<B, Either<Either<A, B>, C>>() {
+      public Either<Either<A, B>, C> f(final B b) {
+        return left(Either.<A, B>right(b));
+      }
+    }, new F<C, Either<Either<A, B>, C>>() {
+      public Either<Either<A, B>, C> f(final C c) {
+        return right(c);
+      }
+    });
   }
 
   public static <A, B, C> Either3<A, B, C> thiss(final A a) {
