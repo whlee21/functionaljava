@@ -60,7 +60,7 @@ public abstract class Either3<A, B, C> {
     });
   }
 
-  public final Either3<B, A, C> switchBAC() {
+  public final Either3<B, A, C> swapBAC() {
     return new Either3<B, A, C>() {
       public <X> X either3(final F<B, X> thiss, final F<A, X> that, final F<C, X> other) {
         return Either3.this.either3(that, thiss, other);
@@ -68,7 +68,7 @@ public abstract class Either3<A, B, C> {
     };
   }
 
-  public final Either3<C, B, A> switchCBA() {
+  public final Either3<C, B, A> swapCBA() {
     return new Either3<C, B, A>() {
       public <X> X either3(final F<C, X> thiss, final F<B, X> that, final F<A, X> other) {
         return Either3.this.either3(other, that, thiss);
@@ -76,7 +76,7 @@ public abstract class Either3<A, B, C> {
     };
   }
 
-  public final Either3<A, C, B> switchACB() {
+  public final Either3<A, C, B> swapACB() {
     return new Either3<A, C, B>() {
       public <X> X either3(final F<A, X> thiss, final F<C, X> that, final F<B, X> other) {
         return Either3.this.either3(thiss, other, that);
@@ -84,7 +84,7 @@ public abstract class Either3<A, B, C> {
     };
   }
 
-  public final Either3<B, C, A> switchBCA() {
+  public final Either3<B, C, A> swapBCA() {
     return new Either3<B, C, A>() {
       public <X> X either3(final F<B, X> thiss, final F<C, X> that, final F<A, X> other) {
         return Either3.this.either3(other, thiss, that);
@@ -92,7 +92,7 @@ public abstract class Either3<A, B, C> {
     };
   }
 
-  public final Either3<C, A, B> switchCAB() {
+  public final Either3<C, A, B> swapCAB() {
     return new Either3<C, A, B>() {
       public <X> X either3(final F<C, X> thiss, final F<A, X> that, final F<B, X> other) {
         return Either3.this.either3(that, other, thiss);
