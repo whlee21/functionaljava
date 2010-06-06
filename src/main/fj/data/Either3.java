@@ -1,8 +1,15 @@
 package fj.data;
 
+import fj.Effect;
 import fj.F;
 import fj.Function;
+import fj.P1;
+import fj.Unit;
 
+import java.util.Collection;
+import java.util.Iterator;
+
+import static fj.P.p;
 import static fj.data.Either.left;
 import static fj.data.Either.right;
 
@@ -99,6 +106,67 @@ public abstract class Either3<A, B, C> {
       }
     };
   }
+
+  public final class ThisProjection<A, B, C> implements Iterable<A> {
+    private final Either3<A, B, C> e3;
+    private final Either<A, Either<B, C>> e;
+
+    private ThisProjection(final Either3<A, B, C> e) {
+      e3 = e;
+      this.e = e.eEither();
+    }
+
+    public List<A> toList() {
+      return e.left().toList();
+    }
+
+    public Collection<A> toCollection() {
+      return e.left().toCollection();
+    }
+
+    public Iterator<A> iterator() {
+      return e.left().iterator();
+    }
+
+    public A valueE(final P1<String> err) {
+      return e.left().valueE(err);
+    }
+
+    public A valueE(final String err) {
+      return e.left().valueE(err);
+    }
+
+    public A value() {
+      return valueE(p("this.value on that or other"));
+    }
+
+    public A orValue(final P1<A> a) {
+      return e.left().orValue(a);
+    }
+
+    public A orValue(final A a) {
+      return e.left().orValue(a);
+    }
+
+    public A on(final F<Either<B, C>, A> f) {
+      return e.left().on(f);
+    }
+
+    public Unit foreach(final F<A, Unit> f) {
+      return e.left().foreach(f);
+    }
+
+    public void foreach(final Effect<A> f) {
+      e.left().foreach(f);
+    }
+
+    public <X> Either3<X, B, C> map(final F<A, X> f) {
+      return e3.either3(f.andThen(Either3.<X, B, C>thiss_()),
+                        Either3.<X, B, C>that_(),
+                        Either3.<X, B, C>other_());
+    }
+  }
+
 
   public static <A, B, C> Either3<A, B, C> thiss(final A a) {
     return new Either3<A, B, C>() {
