@@ -33,6 +33,14 @@ public abstract class Either3<A, B, C> {
     };
   }
 
+  public static <A, B, C> F<A, Either3<A, B, C>> thiss() {
+    return new F<A, Either3<A, B, C>>() {
+      public Either3<A, B, C> f(final A a) {
+        return thiss(a);
+      }
+    };
+  }
+
   public static <A, B, C> Either3<A, B, C> that(final B b) {
     return new Either3<A, B, C>() {
       public <X> X either3(final F<A, X> thiss, final F<B, X> that, final F<C, X> other) {
@@ -41,10 +49,26 @@ public abstract class Either3<A, B, C> {
     };
   }
 
+  public static <A, B, C> F<B, Either3<A, B, C>> that() {
+    return new F<B, Either3<A, B, C>>() {
+      public Either3<A, B, C> f(final B b) {
+        return that(b);
+      }
+    };
+  }
+
   public static <A, B, C> Either3<A, B, C> other(final C c) {
     return new Either3<A, B, C>() {
       public <X> X either3(final F<A, X> thiss, final F<B, X> that, final F<C, X> other) {
         return other.f(c);
+      }
+    };
+  }
+
+  public static <A, B, C> F<C, Either3<A, B, C>> other() {
+    return new F<C, Either3<A, B, C>>() {
+      public Either3<A, B, C> f(final C c) {
+        return other(c);
       }
     };
   }
