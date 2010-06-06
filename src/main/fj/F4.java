@@ -10,7 +10,7 @@ package fj;
  *          <li>$LastChangedDate$</li>
  *          </ul>
  */
-public interface F4<A, B, C, D, E> {
+public abstract class F4<A, B, C, D, E> {
   /**
    * Transform <code>A</code>, <code>B</code>, <code>C</code> and <code>D</code> to <code>E</code>.
    *
@@ -20,5 +20,5 @@ public interface F4<A, B, C, D, E> {
    * @param d The <code>D</code> to transform.
    * @return The result of the transformation.
    */
-  E f(A a, B b, C c, D d);
+  public abstract E f(A a, B b, C c, D d);
 }
