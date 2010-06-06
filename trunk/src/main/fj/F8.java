@@ -11,7 +11,7 @@ package fj;
  *          <li>$LastChangedDate$</li>
  *          </ul>
  */
-public interface F8<A, B, C, D, E, F$, G, H, I> {
+public abstract class F8<A, B, C, D, E, F$, G, H, I> {
   /**
    * Transform <code>A</code>, <code>B</code>, <code>C</code>, <code>D</code>, <code>E</code>,
    * <code>F$</code>, <code>G</code> and <code>H</code> to <code>I</code>.
@@ -26,5 +26,5 @@ public interface F8<A, B, C, D, E, F$, G, H, I> {
    * @param h The <code>H</code> to transform.
    * @return The result of the transformation.
    */
-  I f(A a, B b, C c, D d, E e, F$ f, G g, H h);
+  public abstract I f(A a, B b, C c, D d, E e, F$ f, G g, H h);
 }
