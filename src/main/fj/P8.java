@@ -1,7 +1,5 @@
 package fj;
 
-import static fj.FW.$;
-
 /**
  * A product-8.
  *
@@ -412,7 +410,7 @@ public abstract class P8<A, B, C, D, E, F, G, H> {
    * @return the 1-product projection over the first element.
    */
   public final P1<A> _1_() {
-    return $(P8.<A, B, C, D, E, F, G, H>__1()).lazy().f(this);
+    return P8.<A, B, C, D, E, F, G, H>__1().lazy().f(this);
   }
 
   /**
@@ -421,7 +419,7 @@ public abstract class P8<A, B, C, D, E, F, G, H> {
    * @return the 1-product projection over the second element.
    */
   public final P1<B> _2_() {
-    return $(P8.<A, B, C, D, E, F, G, H>__2()).lazy().f(this);
+    return P8.<A, B, C, D, E, F, G, H>__2().lazy().f(this);
   }
 
   /**
@@ -430,7 +428,7 @@ public abstract class P8<A, B, C, D, E, F, G, H> {
    * @return the 1-product projection over the third element.
    */
   public final P1<C> _3_() {
-    return $(P8.<A, B, C, D, E, F, G, H>__3()).lazy().f(this);
+    return P8.<A, B, C, D, E, F, G, H>__3().lazy().f(this);
   }
 
   /**
@@ -439,7 +437,7 @@ public abstract class P8<A, B, C, D, E, F, G, H> {
    * @return the 1-product projection over the fourth element.
    */
   public final P1<D> _4_() {
-    return $(P8.<A, B, C, D, E, F, G, H>__4()).lazy().f(this);
+    return P8.<A, B, C, D, E, F, G, H>__4().lazy().f(this);
   }
 
   /**
@@ -448,7 +446,7 @@ public abstract class P8<A, B, C, D, E, F, G, H> {
    * @return the 1-product projection over the fifth element.
    */
   public final P1<E> _5_() {
-    return $(P8.<A, B, C, D, E, F, G, H>__5()).lazy().f(this);
+    return P8.<A, B, C, D, E, F, G, H>__5().lazy().f(this);
   }
 
   /**
@@ -457,7 +455,7 @@ public abstract class P8<A, B, C, D, E, F, G, H> {
    * @return the 1-product projection over the sixth element.
    */
   public final P1<F> _6_() {
-    return $(P8.<A, B, C, D, E, F, G, H>__6()).lazy().f(this);
+    return P8.<A, B, C, D, E, F, G, H>__6().lazy().f(this);
   }
 
   /**
@@ -466,7 +464,7 @@ public abstract class P8<A, B, C, D, E, F, G, H> {
    * @return the 1-product projection over the seventh element.
    */
   public final P1<G> _7_() {
-    return $(P8.<A, B, C, D, E, F, G, H>__7()).lazy().f(this);
+    return P8.<A, B, C, D, E, F, G, H>__7().lazy().f(this);
   }
 
   /**
@@ -475,7 +473,7 @@ public abstract class P8<A, B, C, D, E, F, G, H> {
    * @return the 1-product projection over the eighth element.
    */
   public final P1<H> _8_() {
-    return $(P8.<A, B, C, D, E, F, G, H>__8()).lazy().f(this);
+    return P8.<A, B, C, D, E, F, G, H>__8().lazy().f(this);
   }
 
   /**

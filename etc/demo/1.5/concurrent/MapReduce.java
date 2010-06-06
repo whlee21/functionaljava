@@ -1,7 +1,6 @@
 package concurrent;
 
 import fj.F;
-import static fj.FW.$;
 import fj.P1;
 import fj.Unit;
 import fj.control.parallel.ParModule;
@@ -41,7 +40,7 @@ public class MapReduce {
   // Main program does the requisite IO gymnastics
   public static void main(final String[] args) {
     final List<Stream<Character>> documents = list(args).map(
-        $(new F<String, BufferedReader>() {
+        new F<String, BufferedReader>() {
           public BufferedReader f(final String fileName) {
             try {
               return new BufferedReader(new FileReader(new File(fileName)));
@@ -49,7 +48,7 @@ public class MapReduce {
               throw new Error(e);
             }
           }
-        }).andThen(new F<BufferedReader, Stream<Character>>() {
+        }.andThen(new F<BufferedReader, Stream<Character>>() {
           public Stream<Character> f(final BufferedReader reader) {
             final Option<String> s;
             try {

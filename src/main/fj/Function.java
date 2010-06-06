@@ -92,7 +92,7 @@ public final class Function {
       public F<F<B, C>, F<A, C>> f(final F<A, B> g) {
         return new F<F<B, C>, F<A, C>>() {
           public F<A, C> f(final F<B, C> f) {
-            return andThen(g, f);
+            return Function.andThen(g, f);
           }
         };
       }

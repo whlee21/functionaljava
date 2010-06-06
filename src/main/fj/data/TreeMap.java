@@ -1,7 +1,6 @@
 package fj.data;
 
 import fj.F;
-import fj.FW;
 import fj.P;
 import fj.P2;
 import fj.P3;
@@ -10,9 +9,8 @@ import fj.Ord;
 import java.util.Iterator;
 import java.util.Map;
 
-import static fj.F2W.$$;
-import static fj.FW.$;
 import static fj.Function.compose;
+import static fj.Function.flip;
 import static fj.P.p;
 import static fj.data.IterableW.join;
 import static fj.data.List.iterableList;
@@ -216,10 +214,10 @@ public final class TreeMap<K, V> implements Iterable<P2<K, V>> {
    *         and the optional value is the value associated with the given key if present, otherwise None.
    */
   public P3<Set<V>, Option<V>, Set<V>> split(final K k) {
-    final FW<Set<P2<K, Option<V>>>, Set<V>> getSome = $(Option.<V>fromSome()).o(P2.<K, Option<V>>__2())
-        .mapSet(tree.ord().comap($$(P.<K, Option<V>>p2()).f(k).<V>o(Option.<V>some_())));
+    final F<Set<P2<K, Option<V>>>, Set<V>> getSome = Option.<V>fromSome().o(P2.<K, Option<V>>__2())
+        .mapSet(tree.ord().comap(P.<K, Option<V>>p2().f(k).<V>o(Option.<V>some_())));
     return tree.split(p(k, Option.<V>none())).map1(getSome).map3(getSome)
-        .map2($(Option.<V>join()).o($(P2.<K, Option<V>>__2()).mapOption()));
+        .map2(Option.<V>join().o(P2.<K, Option<V>>__2().mapOption()));
   }
 
   /**
@@ -228,9 +226,10 @@ public final class TreeMap<K, V> implements Iterable<P2<K, V>> {
    * @param f A function to apply to the values of this TreeMap.
    * @return A new TreeMap with the values transformed by the given function.
    */
+  @SuppressWarnings({"unchecked"})
   public <W> TreeMap<K, W> map(final F<V, W> f) {
-    final F<P2<K, Option<V>>, P2<K, Option<W>>> g = P2.map2_($(f).mapOption());
-    final FW<K, P2<K, Option<V>>> coord = $$(P.<K, Option<V>>p2()).flip().f(Option.<V>none());
+    final F<P2<K, Option<V>>, P2<K, Option<W>>> g = P2.map2_(f.mapOption());
+    final F<K, P2<K, Option<V>>> coord = flip(P.<K, Option<V>>p2()).f(Option.<V>none());
     final Ord<K> o = tree.ord().comap(coord);
     return new TreeMap<K, W>(tree.map(TreeMap.<K, Option<W>>ord(o), g));
   }

@@ -377,7 +377,7 @@ public abstract class Stream<A> implements Iterable<A> {
   public static <A, B> F<B, Stream<A>> sequence_(final Stream<F<B, A>> fs) {
     return fs.foldRight(new F2<F<B, A>, P1<F<B, Stream<A>>>, F<B, Stream<A>>>() {
       public F<B, Stream<A>> f(final F<B, A> baf, final P1<F<B, Stream<A>>> p1) {
-        return Function.bind(baf, p1._1(), curry(new F2<A, Stream<A>, Stream<A>>() {
+        return Function.bind(baf, p1._1(), Function.curry(new F2<A, Stream<A>, Stream<A>>() {
           public Stream<A> f(final A a, final Stream<A> stream) {
             return cons(a, p(stream));
           }

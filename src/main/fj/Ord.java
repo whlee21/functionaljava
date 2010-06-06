@@ -13,7 +13,6 @@ import fj.data.Validation;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 
-import static fj.FW.$;
 import static fj.Function.curry;
 
 /**
@@ -83,7 +82,7 @@ public final class Ord<A> {
    * @return A new ord.
    */
   public <B> Ord<B> comap(final F<B, A> f) {
-    return ord($(f).<Ordering>andThen_().o(this.f).o(f));
+    return ord(f.<Ordering>andThen().o(this.f).o(f));
   }
 
   /**

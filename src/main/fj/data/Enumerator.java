@@ -439,7 +439,7 @@ public final class Enumerator<A> {
     }
   }, Option.<Natural>none(), some(Natural.ZERO), naturalOrd, curry(new F2<Natural, Long, Option<Natural>>() {
     public Option<Natural> f(final Natural n, final Long l) {
-      return some(n).apply(Natural.natural(l).map(curry(new F2<Natural, Natural, Natural>() {
+      return some(n).apply(Natural.natural(l).map(Function.curry(new F2<Natural, Natural, Natural>() {
         public Natural f(final Natural n1, final Natural n2) {
           return n1.add(n2);
         }

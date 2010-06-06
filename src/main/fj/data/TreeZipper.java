@@ -18,7 +18,6 @@ import static fj.Equal.p3Equal;
 import static fj.Equal.p4Equal;
 import static fj.Equal.streamEqual;
 import static fj.Equal.treeEqual;
-import static fj.F2W.$$;
 import static fj.Function.compose;
 import static fj.Function.curry;
 import static fj.Function.flip;
@@ -727,7 +726,7 @@ public final class TreeZipper<A> implements Iterable<TreeZipper<A>> {
    * @return The result of applying the given function over this TreeZipper and the given TreeZipper, location-wise.
    */
   public <B, C> TreeZipper<C> zipWith(final TreeZipper<B> bs, final F2<A, B, C> f) {
-    return $$(f).zipTreeZipper().f(this, bs);
+    return f.zipTreeZipperM().f(this, bs);
   }
 
   /**
