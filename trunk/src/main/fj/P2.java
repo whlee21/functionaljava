@@ -3,7 +3,6 @@ package fj;
 import static fj.Function.*;
 import fj.data.List;
 import fj.data.Stream;
-import static fj.FW.$;
 
 /**
  * A product-2.
@@ -173,7 +172,7 @@ public abstract class P2<A, B> {
    * @return the 1-product projection over the first element.
    */
   public final P1<A> _1_() {
-    return $(P2.<A, B>__1()).lazy().f(this);
+    return P2.<A, B>__1().lazy().f(this);
   }
 
   /**
@@ -182,7 +181,7 @@ public abstract class P2<A, B> {
    * @return the 1-product projection over the second element.
    */
   public final P1<B> _2_() {
-    return $(P2.<A, B>__2()).lazy().f(this);
+    return P2.<A, B>__2().lazy().f(this);
   }
 
   /**

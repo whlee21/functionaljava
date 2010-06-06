@@ -12,8 +12,6 @@ import fj.P3;
 import fj.P4;
 import fj.Unit;
 import static fj.P.p;
-import static fj.F2W.$$;
-import static fj.FW.$;
 import static fj.Function.curry;
 import static fj.Function.uncurryF2;
 import static fj.control.parallel.Promise.liftM2;
@@ -80,7 +78,7 @@ public final class ParModule {
    *         that can be claimed in the future.
    */
   public <A, B> F<A, Promise<B>> promise(final F<A, B> f) {
-    return $(f).promise(strategy);
+    return f.promiseK(strategy);
   }
 
   /**
@@ -105,7 +103,7 @@ public final class ParModule {
    *         that can be claimed in the future.
    */
   public <A, B, C> F2<A, B, Promise<C>> promise(final F2<A, B, C> f) {
-    return P2.untuple($$(f).tuple().promise(strategy));
+    return P2.untuple(f.tuple().promiseK(strategy));
   }
 
 

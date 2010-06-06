@@ -1,6 +1,5 @@
 package fj;
 
-import static fj.FW.$;
 import static fj.Function.curry;
 import fj.data.hlist.HList;
 import fj.data.Array;
@@ -85,7 +84,7 @@ public final class Equal<A> {
    * @return A new equal.
    */
   public <B> Equal<B> comap(final F<B, A> f) {
-    return equal($(f).<Boolean>andThen_().o(this.f).o(f));
+    return equal(f.<Boolean>andThen().o(this.f).o(f));
   }
 
   /**

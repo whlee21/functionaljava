@@ -1,7 +1,5 @@
 package fj;
 
-import static fj.FW.$;
-
 /**
  * A product-6.
  *
@@ -265,7 +263,7 @@ public abstract class P6<A, B, C, D, E, F> {
    * @return the 1-product projection over the first element.
    */
   public final P1<A> _1_() {
-    return $(P6.<A, B, C, D, E, F>__1()).lazy().f(this);
+    return P6.<A, B, C, D, E, F>__1().lazy().f(this);
   }
 
   /**
@@ -274,7 +272,7 @@ public abstract class P6<A, B, C, D, E, F> {
    * @return the 1-product projection over the second element.
    */
   public final P1<B> _2_() {
-    return $(P6.<A, B, C, D, E, F>__2()).lazy().f(this);
+    return P6.<A, B, C, D, E, F>__2().lazy().f(this);
   }
 
   /**
@@ -283,7 +281,7 @@ public abstract class P6<A, B, C, D, E, F> {
    * @return the 1-product projection over the third element.
    */
   public final P1<C> _3_() {
-    return $(P6.<A, B, C, D, E, F>__3()).lazy().f(this);
+    return P6.<A, B, C, D, E, F>__3().lazy().f(this);
   }
 
   /**
@@ -292,7 +290,7 @@ public abstract class P6<A, B, C, D, E, F> {
    * @return the 1-product projection over the fourth element.
    */
   public final P1<D> _4_() {
-    return $(P6.<A, B, C, D, E, F>__4()).lazy().f(this);
+    return P6.<A, B, C, D, E, F>__4().lazy().f(this);
   }
 
   /**
@@ -301,7 +299,7 @@ public abstract class P6<A, B, C, D, E, F> {
    * @return the 1-product projection over the fifth element.
    */
   public final P1<E> _5_() {
-    return $(P6.<A, B, C, D, E, F>__5()).lazy().f(this);
+    return P6.<A, B, C, D, E, F>__5().lazy().f(this);
   }
 
   /**
@@ -310,7 +308,7 @@ public abstract class P6<A, B, C, D, E, F> {
    * @return the 1-product projection over the sixth element.
    */
   public final P1<F> _6_() {
-    return $(P6.<A, B, C, D, E, F>__6()).lazy().f(this);
+    return P6.<A, B, C, D, E, F>__6().lazy().f(this);
   }
 
   /**

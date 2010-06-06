@@ -1,18 +1,23 @@
 import fj.Effect;
 import fj.F;
 import fj.F2;
-import static fj.P.p;
 import fj.P2;
 import fj.data.List;
-import static fj.data.List.*;
 import fj.data.Option;
-import static fj.data.Option.some;
 import fj.data.Stream;
-import static fj.data.Stream.stream;
 import fj.function.Characters;
+
 import static fj.Equal.charEqual;
 import static fj.Equal.listEqual;
+import static fj.P.p;
 import static fj.Show.stringShow;
+import static fj.data.List.asString;
+import static fj.data.List.fromString;
+import static fj.data.List.list;
+import static fj.data.List.single;
+import static fj.data.List.unfold;
+import static fj.data.Option.some;
+import static fj.data.Stream.stream;
 
 public final class ChequeWrite {
   private ChequeWrite() {}

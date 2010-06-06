@@ -127,7 +127,7 @@ public final class Callables {
   public static <A, B> F<Callable<A>, Callable<B>> fmap(final F<A, B> f) {
     return new F<Callable<A>, Callable<B>>() {
       public Callable<B> f(final Callable<A> a) {
-        return bind(a, callable(f));
+        return Callables.bind(a, callable(f));
       }
     };
   }
