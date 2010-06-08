@@ -23,19 +23,17 @@ public final class QueueActor<A> {
 
   private final Actor<Unit> act;
   private final Actor<A> selfish;
-  private final Actor<Unit> work;
 
   private QueueActor(final Strategy<Unit> s, final Effect<A> ea) {
     act = actor(s, new Effect<Unit>() {
       public void e(final Unit u) {
-        if (!mbox.isEmpty()) {
+        if (!mbox.isEmpty())
           ea.e(mbox.remove());
-          act.act(u);
-        }
-        else {
+        if (mbox.isEmpty()) {
           suspended.set(true);
-          work.act(u);
-        }
+          work();
+        } else
+          act.act(u);
       }
     });
     selfish =
@@ -44,12 +42,11 @@ public final class QueueActor<A> {
             act(a);
           }
         });
-    work = actor(s, new Effect<Unit>() {
-      public void e(final Unit u) {
-        if (suspended.compareAndSet(true, false))
-          act.act(Unit.unit());
-      }
-    });
+  }
+
+  private P1<Unit> work() {
+    return suspended.compareAndSet(true, false) ?
+      act.act(Unit.unit()) : P.p(Unit.unit());
   }
 
   /**
@@ -90,7 +87,7 @@ public final class QueueActor<A> {
    */
   public void act(final A a) {
     if (mbox.offer(a))
-      work.act(Unit.unit());
+      work();
     else
       selfish.act(a);
   }
