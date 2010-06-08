@@ -25,6 +25,10 @@ public final class QueueActor<A> {
   private final Actor<A> selfish;
 
   private QueueActor(final Strategy<Unit> s, final Effect<A> ea) {
+    
+    // Gets the next message, acts on it, then submits itself to the strategy again.
+    // When messages are exhausted, suspend the actor and immediately attempt to unsuspend it,
+    // since a message may have arrived in the meantime.
     act = actor(s, new Effect<Unit>() {
       public void e(final Unit u) {
         A a = mbox.poll();
@@ -38,6 +42,8 @@ public final class QueueActor<A> {
         }
       }
     });
+
+    // An actor that sends messages to this actor.
     selfish =
         actor(s, new Effect<A>() {
           public void e(final A a) {
@@ -46,6 +52,9 @@ public final class QueueActor<A> {
         });
   }
 
+  // Attempts to unsuspend the actor if the queue is nonempty.
+  // Only called if a message has just been submitted,
+  // or if the thread currently animating the actor ran out of messages.
   private P1<Unit> work() {
     boolean mt = mbox.isEmpty();
     return mt ? P.p(Unit.unit()) :
@@ -91,6 +100,8 @@ public final class QueueActor<A> {
    * @param a A message to submit to this actor's queue.
    */
   public void act(final A a) {
+    // Put the message on the queue and try to unsuspend the actor.
+    // If the enqueue fails, try again later.
     if (mbox.offer(a))
       work();
     else
