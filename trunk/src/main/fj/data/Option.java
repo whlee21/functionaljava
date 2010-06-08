@@ -15,6 +15,7 @@ import fj.P6;
 import fj.P7;
 import fj.P8;
 import fj.Unit;
+import fj.Show;
 
 import static fj.Function.*;
 import static fj.P.p;
@@ -28,6 +29,8 @@ import static fj.data.Validation.parseFloat;
 import static fj.data.Validation.parseInt;
 import static fj.data.Validation.parseLong;
 import static fj.data.Validation.parseShort;
+import static fj.Show.optionShow;
+import static fj.Show.anyShow;
 
 import java.util.Collection;
 import java.util.Iterator;
@@ -45,6 +48,11 @@ import java.util.Iterator;
 public abstract class Option<A> implements Iterable<A> {
   private Option() {
 
+  }
+
+  public String toString() {
+    Show<A> s = anyShow();
+    return optionShow(s).showS(this);
   }
 
   /**
