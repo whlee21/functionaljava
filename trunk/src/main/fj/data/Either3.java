@@ -67,6 +67,10 @@ public abstract class Either3<A, B, C> {
     });
   }
 
+  public final ThisProjection<A, B, C> thiss() {
+    return new ThisProjection<A, B, C>(this);
+  }
+
   public final Either3<B, A, C> swapBAC() {
     return new Either3<B, A, C>() {
       public <X> X either3(final F<B, X> thiss, final F<A, X> that, final F<C, X> other) {
@@ -108,32 +112,24 @@ public abstract class Either3<A, B, C> {
   }
 
   public final class ThisProjection<A, B, C> implements Iterable<A> {
-    private final Either3<A, B, C> e3;
-    private final Either<A, Either<B, C>> e;
+    private final Either3<A, B, C> e;
+    private final Either<A, Either<B, C>> eE;
 
     private ThisProjection(final Either3<A, B, C> e) {
-      e3 = e;
-      this.e = e.eEither();
-    }
-
-    public List<A> toList() {
-      return e.left().toList();
-    }
-
-    public Collection<A> toCollection() {
-      return e.left().toCollection();
+      this.e = e;
+      eE = e.eEither();
     }
 
     public Iterator<A> iterator() {
-      return e.left().iterator();
+      return eE.left().iterator();
     }
 
     public A valueE(final P1<String> err) {
-      return e.left().valueE(err);
+      return eE.left().valueE(err);
     }
 
     public A valueE(final String err) {
-      return e.left().valueE(err);
+      return eE.left().valueE(err);
     }
 
     public A value() {
@@ -141,32 +137,81 @@ public abstract class Either3<A, B, C> {
     }
 
     public A orValue(final P1<A> a) {
-      return e.left().orValue(a);
+      return eE.left().orValue(a);
     }
 
     public A orValue(final A a) {
-      return e.left().orValue(a);
+      return eE.left().orValue(a);
     }
 
     public A on(final F<Either<B, C>, A> f) {
-      return e.left().on(f);
+      return eE.left().on(f);
     }
 
     public Unit foreach(final F<A, Unit> f) {
-      return e.left().foreach(f);
+      return eE.left().foreach(f);
     }
 
     public void foreach(final Effect<A> f) {
-      e.left().foreach(f);
+      eE.left().foreach(f);
     }
 
     public <X> Either3<X, B, C> map(final F<A, X> f) {
-      return e3.either3(f.andThen(Either3.<X, B, C>thiss_()),
+      return e.either3(f.andThen(Either3.<X, B, C>thiss_()),
                         Either3.<X, B, C>that_(),
                         Either3.<X, B, C>other_());
     }
-  }
 
+    public <X> Either3<X, B, C> bind(final F<A, Either3<X, B, C>> f) {
+      return fromEitherE(eE.left().bind(f.andThen(new F<Either3<X, B, C>, Either<X, Either<B, C>>>() {
+        public Either<X, Either<B, C>> f(final Either3<X, B, C> k) {
+          return k.eEither();
+        }
+      })));
+    }
+
+    public <X> Either3<X, B, C> bind(final Either3<X, B, C> e) {
+      return bind(Function.<A, Either3<X, B, C>>constant(e));
+    }
+
+    public <Y, Z> Option<Either3<A, Y, Z>> filter(final F<A, Boolean> f) {
+      return eE.isLeft() && f.f(eE.left().value()) ?
+          Option.some(Either3.<A, Y, Z>thiss(value())) :
+          Option.<Either3<A, Y, Z>>none();
+    }
+
+    public <X> Either3<X, B, C> apply(final Either3<F<A, X>, B, C> f) {
+      return f.thiss().bind(new F<F<A, X>, Either3<X, B, C>>() {
+        public Either3<X, B, C> f(final F<A, X> k) {
+          return map(k);
+        }
+      });
+    }
+
+    public boolean forall(final F<A, Boolean> f) {
+      return eE.left().forall(f);
+    }
+
+    public boolean exists(final F<A, Boolean> f) {
+      return eE.left().exists(f);
+    }
+
+    public List<A> toList() {
+      return eE.left().toList();
+    }
+
+    public Option<A> toOption() {
+      return eE.left().toOption();
+    }
+
+    public Stream<A> toStream() {
+      return eE.left().toStream();
+    }
+
+    public Collection<A> toCollection() {
+      return eE.left().toCollection();
+    }
+  }
 
   public static <A, B, C> Either3<A, B, C> thiss(final A a) {
     return new Either3<A, B, C>() {
@@ -215,4 +260,20 @@ public abstract class Either3<A, B, C> {
       }
     };
   }
+
+  public static <A, B, C> Either3<A, B, C> fromEitherE(final Either<A, Either<B, C>> e) {
+    return e.isLeft() ?
+        Either3.<A, B, C>thiss(e.left().value()) :
+        e.right().value().isLeft() ?
+          Either3.<A, B, C>that(e.right().value().left().value()) :
+          Either3.<A, B, C>other(e.right().value().right().value());
+  }
+
+  public static <A, B, C> Either3<A, B, C> fromEEither(final Either<Either<A, B>, C> e) {
+    return e.isRight() ?
+        Either3.<A, B, C>other(e.right().value()) :
+        e.left().value().isRight() ?
+          Either3.<A, B, C>that(e.left().value().right().value()) :
+          Either3.<A, B, C>thiss(e.left().value().left().value());
+  }  
 }
