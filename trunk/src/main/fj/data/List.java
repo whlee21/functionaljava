@@ -210,7 +210,17 @@ public abstract class List<A> implements Iterable<A> {
       x = x.tail();
     }
 
-    return array(a);
+    return Array.array(a);
+  }
+
+  /**
+   * Returns an array from this list.
+   *
+   * @param c The class type of the array to return.
+   * @return An array from this list.
+   */
+  public final A[] array(final Class<A[]> c) {
+    return toArray(c).array(c);
   }
 
   /**
