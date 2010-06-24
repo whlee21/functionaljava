@@ -1259,7 +1259,7 @@ public abstract class List<A> implements Iterable<A> {
    * @return A list with the given elements.
    */
   public static <A> List<A> list(final A... as) {
-    return array(as).toList();
+    return Array.array(as).toList();
   }
 
   /**

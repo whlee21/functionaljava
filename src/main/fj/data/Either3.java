@@ -272,6 +272,7 @@ public abstract class Either3<A, B, C> {
           Either3.<A, X, C>other_());
     }
 
+    /*
     public <X> Either3<A, X, C> bind(final F<B, Either3<A, X, C>> f) {
       return fromEitherE(eE.left().bind(f.andThen(new F<Either3<A, X, C>, Either<X, Either<A, C>>>() {
         public Either<X, Either<B, C>> f(final Either3<X, B, C> k) {
@@ -321,6 +322,7 @@ public abstract class Either3<A, B, C> {
     public Collection<A> toCollection() {
       return eE.left().toCollection();
     }
+    */
   }
   
   public static <A, B, C> F<A, Either3<A, B, C>> thiss_() {
@@ -377,5 +379,5 @@ public abstract class Either3<A, B, C> {
         e.left().value().isRight() ?
           Either3.<A, B, C>that(e.left().value().right().value()) :
           Either3.<A, B, C>thiss(e.left().value().left().value());
-  }  
+  }
 }
