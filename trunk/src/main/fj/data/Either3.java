@@ -111,6 +111,14 @@ public abstract class Either3<A, B, C> {
     };
   }
 
+  public static <A, B, C> Either3<A, B, C> thiss(final A a) {
+    return new Either3<A, B, C>() {
+      public <X> X either3(final F<A, X> thiss, final F<B, X> that, final F<C, X> other) {
+        return thiss.f(a);
+      }
+    };
+  }
+
   public final class ThisProjection<A, B, C> implements Iterable<A> {
     private final Either3<A, B, C> e;
     private final Either<A, Either<B, C>> eE;
@@ -158,8 +166,8 @@ public abstract class Either3<A, B, C> {
 
     public <X> Either3<X, B, C> map(final F<A, X> f) {
       return e.either3(f.andThen(Either3.<X, B, C>thiss_()),
-                        Either3.<X, B, C>that_(),
-                        Either3.<X, B, C>other_());
+          Either3.<X, B, C>that_(),
+          Either3.<X, B, C>other_());
     }
 
     public <X> Either3<X, B, C> bind(final F<A, Either3<X, B, C>> f) {
@@ -213,14 +221,108 @@ public abstract class Either3<A, B, C> {
     }
   }
 
-  public static <A, B, C> Either3<A, B, C> thiss(final A a) {
-    return new Either3<A, B, C>() {
-      public <X> X either3(final F<A, X> thiss, final F<B, X> that, final F<C, X> other) {
-        return thiss.f(a);
-      }
-    };
-  }
+  public final class ThatProjection<A, B, C> implements Iterable<B> {
+    private final Either3<A, B, C> e;
+    private final Either<B, Either<A, C>> eE;
 
+    private ThatProjection(final Either3<A, B, C> e) {
+      this.e = e;
+      eE = e.swapBAC().eEither();
+    }
+
+    public Iterator<B> iterator() {
+      return eE.left().iterator();
+    }
+
+    public B valueE(final P1<String> err) {
+      return eE.left().valueE(err);
+    }
+
+    public B valueE(final String err) {
+      return eE.left().valueE(err);
+    }
+
+    public B value() {
+      return valueE(p("that.value on this or other"));
+    }
+
+    public B orValue(final P1<B> a) {
+      return eE.left().orValue(a);
+    }
+
+    public B orValue(final B a) {
+      return eE.left().orValue(a);
+    }
+
+    public B on(final F<Either<A, C>, B> f) {
+      return eE.left().on(f);
+    }
+
+    public Unit foreach(final F<B, Unit> f) {
+      return eE.left().foreach(f);
+    }
+
+    public void foreach(final Effect<B> f) {
+      eE.left().foreach(f);
+    }
+
+    public <X> Either3<A, X, C> map(final F<B, X> f) {
+      return e.either3(Either3.<A, X, C>thiss_(),
+          f.andThen(Either3.<A, X, C>that_()),
+          Either3.<A, X, C>other_());
+    }
+
+    public <X> Either3<A, X, C> bind(final F<B, Either3<A, X, C>> f) {
+      return fromEitherE(eE.left().bind(f.andThen(new F<Either3<A, X, C>, Either<X, Either<A, C>>>() {
+        public Either<X, Either<B, C>> f(final Either3<X, B, C> k) {
+          return k.eEither();
+        }
+      })));
+    }
+
+    public <X> Either3<X, B, C> bind(final Either3<X, B, C> e) {
+      return bind(Function.<A, Either3<X, B, C>>constant(e));
+    }
+
+    public <Y, Z> Option<Either3<A, Y, Z>> filter(final F<A, Boolean> f) {
+      return eE.isLeft() && f.f(eE.left().value()) ?
+          Option.some(Either3.<A, Y, Z>thiss(value())) :
+          Option.<Either3<A, Y, Z>>none();
+    }
+
+    public <X> Either3<X, B, C> apply(final Either3<F<A, X>, B, C> f) {
+      return f.thiss().bind(new F<F<A, X>, Either3<X, B, C>>() {
+        public Either3<X, B, C> f(final F<A, X> k) {
+          return map(k);
+        }
+      });
+    }
+
+    public boolean forall(final F<A, Boolean> f) {
+      return eE.left().forall(f);
+    }
+
+    public boolean exists(final F<A, Boolean> f) {
+      return eE.left().exists(f);
+    }
+
+    public List<A> toList() {
+      return eE.left().toList();
+    }
+
+    public Option<A> toOption() {
+      return eE.left().toOption();
+    }
+
+    public Stream<A> toStream() {
+      return eE.left().toStream();
+    }
+
+    public Collection<A> toCollection() {
+      return eE.left().toCollection();
+    }
+  }
+  
   public static <A, B, C> F<A, Either3<A, B, C>> thiss_() {
     return new F<A, Either3<A, B, C>>() {
       public Either3<A, B, C> f(final A a) {

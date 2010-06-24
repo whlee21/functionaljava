@@ -2,7 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/functionaljava.iml" filepath="$PROJECT_DIR$/functionaljava.iml" />
+      <module fileurl="file://$PROJECT_DIR$/etc/demo/Demo.iml" filepath="$PROJECT_DIR$/etc/demo/Demo.iml" />
+      <module fileurl="file://$PROJECT_DIR$/src/Trunk.iml" filepath="$PROJECT_DIR$/src/Trunk.iml" />
     </modules>
   </component>
 </project>
