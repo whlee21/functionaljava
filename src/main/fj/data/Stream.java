@@ -31,7 +31,6 @@ import static fj.P.p;
 import static fj.P.p2;
 import static fj.Unit.unit;
 import static fj.control.parallel.Promise.promise;
-import static fj.data.Array.array;
 import static fj.data.Array.mkArray;
 import static fj.data.Option.none;
 import static fj.data.Option.some;

@@ -20,7 +20,6 @@ import fj.Show;
 import static fj.Function.*;
 import static fj.P.p;
 import static fj.Unit.unit;
-import static fj.data.Array.array;
 import static fj.data.List.cons;
 import static fj.data.List.cons_;
 import static fj.data.Validation.parseByte;
@@ -51,7 +50,7 @@ public abstract class Option<A> implements Iterable<A> {
   }
 
   public String toString() {
-    Show<A> s = anyShow();
+    final Show<A> s = anyShow();
     return optionShow(s).showS(this);
   }
 
@@ -523,7 +522,7 @@ public abstract class Option<A> implements Iterable<A> {
    */
   @SuppressWarnings({"unchecked"})
   public final Array<A> toArray() {
-    return isSome() ? array(some()) : Array.<A>empty();
+    return isSome() ? Array.array(some()) : Array.<A>empty();
   }
 
   /**
@@ -537,9 +536,19 @@ public abstract class Option<A> implements Iterable<A> {
     if (isSome()) {
       final A[] a = (A[]) java.lang.reflect.Array.newInstance(c.getComponentType(), 1);
       a[0] = some();
-      return array(a);
+      return Array.array(a);
     } else
-      return array((A[]) java.lang.reflect.Array.newInstance(c.getComponentType(), 0));
+      return Array.array((A[]) java.lang.reflect.Array.newInstance(c.getComponentType(), 0));
+  }
+
+  /**
+   * Returns an array from this optional value.
+   *
+   * @param c The class type of the array to return.
+   * @return An array from this optional value.
+   */
+  public final A[] array(final Class<A[]> c) {
+    return toArray(c).array(c);
   }
 
   /**
