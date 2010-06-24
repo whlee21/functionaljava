@@ -1006,7 +1006,17 @@ public abstract class Stream<A> implements Iterable<A> {
       i++;
     }
 
-    return array(a);
+    return Array.array(a);
+  }
+
+  /**
+   * Returns an array from this stream.
+   *
+   * @param c The class type of the array to return.
+   * @return An array from this stream.
+   */
+  public final A[] array(final Class<A[]> c) {
+    return toArray(c).array(c);
   }
 
   /**
