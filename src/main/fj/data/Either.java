@@ -90,17 +90,6 @@ public abstract class Either<A, B> {
     return isLeft() ? new Right<B, A>(((Left<A, B>) this).a) : new Left<B, A>(((Right<A, B>) this).b);
   }
 
-  /**
-   * Returns an either-3 that has a value in the A or B (not the C).
-   *
-   * @return An either-3 that has a value in the A or B (not the C).
-   */
-  public final <C> Either3<A, B, C> either3() {
-    return isLeft() ?
-        Either3.<A, B, C>thiss(left().value()) :
-        Either3.<A, B, C>that(right().value());
-  }
-
   private static final class Left<A, B> extends Either<A, B> {
     private final A a;
 
