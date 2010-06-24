@@ -63,6 +63,7 @@ public abstract class Node<V, A> {
     return m;
   }
 
+  @SuppressWarnings({"SameReturnValue"})
   public abstract P2<Integer, A> lookup(final F<V, Integer> o, final int i);
 
   public abstract <B> B match(final F<Node2<V, A>, B> n2, final F<Node3<V, A>, B> n3);

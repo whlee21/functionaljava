@@ -21,6 +21,7 @@
     <inspection_tool class="AutowiredDependenciesInspection" enabled="false" level="WARNING" enabled_by_default="false" />
     <inspection_tool class="BadExpressionStatementJS" enabled="false" level="WARNING" enabled_by_default="false" />
     <inspection_tool class="BindingAnnotationWithoutInject" enabled="false" level="WARNING" enabled_by_default="false" />
+    <inspection_tool class="BooleanMethodIsAlwaysInverted" enabled="false" level="WARNING" enabled_by_default="false" />
     <inspection_tool class="BoundFieldAssignment" enabled="false" level="WARNING" enabled_by_default="false" />
     <inspection_tool class="BvConfigDomInspection" enabled="false" level="ERROR" enabled_by_default="false" />
     <inspection_tool class="BvConstraintMappingsInspection" enabled="false" level="ERROR" enabled_by_default="false" />
@@ -168,7 +169,6 @@
     <inspection_tool class="HardcodedFileSeparators" enabled="true" level="WARNING" enabled_by_default="true">
       <option name="m_recognizeExampleMediaType" value="false" />
     </inspection_tool>
-    <inspection_tool class="HardcodedLineSeparators" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="HardwiredNamespacePrefix" enabled="false" level="WARNING" enabled_by_default="false" />
     <inspection_tool class="HibernateConfigDomFacetInspection" enabled="false" level="WARNING" enabled_by_default="false" />
     <inspection_tool class="HibernateConfigDomInspection" enabled="false" level="ERROR" enabled_by_default="false" />
@@ -334,6 +334,7 @@
     <inspection_tool class="ReuseOfLocalVariable" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="RuntimeExec" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="SamePackageImport" enabled="true" level="WARNING" enabled_by_default="true" />
+    <inspection_tool class="SameParameterValue" enabled="false" level="WARNING" enabled_by_default="false" />
     <inspection_tool class="SeamAnnotationIncorrectSignatureInspection" enabled="false" level="ERROR" enabled_by_default="false" />
     <inspection_tool class="SeamAnnotationsInconsistencyInspection" enabled="false" level="ERROR" enabled_by_default="false" />
     <inspection_tool class="SeamBijectionIllegalScopeParameterInspection" enabled="false" level="ERROR" enabled_by_default="false" />
@@ -458,7 +459,7 @@
     <inspection_tool class="UnreachableCodeJS" enabled="false" level="WARNING" enabled_by_default="false" />
     <inspection_tool class="UnresolvedPropertyKey" enabled="false" level="ERROR" enabled_by_default="false" />
     <inspection_tool class="UnterminatedStatementJS" enabled="false" level="WARNING" enabled_by_default="false" />
-    <inspection_tool class="UnusedDeclaration" enabled="true" level="WARNING" enabled_by_default="true">
+    <inspection_tool class="UnusedDeclaration" enabled="false" level="WARNING" enabled_by_default="false">
       <option name="ADD_MAINS_TO_ENTRIES" value="false" />
       <option name="ADD_APPLET_TO_ENTRIES" value="false" />
       <option name="ADD_SERVLET_TO_ENTRIES" value="false" />
@@ -476,9 +477,6 @@
     <inspection_tool class="UnusedReturnValue" enabled="false" level="WARNING" enabled_by_default="false" />
     <inspection_tool class="UtilSchemaInspection" enabled="false" level="ERROR" enabled_by_default="false" />
     <inspection_tool class="UtilityClassWithPublicConstructor" enabled="true" level="WARNING" enabled_by_default="true" />
-    <inspection_tool class="UtilityClassWithoutPrivateConstructor" enabled="true" level="WARNING" enabled_by_default="true">
-      <option name="ignoreClassesWithOnlyMain" value="false" />
-    </inspection_tool>
     <inspection_tool class="ValidExternallyBoundObject" enabled="false" level="ERROR" enabled_by_default="false" />
     <inspection_tool class="ValidatorConfigModelInspection" enabled="false" level="ERROR" enabled_by_default="false" />
     <inspection_tool class="ValidatorModelInspection" enabled="false" level="ERROR" enabled_by_default="false" />

@@ -2099,6 +2099,7 @@ public final class Java {
     return new F<Future<A>, P1<Either<Exception, A>>>() {
       public P1<Either<Exception, A>> f(final Future<A> a) {
         return new P1<Either<Exception, A>>() {
+          @SuppressWarnings({"OverlyBroadCatchBlock"})
           public Either<Exception, A> _1() {
             Either<Exception, A> r;
             try {
