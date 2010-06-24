@@ -160,7 +160,7 @@ maven = do buildAll
              writeHashArchive (map (flip (,) ".") f) nosvn nosvnf [OptVerbose] (mavendir </> "fj-" ++ v ++ '-' :  n ++ ".jar"))
 
 svn :: String -> IO ExitCode
-svn k = system ("svn " ++ k)
+svn k = print k >> system ("svn " ++ k)
 
 svn' :: [String] -> IO ExitCode
 svn' = svn . join
