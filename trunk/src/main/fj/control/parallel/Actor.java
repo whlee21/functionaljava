@@ -1,5 +1,7 @@
 package fj.control.parallel;
 
+import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.atomic.AtomicBoolean;
 import fj.Effect;
 import fj.F;
 import fj.Unit;
@@ -10,18 +12,69 @@ import fj.P1;
  * The Strategy serves as the Actor's execution engine, and as its mailbox.
  * <p/>
  * Given some effect, the Actor performs the effect on its messages using its Strategy, transforming them
- * into unit-products. The unit-product represents a possibly running computation which is executing the effect.
+ * into instances of fj.P1. The P1 represents a possibly running computation which is executing the effect.
  * <p/>
- * <b>NOTE:</b> An value of this type may process more than one message at a time, depending on its Strategy,
- * and so is generally not thread safe unless its Effect is. For an actor that processes only one message at a time,
- * see {@link QueueActor}.
- * Author: Runar
+ * <b>NOTE:</b> A value of this type may generally process more than one message at a time, depending on its Strategy.
+ * An actor is not thread-safe unless either its Effect imposes an order on incoming messages or its Strategy is
+ * single-threaded.
+ *
+ * A queue actor which imposes an order on its messages is provided by the {@link #queueActor} static method.
  */
 public final class Actor<A> {
 
   private final Strategy<Unit> s;
   private final F<A, P1<Unit>> f;
 
+  /**
+   * An Actor equipped with a queue and which is guaranteed to process one message at a time.
+   * With respect to an enqueueing actor or thread, this actor will process messages in the same order
+   * as they are sent.
+   */
+  public static <T> Actor<T> queueActor(final Strategy<Unit> s, final Effect<T> ea) {
+    return actor(Strategy.<Unit>seqStrategy(), new Effect<T>() {
+
+      // Lock to ensure the actor only acts on one message at a time
+      AtomicBoolean suspended = new AtomicBoolean(true);
+
+      // Queue to hold pending messages
+      ConcurrentLinkedQueue<T> mbox = new ConcurrentLinkedQueue<T>();
+
+      // Product so the actor can use its strategy (to act on messages in other threads,
+      // to handle exceptions, etc.)
+      P1<Unit> processor = new P1<Unit>() {
+        @Override public Unit _1() {
+          // get next item from queue
+          T a = mbox.poll();
+          // if there is one, process it
+          if (a != null) {
+            ea.e(a);
+            // try again, in case there are more messages
+            s.par(this);
+          } else {
+            // clear the lock
+            suspended.set(true);
+            // work again, in case someone else queued up a message while we were holding the lock
+            work();
+          }
+          return Unit.unit();
+        }
+      };
+      
+      // Effect's body -- queues up a message and tries to unsuspend the actor
+      @Override public void e(T a) {
+        mbox.offer(a);
+        work();
+      }
+
+      // If there are pending messages, use the strategy to run the processor
+      protected void work() {
+        if (!mbox.isEmpty() && suspended.compareAndSet(true, false)) {
+          s.par(processor);
+        }
+      }
+    });
+  };
+  
   private Actor(final Strategy<Unit> s, final F<A, P1<Unit>> e) {
     this.s = s;
     f = new F<A, P1<Unit>>() {
@@ -30,7 +83,6 @@ public final class Actor<A> {
       }
     };
   }
-
 
   /**
    * Creates a new Actor that uses the given parallelization strategy and has the given side-effect.

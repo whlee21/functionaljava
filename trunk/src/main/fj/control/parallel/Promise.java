@@ -12,7 +12,7 @@ import static fj.Function.curry;
 import static fj.Function.identity;
 import static fj.control.parallel.Actor.actor;
 import static fj.control.parallel.Callables.normalise;
-import static fj.control.parallel.QueueActor.queueActor;
+import static fj.control.parallel.Actor.queueActor;
 import fj.data.Either;
 import fj.data.List;
 import fj.data.Option;
@@ -65,7 +65,7 @@ public final class Promise<A> {
             else
               p._1().right().value().act(snd.v.some());
           }
-        }).asActor();
+        });
     return new Promise<A>(s, q);
   }
 

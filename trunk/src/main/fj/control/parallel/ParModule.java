@@ -136,10 +136,10 @@ public final class ParModule {
    * Creates a concurrent actor that is guaranteed to process only one message at a time.
    *
    * @param e The effect that the actor should have on its messages.
-   * @return A concurrent actor that is guaranteed to process its messages in some order.
+   * @return A concurrent actor that is guaranteed to process its messages in order.
    */
-  public <A> QueueActor<A> actor(final Effect<A> e) {
-    return QueueActor.queueActor(strategy, e);
+  public <A> Actor<A> actor(final Effect<A> e) {
+    return Actor.queueActor(strategy, e);
   }
 
   /**
@@ -147,9 +147,9 @@ public final class ParModule {
    *
    * @return A function that takes an effect and returns an actor that processes messages in some order.
    */
-  public <A> F<Effect<A>, QueueActor<A>> actor() {
-    return new F<Effect<A>, QueueActor<A>>() {
-      public QueueActor<A> f(final Effect<A> effect) {
+  public <A> F<Effect<A>, Actor<A>> actor() {
+    return new F<Effect<A>, Actor<A>>() {
+      public Actor<A> f(final Effect<A> effect) {
         return actor(effect);
       }
     };
