@@ -4,7 +4,6 @@ import static fj.Bottom.error;
 import fj.Unit;
 import fj.Effect;
 import fj.control.parallel.Strategy;
-import fj.control.parallel.QueueActor;
 import fj.control.parallel.Actor;
 
 import java.text.MessageFormat;
@@ -31,7 +30,7 @@ public class PingPong {
 
     // This actor gives feedback to the user that work is being done
     // and also terminates the program when all work has been completed.
-    callback = QueueActor.queueActor(s, new Effect<Integer>() {
+    callback = Actor.queueActor(s, new Effect<Integer>() {
       public void e(final Integer i) {
         done++;
         if (done >= actors) {
@@ -40,7 +39,7 @@ public class PingPong {
         } else if (actors < 10 || done % (actors / 10) == 0)
           System.out.println(MessageFormat.format("{0} actors done ({1} total pongs).", done, pings * done));
       }
-    }).asActor();
+    });
   }
 
   public static void main(final String[] args) {

@@ -281,9 +281,13 @@ public final class TreeZipper<A> implements Iterable<TreeZipper<A>> {
                                                     : Option.<P3<Stream<Tree<A>>, Tree<A>, Stream<Tree<A>>>>none();
           }
         };
-    for (final P3<Stream<Tree<A>>, Tree<A>, Stream<Tree<A>>> ltr
-        : split.f(Stream.<Tree<A>>nil(), tree.subForest()._1())) {
-      r = some(treeZipper(ltr._2(), ltr._1(), ltr._3(), downParents()));
+
+    Stream<Tree<A>> subforest = tree.subForest()._1();
+    if (subforest.isNotEmpty()) {
+      for (final P3<Stream<Tree<A>>, Tree<A>, Stream<Tree<A>>> ltr
+        : split.f(Stream.<Tree<A>>nil(), subforest)) {
+        r = some(treeZipper(ltr._2(), ltr._1(), ltr._3(), downParents()));
+      }
     }
     return r;
   }
